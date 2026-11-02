@@ -1,0 +1,45 @@
+# AI-TIMS 本地中间件（P0 阶段 compose 形态；M8 起 manifests 化）
+# 用法：docker compose up -d
+# 注意：密码/密钥一律走环境变量注入，本文件不含敏感信息。
+
+services:
+  nacos:
+    image: nacos/nacos-server:v3.0.3
+    container_name: tims-nacos
+    environment:
+      - MODE=standalone
+      - NACOS_AUTH_ENABLE=false        # 开发期关闭鉴权；上生产/K8s 时改 true 并注入 NACOS_AUTH_TOKEN/IDENTITY
+      - JVM_XMS=256m
+      - JVM_XMX=512m
+    ports:
+      - "8848:8848"                    # HTTP OpenAPI / 控制台后端
+      - "9848:9848"                    # gRPC（客户端端口 = 8848 + 1000，必须一并映射）
+      - "8849:8080"                    # Nacos 3 控制台 UI（容器内 8080，避开宿主机网关端口）
+    volumes:
+      - nacos-data:/home/nacos/data    # 内嵌 derby 持久化（毕设规模够用；MySQL 存储留作优化项）
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8848/nacos > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: tims-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+    restart: unless-stopped
+
+volumes:
+  nacos-data:
+  redis-data:

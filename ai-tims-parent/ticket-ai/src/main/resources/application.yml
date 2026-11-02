@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: ticket-ai
+  cloud:
+    nacos:
+      server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+      discovery:
+        namespace: ${NACOS_NAMESPACE:public}
+        group: DEFAULT_GROUP
 
 management:
   endpoints:

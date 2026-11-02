@@ -1,0 +1,34 @@
+# ===== 构建产物 =====
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# ===== 日志 =====
+logs/
+*.log
+
+# ===== 密钥与环境配置（严禁入库）=====
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+*.p12
+*.jks
+
+# ===== IDE =====
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+
+# ===== 系统 =====
+.DS_Store
+Thumbs.db

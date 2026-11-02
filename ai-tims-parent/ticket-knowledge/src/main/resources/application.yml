@@ -1,0 +1,22 @@
+server:
+  port: 8103
+
+spring:
+  application:
+    name: ticket-knowledge
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ===== M0 骨架仅保留最小配置；中间件连接 M3 起启用，一律走环境变量，严禁硬编码 =====
+# spring.datasource.url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:ai_tims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+# spring.datasource.username: ${MYSQL_USER:dev}
+# spring.datasource.password: ${MYSQL_PASSWORD:}          # 必填，无默认值
+# milvus.host: ${MILVUS_HOST:127.0.0.1}                   # Spring AI MilvusVectorStore
+# milvus.port: ${MILVUS_PORT:19530}
+# spring.ai.openai.api-key: ${LLM_API_KEY:}               # Embedding: embedding-3
+# spring.ai.openai.base-url: ${LLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}
+# spring.ai.openai.embedding.options.model: ${LLM_EMBED_MODEL:embedding-3}

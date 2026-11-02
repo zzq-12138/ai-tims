@@ -1,0 +1,23 @@
+server:
+  port: 8105
+
+spring:
+  application:
+    name: ticket-push
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ===== M0 骨架仅保留最小配置；中间件连接 M4 起启用，一律走环境变量，严禁硬编码 =====
+# spring.datasource.url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:ai_tims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+# spring.datasource.username: ${MYSQL_USER:dev}
+# spring.datasource.password: ${MYSQL_PASSWORD:}          # 必填，无默认值（ps_push_record 埋点）
+# spring.data.redis.host: ${REDIS_HOST:127.0.0.1}         # 在线表 push:online
+# spring.data.redis.port: ${REDIS_PORT:6379}
+# spring.rabbitmq.host: ${RABBIT_HOST:127.0.0.1}          # q.push.notify
+# spring.rabbitmq.port: ${RABBIT_PORT:5672}
+# spring.rabbitmq.username: ${RABBIT_USER:guest}
+# spring.rabbitmq.password: ${RABBIT_PASSWORD:}

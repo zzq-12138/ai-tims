@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ticket-gateway
+  cloud:
+    gateway:
+      # M0 骨架阶段未接入 Nacos，lb:// 路由先注释预置（任务书 3.2 路由表），
+      # M1 注册中心就绪后取消注释即可生效。
+      # routes:
+      #   - id: system
+      #     uri: lb://ticket-system
+      #     predicates: [ "Path=/api/system/**" ]
+      #   - id: order
+      #     uri: lb://ticket-order
+      #     predicates: [ "Path=/api/order/**" ]
+      #   - id: kb
+      #     uri: lb://ticket-knowledge
+      #     predicates: [ "Path=/api/kb/**" ]
+      #   - id: ai
+      #     uri: lb://ticket-ai
+      #     predicates: [ "Path=/api/ai/**" ]
+      #   - id: push
+      #     uri: lb://ticket-push
+      #     predicates: [ "Path=/api/push/**" ]
+      #   - id: ws
+      #     uri: lb:ws://ticket-push
+      #     predicates: [ "Path=/ws/**" ]
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

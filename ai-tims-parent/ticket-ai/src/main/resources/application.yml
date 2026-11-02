@@ -1,0 +1,23 @@
+server:
+  port: 8104
+
+spring:
+  application:
+    name: ticket-ai
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ===== M0 骨架仅保留最小配置；Spring AI 与中间件 M5 起启用，密钥一律走环境变量，严禁硬编码 =====
+# spring.ai.openai.api-key: ${LLM_API_KEY:}               # 必填，无默认值（智谱 OpenAI 兼容协议）
+# spring.ai.openai.base-url: ${LLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}
+# spring.ai.openai.chat.options.model: ${LLM_CHAT_MODEL:glm-4-flash}
+# spring.data.redis.host: ${REDIS_HOST:127.0.0.1}         # 对话历史 plan:{ticketId} / chat:{sessionId}
+# spring.data.redis.port: ${REDIS_PORT:6379}
+# spring.rabbitmq.host: ${RABBIT_HOST:127.0.0.1}          # q.ai.enhance / q.ai.extract
+# spring.rabbitmq.port: ${RABBIT_PORT:5672}
+# spring.rabbitmq.username: ${RABBIT_USER:guest}
+# spring.rabbitmq.password: ${RABBIT_PASSWORD:}

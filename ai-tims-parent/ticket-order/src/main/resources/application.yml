@@ -1,0 +1,21 @@
+server:
+  port: 8102
+
+spring:
+  application:
+    name: ticket-order
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# ===== M0 骨架仅保留最小配置；中间件连接 M2 起启用，一律走环境变量，严禁硬编码 =====
+# spring.datasource.url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:ai_tims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+# spring.datasource.username: ${MYSQL_USER:dev}
+# spring.datasource.password: ${MYSQL_PASSWORD:}          # 必填，无默认值
+# spring.rabbitmq.host: ${RABBIT_HOST:127.0.0.1}          # topic exchange: ai-tims.event
+# spring.rabbitmq.port: ${RABBIT_PORT:5672}
+# spring.rabbitmq.username: ${RABBIT_USER:guest}
+# spring.rabbitmq.password: ${RABBIT_PASSWORD:}

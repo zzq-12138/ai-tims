@@ -10,16 +10,39 @@ spring:
       discovery:
         namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:aitims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:dev}
+    password: ${MYSQL_PASSWORD:}          # 必填，无默认值（~/.secrets/mysql_pwd 注入）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话存储
+      port: ${REDIS_PORT:6379}
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+sa-token:
+  token-name: Authorization               # 前端 header：Authorization: <token>
+  timeout: 2592000                        # 30 天
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-read-cookie: false                   # 仅走 header，防 CSRF
+  is-log: false
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
-
-# ===== M0 骨架仅保留最小配置；中间件连接 M1 起启用，一律走环境变量，严禁硬编码 =====
-# spring.datasource.url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:ai_tims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-# spring.datasource.username: ${MYSQL_USER:dev}
-# spring.datasource.password: ${MYSQL_PASSWORD:}          # 必填，无默认值
-# spring.data.redis.host: ${REDIS_HOST:127.0.0.1}         # Sa-Token 会话存储
-# spring.data.redis.port: ${REDIS_PORT:6379}

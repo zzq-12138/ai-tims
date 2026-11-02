@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * ticket-knowledge 启动类：知识库服务（:8103，任务书 3.5）。
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.tims")
 public class KnowledgeApplication {
 
     public static void main(String[] args) {

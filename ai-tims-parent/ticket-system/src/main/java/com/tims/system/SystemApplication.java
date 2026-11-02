@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * ticket-system 启动类：认证与用户服务（:8101，任务书 3.3）。
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.tims")
 public class SystemApplication {
 
     public static void main(String[] args) {

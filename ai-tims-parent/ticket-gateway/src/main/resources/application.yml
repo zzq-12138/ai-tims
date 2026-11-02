@@ -11,27 +11,48 @@ spring:
         namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
     gateway:
-      # M1 起接入 Nacos 注册中心，lb:// 路由已启用（任务书 3.2 路由表）。
+      # M1 起接入 Nacos 注册中心，lb:// 路由已启用（任务书 3.2 路由表 + auth 扩展）。
       # 下游服务直接暴露 /api/{svc}/** 全路径，网关不剥前缀。
-      routes:
-        - id: system
-          uri: lb://ticket-system
-          predicates: [ "Path=/api/system/**" ]
-        - id: orde
-          uri: lb://ticket-order
-          predicates: [ "Path=/api/order/**" ]
-        - id: kb
-          uri: lb://ticket-knowledge
-          predicates: [ "Path=/api/kb/**" ]
-        - id: ai
-          uri: lb://ticket-ai
-          predicates: [ "Path=/api/ai/**" ]
-        - id: push
-          uri: lb://ticket-push
-          predicates: [ "Path=/api/push/**" ]
-        - id: ws
-          uri: lb:ws://ticket-push
-          predicates: [ "Path=/ws/**" ]
+      # auth 路由为 M1 扩展：登录/登出/当前用户接口落在 ticket-system。
+      # 注意：SC 2025.0 起 routes 前缀迁移为 spring.cloud.gateway.server.webflux.routes
+      server:
+        webflux:
+          routes:
+            - id: auth
+              uri: lb://ticket-system
+              predicates: [ "Path=/api/auth/**" ]
+            - id: system
+              uri: lb://ticket-system
+              predicates: [ "Path=/api/system/**" ]
+            - id: order
+              uri: lb://ticket-order
+              predicates: [ "Path=/api/order/**" ]
+            - id: kb
+              uri: lb://ticket-knowledge
+              predicates: [ "Path=/api/kb/**" ]
+            - id: ai
+              uri: lb://ticket-ai
+              predicates: [ "Path=/api/ai/**" ]
+            - id: push
+              uri: lb://ticket-push
+              predicates: [ "Path=/api/push/**" ]
+            - id: ws
+              uri: lb:ws://ticket-push
+              predicates: [ "Path=/ws/**" ]
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话共享（与 ticket-system 同一 Redis）
+      port: ${REDIS_PORT:6379}
+
+sa-token:
+  token-name: Authorization               # 必须与 ticket-system 一致
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-read-cookie: false
+  is-log: false
 
 management:
   endpoints:

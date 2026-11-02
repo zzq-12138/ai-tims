@@ -1,0 +1,23 @@
+{
+  "name": "ai-tims-front",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-TIMS 前端（Vue3 + Vite + Element Plus + Pinia）",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "element-plus": "^2.9.3",
+    "pinia": "^3.0.1",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.7"
+  }
+}

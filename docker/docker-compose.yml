@@ -103,9 +103,55 @@ services:
       start_period: 60s
     restart: unless-stopped
 
+  # -----------------------------------------------------------------
+  # RabbitMQ（P0 补做：后续事件流/异步任务用）
+  #   AMQP 5672；管理台 15672 映射宿主机；内存 350M
+  # -----------------------------------------------------------------
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: tims-rabbitmq
+    hostname: tims-rabbit
+    environment:
+      - RABBITMQ_DEFAULT_USER=tims      # 开发期固定；生产注入环境变量
+      - RABBITMQ_DEFAULT_PASS=tims123   # 开发期固定；生产注入环境变量
+    mem_limit: 350m
+    ports:
+      - "5672:5672"                      # AMQP
+      - "15672:15672"                    # 管理台 UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq  # 数据卷持久化，避免重启丢队列
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  # -----------------------------------------------------------------
+  # 本地镜像仓库（P0 补做：k3s 阶段 imagePullPolicy: IfNotPresent 配套）
+  #   地址：localhost:5000；tag 规则：localhost:5000/tims/{svc}:{ver}
+  # -----------------------------------------------------------------
+  registry:
+    image: registry:2
+    container_name: tims-registry
+    mem_limit: 128m
+    ports:
+      - "5000:5000"
+    volumes:
+      - registry-data:/var/lib/registry
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5000/v2/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+
 volumes:
   nacos-data:
   redis-data:
   etcd-data:
   minio-data:
   milvus-data:
+  rabbitmq-data:
+  registry-data:

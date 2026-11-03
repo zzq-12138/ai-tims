@@ -1,0 +1,39 @@
+# AI-TIMS 后端 CI：push / PR 到 main 时触发
+# 仅构建验证（mvn package），不发布镜像、不做部署；密钥一律不落盘
+name: ci
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ai-tims-parent/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "ai-tims-parent/**"
+      - ".github/workflows/ci.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Cache Maven repo
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ hashFiles('ai-tims-parent/**/pom.xml') }}
+          restore-keys: maven-
+
+      - name: Build (skip tests)
+        working-directory: ai-tims-parent
+        run: mvn -B -DskipTests package

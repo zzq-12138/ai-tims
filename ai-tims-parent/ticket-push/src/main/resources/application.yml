@@ -34,8 +34,8 @@ spring:
           initial-interval: 500
           multiplier: 2
         default-requeue-rejected: false
-        concurrency: 4
-        max-concurrency: 8
+        concurrency: 16
+        max-concurrency: 32
 
 mybatis-plus:
   configuration:

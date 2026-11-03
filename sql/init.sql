@@ -358,3 +358,26 @@ CREATE TABLE `ps_push_message` (
   KEY `idx_tenant_user_read` (`tenant_id`, `user_id`, `read_flag`),
   KEY `idx_tenant_ticket` (`tenant_id`, `ticket_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='站内消息表(离线补推)';
+
+-- 压测运行摘要（M4 批二，每次压测一行）
+DROP TABLE IF EXISTS `pt_stress_run`;
+CREATE TABLE `pt_stress_run` (
+  `id`             BIGINT      NOT NULL COMMENT '主键',
+  `tenant_id`      BIGINT      NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `run_tag`        VARCHAR(64) NOT NULL COMMENT '运行标识(场景名)',
+  `concurrency`    INT         NOT NULL DEFAULT 1 COMMENT '并发数',
+  `total`          INT         NOT NULL COMMENT '工单总数',
+  `ok_count`       INT         NOT NULL DEFAULT 0 COMMENT '成功建单数',
+  `fail_count`     INT         NOT NULL DEFAULT 0 COMMENT '失败数',
+  `p50_ms`         BIGINT      DEFAULT NULL COMMENT '端到端P50',
+  `p95_ms`         BIGINT      DEFAULT NULL COMMENT '端到端P95',
+  `p99_ms`         BIGINT      DEFAULT NULL COMMENT '端到端P99',
+  `avg_ms`         BIGINT      DEFAULT NULL COMMENT '端到端均值',
+  `seg_event_ms`   BIGINT      DEFAULT NULL COMMENT '建单→MQ发出 均值',
+  `seg_retrieve_ms` BIGINT     DEFAULT NULL COMMENT 'MQ→检索返回 均值',
+  `seg_push_ms`    BIGINT      DEFAULT NULL COMMENT '检索→WS推送 均值',
+  `degraded_count` INT         NOT NULL DEFAULT 0 COMMENT '降级行数',
+  `create_time`    DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_tag` (`tenant_id`, `run_tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='推送压测运行摘要';

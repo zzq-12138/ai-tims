@@ -199,10 +199,11 @@ public class MilvusVectorStore {
                 c = new MilvusServiceClient(ConnectParam.newBuilder()
                         .withHost(host)
                         .withPort(port)
-                        // M4：推送链路 P95 ≤ 1s，降级必须快速失败——
-                        // docker stop 后 docker-proxy 仍可能短暂 accept 连接，
-                        // connect deadline 1s + rpc deadline 1s，保证 kb 侧 ~1s 内退关键词兜底
-                        .withConnectTimeout(1, java.util.concurrent.TimeUnit.SECONDS)
+                        // M4：降级快速失败与冷启动的平衡——
+                        // connect 3s 仅作用于信道初始化（1s 会在 gRPC 冷启动时形成
+                        // 「重建信道→超时→再重建」死循环，实测 200 单全量退化）；
+                        // rpc deadline 1s 作用于查询，Milvus 停机时仍在 ~1s 内退关键词兜底
+                        .withConnectTimeout(3, java.util.concurrent.TimeUnit.SECONDS)
                         .withRpcDeadline(1, java.util.concurrent.TimeUnit.SECONDS)
                         .build());
                 clientRef.set(c);

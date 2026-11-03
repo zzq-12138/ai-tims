@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// 开发代理指向 VM 网关（tomcat9 停服前网关临时跑 8090，切回 8080 后改端口即可）
-const GATEWAY = process.env.VITE_GATEWAY || 'http://192.168.40.10:8090'
+// 开发代理指向 VM 网关（tomcat9 已停服，网关已回到 8080）
+const GATEWAY = process.env.VITE_GATEWAY || 'http://192.168.40.10:8080'
 
 export default defineConfig({
   plugins: [vue()],

@@ -29,6 +29,28 @@ export function addComment(ticketId, content) {
   return request.post(`/api/order/comment/${ticketId}`, { content })
 }
 
+// 附件（M3 前置补齐）
+export function listAttachments(ticketId) {
+  return request.get(`/api/order/ticket/${ticketId}/attachment`)
+}
+
+export function uploadAttachment(ticketId, file) {
+  const fd = new FormData()
+  fd.append('file', file)
+  return request.post(`/api/order/ticket/${ticketId}/attachment`, fd, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}
+
+export function downloadAttachment(ticketId, aid) {
+  // blob 直通响应拦截器，由调用方触发浏览器保存
+  return request.get(`/api/order/ticket/${ticketId}/attachment/${aid}`, { responseType: 'blob' })
+}
+
+export function deleteAttachment(ticketId, aid) {
+  return request.delete(`/api/order/ticket/${ticketId}/attachment/${aid}`)
+}
+
 // 数据模拟
 export function mockBatch(count, factory) {
   return request.post('/api/order/mock/batch', { count, factory })

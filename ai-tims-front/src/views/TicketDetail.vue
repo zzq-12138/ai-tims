@@ -38,6 +38,33 @@
         </template>
       </div>
 
+      <div class="attachments">
+        <div class="att-head">
+          <h4>附件</h4>
+          <el-upload :show-file-list="false" :before-upload="beforeUpload" :http-request="doUpload">
+            <el-button size="small" type="primary" plain :loading="uploading">上传附件</el-button>
+          </el-upload>
+        </div>
+        <el-table v-if="attachments.length" :data="attachments" size="small" border>
+          <el-table-column prop="originalName" label="文件名" min-width="200" show-overflow-tooltip />
+          <el-table-column label="大小" width="100">
+            <template #default="{ row }">{{ fmtSize(row.size) }}</template>
+          </el-table-column>
+          <el-table-column prop="createTime" label="上传时间" width="170" />
+          <el-table-column label="操作" width="140">
+            <template #default="{ row }">
+              <el-button size="small" link type="primary" @click="download(row)">下载</el-button>
+              <el-popconfirm title="确认删除该附件？" width="180" @confirm="removeAtt(row)">
+                <template #reference>
+                  <el-button size="small" link type="danger">删除</el-button>
+                </template>
+              </el-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div v-else class="muted">暂无附件</div>
+      </div>
+
       <el-row :gutter="16">
         <el-col :span="14">
           <h4>流转时间线</h4>
@@ -72,13 +99,85 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { getTicket, ticketAction, addComment } from '../api/ticket'
+import {
+  getTicket, ticketAction, addComment,
+  listAttachments, uploadAttachment, downloadAttachment, deleteAttachment
+} from '../api/ticket'
 
 const route = useRoute()
 const id = route.params.id
 const detail = ref(null)
 const acting = ref(false)
 const comment = ref('')
+const attachments = ref([])
+const uploading = ref(false)
+
+const ALLOWED_EXT = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'log', 'txt']
+const MAX_SIZE = 20 * 1024 * 1024
+
+function fmtSize(n) {
+  if (n == null) return '-'
+  if (n < 1024) return n + ' B'
+  if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB'
+  return (n / 1024 / 1024).toFixed(1) + ' MB'
+}
+
+/** 前端先校验（后端为准）：20MB + 白名单 */
+function beforeUpload(file) {
+  if (file.size > MAX_SIZE) {
+    ElMessage.error('文件超过 20MB 上限')
+    return false
+  }
+  const ext = (file.name.split('.').pop() || '').toLowerCase()
+  if (!ALLOWED_EXT.includes(ext)) {
+    ElMessage.error('不支持的文件类型：' + ext)
+    return false
+  }
+  return true
+}
+
+async function doUpload({ file }) {
+  uploading.value = true
+  try {
+    await uploadAttachment(id, file)
+    ElMessage.success('上传成功')
+    await loadAttachments()
+  } catch (e) {
+    ElMessage.error(e.message || '上传失败')
+  } finally {
+    uploading.value = false
+  }
+}
+
+async function download(row) {
+  try {
+    const blob = await downloadAttachment(id, row.id)
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = row.originalName
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch (e) {
+    ElMessage.error(e.message || '下载失败')
+  }
+}
+
+async function removeAtt(row) {
+  try {
+    await deleteAttachment(id, row.id)
+    ElMessage.success('已删除')
+    await loadAttachments()
+  } catch (e) {
+    ElMessage.error(e.message || '删除失败')
+  }
+}
+
+async function loadAttachments() {
+  try {
+    attachments.value = await listAttachments(id) || []
+  } catch { attachments.value = [] }
+}
 
 const statusMap = {
   DRAFT: '草稿', SUBMITTED: '待受理', ACCEPTED: '已受理', PROCESSING: '处理中',
@@ -138,6 +237,7 @@ async function submitComment() {
 
 async function load() {
   detail.value = await getTicket(id)
+  await loadAttachments()
 }
 
 onMounted(load)
@@ -151,4 +251,6 @@ onMounted(load)
 .comment-input { margin-top: 12px; }
 .mt8 { margin-top: 8px; }
 .mr8 { margin-right: 8px; }
+.attachments { margin: 8px 0 16px; }
+.att-head { display: flex; justify-content: space-between; align-items: center; }
 </style>

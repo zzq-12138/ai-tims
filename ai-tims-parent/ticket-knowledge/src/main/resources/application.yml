@@ -10,19 +10,56 @@ spring:
       discovery:
         namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:aitims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:dev}
+    password: ${MYSQL_PASSWORD:}          # 必填，无默认值（~/secrets/mysql_pwd 注入）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话共享
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+sa-token:
+  token-name: Authorization               # 必须与 ticket-system 一致，会话共享
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-read-cookie: false
+  is-log: false
+
+tims:
+  kb:
+    embedding:
+      # 智谱 embedding-3：维度 1024（平衡精度与 Milvus 内存），key 从环境变量注入
+      api-url: ${ZHIPU_EMBEDDING_URL:https://open.bigmodel.cn/api/paas/v4/embeddings}
+      api-key: ${ZHIPU_API_KEY:}
+      model: embedding-3
+      dimensions: 1024
+      # 单条文本截断长度（embedding-3 上限 8192 tokens，留余量）
+      max-text-length: 4000
+    milvus:
+      host: ${MILVUS_HOST:127.0.0.1}
+      port: ${MILVUS_PORT:19530}
+      collection: kb_knowledge_vec
+    sync:
+      interval-ms: 10000                  # 同步扫描间隔（发布后 30s 内可检索的保障）
+      batch-size: 16                      # 单批向量化条数（embedding-3 批量上限内）
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
-
-# ===== M0 骨架仅保留最小配置；中间件连接 M3 起启用，一律走环境变量，严禁硬编码 =====
-# spring.datasource.url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:ai_tims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-# spring.datasource.username: ${MYSQL_USER:dev}
-# spring.datasource.password: ${MYSQL_PASSWORD:}          # 必填，无默认值
-# milvus.host: ${MILVUS_HOST:127.0.0.1}                   # Spring AI MilvusVectorStore
-# milvus.port: ${MILVUS_PORT:19530}
-# spring.ai.openai.api-key: ${LLM_API_KEY:}               # Embedding: embedding-3
-# spring.ai.openai.base-url: ${LLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}
-# spring.ai.openai.embedding.options.model: ${LLM_EMBED_MODEL:embedding-3}

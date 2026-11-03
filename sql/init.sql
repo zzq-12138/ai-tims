@@ -236,3 +236,79 @@ INSERT INTO `wo_mock_config` (`id`, `tenant_id`, `metric_name`, `factory`, `scen
 (1, 1, 'AOI_DEFECT_RATE', 'F1', 'Cell',  0.0200, 'GT', '品质异常', 'AOI检测机', 0.0100, 0.0030, 10, 0),
 (2, 1, 'SPC_CPK',         'F1', 'Array', 1.3300, 'LT', '品质异常', '涂布机',    1.5000, 0.1000, 10, 0),
 (3, 1, 'DEVICE_TEMP',      'F1', 'Cell',  80.0000, 'GT', '设备异常', '贴合机',   65.0000, 5.0000, 10, 0);
+
+-- ---------------------------------------------------------------------
+-- 4.6 wo_attachment 附件表（2026-11-03 拍板补齐，wo_ 五表扩为六表）
+--     防路径穿越：存储名 uuid.ext 由服务端生成，original_name 仅存库
+-- ---------------------------------------------------------------------
+DROP TABLE IF EXISTS `wo_attachment`;
+CREATE TABLE `wo_attachment` (
+  `id`            BIGINT       NOT NULL COMMENT '主键',
+  `tenant_id`     BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `ticket_id`     BIGINT       NOT NULL COMMENT '工单ID',
+  `file_name`     VARCHAR(64)  NOT NULL COMMENT '存储文件名 uuid.ext(服务端生成,防路径穿越)',
+  `original_name` VARCHAR(255) NOT NULL COMMENT '原始文件名(仅存库,下载时回显)',
+  `storage_key`   VARCHAR(255) NOT NULL COMMENT '存储相对路径 yyyyMM/uuid.ext',
+  `size`          BIGINT       NOT NULL COMMENT '文件字节数',
+  `mime_type`     VARCHAR(128) NOT NULL COMMENT 'MIME类型',
+  `uploader_id`   BIGINT       NOT NULL COMMENT '上传人',
+  `create_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上传时间',
+  `update_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted`       TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除(文件保留不回收)',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_ticket` (`tenant_id`, `ticket_id`),
+  KEY `idx_tenant_uploader` (`tenant_id`, `uploader_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工单附件表';
+
+-- ---------------------------------------------------------------------
+-- 6. kb_ 知识域（M3，2026-11-03）
+--    标签方案拍板：tags 用 JSON 列，不建独立标签表——
+--    单租户、标签仅用于过滤/展示，检索主链路在 Milvus 向量 + FULLTEXT 全文；
+--    独立标签表需 kb_tag + kb_knowledge_tag 两表两 join，收益不抵成本。
+--    Milvus collection kb_knowledge_vec（dim=1024）由服务启动/同步时惰性创建。
+-- ---------------------------------------------------------------------
+DROP TABLE IF EXISTS `kb_category`;
+CREATE TABLE `kb_category` (
+  `id`            BIGINT      NOT NULL COMMENT '主键',
+  `tenant_id`     BIGINT      NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `category_name` VARCHAR(64) NOT NULL COMMENT '分类名',
+  `description`   VARCHAR(255) DEFAULT NULL COMMENT '描述',
+  `sort`          INT         NOT NULL DEFAULT 0 COMMENT '排序',
+  `create_time`   DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time`   DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted`       TINYINT     NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_sort` (`tenant_id`, `sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知识分类表';
+
+DROP TABLE IF EXISTS `kb_knowledge`;
+CREATE TABLE `kb_knowledge` (
+  `id`                BIGINT       NOT NULL COMMENT '主键',
+  `tenant_id`         BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `title`             VARCHAR(128) NOT NULL COMMENT '标题',
+  `content`           TEXT         NOT NULL COMMENT '正文(向量化的主文本)',
+  `summary`           VARCHAR(512) DEFAULT NULL COMMENT '摘要',
+  `tags`              JSON         DEFAULT NULL COMMENT '标签数组，如["贴片机","抛料"]',
+  `apply_device_type` VARCHAR(64)  DEFAULT NULL COMMENT '适用设备类型(检索加权维度)',
+  `category_id`       BIGINT       DEFAULT NULL COMMENT '分类ID',
+  `source_ticket_id`  BIGINT       DEFAULT NULL COMMENT '来源工单ID(工单提炼)',
+  `status`            VARCHAR(16)  NOT NULL DEFAULT 'DRAFT' COMMENT '状态 DRAFT/PENDING/PUBLISHED/REJECTED',
+  `reject_reason`     VARCHAR(255) DEFAULT NULL COMMENT '驳回原因',
+  `version`           INT          NOT NULL DEFAULT 1 COMMENT '版本号(每次编辑+1)',
+  `quote_count`       INT          NOT NULL DEFAULT 0 COMMENT '被引用次数',
+  `create_by`         BIGINT       DEFAULT NULL COMMENT '创建人',
+  `vector_synced_at`  DATETIME     DEFAULT NULL COMMENT '最近一次向量同步时间(NULL=待同步)',
+  `create_time`       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time`       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted`           TINYINT      NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_status_time` (`tenant_id`, `status`, `update_time`),
+  KEY `idx_tenant_device` (`tenant_id`, `apply_device_type`),
+  KEY `idx_tenant_category` (`tenant_id`, `category_id`),
+  FULLTEXT KEY `ft_title_content` (`title`, `content`) WITH PARSER ngram
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知识点主表';
+
+INSERT INTO `kb_category` (`id`, `tenant_id`, `category_name`, `description`, `sort`) VALUES
+(1, 1, '设备维护', '设备异常处理类经验', 1),
+(2, 1, '品质分析', '品质异常分析类经验', 2),
+(3, 1, '系统运维', 'MES/系统类问题',    3);

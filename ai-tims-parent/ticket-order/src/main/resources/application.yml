@@ -18,6 +18,10 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话共享 + 工单流水号 + 指标最新值
+  servlet:
+    multipart:
+      max-file-size: 20MB                 # 附件单文件上限（与 AttachmentService 校验一致）
+      max-request-size: 25MB
 
 mybatis-plus:
   configuration:
@@ -46,6 +50,9 @@ tims:
     default-handler: ${TIMS_DEFAULT_HANDLER:1}
     # 单次批量建单上限（模拟器接口护栏）
     mock-batch-max: 500
+  attachment:
+    # 附件存储根目录（VM 本地盘，按月分目录，存储名 uuid.ext 防路径穿越）
+    storage-dir: ${TIMS_ATTACHMENT_DIR:/home/dev/data/uploads}
 
 management:
   endpoints:

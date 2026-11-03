@@ -55,8 +55,10 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, onUnmounted, reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 import { pageTickets } from '../api/ticket'
+import { onPush } from '../utils/ws'
 
 const tab = ref('ALL')
 const records = ref([])
@@ -84,7 +86,22 @@ async function load() {
   }
 }
 
-onMounted(load)
+// M4：推送实时反映——新工单卡片/关闭通知到达时自动刷新当前列表（1s 去抖）
+let reloadTimer = null
+function scheduleReload(reason) {
+  if (reloadTimer) return
+  reloadTimer = setTimeout(() => {
+    reloadTimer = null
+    load()
+  }, 1000)
+}
+const offCard = onPush('CARD', (c) => {
+  scheduleReload()
+  if (c?.ticketNo) ElMessage.info(`新工单 ${c.ticketNo} 已进入列表`)
+})
+const offClosed = onPush('TICKET_CLOSED', () => scheduleReload())
+onMounted(() => { load(); })
+onUnmounted(() => { offCard(); offClosed(); if (reloadTimer) clearTimeout(reloadTimer) })
 </script>
 
 <style scoped>

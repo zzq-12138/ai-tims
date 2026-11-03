@@ -6,6 +6,7 @@
           <span>{{ detail.ticket.title }}</span>
           <div>
             <el-tag :type="statusType(detail.ticket.status)" class="mr8">{{ statusMap[detail.ticket.status] }}</el-tag>
+            <el-button size="small" type="primary" plain class="mr8" @click="openAi">AI 分析</el-button>
             <el-button size="small" @click="$router.back()">返回</el-button>
           </div>
         </div>
@@ -92,17 +93,66 @@
         </el-col>
       </el-row>
     </el-card>
+
+    <!-- M5：AI 分析抽屉（RAG 流式 + 引用知识） -->
+    <el-drawer v-model="aiVisible" title="AI 工单分析" size="720px" @closed="stopAi">
+      <div class="ai-toolbar">
+        <el-tag size="small">{{ ai.model || 'GLM' }}</el-tag>
+        <el-tag size="small" type="info">检索 {{ ai.retrievalMs }}ms</el-tag>
+        <el-tag v-if="ai.degraded" size="small" type="warning">知识库检索降级</el-tag>
+        <el-tag v-if="ai.firstTokenMs" size="small" type="success">首 Token {{ ai.firstTokenMs }}ms</el-tag>
+        <span class="ai-spacer" />
+        <el-button v-if="aiLoading" size="small" @click="stopAi">停止</el-button>
+        <el-button size="small" type="primary" plain :loading="aiLoading" @click="runAi">重新分析</el-button>
+      </div>
+
+      <el-alert v-if="ai.error" :title="ai.error" type="error" :closable="false" class="mt8" />
+
+      <div v-if="aiRefs.length" class="ai-refs">
+        <div class="ai-section-title">引用知识（{{ aiRefs.length }}）</div>
+        <el-card v-for="(r, i) in aiRefs" :key="r.id || i" shadow="never" class="ai-ref">
+          <div class="ai-ref-head">
+            <span class="ai-ref-index">[K{{ i + 1 }}]</span>
+            <span class="ai-ref-title">{{ r.title }}</span>
+            <el-tag v-if="r.deviceType" size="small" type="info">{{ r.deviceType }}</el-tag>
+            <span v-if="r.score != null" class="muted">score {{ Number(r.score).toFixed(3) }}</span>
+          </div>
+          <div class="ai-ref-summary">{{ r.summary || '—' }}</div>
+        </el-card>
+      </div>
+
+      <el-collapse v-if="ai.reasoning" class="mt8">
+        <el-collapse-item :title="`思考过程（${ai.reasoning.length} 字）`">
+          <div class="ai-reasoning">{{ ai.reasoning }}</div>
+        </el-collapse-item>
+      </el-collapse>
+
+      <div class="ai-section-title mt8">分析结论</div>
+      <div class="ai-answer" ref="aiAnswerRef">
+        <span v-if="!ai.answer && aiLoading" class="muted">正在检索知识并生成回答…</span>
+        <span v-else>{{ ai.answer || '点击“重新分析”生成' }}</span>
+        <span v-if="aiLoading" class="ai-cursor">▍</span>
+      </div>
+
+      <div v-if="ai.usage" class="ai-usage">
+        <span>prompt {{ ai.usage.promptTokens }}</span>
+        <span>completion {{ ai.usage.completionTokens }}</span>
+        <span>total {{ ai.usage.totalTokens }}</span>
+        <span>耗时 {{ ai.usage.latencyMs }}ms</span>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   getTicket, ticketAction, addComment,
   listAttachments, uploadAttachment, downloadAttachment, deleteAttachment
 } from '../api/ticket'
+import { chatStream } from '../api/ai'
 
 const route = useRoute()
 const id = route.params.id
@@ -111,6 +161,75 @@ const acting = ref(false)
 const comment = ref('')
 const attachments = ref([])
 const uploading = ref(false)
+
+// ===== M5 AI 分析（SSE 流式）=====
+const aiVisible = ref(false)
+const aiLoading = ref(false)
+const aiAnswerRef = ref(null)
+const ai = reactive({
+  model: '', retrievalMs: 0, degraded: false, firstTokenMs: 0,
+  answer: '', reasoning: '', refs: [], usage: null, error: ''
+})
+const aiRefs = computed(() => ai.refs || [])
+let aiAbort = null
+
+function openAi() {
+  aiVisible.value = true
+  if (!ai.answer) runAi()
+}
+
+function stopAi() {
+  if (aiAbort) {
+    aiAbort.abort()
+    aiAbort = null
+  }
+  aiLoading.value = false
+}
+
+async function scrollAiBottom() {
+  await nextTick()
+  const el = aiAnswerRef.value
+  if (el) el.scrollTop = el.scrollHeight
+}
+
+async function runAi() {
+  stopAi()
+  Object.assign(ai, { answer: '', reasoning: '', refs: [], usage: null, error: '', degraded: false, retrievalMs: 0, firstTokenMs: 0 })
+  aiLoading.value = true
+  aiAbort = new AbortController()
+  const question = `请分析该工单“${detail.value?.ticket?.title || ''}”的可能原因、排查步骤与处理建议；知识库有相关 SOP 请引用。`
+  try {
+    await chatStream({
+      question,
+      ticketId: String(id),
+      topK: 5
+    }, {
+      meta: (m) => {
+        ai.model = m.model
+        ai.retrievalMs = m.retrievalMs
+        ai.degraded = !!m.degraded
+        ai.refs = m.refs || []
+      },
+      reasoning: (d) => { ai.reasoning += d.delta || '' },
+      delta: (d) => { ai.answer += d.delta || ''; scrollAiBottom() },
+      usage: (u) => {
+        ai.usage = u
+        ai.firstTokenMs = u.firstTokenMs
+      },
+      error: (e) => { ai.error = e.message || 'AI 服务异常' },
+      done: () => {}
+    }, aiAbort.signal)
+  } catch (e) {
+    if (e.name !== 'AbortError') {
+      ai.error = e.message || 'AI 分析失败'
+      ElMessage.error(ai.error)
+    }
+  } finally {
+    aiLoading.value = false
+    aiAbort = null
+  }
+}
+
 
 const ALLOWED_EXT = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'log', 'txt']
 const MAX_SIZE = 20 * 1024 * 1024
@@ -253,4 +372,24 @@ onMounted(load)
 .mr8 { margin-right: 8px; }
 .attachments { margin: 8px 0 16px; }
 .att-head { display: flex; justify-content: space-between; align-items: center; }
+
+/* M5 AI 分析 */
+.ai-toolbar { display: flex; align-items: center; gap: 8px; }
+.ai-spacer { flex: 1; }
+.ai-section-title { font-weight: 600; font-size: 13px; color: #303133; margin-bottom: 6px; }
+.ai-refs { margin-top: 14px; }
+.ai-ref { margin-bottom: 8px; background: #f8fafc; }
+.ai-ref-head { display: flex; align-items: center; gap: 8px; }
+.ai-ref-index { color: #409eff; font-weight: 600; font-size: 12px; }
+.ai-ref-title { font-weight: 600; font-size: 13px; }
+.ai-ref-summary { color: #606266; font-size: 12px; margin-top: 4px; line-height: 1.6; }
+.ai-reasoning { white-space: pre-wrap; font-size: 12px; color: #909399; line-height: 1.7; max-height: 260px; overflow: auto; }
+.ai-answer {
+  white-space: pre-wrap; line-height: 1.75; font-size: 14px; color: #303133;
+  background: #fafcff; border: 1px solid #ebeef5; border-radius: 6px;
+  padding: 12px; min-height: 120px; max-height: 46vh; overflow: auto;
+}
+.ai-cursor { color: #409eff; animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.ai-usage { margin-top: 12px; display: flex; gap: 16px; color: #909399; font-size: 12px; border-top: 1px dashed #e4e7ed; padding-top: 8px; }
 </style>

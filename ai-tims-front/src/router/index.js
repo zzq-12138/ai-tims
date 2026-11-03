@@ -40,6 +40,12 @@ const routes = [
         meta: { title: '知识库' }
       },
       {
+        path: 'assistant',
+        name: 'assistant',
+        component: () => import('../views/Assistant.vue'),
+        meta: { title: 'AI 助手' }
+      },
+      {
         path: 'system/users',
         name: 'system-users',
         component: () => import('../views/SystemUser.vue'),

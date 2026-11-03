@@ -16,6 +16,9 @@
         <el-menu-item index="/kb">
           <span>知识库</span>
         </el-menu-item>
+        <el-menu-item index="/assistant">
+          <span>AI 助手</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>

@@ -17,6 +17,9 @@ spring:
       # 注意：SC 2025.0 起 routes 前缀迁移为 spring.cloud.gateway.server.webflux.routes
       server:
         webflux:
+          default-filters:
+            # 剥离客户端伪造的 X-Forwarded-For，由网关重新追加真实客户端 IP（防爆破按 IP 计数的前提）
+            - RemoveRequestHeader=X-Forwarded-For
           routes:
             - id: auth
               uri: lb://ticket-system

@@ -3,6 +3,7 @@ package com.tims.system.controller;
 import com.tims.common.api.Result;
 import com.tims.system.service.AuthService;
 import com.tims.system.service.RegisterService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,8 +35,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Result<Map<String, Object>> login(@RequestBody LoginRequest req) {
-        return Result.ok(authService.login(req.username(), req.password()));
+    public Result<Map<String, Object>> login(@RequestBody LoginRequest req, HttpServletRequest request) {
+        return Result.ok(authService.login(req.username(), req.password(), clientIp(request)));
+    }
+
+    /**
+     * 客户端 IP：网关已剥离客户端伪造的 X-Forwarded-For 并追加真实 IP，
+     * 这里取 XFF 首个地址；无 XFF（本机直连调试）回退 remoteAddr。
+     */
+    private static String clientIp(HttpServletRequest request) {
+        String xff = request.getHeader("X-Forwarded-For");
+        if (xff != null && !xff.isBlank()) {
+            int comma = xff.indexOf(',');
+            return (comma > 0 ? xff.substring(0, comma) : xff).trim();
+        }
+        return request.getRemoteAddr();
     }
 
     @PostMapping("/register")

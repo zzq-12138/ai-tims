@@ -38,6 +38,14 @@ tims:
     mail:
       from: 812014285@qq.com
       from-name: AI-TIMS 系统
+  # 登录防爆破阈值（M2 批一：用户名 + IP 双维度，任一触发即拒）
+  login-protection:
+    username-max-fail: 5          # 同一用户名失败上限
+    username-window-minutes: 15   # 用户名计数窗口
+    username-lock-minutes: 15     # 用户名锁定时长
+    ip-max-fail: 10               # 同一 IP 失败上限
+    ip-window-minutes: 10         # IP 计数窗口
+    ip-ban-minutes: 30            # IP 封禁时长
 
 mybatis-plus:
   configuration:

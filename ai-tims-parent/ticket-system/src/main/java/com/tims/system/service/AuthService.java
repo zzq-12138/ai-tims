@@ -6,6 +6,7 @@ import com.tims.common.enums.ErrorCode;
 import com.tims.common.exception.BizException;
 import com.tims.system.entity.SysUser;
 import com.tims.system.mapper.SysUserMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,33 @@ import java.util.Map;
  * 多租户：登录成功后把 tenantId 签进会话（M2 起网关校验后透传 X-Tenant-Id，
  * 绝不信任客户端直接传的租户值）。
  *
- * M1 第二段（2026-11-03）：
- * - 密码校验切到标准 BCryptPasswordEncoder（spring-security-crypto），
- *   种子 hash $2a$10$... 与其兼容，数据不动
- * - 登录防爆破：同用户名失败 ≥5 次锁定 5 分钟（Redis 计数）
+ * M2 批一（2026-11-03）：登录防爆破升级为双维度，阈值可配（tims.login-protection.*）：
+ * - 用户名维度：同一用户名失败 ≥5 次，锁定 15 分钟
+ * - IP 维度：同一 IP 失败 ≥10 次（10 分钟窗口），封禁 30 分钟
+ * 两者任一触发即拒绝登录。
  */
 @Service
 public class AuthService {
 
-    private static final String KEY_FAIL = "tims:login:fail:";
-    private static final String KEY_LOCK = "tims:login:lock:";
-    private static final int MAX_FAIL = 5;
-    private static final Duration LOCK_DURATION = Duration.ofMinutes(5);
-    private static final Duration FAIL_TTL = Duration.ofMinutes(15);
+    /** 用户名维度：失败计数 / 锁定标记 */
+    private static final String KEY_FAIL_USER = "tims:login:fail:user:";
+    private static final String KEY_LOCK_USER = "tims:login:lock:user:";
+    /** IP 维度：失败计数（滑动窗口内累计）/ 封禁标记 */
+    private static final String KEY_FAIL_IP = "tims:login:fail:ip:";
+    private static final String KEY_BAN_IP = "tims:login:ban:ip:";
+
+    @Value("${tims.login-protection.username-max-fail:5}")
+    private int usernameMaxFail;
+    @Value("${tims.login-protection.username-lock-minutes:15}")
+    private int usernameLockMinutes;
+    @Value("${tims.login-protection.username-window-minutes:15}")
+    private int usernameWindowMinutes;
+    @Value("${tims.login-protection.ip-max-fail:10}")
+    private int ipMaxFail;
+    @Value("${tims.login-protection.ip-window-minutes:10}")
+    private int ipWindowMinutes;
+    @Value("${tims.login-protection.ip-ban-minutes:30}")
+    private int ipBanMinutes;
 
     private final SysUserMapper userMapper;
     private final StringRedisTemplate redis;
@@ -46,21 +61,28 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Map<String, Object> login(String username, String password) {
-        if (Boolean.TRUE.equals(redis.hasKey(KEY_LOCK + username))) {
-            throw new BizException(ErrorCode.LOGIN_LOCKED, "登录失败次数过多，账号已锁定，请 5 分钟后再试");
+    public Map<String, Object> login(String username, String password, String ip) {
+        // 双维度前置检查：IP 封禁 / 用户名锁定，任一触发即拒
+        if (Boolean.TRUE.equals(redis.hasKey(KEY_BAN_IP + ip))) {
+            throw new BizException(ErrorCode.LOGIN_LOCKED,
+                    "该 IP 登录失败次数过多，已被封禁 " + ipBanMinutes + " 分钟");
+        }
+        if (Boolean.TRUE.equals(redis.hasKey(KEY_LOCK_USER + username))) {
+            throw new BizException(ErrorCode.LOGIN_LOCKED,
+                    "登录失败次数过多，账号已锁定，请 " + usernameLockMinutes + " 分钟后再试");
         }
         SysUser user = userMapper.selectOne(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUsername, username));
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-            recordLoginFail(username);
+            recordUserFail(username);
+            recordIpFail(ip);
             throw new BizException(ErrorCode.UNAUTHORIZED, "用户名或密码错误");
         }
         if (user.getStatus() != null && user.getStatus() != 1) {
             throw new BizException(ErrorCode.FORBIDDEN, "账号已停用");
         }
-        redis.delete(KEY_FAIL + username);
-        // 先登录建立会话，再把 tenantId 签进会话（M2 网关透传时以此为准）
+        redis.delete(KEY_FAIL_USER + username);
+        // 先登录建立会话，再把 tenantId 签进会话（网关透传时以此为准）
         StpUtil.login(user.getId());
         StpUtil.getSession().set("tenantId", user.getTenantId() == null ? 1L : user.getTenantId());
         Map<String, Object> data = new HashMap<>();
@@ -69,15 +91,33 @@ public class AuthService {
         return data;
     }
 
-    /** 失败计数：达到上限即锁定并清零计数，锁定窗口内拒绝登录 */
-    private void recordLoginFail(String username) {
-        String failKey = KEY_FAIL + username;
+    /** 用户名维度失败计数：窗口内达到上限即锁定并清零计数 */
+    private void recordUserFail(String username) {
+        String failKey = KEY_FAIL_USER + username;
         Long fails = redis.opsForValue().increment(failKey);
         if (fails != null && fails == 1L) {
-            redis.expire(failKey, FAIL_TTL);
+            redis.expire(failKey, Duration.ofMinutes(usernameWindowMinutes));
         }
-        if (fails != null && fails >= MAX_FAIL) {
-            redis.opsForValue().set(KEY_LOCK + username, "1", LOCK_DURATION);
+        if (fails != null && fails >= usernameMaxFail) {
+            redis.opsForValue().set(KEY_LOCK_USER + username, "1",
+                    Duration.ofMinutes(usernameLockMinutes));
+            redis.delete(failKey);
+        }
+    }
+
+    /** IP 维度失败计数：窗口内达到上限即封禁并清零计数 */
+    private void recordIpFail(String ip) {
+        if (ip == null || ip.isBlank()) {
+            return;
+        }
+        String failKey = KEY_FAIL_IP + ip;
+        Long fails = redis.opsForValue().increment(failKey);
+        if (fails != null && fails == 1L) {
+            redis.expire(failKey, Duration.ofMinutes(ipWindowMinutes));
+        }
+        if (fails != null && fails >= ipMaxFail) {
+            redis.opsForValue().set(KEY_BAN_IP + ip, "1",
+                    Duration.ofMinutes(ipBanMinutes));
             redis.delete(failKey);
         }
     }

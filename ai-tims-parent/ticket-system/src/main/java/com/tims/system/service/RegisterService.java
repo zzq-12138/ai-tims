@@ -3,8 +3,10 @@ package com.tims.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.tims.common.enums.ErrorCode;
 import com.tims.common.exception.BizException;
+import com.tims.system.entity.SysRole;
 import com.tims.system.entity.SysUser;
 import com.tims.system.entity.SysUserRole;
+import com.tims.system.mapper.SysRoleMapper;
 import com.tims.system.mapper.SysUserMapper;
 import com.tims.system.mapper.SysUserRoleMapper;
 import jakarta.validation.constraints.NotBlank;
@@ -18,10 +20,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * 注册服务（M1 第二段，2026-11-03 拍板口径）：
+ * 注册服务（M1 第二段，M2 批一修订，2026-11-03）：
  * - 手机号必填：格式校验 ^1[3-9]\d{9}$ + (tenant_id, phone) 唯一约束（DB 兜底）
- * - 注册前必须通过邮箱验证码：Redis 5 分钟 TTL、getAndDelete 一次性消费、
- *   同邮箱 60s 一次 + 每日上限 10 条；发信走 VerificationCodeSender（mock/smtp 可切换）
+ * - 注册前必须通过邮箱验证码：Redis 5 分钟 TTL、一次性消费、同邮箱 60s 一次 + 每日上限 10 条；
+ *   M2 批一起同一验证码输错 ≥5 次即作废（防暴力试码）
+ * - 默认角色不再硬编码 roleId=4，按 role_code=USER 查 sys_role（租户隔离由插件自动追加）
  * - 密码规则：≥8 位，同时含大写、小写、数字、特殊字符（后端为准）
  * - Mapper 一律 BaseMapper/LambdaQueryWrapper，无 XML SQL
  */
@@ -34,7 +37,11 @@ public class RegisterService {
     private static final String KEY_LOCK = "tims:reg:lock:";
     /** 每日上限键：按自然日计数 */
     private static final String KEY_DAILY = "tims:reg:daily:";
+    /** 验证码试错计数键：与验证码同生命周期（5 分钟） */
+    private static final String KEY_CODE_FAIL = "tims:reg:codefail:";
     private static final long DAILY_LIMIT = 10;
+    /** 同一验证码最大试错次数，超过即作废 */
+    private static final int CODE_MAX_FAIL = 5;
 
     private static final String PHONE_REGEX = "^1[3-9]\\d{9}$";
     private static final String EMAIL_REGEX = "^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)+$";
@@ -42,22 +49,25 @@ public class RegisterService {
     /** ≥8 位，同时含大写、小写、数字、特殊字符 */
     private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^0-9a-zA-Z]).{8,64}$";
 
-    /** 普通用户角色 ID（sql/init.sql 种子，M1 硬编码；M2 做角色管理时改为按 role_code 查询） */
-    private static final long ROLE_USER_ID = 4L;
+    /** 默认注册角色码（sql/init.sql 种子，按 role_code 查询，不再硬编码 roleId） */
+    private static final String DEFAULT_ROLE_CODE = "USER";
 
     private final SysUserMapper userMapper;
     private final SysUserRoleMapper userRoleMapper;
+    private final SysRoleMapper roleMapper;
     private final StringRedisTemplate redis;
     private final VerificationCodeSender codeSender;
     private final org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder passwordEncoder;
 
     public RegisterService(SysUserMapper userMapper,
                            SysUserRoleMapper userRoleMapper,
+                           SysRoleMapper roleMapper,
                            StringRedisTemplate redis,
                            VerificationCodeSender codeSender,
                            org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
         this.userRoleMapper = userRoleMapper;
+        this.roleMapper = roleMapper;
         this.redis = redis;
         this.codeSender = codeSender;
         this.passwordEncoder = passwordEncoder;
@@ -119,13 +129,36 @@ public class RegisterService {
             throw new BizException(ErrorCode.CONFLICT, "邮箱已被注册");
         }
 
-        // 3. 验证码一次性消费（getAndDelete：取值即删除，防重放）
-        String cached = redis.opsForValue().getAndDelete(KEY_CODE + req.email());
-        if (cached == null || !cached.equals(req.code())) {
+        // 3. 验证码校验：错误累计 ≥5 次作废（防暴力试码），正确则一次性消费
+        String codeKey = KEY_CODE + req.email();
+        String failKey = KEY_CODE_FAIL + req.email();
+        String cached = redis.opsForValue().get(codeKey);
+        if (cached == null) {
             throw new BizException(ErrorCode.VALIDATE_CODE_INVALID);
         }
+        if (!cached.equals(req.code())) {
+            Long fails = redis.opsForValue().increment(failKey);
+            if (fails != null && fails == 1L) {
+                redis.expire(failKey, Duration.ofMinutes(5));
+            }
+            if (fails != null && fails >= CODE_MAX_FAIL) {
+                redis.delete(codeKey);
+                redis.delete(failKey);
+                throw new BizException(ErrorCode.VALIDATE_CODE_INVALID, "验证码错误次数过多已作废，请重新获取");
+            }
+            throw new BizException(ErrorCode.VALIDATE_CODE_INVALID);
+        }
+        redis.delete(codeKey);
+        redis.delete(failKey);
 
-        // 4. 落库：tenant_id 恒为 1（单租户阶段），默认 USER 角色
+        // 4. 默认角色：按 role_code 查询（租户条件由 TenantLineInnerInterceptor 自动追加）
+        SysRole role = roleMapper.selectOne(new LambdaQueryWrapper<SysRole>()
+                .eq(SysRole::getRoleCode, DEFAULT_ROLE_CODE));
+        if (role == null) {
+            throw new BizException(ErrorCode.INTERNAL_ERROR, "默认角色缺失，请检查种子数据");
+        }
+
+        // 5. 落库：tenant_id 恒为 1（单租户阶段），默认 USER 角色
         SysUser user = new SysUser();
         user.setTenantId(1L);
         user.setUsername(req.username());
@@ -139,7 +172,7 @@ public class RegisterService {
         SysUserRole ur = new SysUserRole();
         ur.setTenantId(1L);
         ur.setUserId(user.getId());
-        ur.setRoleId(ROLE_USER_ID);
+        ur.setRoleId(role.getId());
         userRoleMapper.insert(ur);
     }
 

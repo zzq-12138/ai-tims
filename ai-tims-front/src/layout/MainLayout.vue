@@ -13,8 +13,8 @@
         <el-menu-item v-if="isAdmin" index="/system/users">
           <span>系统管理</span>
         </el-menu-item>
-        <el-menu-item index="/kb" disabled>
-          <span>知识库（M3）</span>
+        <el-menu-item index="/kb">
+          <span>知识库</span>
         </el-menu-item>
       </el-menu>
     </el-aside>

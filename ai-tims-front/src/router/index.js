@@ -34,6 +34,12 @@ const routes = [
         meta: { title: '工单详情' }
       },
       {
+        path: 'kb',
+        name: 'kb',
+        component: () => import('../views/Knowledge.vue'),
+        meta: { title: '知识库' }
+      },
+      {
         path: 'system/users',
         name: 'system-users',
         component: () => import('../views/SystemUser.vue'),

@@ -162,22 +162,17 @@ public class MilvusVectorStore {
                 .withVectors(Collections.singletonList(q))
                 .withTopK(topK)
                 .withExpr("tenant_id == " + tenantId)
-                .withOutFields(List.of("device_type"))
                 .withParams("{\"ef\":64}")
                 .build();
         R<io.milvus.grpc.SearchResults> r = c.search(sp);
         check(r, "search");
-        // grpc SearchResults → SearchResultData 包一层 SearchResultsWrapper
+        // 用 IDScore 解析（2.4.4 的 getRowRecords 依赖 outFields 名匹配，易抛 key not found；
+        // 设备类型等详情统一由调用方回查 MySQL，此处不取标量字段）
         SearchResultsWrapper wrapper = new SearchResultsWrapper(r.getData().getResults());
-        List<VecHit> hits = new ArrayList<>();
-        for (QueryResultsWrapper.RowRecord row : wrapper.getRowRecords(0)) {
-            Object id = row.get("knowledge_id");
-            Object score = row.get("distance");
-            Object dev = row.get("device_type");
-            if (id == null) continue;
-            hits.add(new VecHit(Long.parseLong(id.toString()),
-                    score == null ? 0f : Float.parseFloat(score.toString()),
-                    dev == null ? null : dev.toString()));
+        List<SearchResultsWrapper.IDScore> idScores = wrapper.getIDScore(0);
+        List<VecHit> hits = new ArrayList<>(idScores.size());
+        for (SearchResultsWrapper.IDScore s : idScores) {
+            hits.add(new VecHit(s.getLongID(), (float) s.getScore(), null));
         }
         return hits;
     }
@@ -205,6 +200,8 @@ public class MilvusVectorStore {
                         .withHost(host)
                         .withPort(port)
                         .withConnectTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+                        // RPC 总超时：对端宕机时 cached channel 的请求不至于无限阻塞
+                        .withRpcDeadline(10, java.util.concurrent.TimeUnit.SECONDS)
                         .build());
                 clientRef.set(c);
             }

@@ -60,6 +60,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!-- M4：领域事件走 RabbitMQ（ticket.created/ticket.closed，Topic 交换机） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <!-- M4：MQ 不可用时 HTTP 降级直调 ticket-push（lb:// 服务名调用需 LoadBalancer） -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
         <!-- 参数校验（建单/挂起/转派等 DTO） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -199,9 +199,11 @@ public class MilvusVectorStore {
                 c = new MilvusServiceClient(ConnectParam.newBuilder()
                         .withHost(host)
                         .withPort(port)
-                        .withConnectTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
-                        // RPC 总超时：对端宕机时 cached channel 的请求不至于无限阻塞
-                        .withRpcDeadline(10, java.util.concurrent.TimeUnit.SECONDS)
+                        // M4：推送链路 P95 ≤ 1s，降级必须快速失败——
+                        // docker stop 后 docker-proxy 仍可能短暂 accept 连接，
+                        // connect deadline 1s + rpc deadline 1s，保证 kb 侧 ~1s 内退关键词兜底
+                        .withConnectTimeout(1, java.util.concurrent.TimeUnit.SECONDS)
+                        .withRpcDeadline(1, java.util.concurrent.TimeUnit.SECONDS)
                         .build());
                 clientRef.set(c);
             }

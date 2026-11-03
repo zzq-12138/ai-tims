@@ -140,6 +140,7 @@ CREATE TABLE `wo_ticket` (
   `handler_name`  VARCHAR(32)  DEFAULT NULL COMMENT '处理人姓名',
   `resolve_note`  TEXT         COMMENT '解决说明(知识提炼输入)',
   `ai_extracted`  TINYINT      NOT NULL DEFAULT 0 COMMENT '是否已AI提炼 0/1',
+  `version`       INT          NOT NULL DEFAULT 0 COMMENT '乐观锁版本号(状态迁移并发控制,M4)',
   `create_by`     BIGINT       DEFAULT NULL COMMENT '创建人',
   `create_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -312,3 +313,48 @@ INSERT INTO `kb_category` (`id`, `tenant_id`, `category_name`, `description`, `s
 (1, 1, '设备维护', '设备异常处理类经验', 1),
 (2, 1, '品质分析', '品质异常分析类经验', 2),
 (3, 1, '系统运维', 'MES/系统类问题',    3);
+
+-- ---------------------------------------------------------------------
+-- 7. ps_ 推送域（M4，2026-11-03）
+--    ps_push_latency：四时间戳埋点，一条工单一行（ticket.created 触发创建）：
+--      t_created 建单落库 / t_event_sent MQ发出 / t_retrieve_done 检索返回 / t_push_sent WS发出
+--    degraded 位标记：1=kb关键词降级 2=MQ降级(本地线程池) 4=kb全不可用(空卡片)，按位或叠加
+--    ps_push_message：站内消息（离线坐席补推），上线时按 user_id 补推未读
+-- ---------------------------------------------------------------------
+DROP TABLE IF EXISTS `ps_push_latency`;
+CREATE TABLE `ps_push_latency` (
+  `id`               BIGINT      NOT NULL COMMENT '主键',
+  `tenant_id`        BIGINT      NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `ticket_id`        BIGINT      NOT NULL COMMENT '工单ID',
+  `ticket_no`        VARCHAR(32) DEFAULT NULL COMMENT '工单编号',
+  `device_type`      VARCHAR(64) DEFAULT NULL COMMENT '设备类型',
+  `t_created`        DATETIME(3) DEFAULT NULL COMMENT '建单落库时间',
+  `t_event_sent`     DATETIME(3) DEFAULT NULL COMMENT 'MQ事件发出时间',
+  `t_retrieve_done`  DATETIME(3) DEFAULT NULL COMMENT '知识检索返回时间',
+  `t_push_sent`      DATETIME(3) DEFAULT NULL COMMENT 'WS推送发出时间',
+  `degraded`         INT         NOT NULL DEFAULT 0 COMMENT '降级位标记 1=kb降级 2=MQ降级 4=kb不可用',
+  `e2e_ms`           BIGINT      DEFAULT NULL COMMENT '端到端耗时ms(t_push_sent-t_created)',
+  `create_time`      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `update_time`      DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_ticket` (`ticket_id`),
+  KEY `idx_tenant_created` (`tenant_id`, `t_created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='推送端到端时延埋点表(四时间戳)';
+
+DROP TABLE IF EXISTS `ps_push_message`;
+CREATE TABLE `ps_push_message` (
+  `id`           BIGINT       NOT NULL COMMENT '主键',
+  `tenant_id`    BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `ticket_id`    BIGINT       NOT NULL COMMENT '工单ID',
+  `user_id`      BIGINT       NOT NULL COMMENT '目标坐席用户ID',
+  `msg_type`     VARCHAR(16)  NOT NULL DEFAULT 'CARD' COMMENT '消息类型 CARD/NOTICE',
+  `title`        VARCHAR(128) NOT NULL COMMENT '标题',
+  `content`      TEXT         COMMENT '内容(知识卡片JSON)',
+  `read_flag`    TINYINT      NOT NULL DEFAULT 0 COMMENT '是否已读 0/1',
+  `pushed_flag`  TINYINT      NOT NULL DEFAULT 0 COMMENT '是否已补推 0/1',
+  `create_time`  DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `read_time`    DATETIME(3)  DEFAULT NULL COMMENT '阅读时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_user_read` (`tenant_id`, `user_id`, `read_flag`),
+  KEY `idx_tenant_ticket` (`tenant_id`, `ticket_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='站内消息表(离线补推)';

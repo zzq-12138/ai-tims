@@ -18,6 +18,16 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话共享 + 工单流水号 + 指标最新值
+  rabbitmq:
+    host: ${RABBIT_HOST:127.0.0.1}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:tims}
+    password: ${RABBIT_PASSWORD:}          # 必填，无默认值（~/.secrets 不进 git，重启脚本注入）
+    virtual-host: /
+    publisher-confirm-type: correlated     # 发送确认（nack/不可达时走 HTTP 降级）
+    publisher-returns: true
+    template:
+      mandatory: true
   servlet:
     multipart:
       max-file-size: 20MB                 # 附件单文件上限（与 AttachmentService 校验一致）

@@ -45,6 +45,17 @@ public class GlobalExceptionHandler {
                 .body(Result.fail(ErrorCode.BAD_REQUEST));
     }
 
+    /**
+     * 附件超限（M4 硬债：此前落到兜底 Exception → 10500，语义错误）。
+     * 单文件 >20MB 由 multipart 层拦截，返回 10400 参数错误。
+     */
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<Result<Void>> handleMaxUploadSize(org.springframework.web.multipart.MaxUploadSizeExceededException e) {
+        log.warn("附件超限: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Result.fail(ErrorCode.BAD_REQUEST.getCode(), "附件大小超出上限（单文件最大 20MB）"));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Result<Void>> handleException(Exception e) {
         log.error("系统异常", e);

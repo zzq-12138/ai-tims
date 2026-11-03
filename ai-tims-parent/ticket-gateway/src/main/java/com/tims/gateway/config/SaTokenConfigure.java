@@ -30,7 +30,10 @@ public class SaTokenConfigure {
             "/api/ai/ping",
             "/api/push/ping",
             "/actuator/**",
-            "/favicon.ico"
+            "/favicon.ico",
+            // M4：WS 握手（浏览器 WebSocket API 无法携带 Authorization 头），
+            // 鉴权由 ticket-push 的 AuthHandshakeInterceptor 用 ?token= 参数完成（Sa-Token 会话共享校验）
+            "/ws/**"
     };
 
     @Bean

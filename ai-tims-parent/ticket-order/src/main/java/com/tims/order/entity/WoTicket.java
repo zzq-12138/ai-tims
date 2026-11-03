@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 
 import java.time.LocalDateTime;
 
@@ -60,6 +61,10 @@ public class WoTicket {
     /** 是否已 AI 提炼 0/1 */
     private Integer aiExtracted;
 
+    /** 乐观锁版本号（M4：状态迁移并发控制，OptimisticLockerInnerInterceptor） */
+    @Version
+    private Integer version;
+
     private Long createBy;
 
     private LocalDateTime createTime;
@@ -109,6 +114,8 @@ public class WoTicket {
     public void setResolveNote(String resolveNote) { this.resolveNote = resolveNote; }
     public Integer getAiExtracted() { return aiExtracted; }
     public void setAiExtracted(Integer aiExtracted) { this.aiExtracted = aiExtracted; }
+    public Integer getVersion() { return version; }
+    public void setVersion(Integer version) { this.version = version; }
     public Long getCreateBy() { return createBy; }
     public void setCreateBy(Long createBy) { this.createBy = createBy; }
     public LocalDateTime getCreateTime() { return createTime; }

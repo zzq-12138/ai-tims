@@ -27,6 +27,9 @@ public final class TicketStateMachine {
     /** 非法状态迁移错误码（任务书 2.5：order 段 20401） */
     public static final int ILLEGAL_TRANSITION_CODE = 20401;
 
+    /** 乐观锁并发冲突错误码（M4：状态迁移并发控制） */
+    public static final int CONCURRENT_MODIFY_CODE = 20402;
+
     /** 迁移表：action → (前置状态 → 后置状态)，11 对超 Map.of 上限改用 ofEntries */
     private static final Map<TicketAction, Map<String, String>> TRANSITIONS = Map.ofEntries(
             Map.entry(TicketAction.CREATE, Map.of("*", "SUBMITTED")),

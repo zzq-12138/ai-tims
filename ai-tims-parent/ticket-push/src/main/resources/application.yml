@@ -10,20 +10,62 @@ spring:
       discovery:
         namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:aitims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:dev}
+    password: ${MYSQL_PASSWORD:}          # 必填，无默认值（ps_ 表落库，重启脚本注入）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}       # 在线用户表 tims:push:online:{userId} + Sa-Token 会话共享
+      port: ${REDIS_PORT:6379}
+  rabbitmq:
+    host: ${RABBIT_HOST:127.0.0.1}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:tims}
+    password: ${RABBIT_PASSWORD:}          # 必填，无默认值（重启脚本注入）
+    virtual-host: /
+    listener:
+      simple:
+        # 失败重投：本地重试 3 次仍失败 → 不重回队列 → 落死信 q.push.ticket.dead
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 500
+          multiplier: 2
+        default-requeue-rejected: false
+        concurrency: 4
+        max-concurrency: 8
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id
+
+sa-token:
+  token-name: Authorization               # 必须与 ticket-system 一致，会话共享校验握手 token
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-read-cookie: false
+  is-log: false
+
+tims:
+  # 服务间内部接口共享密钥（order HTTP 降级调用 /api/push/internal/event 携带，不进 git）
+  internal-token: ${TIMS_INTERNAL_TOKEN:tims-internal-dev}
+  push:
+    # 知识检索调用地址（lb 服务名）；走网关可改 http://ticket-gateway:8080
+    kb-base-url: ${TIMS_KB_BASE_URL:http://ticket-knowledge}
+    # 在线表心跳 TTL（秒），客户端 10s 一跳，30s 无心跳判离线
+    online-ttl-seconds: 30
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
-
-# ===== M0 骨架仅保留最小配置；中间件连接 M4 起启用，一律走环境变量，严禁硬编码 =====
-# spring.datasource.url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:ai_tims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-# spring.datasource.username: ${MYSQL_USER:dev}
-# spring.datasource.password: ${MYSQL_PASSWORD:}          # 必填，无默认值（ps_push_record 埋点）
-# spring.data.redis.host: ${REDIS_HOST:127.0.0.1}         # 在线表 push:online
-# spring.data.redis.port: ${REDIS_PORT:6379}
-# spring.rabbitmq.host: ${RABBIT_HOST:127.0.0.1}          # q.push.notify
-# spring.rabbitmq.port: ${RABBIT_PORT:5672}
-# spring.rabbitmq.username: ${RABBIT_USER:guest}
-# spring.rabbitmq.password: ${RABBIT_PASSWORD:}

@@ -162,6 +162,21 @@ public class TicketService {
         writeFlow(t, draft ? TicketAction.SUBMIT : TicketAction.CREATE, null, toStatus,
                 userId, userNickname(tenantId, userId), draft ? "保存草稿" : null);
         log.info("工单创建 id={} no={} status={} handler={}", t.getId(), t.getTicketNo(), toStatus, t.getHandlerId());
+
+        // M4：推送链路入口 —— 非草稿建单提交后发布 ticket.created（事务提交后真正发出）
+        if (!draft) {
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("tenantId", tenantId);
+            payload.put("ticketId", t.getId());
+            payload.put("ticketNo", t.getTicketNo());
+            payload.put("deviceType", t.getDeviceType());
+            payload.put("title", t.getTitle());
+            payload.put("description", t.getDescription());
+            payload.put("urgency", t.getUrgency());
+            payload.put("handlerId", t.getHandlerId());
+            payload.put("tCreated", LocalDateTime.now());
+            eventPublisher.publish("ticket.created", payload);
+        }
         return t;
     }
 
@@ -364,7 +379,7 @@ public class TicketService {
         applyTransition(t, action, userId, comment);
     }
 
-    /** 迁移表校验 → 更新状态/节点 → 写流转日志 → confirm 时发布 ticket.closed */
+    /** 迁移表校验 → 乐观锁更新状态/节点 → 写流转日志 → confirm 时发布 ticket.closed */
     private void applyTransition(WoTicket t, TicketAction action, long operatorId, String comment) {
         Long tenantId = t.getTenantId() == null ? tenantId() : t.getTenantId();
         String from = t.getStatus();
@@ -374,19 +389,27 @@ public class TicketService {
         patch.setId(t.getId());
         patch.setStatus(to);
         patch.setCurrentNode(TicketStateMachine.nodeOf(to));
+        // M4 乐观锁：携带读取时的 version，并发迁移时 UPDATE 影响 0 行 → 抛 20402 拒绝
+        patch.setVersion(t.getVersion());
         if (action == TicketAction.RESOLVE) {
             patch.setResolveNote(comment); // 解决说明是 M3 知识提炼输入
         }
-        ticketMapper.updateById(patch);
-
+        int rows = ticketMapper.updateById(patch);
+        if (rows == 0) {
+            throw new BizException(TicketStateMachine.CONCURRENT_MODIFY_CODE,
+                    "工单状态已被其他操作变更，请刷新后重试");
+        }
         t.setStatus(to);
         t.setCurrentNode(TicketStateMachine.nodeOf(to));
+        t.setVersion(t.getVersion() == null ? 1 : t.getVersion() + 1);
         writeFlow(t, action, from, to, operatorId, userNickname(tenantId, operatorId), comment);
 
         if (action == TicketAction.CONFIRM) {
             Map<String, Object> payload = new HashMap<>();
+            payload.put("tenantId", tenantId);
             payload.put("ticketId", t.getId());
             payload.put("ticketNo", t.getTicketNo());
+            payload.put("deviceType", t.getDeviceType());
             payload.put("handlerId", t.getHandlerId());
             eventPublisher.publish("ticket.closed", payload);
         }

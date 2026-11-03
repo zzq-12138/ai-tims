@@ -19,6 +19,25 @@ spring:
     redis:
       host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话存储
       port: ${REDIS_PORT:6379}
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 812014285@qq.com
+    password: ${SMTP_AUTH:}               # 授权码：~/secrets/smtp_auth 注入（不进 git）
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 10000
+      mail.smtp.writetimeout: 10000
+
+# 验证码发信：mock=开发默认（写日志+调试接口取码）；smtp=真实发信（M2 验证）
+tims:
+  verification:
+    sender: ${VERIFY_SENDER:mock}
+    mail:
+      from: 812014285@qq.com
+      from-name: AI-TIMS 系统
 
 mybatis-plus:
   configuration:

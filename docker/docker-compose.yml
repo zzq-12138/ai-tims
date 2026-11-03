@@ -8,7 +8,11 @@ services:
     container_name: tims-nacos
     environment:
       - MODE=standalone
-      - NACOS_AUTH_ENABLE=false        # 开发期关闭鉴权；上生产/K8s 时改 true 并注入 NACOS_AUTH_TOKEN/IDENTITY
+      - NACOS_AUTH_ENABLE=false        # Nacos 3 启动脚本强制要求 AUTH_TOKEN（Base64, >=32 字节），即使鉴权关闭。
+        # 开发期固定示例值，生产必须替换：openssl rand -base64 32
+      - NACOS_AUTH_TOKEN=ZGV2LXRpbXMtZGV2LXRpbXMtZGV2LXRpbXMtZGV2LXRpbXMtZGV2LTEyMzQ=
+      - NACOS_AUTH_IDENTITY_KEY=serverIdentity
+      - NACOS_AUTH_IDENTITY_VALUE=tims-dev        # 开发期关闭鉴权；上生产/K8s 时改 true 并注入 NACOS_AUTH_TOKEN/IDENTITY
       - JVM_XMS=256m
       - JVM_XMX=512m
     ports:

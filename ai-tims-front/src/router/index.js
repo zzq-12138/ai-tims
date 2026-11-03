@@ -3,6 +3,7 @@ import { useAuthStore } from '../stores/auth'
 
 const routes = [
   { path: '/login', name: 'login', component: () => import('../views/Login.vue') },
+  { path: '/register', name: 'register', component: () => import('../views/Register.vue') },
   {
     path: '/',
     component: () => import('../layout/MainLayout.vue'),
@@ -24,10 +25,10 @@ const router = createRouter({
   routes
 })
 
-// 路由守卫：无 token 一律回登录页
+// 路由守卫：无 token 一律回登录页（注册页除外）
 router.beforeEach((to) => {
   const auth = useAuthStore()
-  if (to.path !== '/login' && !auth.token) {
+  if (to.path !== '/login' && to.path !== '/register' && !auth.token) {
     return { path: '/login', query: { redirect: to.fullPath } }
   }
   if (to.path === '/login' && auth.token) {

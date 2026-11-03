@@ -15,6 +15,9 @@ public enum ErrorCode {
     FORBIDDEN(10403, "无访问权限"),
     NOT_FOUND(10404, "资源不存在"),
     CONFLICT(10409, "资源冲突"),
+    VALIDATE_CODE_INVALID(10410, "验证码错误或已过期"),
+    VALIDATE_CODE_LIMIT(10411, "验证码发送过于频繁，请稍后再试"),
+    LOGIN_LOCKED(10412, "登录失败次数过多，账号已临时锁定"),
     INTERNAL_ERROR(10500, "系统内部错误");
 
     private final int code;

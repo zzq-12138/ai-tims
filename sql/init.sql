@@ -39,14 +39,16 @@ CREATE TABLE `sys_user` (
   `nickname`    VARCHAR(32)  NOT NULL COMMENT '姓名',
   `dept_id`     BIGINT       DEFAULT NULL COMMENT '部门ID',
   `factory`     VARCHAR(32)  DEFAULT NULL COMMENT '所属厂区',
-  `phone`       VARCHAR(16)  DEFAULT NULL COMMENT '手机号',
-  `email`       VARCHAR(64)  DEFAULT NULL COMMENT '邮箱',
+  `phone`       VARCHAR(16)  NOT NULL COMMENT '手机号(注册必填，格式后端校验)',
+  `email`       VARCHAR(64)  NOT NULL COMMENT '邮箱(注册必填，验证码通道)',
   `status`      TINYINT      NOT NULL DEFAULT 1 COMMENT '1启用 0停用',
   `create_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted`     TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_tenant_username` (`tenant_id`, `username`),
+  UNIQUE KEY `uk_tenant_phone` (`tenant_id`, `phone`),
+  UNIQUE KEY `uk_tenant_email` (`tenant_id`, `email`),
   KEY `idx_tenant_dept` (`tenant_id`, `dept_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
@@ -106,8 +108,8 @@ INSERT INTO `sys_dept` (`id`, `tenant_id`, `parent_id`, `dept_name`, `factory`, 
 (1, 1, 0, '集团总部', NULL, 0),
 (2, 1, 1, '制造一部', 'F1',  1);
 
-INSERT INTO `sys_user` (`id`, `tenant_id`, `username`, `password`, `nickname`, `dept_id`, `factory`) VALUES
-(1, 1, 'admin', '$2a$10$1Qd7ZqwF9yOKPJ1LvvMcW.RiBpbRlnqA4uIAiSsIbXmw5H.jmMuD2', '系统管理员', 1, 'F1');
+INSERT INTO `sys_user` (`id`, `tenant_id`, `username`, `password`, `nickname`, `dept_id`, `factory`, `phone`, `email`) VALUES
+(1, 1, 'admin', '$2a$10$1Qd7ZqwF9yOKPJ1LvvMcW.RiBpbRlnqA4uIAiSsIbXmw5H.jmMuD2', '系统管理员', 1, 'F1', '13800000001', 'admin@aitims.local');
 
 INSERT INTO `sys_user_role` (`id`, `tenant_id`, `user_id`, `role_id`) VALUES
 (1, 1, 1, 1);

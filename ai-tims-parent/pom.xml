@@ -107,6 +107,8 @@
                     <configuration>
                         <release>17</release>
                         <encoding>UTF-8</encoding>
+                        <!-- Spring 6.1+ 反射取参数名需要 -parameters（@RequestParam 绑定） -->
+                        <parameters>true</parameters>
                     </configuration>
                 </plugin>
                 <plugin>

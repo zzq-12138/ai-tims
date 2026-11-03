@@ -2,6 +2,14 @@
   <div class="login-wrap">
     <el-card class="login-card">
       <h2 class="title">AI-TIMS 智能工单系统</h2>
+      <el-alert
+        v-if="errMsg"
+        :title="errMsg"
+        type="error"
+        show-icon
+        :closable="false"
+        style="margin-bottom: 14px"
+      />
       <el-form :model="form" @keyup.enter="onLogin">
         <el-form-item>
           <el-input v-model="form.username" placeholder="用户名" size="large" />
@@ -15,6 +23,7 @@
           </el-button>
         </el-form-item>
       </el-form>
+      <div class="to-register">还没有账号？<router-link to="/register">立即注册</router-link></div>
     </el-card>
   </div>
 </template>
@@ -30,11 +39,13 @@ const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
 const loading = ref(false)
+const errMsg = ref('')
 const form = reactive({ username: '', password: '' })
 
 async function onLogin() {
+  errMsg.value = ''
   if (!form.username || !form.password) {
-    ElMessage.warning('请输入用户名和密码')
+    errMsg.value = '请输入用户名和密码'
     return
   }
   loading.value = true
@@ -46,7 +57,7 @@ async function onLogin() {
     ElMessage.success('登录成功')
     router.push(route.query.redirect || '/dashboard')
   } catch (e) {
-    ElMessage.error(e.message || '登录失败')
+    errMsg.value = e.message || '登录失败，请稍后重试'
   } finally {
     loading.value = false
   }
@@ -69,5 +80,10 @@ async function onLogin() {
   text-align: center;
   margin: 8px 0 24px;
   color: #1f2d3d;
+}
+.to-register {
+  text-align: center;
+  font-size: 13px;
+  color: #606266;
 }
 </style>

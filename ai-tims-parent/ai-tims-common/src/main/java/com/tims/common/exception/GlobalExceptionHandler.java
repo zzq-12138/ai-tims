@@ -27,6 +27,17 @@ public class GlobalExceptionHandler {
                 .body(Result.fail(e.getCode(), e.getMessage()));
     }
 
+    @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
+    public ResponseEntity<Result<Void>> handleValidation(org.springframework.web.bind.MethodArgumentNotValidException e) {
+        String msg = e.getBindingResult().getFieldErrors().stream()
+                .map(f -> f.getDefaultMessage())
+                .findFirst()
+                .orElse(ErrorCode.BAD_REQUEST.getMessage());
+        log.warn("参数校验失败: {}", msg);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Result.fail(ErrorCode.BAD_REQUEST.getCode(), msg));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Result<Void>> handleIllegalArgument(IllegalArgumentException e) {
         log.warn("参数错误: {}", e.getMessage());

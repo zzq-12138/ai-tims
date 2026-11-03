@@ -20,6 +20,9 @@ public class SaTokenConfigure {
 
     private static final String[] WHITELIST = {
             "/api/auth/login",
+            "/api/auth/register",
+            "/api/auth/code",
+            "/api/auth/debug/**",
             "/api/gateway/ping",
             "/api/system/ping",
             "/api/order/ping",

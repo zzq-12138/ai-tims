@@ -10,18 +10,45 @@ spring:
       discovery:
         namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:aitims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:dev}
+    password: ${MYSQL_PASSWORD:}          # 必填，无默认值（~/.secrets/mysql_pwd 注入）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话共享 + 工单流水号 + 指标最新值
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+sa-token:
+  token-name: Authorization               # 必须与 ticket-system 一致，会话共享
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-read-cookie: false
+  is-log: false
+
+tims:
+  order:
+    # 派发兜底默认值班人（§4.3：无规则匹配时落到该用户，工单停留 SUBMITTED）
+    default-handler: ${TIMS_DEFAULT_HANDLER:1}
+    # 单次批量建单上限（模拟器接口护栏）
+    mock-batch-max: 500
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
-
-# ===== M0 骨架仅保留最小配置；中间件连接 M2 起启用，一律走环境变量，严禁硬编码 =====
-# spring.datasource.url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:ai_tims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-# spring.datasource.username: ${MYSQL_USER:dev}
-# spring.datasource.password: ${MYSQL_PASSWORD:}          # 必填，无默认值
-# spring.rabbitmq.host: ${RABBIT_HOST:127.0.0.1}          # topic exchange: ai-tims.event
-# spring.rabbitmq.port: ${RABBIT_PORT:5672}
-# spring.rabbitmq.username: ${RABBIT_USER:guest}
-# spring.rabbitmq.password: ${RABBIT_PASSWORD:}

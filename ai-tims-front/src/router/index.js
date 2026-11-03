@@ -14,6 +14,30 @@ const routes = [
         name: 'dashboard',
         component: () => import('../views/Dashboard.vue'),
         meta: { title: '工作台' }
+      },
+      {
+        path: 'tickets',
+        name: 'tickets',
+        component: () => import('../views/TicketList.vue'),
+        meta: { title: '工单列表' }
+      },
+      {
+        path: 'tickets/create',
+        name: 'ticket-create',
+        component: () => import('../views/TicketCreate.vue'),
+        meta: { title: '新建工单' }
+      },
+      {
+        path: 'tickets/:id',
+        name: 'ticket-detail',
+        component: () => import('../views/TicketDetail.vue'),
+        meta: { title: '工单详情' }
+      },
+      {
+        path: 'system/users',
+        name: 'system-users',
+        component: () => import('../views/SystemUser.vue'),
+        meta: { title: '用户管理' }
       }
     ]
   },

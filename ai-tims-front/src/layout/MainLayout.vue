@@ -7,8 +7,11 @@
         <el-menu-item index="/dashboard">
           <span>工作台</span>
         </el-menu-item>
-        <el-menu-item index="/tickets" disabled>
-          <span>工单管理（M2）</span>
+        <el-menu-item index="/tickets">
+          <span>工单管理</span>
+        </el-menu-item>
+        <el-menu-item v-if="isAdmin" index="/system/users">
+          <span>系统管理</span>
         </el-menu-item>
         <el-menu-item index="/kb" disabled>
           <span>知识库（M3）</span>
@@ -35,6 +38,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { logout } from '../api/auth'
 import { useAuthStore } from '../stores/auth'
@@ -42,6 +46,7 @@ import { useAuthStore } from '../stores/auth'
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
+const isAdmin = computed(() => (auth.user?.roles || []).includes('ADMIN'))
 
 async function onCommand(cmd) {
   if (cmd === 'logout') {

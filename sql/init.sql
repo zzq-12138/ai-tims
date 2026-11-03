@@ -381,3 +381,33 @@ CREATE TABLE `pt_stress_run` (
   PRIMARY KEY (`id`),
   KEY `idx_tenant_tag` (`tenant_id`, `run_tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='推送压测运行摘要';
+
+-- ---------------------------------------------------------------------
+-- 8. ai_ 调用观测（M5，2026-11-03）
+--    ai_call_log：每次 LLM 调用/工具调用落一行，用于估算智谱 ¥18 配额余量
+--    scene：CHAT_STREAM / CHAT_SYNC / AGENT / AGENT_TOOL；status：SUCCESS / ERROR / DEGRADED
+-- ---------------------------------------------------------------------
+DROP TABLE IF EXISTS `ai_call_log`;
+CREATE TABLE `ai_call_log` (
+  `id`                BIGINT      NOT NULL COMMENT '主键',
+  `tenant_id`         BIGINT      NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `scene`             VARCHAR(24) NOT NULL COMMENT '场景 CHAT_STREAM/CHAT_SYNC/AGENT/AGENT_TOOL',
+  `model`             VARCHAR(64) DEFAULT NULL COMMENT '模型名',
+  `tool_name`         VARCHAR(64) DEFAULT NULL COMMENT '工具名(scene=AGENT_TOOL)',
+  `tool_args`         VARCHAR(512) DEFAULT NULL COMMENT '工具入参摘要',
+  `prompt_tokens`     INT         NOT NULL DEFAULT 0 COMMENT '输入 token',
+  `completion_tokens` INT         NOT NULL DEFAULT 0 COMMENT '输出 token',
+  `total_tokens`      INT         NOT NULL DEFAULT 0 COMMENT '合计 token',
+  `reasoning_tokens`  INT         NOT NULL DEFAULT 0 COMMENT '思考 token(推理模型)',
+  `latency_ms`        BIGINT      DEFAULT NULL COMMENT '总耗时ms',
+  `first_token_ms`    BIGINT      DEFAULT NULL COMMENT '首Token耗时ms/工具耗时ms',
+  `ref_count`         INT         NOT NULL DEFAULT 0 COMMENT '引用知识条数',
+  `status`            VARCHAR(16) NOT NULL DEFAULT 'SUCCESS' COMMENT 'SUCCESS/ERROR/DEGRADED',
+  `degraded`          TINYINT     NOT NULL DEFAULT 0 COMMENT '是否降级 0/1',
+  `error_msg`         VARCHAR(255) DEFAULT NULL COMMENT '错误摘要',
+  `user_id`           BIGINT      DEFAULT NULL COMMENT '调用用户',
+  `create_time`       DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_time` (`tenant_id`, `create_time`),
+  KEY `idx_tenant_scene` (`tenant_id`, `scene`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI调用观测表';

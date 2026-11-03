@@ -10,6 +10,38 @@ spring:
       discovery:
         namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DB:aitims}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:dev}
+    password: ${MYSQL_PASSWORD:}          # 必填，无默认值（~/secrets/mysql_pwd 由启动脚本注入）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+    db-config:
+      id-type: assign_id
+
+tims:
+  ai:
+    # ===== 模型唯一开关：跑批/消融 glm-4-flash，演示 glm-5.3-flash；只改环境变量 LLM_CHAT_MODEL =====
+    model: ${LLM_CHAT_MODEL:glm-4-flash}
+    base-url: ${LLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}
+    completions-path: ${LLM_COMPLETIONS_PATH:/chat/completions}
+    # 密钥优先读环境变量，否则读文件（600 权限，严禁入库/入 Git）
+    api-key: ${LLM_API_KEY:}
+    api-key-file: ${LLM_API_KEY_FILE:/home/dev/secrets/zhipu_api_key}
+    # 推理模型 reasoning 先耗 token，输出上限必须 ≥8192，否则只剩思考没有答案
+    max-tokens: ${LLM_MAX_TOKENS:8192}
+    temperature: ${LLM_TEMPERATURE:0.3}
+    read-timeout-ms: ${LLM_READ_TIMEOUT_MS:120000}
+    connect-timeout-ms: ${LLM_CONNECT_TIMEOUT_MS:5000}
+    kb-base-url: ${KB_BASE_URL:http://ticket-knowledge}
+    order-base-url: ${ORDER_BASE_URL:http://ticket-order}
+    top-k: ${LLM_RAG_TOPK:5}
+    snippet-chars: ${LLM_SNIPPET_CHARS:500}
 
 management:
   endpoints:
@@ -17,13 +49,6 @@ management:
       exposure:
         include: health,info
 
-# ===== M0 骨架仅保留最小配置；Spring AI 与中间件 M5 起启用，密钥一律走环境变量，严禁硬编码 =====
-# spring.ai.openai.api-key: ${LLM_API_KEY:}               # 必填，无默认值（智谱 OpenAI 兼容协议）
-# spring.ai.openai.base-url: ${LLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}
-# spring.ai.openai.chat.options.model: ${LLM_CHAT_MODEL:glm-4-flash}
-# spring.data.redis.host: ${REDIS_HOST:127.0.0.1}         # 对话历史 plan:{ticketId} / chat:{sessionId}
-# spring.data.redis.port: ${REDIS_PORT:6379}
-# spring.rabbitmq.host: ${RABBIT_HOST:127.0.0.1}          # q.ai.enhance / q.ai.extract
-# spring.rabbitmq.port: ${RABBIT_PORT:5672}
-# spring.rabbitmq.username: ${RABBIT_USER:guest}
-# spring.rabbitmq.password: ${RABBIT_PASSWORD:}
+logging:
+  level:
+    com.tims.ai: info

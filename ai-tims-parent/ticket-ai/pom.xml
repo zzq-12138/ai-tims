@@ -12,7 +12,7 @@
 
     <artifactId>ticket-ai</artifactId>
     <name>ticket-ai</name>
-    <description>AI 服务 :8104 - Spring AI 接入、RAG 方案 SSE、助手 Agent、知识提炼（M5/M6 实现）</description>
+    <description>AI 服务 :8104 - Spring AI 接入智谱 GLM、RAG SSE、工单助手与调用观测（M5 实现）</description>
 
     <dependencies>
         <dependency>
@@ -31,6 +31,26 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- M5：智谱 GLM 走 OpenAI 兼容协议 -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+        </dependency>
+        <!-- M5：跨服务调用 kb 检索 / order 工单（lb:// 服务名寻址） -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <!-- M5：ai_call_log 观测落库（BaseMapper，禁 XML） -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

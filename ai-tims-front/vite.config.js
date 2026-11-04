@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// 开发代理指向 VM 网关（tomcat9 已停服，网关已回到 8080）
-const GATEWAY = process.env.VITE_GATEWAY || 'http://192.168.40.10:8080'
+// 开发代理指向 VM 本机网关（dev server 与网关同机，默认 localhost:8080；可用 VITE_GATEWAY 覆盖）
+const GATEWAY = process.env.VITE_GATEWAY || 'http://localhost:8080'
 
 export default defineConfig({
   plugins: [vue()],

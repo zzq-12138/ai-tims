@@ -1,9 +1,15 @@
 <template>
   <el-container class="layout">
-    <el-aside width="200px" class="aside">
-      <div class="logo">AI-TIMS</div>
-      <el-menu :default-active="route.path" router background-color="#1f2d3d"
-               text-color="#cfd8e3" active-text-color="#409eff">
+    <el-aside width="232px" class="aside">
+      <div class="logo">
+        <span class="logo-mark">T</span>
+        <span class="logo-text">
+          <strong>AI-TIMS</strong>
+          <small>智能工单 · 知识闭环</small>
+        </span>
+      </div>
+      <el-menu :default-active="route.path" router background-color="transparent"
+               text-color="#c8d0d8" active-text-color="#f3e6d8">
         <el-menu-item index="/dashboard">
           <span>工作台</span>
         </el-menu-item>
@@ -34,7 +40,10 @@
           </el-badge>
         </div>
         <el-dropdown @command="onCommand">
-          <span class="user">{{ auth.user?.nickname || '用户' }}</span>
+          <span class="user-pill">
+            <span class="user-dot" />
+            <span class="user">{{ auth.user?.nickname || '用户' }}</span>
+          </span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
@@ -151,33 +160,120 @@ async function onCommand(cmd) {
 </script>
 
 <style scoped>
-.layout { height: 100vh; }
-.aside { background-color: #1f2d3d; }
-.logo {
-  height: 56px;
-  line-height: 56px;
-  text-align: center;
-  color: #fff;
-  font-weight: 600;
-  letter-spacing: 2px;
+.layout { height: 100vh; background: var(--paper); }
+.aside {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .05), transparent 28%),
+    linear-gradient(180deg, var(--graphite) 0%, var(--graphite-2) 100%);
+  border-right: 1px solid #0c1217;
+  overflow: hidden;
 }
+.aside::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, .9), transparent 70%);
+}
+.logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 72px;
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+.logo-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: var(--amber);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .18) inset, 0 8px 18px -10px rgba(180, 90, 30, .9);
+}
+.logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+.logo-text strong { color: #f4efe7; font-size: 16px; letter-spacing: .16em; }
+.logo-text small { color: #8d99a3; font-size: 10px; letter-spacing: .12em; margin-top: 3px; }
+.aside :deep(.el-menu) { border-right: 0; padding: 12px 10px; counter-reset: nav; }
+.aside :deep(.el-menu-item) {
+  height: 44px;
+  margin: 2px 0;
+  border-radius: 7px;
+  font-size: 13.5px;
+  letter-spacing: .06em;
+  transition: background-color .18s ease, color .18s ease;
+}
+.aside :deep(.el-menu-item::before) {
+  counter-increment: nav;
+  content: counter(nav, decimal-leading-zero);
+  margin-right: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #5f6b76;
+}
+.aside :deep(.el-menu-item:hover) { background: rgba(255, 255, 255, .06); color: #fff; }
+.aside :deep(.el-menu-item.is-active) {
+  background: linear-gradient(90deg, rgba(180, 90, 30, .24), rgba(180, 90, 30, .05));
+  box-shadow: 3px 0 0 var(--amber) inset;
+  color: #f3e6d8;
+}
+.aside :deep(.el-menu-item.is-active::before) { color: var(--amber); }
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e4e7ed;
+  height: 64px;
+  padding: 0 26px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 253, 249, .82);
+  backdrop-filter: blur(6px);
 }
 .header-left { display: flex; align-items: center; gap: 12px; }
-.ws-tag { cursor: pointer; }
-.user { cursor: pointer; }
+.ws-tag { cursor: pointer; font-family: var(--font-mono); letter-spacing: .04em; }
+.user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 14px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.user-pill:hover { border-color: var(--line-strong); box-shadow: var(--shadow-sm); }
+.user-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px rgba(47, 125, 102, .14); }
+.user { color: var(--ink); font-weight: 600; font-size: 13px; }
 .card-head { display: flex; align-items: center; gap: 8px; }
 .card-title { font-weight: 600; }
 .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.card-time { color: #909399; font-size: 12px; }
+.card-time { color: var(--muted); font-family: var(--font-mono); font-size: 11px; }
 .card-notice { margin-bottom: 8px; }
-.kb-item { border-top: 1px dashed #ebeef5; padding: 8px 0; }
+.kb-item { border-top: 1px dashed var(--line); padding: 10px 0; }
 .kb-title { font-weight: 600; font-size: 13px; }
-.kb-summary { color: #606266; font-size: 12px; margin: 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.kb-summary { color: var(--ink-2); font-size: 12px; margin: 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .kb-tags { display: flex; gap: 4px; flex-wrap: wrap; }
-.kb-empty { color: #909399; font-size: 12px; }
+.kb-empty { color: var(--muted); font-size: 12px; }
+
+@media (max-width: 820px) {
+  .layout { flex-direction: column; }
+  .aside { width: 100% !important; height: auto; flex: none; }
+  .logo { height: 52px; }
+  .aside :deep(.el-menu) { display: flex; overflow-x: auto; padding: 6px 8px; }
+  .aside :deep(.el-menu-item) { flex: 0 0 auto; margin: 0 4px; padding: 0 12px; }
+  .aside :deep(.el-menu-item::before) { display: none; }
+  .header { height: 50px; padding: 0 14px; }
+}
 </style>

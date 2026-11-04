@@ -13,14 +13,14 @@
       </template>
 
       <el-descriptions :column="3" border size="small">
-        <el-descriptions-item label="工单编号">{{ detail.ticket.ticketNo || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="工单编号"><span class="mono">{{ detail.ticket.ticketNo || '-' }}</span></el-descriptions-item>
         <el-descriptions-item label="类型">{{ detail.ticket.ticketType }}</el-descriptions-item>
         <el-descriptions-item label="紧急程度">{{ { 1: '高', 2: '中', 3: '低' }[detail.ticket.urgency] }}</el-descriptions-item>
         <el-descriptions-item label="厂区/厂别">{{ detail.ticket.factory || '-' }} / {{ detail.ticket.plant || '-' }}</el-descriptions-item>
         <el-descriptions-item label="设备类型">{{ detail.ticket.deviceType || '-' }}</el-descriptions-item>
-        <el-descriptions-item label="Glass ID">{{ detail.ticket.glassId || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="Glass ID"><span class="mono">{{ detail.ticket.glassId || '-' }}</span></el-descriptions-item>
         <el-descriptions-item label="处理人">{{ detail.ticket.handlerName || '-' }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间">{{ detail.ticket.createTime }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间"><span class="mono">{{ detail.ticket.createTime }}</span></el-descriptions-item>
         <el-descriptions-item label="当前节点">{{ detail.ticket.currentNode }}</el-descriptions-item>
         <el-descriptions-item label="现象描述" :span="3">{{ detail.ticket.description }}</el-descriptions-item>
         <el-descriptions-item v-if="detail.ticket.resolveNote" label="解决说明" :span="3">
@@ -130,7 +130,8 @@
       <div class="ai-section-title mt8">分析结论</div>
       <div class="ai-answer" ref="aiAnswerRef">
         <span v-if="!ai.answer && aiLoading" class="muted">正在检索知识并生成回答…</span>
-        <span v-else>{{ ai.answer || '点击“重新分析”生成' }}</span>
+        <span v-else-if="ai.answer" class="ai-answer-body" v-html="formatAnswer(ai.answer)" />
+        <span v-else>点击“重新分析”生成</span>
         <span v-if="aiLoading" class="ai-cursor">▍</span>
       </div>
 
@@ -184,6 +185,20 @@ function stopAi() {
     aiAbort = null
   }
   aiLoading.value = false
+}
+
+/** 展示层轻量格式化：把模型返回的 Markdown 片段转成可读结构（先转义，防注入） */
+function formatAnswer(text) {
+  const esc = String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  return esc
+    .replace(/^###\s+(.+)$/gm, '<div class="ai-h3">$1</div>')
+    .replace(/^##\s+(.+)$/gm, '<div class="ai-h2">$1</div>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^\s*\d+\.\s+(.+)$/gm, '<div class="ai-li">$1</div>')
+    .replace(/^\s*[-*]\s+(.+)$/gm, '<div class="ai-li ai-li-dash">$1</div>')
 }
 
 async function scrollAiBottom() {
@@ -363,33 +378,100 @@ onMounted(load)
 </script>
 
 <style scoped>
-.head { display: flex; justify-content: space-between; align-items: center; }
-.actions { margin: 16px 0; display: flex; gap: 8px; }
-.muted { color: #909399; font-size: 12px; }
-.comment { border-top: 1px dashed #e4e7ed; padding: 8px 0; }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.head > span { font-size: 17px; font-weight: 600; letter-spacing: .02em; }
+.actions { margin: 18px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.muted { color: var(--muted); font-size: 12px; }
+.mono { font-family: var(--font-mono); font-size: 12px; letter-spacing: -.01em; }
+.comment { border-top: 1px dashed var(--line); padding: 10px 0; }
 .comment-input { margin-top: 12px; }
 .mt8 { margin-top: 8px; }
 .mr8 { margin-right: 8px; }
-.attachments { margin: 8px 0 16px; }
+.attachments { margin: 8px 0 18px; }
 .att-head { display: flex; justify-content: space-between; align-items: center; }
+.att-head h4 { margin-bottom: 6px; }
+.attachments h4,
+:deep(.el-row) h4 { margin: 4px 0 10px; font-size: 13px; letter-spacing: .1em; color: var(--muted); }
 
 /* M5 AI 分析 */
-.ai-toolbar { display: flex; align-items: center; gap: 8px; }
+.ai-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .ai-spacer { flex: 1; }
-.ai-section-title { font-weight: 600; font-size: 13px; color: #303133; margin-bottom: 6px; }
-.ai-refs { margin-top: 14px; }
-.ai-ref { margin-bottom: 8px; background: #f8fafc; }
-.ai-ref-head { display: flex; align-items: center; gap: 8px; }
-.ai-ref-index { color: #409eff; font-weight: 600; font-size: 12px; }
-.ai-ref-title { font-weight: 600; font-size: 13px; }
-.ai-ref-summary { color: #606266; font-size: 12px; margin-top: 4px; line-height: 1.6; }
-.ai-reasoning { white-space: pre-wrap; font-size: 12px; color: #909399; line-height: 1.7; max-height: 260px; overflow: auto; }
-.ai-answer {
-  white-space: pre-wrap; line-height: 1.75; font-size: 14px; color: #303133;
-  background: #fafcff; border: 1px solid #ebeef5; border-radius: 6px;
-  padding: 12px; min-height: 120px; max-height: 46vh; overflow: auto;
+.ai-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: .12em;
+  color: var(--muted);
+  margin-bottom: 10px;
 }
-.ai-cursor { color: #409eff; animation: blink 1s infinite; }
+.ai-section-title::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  background: var(--amber);
+}
+.ai-refs { margin-top: 16px; }
+.ai-ref {
+  margin-bottom: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+}
+.ai-ref :deep(.el-card__body) { padding: 12px 14px; }
+.ai-ref-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ai-ref-index { color: var(--amber); font-family: var(--font-mono); font-weight: 600; font-size: 11.5px; }
+.ai-ref-title { font-weight: 600; font-size: 13px; }
+.ai-ref-summary { color: var(--ink-2); font-size: 12px; margin-top: 6px; line-height: 1.7; }
+.ai-reasoning { white-space: pre-wrap; font-size: 12px; color: var(--muted); line-height: 1.75; max-height: 260px; overflow: auto; }
+.ai-answer {
+  white-space: pre-wrap; line-height: 1.85; font-size: 13.5px; color: var(--ink);
+  background:
+    linear-gradient(180deg, rgba(180, 90, 30, .035), transparent 120px),
+    var(--surface);
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 16px 18px; min-height: 120px; max-height: 46vh; overflow: auto;
+  box-shadow: 0 1px 0 rgba(28, 35, 42, .03) inset;
+}
+.ai-cursor { color: var(--amber); animation: blink 1s infinite; }
+.ai-answer :deep(.ai-h2),
+.ai-answer :deep(.ai-h3) {
+  margin: 14px 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--ink);
+}
+.ai-answer :deep(.ai-h3)::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 11px;
+  margin-right: 8px;
+  vertical-align: 1px;
+  background: var(--amber);
+}
+.ai-answer :deep(.ai-h3:first-child),
+.ai-answer :deep(.ai-h2:first-child) { margin-top: 0; }
+.ai-answer :deep(.ai-li) { padding-left: 12px; position: relative; }
+.ai-answer :deep(.ai-li)::before {
+  content: "·";
+  position: absolute;
+  left: 2px;
+  color: var(--amber);
+  font-weight: 700;
+}
+.ai-answer :deep(strong) { color: var(--ink); font-weight: 700; }
 @keyframes blink { 50% { opacity: 0; } }
-.ai-usage { margin-top: 12px; display: flex; gap: 16px; color: #909399; font-size: 12px; border-top: 1px dashed #e4e7ed; padding-top: 8px; }
+.ai-usage {
+  margin-top: 14px; display: flex; gap: 16px; flex-wrap: wrap;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .02em;
+  color: var(--muted); border-top: 1px dashed var(--line); padding-top: 10px;
+}
+
+@media (max-width: 760px) {
+  .head { flex-direction: column; align-items: flex-start; }
+  :deep(.el-row) .el-col { max-width: 100%; flex: 0 0 100%; }
+}
 </style>

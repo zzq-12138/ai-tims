@@ -59,10 +59,10 @@
         </el-select>
       </div>
       <el-table :data="extractRecords" v-loading="extractLoading" stripe size="small">
-        <el-table-column prop="title" label="抽取标题" min-width="200" show-overflow-tooltip />
-        <el-table-column prop="sourceTicketNo" label="来源工单" width="150" show-overflow-tooltip />
-        <el-table-column prop="deviceType" label="设备类型" width="100" />
-        <el-table-column label="相似度 / 建议" min-width="240">
+        <el-table-column prop="title" label="抽取标题" min-width="180" show-overflow-tooltip />
+        <el-table-column prop="sourceTicketNo" label="来源工单" width="126" show-overflow-tooltip />
+        <el-table-column prop="deviceType" label="设备类型" width="88" />
+        <el-table-column label="相似度 / 建议" min-width="190">
           <template #default="{ row }">
             <el-tag :type="suggestType(row.dedupAction)" size="small" class="mr4">
               {{ suggestMap[row.dedupAction] || row.dedupAction }}
@@ -71,15 +71,15 @@
             <span v-if="row.dedupTargetTitle" class="target">→ {{ row.dedupTargetTitle }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="95">
+        <el-table-column label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="extractStatusType(row.status)" size="small">
               {{ extractStatusMap[row.status] || row.status }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="抽取时间" width="165" />
-        <el-table-column label="操作" width="250" fixed="right">
+        <el-table-column prop="createTime" label="抽取时间" width="200" class-name="mono-cell" />
+        <el-table-column label="操作" width="240" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="openExtractView(row)">查看</el-button>
             <el-button v-if="pendingExtract(row)" link type="primary" @click="openExtractEdit(row)">补录</el-button>
@@ -116,25 +116,25 @@
         <el-button @click="load">查询</el-button>
       </div>
       <el-table :data="records" v-loading="loading" stripe>
-        <el-table-column prop="title" label="标题" min-width="220" show-overflow-tooltip />
-        <el-table-column prop="applyDeviceType" label="设备类型" width="110" />
-        <el-table-column prop="categoryName" label="分类" width="100">
+        <el-table-column prop="title" label="标题" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="applyDeviceType" label="设备类型" width="96" />
+        <el-table-column prop="categoryName" label="分类" width="84">
           <template #default="{ row }">{{ categoryName(row.categoryId) }}</template>
         </el-table-column>
-        <el-table-column label="标签" width="180">
+        <el-table-column label="标签" width="140">
           <template #default="{ row }">
             <el-tag v-for="t in parseTags(row.tags).slice(0, 3)" :key="t" size="small" class="mr4">{{ t }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="状态" width="90">
+        <el-table-column label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="statusType(row.status)" size="small">{{ statusMap[row.status] || row.status }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="version" label="版本" width="65" />
-        <el-table-column prop="vectorSyncedAt" label="向量同步时间" width="165" />
-        <el-table-column prop="updateTime" label="更新时间" width="165" />
-        <el-table-column label="操作" width="230" fixed="right">
+        <el-table-column prop="version" label="版本" width="52" />
+        <el-table-column prop="vectorSyncedAt" label="向量同步时间" width="140" />
+        <el-table-column prop="updateTime" label="更新时间" width="140" />
+        <el-table-column label="操作" width="186" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="viewRow = row">查看</el-button>
             <el-button link type="primary" @click="openEdit(row)">编辑</el-button>

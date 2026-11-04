@@ -1,6 +1,6 @@
 # AI-TIMS k3s 单节点搭建手册（亲手执行版）
 
-> **环境**：VM `ubuntu-server`（192.168.40.10，Ubuntu Server 22.04.5，**内核 5.15.0-202-generic**——由旧版本升级而来，不是 24.04 默认的 6.8），4 vCPU / 15Gi 内存 / 根分区 96G LVM（实测已用 25%），**swap 4G（`/swap.img`）**，已装 Docker 29.1.3 与本地镜像仓库 `localhost:5000`（`tims-registry` 容器），VM 可用宿主机 Clash 代理 `http://192.168.40.1:7897`。**【实测 2026-11-04】k3s 已安装：v1.36.5+k3s1，节点 `zzqserver` Ready，`k3s.service active (running)`；swap 仍为 4G 未关（见 1.4 方案 A）。**
+> **环境**：VM `ubuntu-server`（192.168.40.10，Ubuntu Server 22.04.5，**内核 5.15.0-202-generic**——由旧版本升级而来，不是 24.04 默认的 6.8），4 vCPU / 15Gi 内存 / 根分区 96G LVM（实测已用 25%），**swap 4G（`/swap.img`）**，已装 Docker 29.1.3 与本地镜像仓库 `localhost:5000`（`tims-registry` 容器），VM 可用宿主机 Clash 代理 `http://192.168.40.1:7897`。**【实测 2026-11-04】k3s 已安装：v1.36.5+k3s1，节点 `zzqserver` Ready，`k3s.service active (running)`；swap 仍为 4G 未关（见 1.4 方案 A）；系统组件镜像须经宿主机代理才能拉取，已在 `/etc/systemd/system/k3s.service.env` 配 `HTTP_PROXY/HTTPS_PROXY/NO_PROXY`（见 3.7），**重装脚本会重置该文件（见 3.8，最容易复发）**。**
 >
 > **定位与排期**：DEVLOG 拍板——VM k3s 单节点搭建在开题后（寒假）执行，任务书硬验收只需 k3s 单节点；预算约 8.5G/16G 内存（含精简监控）。本手册按「一条命令 → 预期输出 → 判断标准 → 失败怎么读报错」编写，照着敲即可。
 >
@@ -186,7 +186,8 @@ curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIR
 
 - **预期输出**：脚本依次下载 k3s 二进制与 kubectl/kubelet 链接，结尾输出 `[INFO] Created ... k3s.service` 类日志，无 ERROR。
 - **判断标准**：命令退出码 0，且 `sudo systemctl status k3s` 显示 active（下一阶段验证）。
-- **说明**：`INSTALL_K3S_MIRROR=cn` 使二进制从 `rancher-mirror.rancher.cn` 下载，国内直连可用，**不需要代理**。`--write-kubeconfig-mode 644` 让非 root 用户能读 kubeconfig（单机实验可接受，生产不要这么开）。
+- **说明**：`INSTALL_K3S_MIRROR=cn` 使 k3s **二进制与安装脚本**从 `rancher-mirror.rancher.cn` 下载，国内直连可用，**不需要代理**。`--write-kubeconfig-mode 644` 让非 root 用户能读 kubeconfig（单机实验可接受，生产不要这么开）。
+- **⚠ 关键认知（实测 3 小时 48 分卡住的根因）**：`INSTALL_K3S_MIRROR=cn` **只加速二进制和脚本，不加速系统镜像**——`rancher/mirrored-pause`、`coredns`、`traefik` 等系统镜像仍从 `docker.io` 拉取。国内环境**必须**为 k3s 的 containerd 配代理（见 3.7）或改用 `registries.yaml` 镜像源，否则节点虽 `Ready`、系统 Pod 会全部卡在 `ContainerCreating`。
 - **失败时**：curl 报 000/超时 → 网络问题，试方式 B；脚本中途报下载失败 → 看是哪个 URL 失败，该 URL 手动 `wget` 复测定位。
 
 ### 2.2 方式 B：走宿主机代理安装（镜像源失效时备用）
@@ -279,7 +280,7 @@ systemctl status k3s --no-pager | head -5          # ③ 服务状态
 ```
 
 - **① 预期**：一行，`STATUS=Ready`，`INTERNAL-IP` 为本机地址，`VERSION` 形如 `v1.31.x+k3s1`（具体版本 **需现场确认**）。判断标准：`Ready`。
-- **② 预期**：`kube-system` 下出现 `traefik`（1 个）、`coredns`（1 个）、`local-path-provisioner`（1 个）、`metrics-server`（1 个），全部 `Running`。判断标准：**Traefik + CoreDNS + local-path 三者都在 Running**——它们是 k3s 默认自带组件的「活着」的证明（Traefik 没起通常是 80/443 被占，见第 8 节表第 4 行；CoreDNS 没起通常是节点 NotReady 连带）。
+- **② 预期**：`kube-system` 下出现 `traefik`（1 个）、`coredns`（1 个）、`local-path-provisioner`（1 个）、`metrics-server`（1 个）、`svclb-traefik`（2 个，DaemonSet 每节点一个），全部 `Running`；`helm-install-*` 两个 Job 显示 `Completed`。判断标准：**上述 Pod 全部 Running**——它们是 k3s 默认自带组件的「活着」的证明（Traefik 没起通常是 80/443 被占，见第 8 节表第 4 行；CoreDNS 没起通常是节点 NotReady 连带）。**【实测】首次安装时这批 Pod 全部卡 `ContainerCreating` 长达 3 小时 48 分，原因是系统镜像拉 docker.io 失败，修复后约 4 分钟内全部 Running**（见 3.7）。
 - **③ 预期**：`Active: active (running)`，`Loaded: ... enabled`（enabled 表示重启自启已开）。
 - **失败时**：先看 ③ 的 `Active:` 行；`activating (start)` 卡住超过 1 分钟 → `journalctl -u k3s -e --no-pager | tail -30`，按最后一段报错对应第 8 节表格。
 
@@ -289,6 +290,55 @@ systemctl status k3s --no-pager | head -5          # ③ 服务状态
 - **原因**：k3s 用**自带的 embedded containerd**，与系统 Docker 是两套完全独立的运行时和镜像存储（`/var/lib/rancher/k3s/agent/containerd` vs `/var/lib/docker`）。两者并存但**镜像互不可见**。
 - **正确做法**：查 k3s 侧用 `sudo k3s crictl ps` / `sudo k3s crictl images`；要让 k3s 用到本地仓库里的镜像，必须走阶段五的 `registries.yaml` + `localhost:5000` 显式地址——**不能指望 containerd 自动“看见”Docker 的本地镜像**。
 - **判断标准**：`sudo k3s crictl images` 能看到 `rancher/*` 等系统镜像、却看不到 `tims/*`（在推送到 registry 之前）→ 这就是正常现象，不是丢镜像。
+
+### 3.7 【实测必读】系统组件卡 `ContainerCreating`：给 k3s 的 containerd 配代理
+
+**实测现象（2026-11-04）**：k3s 装完、节点 `Ready`、`k3s.service active (running)`，但 `kubectl get pods -A` 里所有系统 Pod 全部卡在 `ContainerCreating`，**持续 3 小时 48 分**它们也不会自己好。
+
+**怎么读错（三步定位）**：
+
+```bash
+kubectl get pods -A
+kubectl describe pod -n kube-system <卡住的 pod 名> | tail -20   # 看 Events 段
+```
+
+Events 里出现 **`FailedCreatePodSandBox`**，进一步信息是 `Failed to create pod sandbox: ... failed to get sandbox image "rancher/mirrored-pause:3.10.2": ... docker.io ... connection refused`——即 **pause 镜像从 `docker.io` 拉不下来**（实测反复重试 79 次）。`pause` 镜像是起任何 Pod sandbox 的前提，它拉不到，所有 Pod 就永远 `ContainerCreating`。
+
+**根因**：k3s 的 containerd **不继承 shell 的 `http_proxy`，也不读 Docker 的 `daemon.json`**（见第 8 节表第 5 行）；而 `INSTALL_K3S_MIRROR=cn` 只加速二进制与安装脚本（见 2.1），系统镜像仍直连 `docker.io`。
+
+**修复（实测有效，约 4 分钟全部恢复）**：
+
+```bash
+sudo tee /etc/systemd/system/k3s.service.env >/dev/null <<'EOF'
+HTTP_PROXY=http://192.168.40.1:7897
+HTTPS_PROXY=http://192.168.40.1:7897
+NO_PROXY=127.0.0.1,localhost,192.168.40.0/24,10.42.0.0/16,10.43.0.0/16
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart k3s
+kubectl get pods -n kube-system            # 等 1~2 分钟看状态变化
+kubectl delete pod -n kube-system --all    # 卡住的 Pod 不会自己重试成功，删掉让控制器重建
+```
+
+- **`NO_PROXY` 为什么必须含这些网段**：`10.42.0.0/16` 是 Pod CIDR、`10.43.0.0/16` 是 Service CIDR、`192.168.40.0/24` 含本机与 `localhost:5000` 本地仓库——不排除这些，集群内部流量和本地仓库拉取也会被送去代理，反而更糟。
+- **预期结果（实测）**：约 4 分钟内 `coredns`、`local-path-provisioner`、`metrics-server`、`traefik`、`svclb-traefik` 全部 `Running`，两个 `helm-install-*` 转 `Completed`。
+- **判断标准**：`kubectl get pods -n kube-system` 里无 `ContainerCreating` 残留。
+- **失败时**：仍 `ContainerCreating` → 再看 `describe` 的 Events；若报 `connection refused` 到代理端口 → 先在本机确认 Clash 的 **Allow LAN** 生效（`curl -x http://192.168.40.1:7897 -sfL https://get.k3s.io -o /dev/null -w '%{http_code}\n'` 应为 200）；若报 `ImagePullBackOff` 且镜像地址是 `docker.io` → 代理没生效，`systemctl show k3s | grep -i proxy` 复查环境变量是否被服务读到。
+
+### 3.8 【重要】安装脚本会重建 `k3s.service.env`——代理配置被清空
+
+**这是最容易复发的一条。** k3s 安装脚本**每次执行都会重新生成** `/etc/systemd/system/k3s.service.env`（安装日志里的 `env: Creating environment file ...` 就是它），因此 3.7 里追加的 `HTTP_PROXY/HTTPS_PROXY/NO_PROXY` **会被整体覆盖清空**。
+
+- **实测经过**：当天重跑一次安装脚本后该文件被重置。此时**镜像已被缓存，系统 Pod 仍然 Running**——问题被完美掩盖，看起来「一切正常」，**直到下次需要拉一个新镜像时才会再次失败**。
+- **重装/升级后的必做检查**：
+
+```bash
+cat /etc/systemd/system/k3s.service.env | grep -i proxy    # 有输出才算没丢
+```
+
+- **丢了就补**：重新执行 3.7 的 `tee` 写入 → `sudo systemctl daemon-reload && sudo systemctl restart k3s`。
+- **判断标准**：重装后 `kubectl run` 一个**本地没有的新镜像**（如 `kubectl run probe --image=docker.m.daocloud.io/library/nginx:alpine`）能 `Running`，才算代理链路真的在；只看已有 Pod 还绿着**不能**证明（见上条「被缓存掩盖」）。
+- **结论**：凡是跑过安装脚本（包括升级、重装、改动安装参数），**立刻复查本文件**，不要等拉镜像失败才发现。
 
 ---
 
@@ -335,6 +385,7 @@ curl -sf http://localhost:5000/v2/_catalog     # 预期可见 "tims/redis"
 ```
 
 - **预期输出**：push 成功输出 digest；catalog 返回 `{"repositories":["tims/redis",...]}`。
+- **【实测 2026-11-04】**：`docker push localhost:5000/tims/redis:lab` 成功，digest 前缀 **`1cf73a2f`**；`curl -sf http://localhost:5000/v2/_catalog` 返回含 **`tims/redis`** 与 **`tims/ticket-push`**（后者为业务镜像，说明仓库里已有交付用镜像）。
 - **判断标准**：与文档一 4.3 相同的推拉闭环判据（此流程 DEVLOG 已实测过，digest 一致性核对见该节）。
 - **失败时**：push 报 `connection refused :5000` → `docker ps | grep tims-registry` 确认 registry 容器在跑。
 
@@ -364,6 +415,7 @@ kubectl get pod lab-nginx lab-redis 2>/dev/null; kubectl get pod lab-redis
 ```
 
 - **预期输出**：`lab-redis` 状态 `Running`（数秒级，因为镜像已在节点本地）。
+- **【实测 2026-11-04】**：按 5.2 写入 `registries.yaml` 并重启 k3s 后，`kubectl run lab-redis --image=localhost:5000/tims/redis:lab` **成功 Running**；练完即删（镜像仍在 k3s 侧 containerd 里，便于复跑）。
 - **判断标准**：Running。
 - **失败时**：ImagePullBackOff → describe 看 Events：`http: server gave HTTP response to HTTPS client` = registries.yaml 没生效（检查缩进、确认 restart 过）；`connection refused` = registry 容器没跑。
 
@@ -402,6 +454,7 @@ kubectl delete pod lab-redis    # 练完即删
 | 4 | 本地仓库镜像 Pod | `kubectl get pod lab-redis` + `k3s crictl images \| grep localhost:5000` | `2026MMDD_k3s_registry_image_pod.png` |
 | 5 | 拉取事件证据 | `kubectl describe pod lab-redis` 的 Events 段（出现 pulled `localhost:5000/...`） | `2026MMDD_k3s_pullevent_local_reg.png` |
 | 6 | （若遇失败）报错现场 | `kubectl describe pod ...` Events + `journalctl -u k3s -e` 尾部 | `2026MMDD_k3s_fail_<现象>.png` |
+| 7 | **系统组件全 Running + 代理配置同屏**（证明 3.7 的修复生效，答辩可讲排障） | `kubectl get pods -n kube-system` + `cat /etc/systemd/system/k3s.service.env` | `2026MMDD_k3s_syspods_proxy.png` |
 
 存放到仓库 `/home/dev/ai-tims/docs/screenshots/`，文件名日期以实际执行日为准。
 
@@ -415,7 +468,7 @@ kubectl delete pod lab-redis    # 练完即删
 | 2 | 节点 NotReady，`journalctl -u k3s` 出现 `running with swap on is not supported` | `free -h \| grep -i swap`；`k3s --version` | **仅老版本（k3s < 1.28）**：kubelet 默认硬拦 swap；v1.36.x 默认不拦（2026-11-04 实测未关 swap 仍 Ready） | 老版本：`sudo swapoff -a` + 注释 `/etc/fstab` swap 行，或安装参数 `--kubelet-arg=fail-swap-on=false`，然后 `sudo systemctl restart k3s`（见 1.4） |
 | 3 | 节点 NotReady，Pod 全部 Pending，日志有 iptables/CNI 报错 | `sudo ufw status`；`journalctl -u k3s \| grep -iE 'flannel\|cni\|iptables'` | 防火墙拦 VXLAN(8472/udp) 或 iptables 规则异常 | ufw 放行 6443/10250/tcp、8472/udp 或实验机直接 disable；iptables 混乱时 `sudo systemctl restart k3s` 让其重建规则 |
 | 4 | Traefik 起不来或 80/443 冲突，`kubectl get pods -n kube-system` 里 traefik 反复重启 | `ss -lntp \| grep -E ':80\|:443'` | 宿主机已有服务占 80/443 | 确认不需要 ingress 就安装时加 `--disable traefik`；需要则停掉占用进程（不要装 ingress-nginx 替代，重复） |
-| 5 | 镜像拉取超时，shell 里 `curl` 却通 | describe pod 的 `Failed to pull image ... i/o timeout` | **containerd 不继承 shell 的 http_proxy 环境变量**，也不读 Docker 的 daemon.json | 要么用国内直连镜像前缀（daocloud 等）；要么给 k3s 配代理：写入 `/etc/systemd/system/k3s.service.env`（`HTTP_PROXY=http://192.168.40.1:7897`、`HTTPS_PROXY=...`、`NO_PROXY=localhost,127.0.0.1,10.0.0.0/8,192.168.0.0/16`，**NO_PROXY 必须含 localhost:5000 网段**，否则本地仓库拉取也会被送去代理），然后 `sudo systemctl daemon-reload && sudo systemctl restart k3s` |
+| 5 | **系统 Pod 全部卡 `ContainerCreating`**，describe 报 `FailedCreatePodSandBox` + `rancher/mirrored-pause ... docker.io ... connection refused` | `kubectl describe pod -n kube-system <pod> \| tail -20`；`cat /etc/systemd/system/k3s.service.env` | **containerd 不继承 shell 的 `http_proxy`**，也不读 Docker 的 `daemon.json`；`INSTALL_K3S_MIRROR=cn` 只加速二进制，系统镜像仍走 `docker.io` | 写入 `/etc/systemd/system/k3s.service.env`（`HTTP_PROXY`、`HTTPS_PROXY`、`NO_PROXY=127.0.0.1,localhost,192.168.40.0/24,10.42.0.0/16,10.43.0.0/16`），`daemon-reload` + `restart k3s` + `delete pod -n kube-system --all`（实测约 4 分钟全部 Running，见 3.7） |
 | 6 | `kubectl` 报 `The connection to the server localhost:8080 was refused` | `echo $KUBECONFIG`；`ls ~/.kube/config` | kubeconfig 未配置/未拷贝 | 按 3.4 拷贝配置，或 `export KUBECONFIG=/etc/rancher/k3s/k3s.yaml`（配合 644 权限） |
 | 7 | VM 重启后 k3s 没起来 | `systemctl status k3s` | 安装脚本默认 enable，一般不会发生；若被手动 disable | `sudo systemctl enable --now k3s`（参照 DEVLOG：Docker 也曾因 VM 重启后未自启踩坑，已 `enable docker`） |
 | 8 | **只加载上一个模块**：`lsmod \| grep -E 'overlay\|br_netfilter'` 只见 `overlay`，`br_netfilter` 一直不出现 | `lsmod \| grep br_netfilter`；`cat /proc/sys/net/bridge/bridge-nf-call-iptables`（报 No such file） | **`modprobe overlay br_netfilter` 把第二个词当成了模块参数**，不是加载第二个模块 | 分成两条：`sudo modprobe overlay`、`sudo modprobe br_netfilter`；再写 `/etc/modules-load.d/k3s.conf`（见 1.2） |
@@ -424,6 +477,7 @@ kubectl delete pod lab-redis    # 练完即删
 | 11 | 装完 `docker images` / `docker ps` 看不到 k3s 的镜像与容器，误以为「镜像丢了」 | `sudo k3s crictl images` | k3s 用自带 containerd，与 Docker 镜像存储完全独立，互不可见 | 属正常现象；要让 k3s 用本地仓库镜像须配 `registries.yaml` + `localhost:5000`（见 3.6 与阶段五） |
 | 12 | **装的时候正常、重启后 k3s 起不来**，日志里 containerd/CNI 报错 | `uname -r`；`lsmod \| grep -E 'overlay\|br_netfilter'` | 模块只在内存里 `modprobe` 过，重启后未自动加载 | 写 `/etc/modules-load.d/k3s.conf`（内容 `overlay`、`br_netfilter`）后 `sudo systemctl restart k3s`（见 1.2） |
 | 13 | 排查时发现「忘了 `swapoff`」，但节点明明 Ready | `swapon --show`；`k3s --version`；`kubectl get nodes` | **新版 k3s（≥1.28，实测 v1.36.5）默认允许 swap，Ready 属正常行为**，不是故障 | **不要往 swap 方向排查**（也不用补关）：只有节点 NotReady 且日志明确报 `running with swap on is not supported` 才处理（见 1.4 三方案） |
+| 14 | **重装/升级 k3s 后新镜像又拉不动，但旧 Pod 仍全绿**（极易误判「已经好了」） | `cat /etc/systemd/system/k3s.service.env \| grep -i proxy`（无输出即丢失） | **安装脚本每次都重建 `k3s.service.env`**（日志有 `env: Creating environment file ...`），3.7 追加的代理配置被清空；已缓存镜像掩盖了问题 | 重新追加 `HTTP_PROXY/HTTPS_PROXY/NO_PROXY` → `daemon-reload` + `restart k3s`；用「本地没有的新镜像」起 Pod 验证，而不是看旧 Pod（见 3.8） |
 
 ---
 
@@ -449,9 +503,9 @@ ss -lntp | grep -E ':(6443|10250)'      # 预期无输出
 
 ---
 
-## 实测记录（2026-11-04）：阶段一前置检查现场数据
+## 实测记录（2026-11-04）：前置检查 → 安装 → 排障 → 本地仓库打通（全过程）
 
-> **性质**：以下为**真实实装记录**（用户按本手册在 VM 上执行），与上文「纸面推导」部分严格区分。实测机型：Ubuntu Server 22.04.5，内核 **5.15.0-202-generic**（旧版本升级而来，非 24.04 默认 6.8），4 vCPU / 15Gi。
+> **性质**：以下为**真实实装记录**（用户按本手册在 VM 上执行），与上文「纸面推导」部分严格区分。实测机型：Ubuntu Server 22.04.5，内核 **5.15.0-202-generic**（旧版本升级而来，非 24.04 默认 6.8），4 vCPU / 15Gi，根分区 96G（已用 23G）。
 
 | 检查项 | 手册小节 | 实测结果 | 判定 |
 |---|---|---|---|
@@ -460,14 +514,22 @@ ss -lntp | grep -E ':(6443|10250)'      # 预期无输出
 | cgroup | 1.3 | `cgroup2fs`（v2） | ✅ 过 |
 | swap | 1.4 | **4G `/swap.img`**（与手册「预期 0」不符），实测仅用 780K；**未关 swap 直接安装，节点仍 Ready** | ✅ 过（保留 swap，按 1.4 方案 A） |
 | 防火墙 | 1.5 | `ufw` inactive | ✅ 过 |
-| 磁盘 | 1.6 | 根分区 96G，已用 25%，**可用约 69G** | ✅ 过（远超 ≥10G 门槛） |
+| 磁盘 | 1.6 | 根分区 96G，已用 23G（约 25%），可用约 69G | ✅ 过（远超 ≥10G 门槛） |
 | 内存 | 1.7 | `used 5.7G`、`available 9.5G`（全中间件 + 6 服务在跑） | ✅ 可装；按 1.7 建议装前先停 Milvus 三件套 |
 | **安装结果** | 阶段二 | `--write-kubeconfig-mode 644`，**未加 `fail-swap-on`、未执行 `swapoff`** → **k3s v1.36.5+k3s1**；节点 `zzqserver` **Ready**；`k3s.service active (running)` | ✅ 通过（同时修正 1.4 的旧结论） |
 | sysctl | 1.2 | 三项均 1；`sysctl --system` 有两行 `Invalid argument` 噪音（与 k3s 无关） | ✅ 过（噪音忽略） |
+| **系统 Pod（首次）** | 3.5 / 3.7 | 全部卡 `ContainerCreating`，**持续 3 小时 48 分**；`describe` 报 `FailedCreatePodSandBox`，根因 `rancher/mirrored-pause:3.10.2` 从 `docker.io` 拉取 `connection refused`，**重试 79 次** | ❌ 故障（见 3.7 修复） |
+| **系统 Pod（修复后）** | 3.7 | 配 `/etc/systemd/system/k3s.service.env` 代理 → `daemon-reload` + `restart k3s` + `delete pod -n kube-system --all` → **约 4 分钟内全部 Running**：`coredns`、`local-path-provisioner`、`metrics-server`、`traefik`、`svclb-traefik`；两个 `helm-install-*` 转 `Completed` | ✅ 过 |
+| **资源占用（装后）** | 1.7 | k3s 服务内存 **1.4G**；系统 `available 9.8G` | ✅ 充裕（预算 8.5G/16G 内） |
+| **本地 registry 打通** | 5.1~5.3 | `docker tag redis:7-alpine localhost:5000/tims/redis:lab` → push digest **`1cf73a2f…`**；`_catalog` 含 **`tims/redis`、`tims/ticket-push`**；写 `/etc/rancher/k3s/registries.yaml`（mirror → `http://localhost:5000`）→ 重启 k3s → `kubectl run lab-redis --image=localhost:5000/tims/redis:lab` **Running**，练完即删 | ✅ 过 |
+| **重跑安装脚本** | 3.8 | 重跑一次安装脚本后 `/etc/systemd/system/k3s.service.env` **被重建，代理配置被清空**；因镜像已缓存，系统 Pod 仍 Running，问题被掩盖 | ⚠ 复发隐患（见 3.8 / 表第 14 行） |
 
-**本次最关键的真坑**：`sudo modprobe overlay br_netfilter` 只加载了 `overlay`——第二个词被当作模块参数。根因与正确做法见 1.2 / 表第 8 行；同时暴露「模块未持久化」的隐患（重启后失效），已补 `/etc/modules-load.d/k3s.conf` 要求。
+**本次最关键的两个真坑**：
 
-**装前待办的实际进展**：① VMware 快照——**需现场确认是否已拍**（若未拍，现在补拍并记名）；② ~~停 Milvus 腾内存 + swapoff~~ → **实测未关 swap 也装成功**，swap 按 1.4 方案 A 保留即可（Milvus 停止与否以 `free -h` available ≥8G 为准）；③ 安装——**已完成（v1.36.5+k3s1，节点 Ready）**；④ 装后写 `registries.yaml` 并跑阶段四/五——**待办**；⑤ 截图（见阶段六与 DEVLOG 第七节）——**待办**（含 `2026MMDD_k3s_precheck_all_green.png`、`2026MMDD_k3s_nodes_ready.png`）。
+1. **`sudo modprobe overlay br_netfilter` 只加载了 `overlay`**——第二个词被当作模块参数。根因与正确做法见 1.2 / 表第 8 行；同时暴露「模块未持久化」的隐患（重启后失效），已补 `/etc/modules-load.d/k3s.conf` 要求。
+2. **系统镜像不走镜像源、必须配 containerd 代理**——卡 `ContainerCreating` 3 小时 48 分才定位到 `FailedCreatePodSandBox` / pause 镜像 `docker.io` 拉取失败（79 次重试）。修复见 3.7；而**安装脚本每次重跑都会重置 `k3s.service.env` 把代理抹掉**，且被缓存镜像掩盖，见 3.8 / 表第 14 行。
+
+**装前待办的实际进展**：① VMware 快照——**需现场确认是否已拍**（若未拍，现在补拍并记名）；② ~~停 Milvus 腾内存 + swapoff~~ → **实测未关 swap 也装成功**，swap 按 1.4 方案 A 保留即可（Milvus 停止与否以 `free -h` available ≥8G 为准）；③ 安装——**已完成（v1.36.5+k3s1，节点 Ready）**；④ 写 `registries.yaml` 并跑阶段四/五——**已完成（本地仓库镜像 Pod 已 Running）**；⑤ 截图（见阶段六与 DEVLOG 第七节）——**待办**（含 `2026MMDD_k3s_precheck_all_green.png`、`2026MMDD_k3s_nodes_ready.png`、系统 Pod 全 Running 与代理配置同屏）。
 
 ---
 

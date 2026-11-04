@@ -1,6 +1,6 @@
 # AI-TIMS k3s 单节点搭建手册（亲手执行版）
 
-> **环境**：VM `ubuntu-server`（192.168.40.10，Ubuntu Server 22.04.5，**内核 5.15.0-202-generic**——由旧版本升级而来，不是 24.04 默认的 6.8），4 vCPU / 15Gi 内存 / 根分区 96G LVM（实测已用 25%），**swap 4G（`/swap.img`）**，已装 Docker 29.1.3 与本地镜像仓库 `localhost:5000`（`tims-registry` 容器），VM 可用宿主机 Clash 代理 `http://192.168.40.1:7897`。
+> **环境**：VM `ubuntu-server`（192.168.40.10，Ubuntu Server 22.04.5，**内核 5.15.0-202-generic**——由旧版本升级而来，不是 24.04 默认的 6.8），4 vCPU / 15Gi 内存 / 根分区 96G LVM（实测已用 25%），**swap 4G（`/swap.img`）**，已装 Docker 29.1.3 与本地镜像仓库 `localhost:5000`（`tims-registry` 容器），VM 可用宿主机 Clash 代理 `http://192.168.40.1:7897`。**【实测 2026-11-04】k3s 已安装：v1.36.5+k3s1，节点 `zzqserver` Ready，`k3s.service active (running)`；swap 仍为 4G 未关（见 1.4 方案 A）。**
 >
 > **定位与排期**：DEVLOG 拍板——VM k3s 单节点搭建在开题后（寒假）执行，任务书硬验收只需 k3s 单节点；预算约 8.5G/16G 内存（含精简监控）。本手册按「一条命令 → 预期输出 → 判断标准 → 失败怎么读报错」编写，照着敲即可。
 >
@@ -110,16 +110,27 @@ stat -fc %T /sys/fs/cgroup/
 - **判断标准**：两者 k3s 都支持，只需记录是哪个，排障时报错措辞不同（v2 报 `cgroup controllers` 相关，v1 报 `subsystem` 相关）。
 - **失败时**：无需处理，仅记录。
 
-### 1.4 swap（kubelet 硬要求）
+### 1.4 swap（不是「必须关」，分 k3s 版本看）
 
 ```bash
 swapon --show && free -h | grep -i swap
 ```
 
 - **预期输出**：`swapon --show` 无输出（Ubuntu Server 默认无 swap）；`free -h` 里 Swap 行为 0B。
-- **【实测】本 VM 不是默认零 swap**：存在 **4G 的 `/swap.img`**（此前为应对 Milvus 内存压力开过）。**k3s 的 kubelet 默认拒跑在开着 swap 的节点上**，所以装前必须关：`sudo swapoff -a`，并把 `/etc/fstab` 里 `/swap.img` 那行注释掉（否则重启后又回来，症状是「重启后节点 NotReady」）。关 swap 后 Milvus 三件套的 OOM 兜底会变薄——正好配合 1.7 的「装前停 Milvus」策略。
-- **判断标准**：`swapon --show` 无输出且 `free -h` 的 Swap 为 0。
-- **失败时**：若非 0：`sudo swapoff -a` 临时关，再编辑 `/etc/fstab` 注释 swap 行永久关。不关的后果：节点 NotReady，`journalctl -u k3s` 里有 kubelet 报 `running with swap on` 类错误。
+- **【实测】本 VM 不是默认零 swap**：存在 **4G 的 `/swap.img`**（此前为应对 Milvus 内存压力开过），实测占用仅 780K。
+- **【实测 2026-11-04】保留 swap 也装成功了**：未执行 `swapoff`，直接按阶段二安装（只加 `--write-kubeconfig-mode 644`，未加任何 `fail-swap-on` 参数），结果 k3s **v1.36.5+k3s1**、节点 `zzqserver` **Ready**、`k3s.service active (running)`。**因此「开着 swap 必然 NotReady」在 v1.36.x 上不成立。**
+
+**三方案对照（按你的 k3s 版本选）**：
+
+| 方案 | 适用版本 | 做法 | 代价/收益 |
+|---|---|---|---|
+| **A. 保留 swap（推荐本机）** | **k3s ≥ 1.28，实测 v1.36.5 默认不拦** | 什么都不用改，直接装 | 收益：给 Milvus 三件套留 OOM 兜底（本机 4G swap）；代价：kubelet 的内存驱逐判断偏乐观——可能先走 swap 再驱逐，表现为「变慢但不重启」 |
+| B. 关掉 swap | 任何版本都适用 | `sudo swapoff -a`，并把 `/etc/fstab` 里 `/swap.img` 那行注释掉（否则重启又回来） | 收益：驱逐判断最准；代价：Milvus 无兜底、OOM 直接杀容器 |
+| C. 老版本放行 | **k3s < 1.28**（kubelet 默认硬拦） | 安装时加 `--kubelet-arg=fail-swap-on=false`，或按 B 关掉 | 不加参数会报 `running with swap on is not supported`，节点 NotReady |
+
+- **判断标准**：装完后 `kubectl get nodes` 为 `Ready` 即通过——**无论 swap 开或关**。不要拿 `swapon --show` 是否有输出反过来判定安装成败（实测证明二者无必然关系）。
+- **失败时**：若确实 NotReady 且 `journalctl -u k3s` 出现 `running with swap on is not supported`（只可能出现在老版本或显式 `--kubelet-arg=fail-swap-on=true` 时），按方案 B 关 swap 或方案 C 加参数后 `sudo systemctl restart k3s`。
+- **本机建议**：走**方案 A**（保留 4G swap），配合 1.7「装前停 Milvus」策略；单节点演示场景下「变慢但不重启」的代价可接受。
 
 ### 1.5 防火墙
 
@@ -384,7 +395,7 @@ kubectl delete pod lab-redis    # 练完即删
 
 | 序号 | 拍什么 | 命令 | 建议文件名 |
 |---|---|---|---|
-| 0 | **前置检查全绿**（开题材料用图）：端口空闲 + `cgroup2fs` + swap 已关 + 磁盘/内存 + `bridge-nf-call-iptables=1` 同屏 | 阶段一 1.1~1.7 各命令连续执行 | `2026MMDD_k3s_precheck_all_green.png` |
+| 0 | **前置检查全绿**（开题材料用图）：端口空闲 + `cgroup2fs` + swap 现状（4G 开着也算过）+ 磁盘/内存 + `bridge-nf-call-iptables=1` 同屏 | 阶段一 1.1~1.7 各命令连续执行 | `2026MMDD_k3s_precheck_all_green.png` |
 | 1 | 节点 Ready（开题材料用图） | `kubectl get nodes -o wide` | `2026MMDD_k3s_nodes_ready.png` |
 | 2 | 版本与服务 | `k3s --version` + `systemctl status k3s --no-pager` 同屏 | `2026MMDD_k3s_version_systemd.png` |
 | 3 | 第一个 Pod | `kubectl get pod lab-nginx`（Running） | `2026MMDD_k3s_first_pod.png` |
@@ -401,7 +412,7 @@ kubectl delete pod lab-redis    # 练完即删
 | # | 症状 | 一眼定位 | 根因 | 处理 |
 |---|---|---|---|---|
 | 1 | 安装报 `6443 ... address already in use` 或装完 apiserver 连不上 | `ss -lntp \| grep 6443` | 6443 被占（旧 k3s 残留 / 其他组件） | 找到占用进程：旧 k3s → 跑卸载脚本（第 9 节）；其他进程 → 停掉或改用其空闲环境 |
-| 2 | 节点 NotReady，`journalctl -u k3s` 有 swap 字样 | `free -h \| grep -i swap` | swap 未关，kubelet 拒绝工作 | `sudo swapoff -a` + 清 `/etc/fstab` swap 行后 `sudo systemctl restart k3s` |
+| 2 | 节点 NotReady，`journalctl -u k3s` 出现 `running with swap on is not supported` | `free -h \| grep -i swap`；`k3s --version` | **仅老版本（k3s < 1.28）**：kubelet 默认硬拦 swap；v1.36.x 默认不拦（2026-11-04 实测未关 swap 仍 Ready） | 老版本：`sudo swapoff -a` + 注释 `/etc/fstab` swap 行，或安装参数 `--kubelet-arg=fail-swap-on=false`，然后 `sudo systemctl restart k3s`（见 1.4） |
 | 3 | 节点 NotReady，Pod 全部 Pending，日志有 iptables/CNI 报错 | `sudo ufw status`；`journalctl -u k3s \| grep -iE 'flannel\|cni\|iptables'` | 防火墙拦 VXLAN(8472/udp) 或 iptables 规则异常 | ufw 放行 6443/10250/tcp、8472/udp 或实验机直接 disable；iptables 混乱时 `sudo systemctl restart k3s` 让其重建规则 |
 | 4 | Traefik 起不来或 80/443 冲突，`kubectl get pods -n kube-system` 里 traefik 反复重启 | `ss -lntp \| grep -E ':80\|:443'` | 宿主机已有服务占 80/443 | 确认不需要 ingress 就安装时加 `--disable traefik`；需要则停掉占用进程（不要装 ingress-nginx 替代，重复） |
 | 5 | 镜像拉取超时，shell 里 `curl` 却通 | describe pod 的 `Failed to pull image ... i/o timeout` | **containerd 不继承 shell 的 http_proxy 环境变量**，也不读 Docker 的 daemon.json | 要么用国内直连镜像前缀（daocloud 等）；要么给 k3s 配代理：写入 `/etc/systemd/system/k3s.service.env`（`HTTP_PROXY=http://192.168.40.1:7897`、`HTTPS_PROXY=...`、`NO_PROXY=localhost,127.0.0.1,10.0.0.0/8,192.168.0.0/16`，**NO_PROXY 必须含 localhost:5000 网段**，否则本地仓库拉取也会被送去代理），然后 `sudo systemctl daemon-reload && sudo systemctl restart k3s` |
@@ -412,6 +423,7 @@ kubectl delete pod lab-redis    # 练完即删
 | 10 | 终端报 `NO_BRIDGE_SYSCTL: command not found` 或 `1: command not found` | 报错里被当命令执行的词 | **复制命令时带上了 Markdown 反引号**，反引号被 shell 当作命令替换 | 去掉反引号重敲；习惯上只复制代码块内文本（见文首「复制命令注意」） |
 | 11 | 装完 `docker images` / `docker ps` 看不到 k3s 的镜像与容器，误以为「镜像丢了」 | `sudo k3s crictl images` | k3s 用自带 containerd，与 Docker 镜像存储完全独立，互不可见 | 属正常现象；要让 k3s 用本地仓库镜像须配 `registries.yaml` + `localhost:5000`（见 3.6 与阶段五） |
 | 12 | **装的时候正常、重启后 k3s 起不来**，日志里 containerd/CNI 报错 | `uname -r`；`lsmod \| grep -E 'overlay\|br_netfilter'` | 模块只在内存里 `modprobe` 过，重启后未自动加载 | 写 `/etc/modules-load.d/k3s.conf`（内容 `overlay`、`br_netfilter`）后 `sudo systemctl restart k3s`（见 1.2） |
+| 13 | 排查时发现「忘了 `swapoff`」，但节点明明 Ready | `swapon --show`；`k3s --version`；`kubectl get nodes` | **新版 k3s（≥1.28，实测 v1.36.5）默认允许 swap，Ready 属正常行为**，不是故障 | **不要往 swap 方向排查**（也不用补关）：只有节点 NotReady 且日志明确报 `running with swap on is not supported` 才处理（见 1.4 三方案） |
 
 ---
 
@@ -446,15 +458,16 @@ ss -lntp | grep -E ':(6443|10250)'      # 预期无输出
 | 端口 6443/80/443/10250 | 1.1 | 全部空闲（`PORTS FREE`） | ✅ 过 |
 | 内核模块 | 1.2 | `overlay` 已加载；`br_netfilter` 起初未加载（`modprobe` 语法误用），单独加载后 `lsmod` 出现、`bridge` 引用计数 0→1、`/proc/sys/net/bridge/bridge-nf-call-iptables` = 1 | ✅ 过（经排障） |
 | cgroup | 1.3 | `cgroup2fs`（v2） | ✅ 过 |
-| swap | 1.4 | **4G `/swap.img`**（与手册「预期 0」不符） | ⚠️ 需 `swapoff -a` + 注释 `/etc/fstab` 后重启 k3s（见 1.4 / 表第 2 行） |
+| swap | 1.4 | **4G `/swap.img`**（与手册「预期 0」不符），实测仅用 780K；**未关 swap 直接安装，节点仍 Ready** | ✅ 过（保留 swap，按 1.4 方案 A） |
 | 防火墙 | 1.5 | `ufw` inactive | ✅ 过 |
 | 磁盘 | 1.6 | 根分区 96G，已用 25%，**可用约 69G** | ✅ 过（远超 ≥10G 门槛） |
 | 内存 | 1.7 | `used 5.7G`、`available 9.5G`（全中间件 + 6 服务在跑） | ✅ 可装；按 1.7 建议装前先停 Milvus 三件套 |
+| **安装结果** | 阶段二 | `--write-kubeconfig-mode 644`，**未加 `fail-swap-on`、未执行 `swapoff`** → **k3s v1.36.5+k3s1**；节点 `zzqserver` **Ready**；`k3s.service active (running)` | ✅ 通过（同时修正 1.4 的旧结论） |
 | sysctl | 1.2 | 三项均 1；`sysctl --system` 有两行 `Invalid argument` 噪音（与 k3s 无关） | ✅ 过（噪音忽略） |
 
 **本次最关键的真坑**：`sudo modprobe overlay br_netfilter` 只加载了 `overlay`——第二个词被当作模块参数。根因与正确做法见 1.2 / 表第 8 行；同时暴露「模块未持久化」的隐患（重启后失效），已补 `/etc/modules-load.d/k3s.conf` 要求。
 
-**装前待办（未完成，供下次继续）**：① 拍 VMware 快照 `aitims-pre-k3s-<日期>` 并记 DEVLOG；② `docker stop tims-milvus tims-etcd tims-minio` 腾内存 + `swapoff`；③ 执行阶段二安装；④ 装后写 `registries.yaml` 并跑阶段四/五；⑤ 截图（见阶段六与 DEVLOG 第七节）。
+**装前待办的实际进展**：① VMware 快照——**需现场确认是否已拍**（若未拍，现在补拍并记名）；② ~~停 Milvus 腾内存 + swapoff~~ → **实测未关 swap 也装成功**，swap 按 1.4 方案 A 保留即可（Milvus 停止与否以 `free -h` available ≥8G 为准）；③ 安装——**已完成（v1.36.5+k3s1，节点 Ready）**；④ 装后写 `registries.yaml` 并跑阶段四/五——**待办**；⑤ 截图（见阶段六与 DEVLOG 第七节）——**待办**（含 `2026MMDD_k3s_precheck_all_green.png`、`2026MMDD_k3s_nodes_ready.png`）。
 
 ---
 

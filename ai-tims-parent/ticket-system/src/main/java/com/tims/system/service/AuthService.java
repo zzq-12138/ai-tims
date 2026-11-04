@@ -84,7 +84,12 @@ public class AuthService {
         redis.delete(KEY_FAIL_USER + username);
         // 先登录建立会话，再把 tenantId 签进会话（网关透传时以此为准）
         StpUtil.login(user.getId());
-        StpUtil.getSession().set("tenantId", user.getTenantId() == null ? 1L : user.getTenantId());
+        Long tenantId = user.getTenantId() == null ? 1L : user.getTenantId();
+        StpUtil.getSession().set("tenantId", tenantId);
+        // M6 角色矩阵：登录时把角色码签入会话，供网关做路由级粗粒度守卫；
+        // 接口级仍由各服务查库校验，避免权限变更因旧会话失效。
+        List<String> roles = userMapper.selectRoleCodes(tenantId, user.getId());
+        StpUtil.getSession().set("roles", roles == null ? List.of() : roles);
         Map<String, Object> data = new HashMap<>();
         data.put("token", StpUtil.getTokenValue());
         data.put("nickname", user.getNickname());

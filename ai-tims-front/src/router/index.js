@@ -37,7 +37,7 @@ const routes = [
         path: 'kb',
         name: 'kb',
         component: () => import('../views/Knowledge.vue'),
-        meta: { title: '知识库' }
+        meta: { title: '知识库', roles: ['ADMIN', 'ENGINEER', 'REVIEWER'] }
       },
       {
         path: 'assistant',
@@ -49,7 +49,7 @@ const routes = [
         path: 'system/users',
         name: 'system-users',
         component: () => import('../views/SystemUser.vue'),
-        meta: { title: '用户管理' }
+        meta: { title: '用户管理', roles: ['ADMIN'] }
       }
     ]
   },
@@ -69,6 +69,13 @@ router.beforeEach((to) => {
   }
   if (to.path === '/login' && auth.token) {
     return { path: '/dashboard' }
+  }
+  // 角色矩阵：菜单/路由双重显隐，越权访问回到工作台
+  if (to.meta?.roles) {
+    const roles = auth.user?.roles || []
+    if (!to.meta.roles.some(r => roles.includes(r))) {
+      return { path: '/dashboard' }
+    }
   }
 })
 

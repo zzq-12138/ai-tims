@@ -56,7 +56,7 @@ DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
   `id`          BIGINT      NOT NULL COMMENT '主键',
   `tenant_id`   BIGINT      NOT NULL DEFAULT 1 COMMENT '租户ID',
-  `role_code`   VARCHAR(32) NOT NULL COMMENT '角色码 ADMIN/DISPATCHER/ENGINEER/USER',
+  `role_code`   VARCHAR(32) NOT NULL COMMENT '角色码 ADMIN/DISPATCHER/ENGINEER/USER/REVIEWER',
   `role_name`   VARCHAR(32) NOT NULL COMMENT '角色名',
   `remark`      VARCHAR(128) DEFAULT NULL COMMENT '备注',
   `create_time` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -100,19 +100,28 @@ INSERT INTO `sys_tenant` (`id`, `tenant_code`, `tenant_name`, `status`) VALUES
 
 INSERT INTO `sys_role` (`id`, `tenant_id`, `role_code`, `role_name`, `remark`) VALUES
 (1, 1, 'ADMIN',      '系统管理员', '全部权限'),
-(2, 1, 'DISPATCHER', '调度员',     '工单分派'),
-(3, 1, 'ENGINEER',   '工程师',     '工单处理'),
-(4, 1, 'USER',       '普通用户',   '工单填报');
+(2, 1, 'DISPATCHER', '调度员',     '工单分派（历史角色，保留兼容）'),
+(3, 1, 'ENGINEER',   '工程师',     '工单处理、知识查询'),
+(4, 1, 'USER',       '报障人',     '建单，仅看自己创建的工单'),
+(5, 1, 'REVIEWER',   '审核员',     '知识审核发布/驳回、AI 抽取结果审核');
 
 INSERT INTO `sys_dept` (`id`, `tenant_id`, `parent_id`, `dept_name`, `factory`, `sort`) VALUES
 (1, 1, 0, '集团总部', NULL, 0),
 (2, 1, 1, '制造一部', 'F1',  1);
 
+-- 角色矩阵种子账号（密码均为 Admin@123，仅限开发/验收环境；生产须改密）
+-- admin=管理员 / engineer=工程师 / reporter=报障人 / reviewer=审核员
 INSERT INTO `sys_user` (`id`, `tenant_id`, `username`, `password`, `nickname`, `dept_id`, `factory`, `phone`, `email`) VALUES
-(1, 1, 'admin', '$2a$10$1Qd7ZqwF9yOKPJ1LvvMcW.RiBpbRlnqA4uIAiSsIbXmw5H.jmMuD2', '系统管理员', 1, 'F1', '13800000001', 'admin@aitims.local');
+(1, 1, 'admin',    '$2a$10$1Qd7ZqwF9yOKPJ1LvvMcW.RiBpbRlnqA4uIAiSsIbXmw5H.jmMuD2', '系统管理员', 1, 'F1', '13800000001', 'admin@aitims.local'),
+(2, 1, 'engineer', '$2a$10$1Qd7ZqwF9yOKPJ1LvvMcW.RiBpbRlnqA4uIAiSsIbXmw5H.jmMuD2', '工程师-张工', 2, 'F1', '13800000002', 'engineer@aitims.local'),
+(3, 1, 'reporter', '$2a$10$1Qd7ZqwF9yOKPJ1LvvMcW.RiBpbRlnqA4uIAiSsIbXmw5H.jmMuD2', '报障人-李工', 2, 'F1', '13800000003', 'reporter@aitims.local'),
+(4, 1, 'reviewer', '$2a$10$1Qd7ZqwF9yOKPJ1LvvMcW.RiBpbRlnqA4uIAiSsIbXmw5H.jmMuD2', '审核员-王工', 1, 'F1', '13800000004', 'reviewer@aitims.local');
 
 INSERT INTO `sys_user_role` (`id`, `tenant_id`, `user_id`, `role_id`) VALUES
-(1, 1, 1, 1);
+(1, 1, 1, 1),
+(2, 1, 2, 3),
+(3, 1, 3, 4),
+(4, 1, 4, 5);
 
 -- ---------------------------------------------------------------------
 -- 4. wo_ 工单域五表（任务书 5.2，统一叠加 tenant_id 与租户前缀复合索引；

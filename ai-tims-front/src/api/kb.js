@@ -59,8 +59,13 @@ export function approveExtraction(id) {
   return request.post(`/api/kb/extraction/${id}/approve`)
 }
 
-export function mergeExtraction(id, targetId) {
-  return request.post(`/api/kb/extraction/${id}/merge`, { targetId })
+// mode: CONCAT（默认拼接）/ KEEP_ORIGINAL（保留原正文）/ REPLACE（用新内容替换）
+export function mergeExtraction(id, targetId, mode = 'CONCAT') {
+  return request.post(`/api/kb/extraction/${id}/merge`, { targetId, mode })
+}
+
+export function previewMergeExtraction(id, targetId) {
+  return request.get(`/api/kb/extraction/preview/${id}`, { params: { targetId } })
 }
 
 export function rejectExtraction(id, reason) {

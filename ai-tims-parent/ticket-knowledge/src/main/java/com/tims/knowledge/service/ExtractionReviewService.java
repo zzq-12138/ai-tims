@@ -19,21 +19,26 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * M6 抽取审核中心（仅 ADMIN 可审核）。
+ * M6 抽取审核中心（ADMIN / REVIEWER 可审核）。
  * 用户拍板口径：任何情况下不自动合并、不自动覆盖；系统只给建议，落库/合并/驳回均须人工点击。
- * 合并前写入 kb_knowledge_history 全量快照并追加正文，保留原条目历史与合并引用关系。
+ * 合并前写入 kb_knowledge_history 全量快照，正文取舍支持
+ * CONCAT（默认，追加）/ KEEP_ORIGINAL（保留原正文）/ REPLACE（用新内容替换）/ MERGE（旧口径=追加），
+ * 并在 change_type 记录本次人工选择的动作类型，保留原条目历史与合并引用关系。
  */
 @Service
 public class ExtractionReviewService {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final Set<String> PENDING_STATUS = Set.of("PENDING_REVIEW", "MANUAL_REQUIRED");
+    /** 合并正文取舍：CONCAT 默认；MERGE 为旧调用方兼容（行为同 CONCAT）；CHANGE 落 kb_knowledge_history.change_type */
+    private static final Set<String> MERGE_MODES = Set.of("CONCAT", "KEEP_ORIGINAL", "REPLACE", "MERGE");
 
     private final AiExtractedMapper extractedMapper;
     private final KbKnowledgeMapper knowledgeMapper;
@@ -73,6 +78,7 @@ public class ExtractionReviewService {
 
     /** 人工补录：仅待审核/待补录记录可编辑，补录后转为待审核 */
     public AiExtracted update(Long id, AiExtracted in) {
+        requireReviewer();
         AiExtracted row = detail(id);
         requirePending(row, "编辑");
         if (in.getTitle() != null) row.setTitle(in.getTitle());
@@ -96,7 +102,7 @@ public class ExtractionReviewService {
      */
     @Transactional
     public KbKnowledge approve(Long id) {
-        requireAdmin();
+        requireReviewer();
         AiExtracted row = detail(id);
         requirePending(row, "通过");
         if (row.getTitle() == null || row.getTitle().isBlank()) {
@@ -129,25 +135,25 @@ public class ExtractionReviewService {
         return k;
     }
 
-    /**
-     * 人工确认“合并”：必须先写历史快照，再追加正文/合并标签，绝不覆盖原内容。
-     */
+    /** 兼容旧调用方（未传 mode）：等同 CONCAT 拼接 */
     @Transactional
     public KbKnowledge merge(Long id, Long targetId) {
-        requireAdmin();
+        return merge(id, targetId, "CONCAT");
+    }
+
+    /**
+     * 人工确认“合并”：先写历史快照，再按人工选择的正文取舍更新，绝不静默覆盖。
+     *
+     * @param mode CONCAT（默认，追加）/ KEEP_ORIGINAL（保留原正文）/ REPLACE（用新内容替换）
+     *             / MERGE（旧口径，行为同 CONCAT）。动作类型原样记录到 change_type。
+     */
+    @Transactional
+    public KbKnowledge merge(Long id, Long targetId, String mode) {
+        requireReviewer();
         AiExtracted row = detail(id);
         requirePending(row, "合并");
-        Long tid = targetId != null ? targetId : row.getDedupTargetId();
-        if (tid == null) {
-            throw new BizException(10400, "未指定合并目标条目");
-        }
-        KbKnowledge target = knowledgeMapper.selectById(tid);
-        if (target == null) {
-            throw new BizException(30404, "合并目标条目不存在");
-        }
-        if (!"PUBLISHED".equals(target.getStatus())) {
-            throw new BizException(30401, "仅可合并到已发布条目");
-        }
+        String action = normalizeMode(mode);
+        KbKnowledge target = loadMergeTarget(targetId != null ? targetId : row.getDedupTargetId());
 
         KbKnowledgeHistory h = new KbKnowledgeHistory();
         h.setTenantId(target.getTenantId());
@@ -158,15 +164,25 @@ public class ExtractionReviewService {
         h.setSummary(target.getSummary());
         h.setTags(target.getTags());
         h.setApplyDeviceType(target.getApplyDeviceType());
-        h.setChangeType("MERGE");
+        h.setChangeType(action);
         h.setSourceExtractedId(row.getId());
         h.setCreateBy(StpUtil.getLoginIdAsLong());
         h.setCreateTime(LocalDateTime.now());
         historyMapper.insert(h);
 
         String append = buildContent(row);
-        target.setContent((target.getContent() == null ? "" : target.getContent())
-                + "\n\n【工单补充 " + (row.getSourceTicketNo() == null ? "" : row.getSourceTicketNo()) + "】\n" + append);
+        switch (action) {
+            case "KEEP_ORIGINAL" -> {
+                // 仅保留原正文，标签作为元数据仍可合并
+            }
+            case "REPLACE" -> {
+                target.setContent(append);
+                target.setSummary(truncate(nvl(row.getFaultPhenomenon()).isBlank()
+                        ? nvl(row.getTitle()) : row.getFaultPhenomenon(), 500));
+            }
+            default -> target.setContent((target.getContent() == null ? "" : target.getContent())
+                    + "\n\n【工单补充 " + nvl(row.getSourceTicketNo()) + "】\n" + append);
+        }
         target.setTags(unionTags(target.getTags(), row.getTags()));
         target.setVersion((target.getVersion() == null ? 1 : target.getVersion()) + 1);
         target.setUpdateTime(LocalDateTime.now());
@@ -181,9 +197,78 @@ public class ExtractionReviewService {
         return target;
     }
 
+    /**
+     * 合并前差异预览：返回目标条目原文、拟写入的新内容，以及三种正文取舍的结果，
+     * 供前端在人工确认前展示差异，避免误操作。
+     */
+    public Map<String, Object> mergePreview(Long id, Long targetId) {
+        AiExtracted row = detail(id);
+        requirePending(row, "合并预览");
+        Long tid = targetId != null ? targetId : row.getDedupTargetId();
+        if (tid == null) {
+            throw new BizException(10400, "未指定合并目标条目");
+        }
+        KbKnowledge target = loadMergeTarget(tid);
+        String newContent = buildContent(row);
+        String original = target.getContent() == null ? "" : target.getContent();
+        String sourceNote = "【工单补充 " + nvl(row.getSourceTicketNo()) + "】";
+
+        Map<String, Object> res = new LinkedHashMap<>();
+        res.put("extractedId", row.getId());
+        res.put("targetId", target.getId());
+        res.put("targetTitle", target.getTitle());
+        res.put("targetVersion", target.getVersion());
+        res.put("targetContent", original);
+        res.put("newContent", newContent);
+        res.put("dedupScore", row.getDedupScore());
+        res.put("dedupNote", row.getDedupNote());
+        res.put("defaultMode", "CONCAT");
+
+        List<Map<String, Object>> options = new ArrayList<>();
+        options.add(mergeOption("CONCAT", "两者拼接（默认）",
+                original + (original.isBlank() ? "" : "\n\n") + sourceNote + "\n" + newContent));
+        options.add(mergeOption("KEEP_ORIGINAL", "保留原正文（不写入新内容）", original));
+        options.add(mergeOption("REPLACE", "用新内容替换原正文", newContent));
+        res.put("options", options);
+        return res;
+    }
+
+    private Map<String, Object> mergeOption(String mode, String label, String resultContent) {
+        Map<String, Object> o = new LinkedHashMap<>();
+        o.put("mode", mode);
+        o.put("label", label);
+        o.put("resultContent", resultContent);
+        return o;
+    }
+
+    private KbKnowledge loadMergeTarget(Long tid) {
+        if (tid == null) {
+            throw new BizException(10400, "未指定合并目标条目");
+        }
+        KbKnowledge target = knowledgeMapper.selectById(tid);
+        if (target == null) {
+            throw new BizException(30404, "合并目标条目不存在");
+        }
+        if (!"PUBLISHED".equals(target.getStatus())) {
+            throw new BizException(30401, "仅可合并到已发布条目");
+        }
+        return target;
+    }
+
+    private String normalizeMode(String mode) {
+        if (mode == null || mode.isBlank()) {
+            return "CONCAT";
+        }
+        String m = mode.trim().toUpperCase();
+        if (!MERGE_MODES.contains(m)) {
+            throw new BizException(10400, "非法合并方式：" + mode);
+        }
+        return m;
+    }
+
     /** 人工确认“跳过/驳回”：仅记录，不写知识库 */
     public void reject(Long id, String reason) {
-        requireAdmin();
+        requireReviewer();
         AiExtracted row = detail(id);
         requirePending(row, "驳回");
         row.setStatus("REJECTED");
@@ -284,12 +369,13 @@ public class ExtractionReviewService {
         }
     }
 
-    private void requireAdmin() {
+    /** 审核守卫：ADMIN 或 REVIEWER；既有 ADMIN 权限保持不变 */
+    private void requireReviewer() {
         long userId = StpUtil.getLoginIdAsLong();
         Long tenantId = com.tims.knowledge.config.TenantContext.resolve();
         List<String> roles = sysAuthMapper.selectRoleCodes(tenantId, userId);
-        if (roles == null || !roles.contains("ADMIN")) {
-            throw new BizException(10403, "仅 ADMIN 可审核抽取结果");
+        if (roles == null || !(roles.contains("ADMIN") || roles.contains("REVIEWER"))) {
+            throw new BizException(10403, "仅 ADMIN/REVIEWER 可审核抽取结果");
         }
     }
 

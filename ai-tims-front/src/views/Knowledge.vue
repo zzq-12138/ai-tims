@@ -41,8 +41,8 @@
       <el-empty v-else description="输入检索词后点击检索，可切换三种模式对比返回" :image-size="60" />
     </el-card>
 
-    <!-- M6 AI 抽取审核中心（系统仅给建议，必须人工确认才执行） -->
-    <el-card shadow="never" class="mb12">
+    <!-- M6 AI 抽取审核中心（系统仅给建议，必须人工确认才执行；仅 ADMIN/审核员可见） -->
+    <el-card v-if="canReview" shadow="never" class="mb12">
       <template #header>
         <div class="card-head">
           <span>AI 抽取审核</span>
@@ -83,7 +83,7 @@
           <template #default="{ row }">
             <el-button link type="primary" @click="openExtractView(row)">查看</el-button>
             <el-button v-if="pendingExtract(row)" link type="primary" @click="openExtractEdit(row)">补录</el-button>
-            <template v-if="isAdmin && pendingExtract(row)">
+            <template v-if="canReview && pendingExtract(row)">
               <el-button link type="success" @click="doApproveExtract(row)">通过</el-button>
               <el-button link type="warning" @click="openMerge(row)">合并</el-button>
               <el-button link type="danger" @click="doRejectExtract(row)">驳回</el-button>
@@ -140,7 +140,7 @@
             <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
             <el-button v-if="row.status === 'DRAFT' || row.status === 'REJECTED'"
                        link type="warning" @click="doSubmit(row)">提交</el-button>
-            <template v-if="isAdmin">
+            <template v-if="canReview">
               <el-button v-if="row.status === 'PENDING'" link type="success" @click="doPublish(row)">发布</el-button>
               <el-button v-if="row.status === 'PENDING'" link type="danger" @click="doReject(row)">驳回</el-button>
             </template>
@@ -263,23 +263,46 @@
       </template>
     </el-dialog>
 
-    <!-- M6 合并确认（必须人工点击） -->
-    <el-dialog v-model="mergeVisible" title="确认合并到已有条目" width="600px">
+    <!-- M6 合并确认（必须人工点击；先留全量快照，再由人工选择正文取舍） -->
+    <el-dialog v-model="mergeVisible" title="确认合并到已有条目" width="880px">
       <el-alert type="warning" :closable="false" show-icon class="mb12"
-                title="合并会先写入原条目历史快照，再追加内容；不会覆盖原条目。" />
+                title="合并前会先写入原条目全量历史快照；正文保留方式由你选择，不会静默覆盖。" />
       <el-form label-width="110px">
         <el-form-item label="目标条目ID">
           <el-input-number v-model="mergeForm.targetId" :min="1" :controls="false" />
-          <el-button link type="primary" class="ml8" @click="verifyMergeTarget">校验目标</el-button>
+          <el-button link type="primary" class="ml8" :loading="mergePreviewLoading"
+                     @click="verifyMergeTarget">校验目标并预览</el-button>
         </el-form-item>
         <el-form-item label="目标条目">{{ mergeTargetTitle || '请校验目标条目' }}</el-form-item>
         <el-form-item label="相似度">
-          {{ mergeRow?.dedupScore != null ? Number(mergeRow.dedupScore).toFixed(4) : '-' }}
+          {{ (mergePreview?.dedupScore ?? mergeRow?.dedupScore) != null
+            ? Number(mergePreview?.dedupScore ?? mergeRow?.dedupScore).toFixed(4) : '-' }}
         </el-form-item>
         <el-form-item label="关键差异">
-          <span class="diff">{{ mergeRow?.dedupNote || '-' }}</span>
+          <span class="diff">{{ mergePreview?.dedupNote || mergeRow?.dedupNote || '-' }}</span>
+        </el-form-item>
+        <el-form-item label="正文取舍">
+          <el-radio-group v-model="mergeForm.mode">
+            <el-radio-button value="CONCAT">两者拼接（默认）</el-radio-button>
+            <el-radio-button value="KEEP_ORIGINAL">保留原正文</el-radio-button>
+            <el-radio-button value="REPLACE">用新内容替换</el-radio-button>
+          </el-radio-group>
         </el-form-item>
       </el-form>
+      <div v-if="mergePreview" class="diff-grid">
+        <div class="diff-pane">
+          <h4>原条目正文（v{{ mergePreview.targetVersion }}）</h4>
+          <pre class="diff-pre">{{ mergePreview.targetContent || '（空）' }}</pre>
+        </div>
+        <div class="diff-pane">
+          <h4>本次抽取新内容</h4>
+          <pre class="diff-pre">{{ mergePreview.newContent }}</pre>
+        </div>
+      </div>
+      <div v-if="selectedMergeOption" class="diff-result">
+        <h4>合并后正文预览（{{ selectedMergeOption.label }}）</h4>
+        <pre class="diff-pre">{{ selectedMergeOption.resultContent || '（空）' }}</pre>
+      </div>
       <template #footer>
         <el-button @click="mergeVisible = false">取消</el-button>
         <el-button type="warning" :loading="mergeSaving" @click="doMergeExtract">确认合并</el-button>
@@ -294,12 +317,17 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   pageKnowledge, createKnowledge, updateKnowledge, deleteKnowledge,
   submitKnowledge, publishKnowledge, rejectKnowledge, listCategories, searchKnowledge,
-  getKnowledge, pageExtraction, updateExtraction, approveExtraction, mergeExtraction, rejectExtraction
+  pageExtraction, updateExtraction, approveExtraction, mergeExtraction,
+  previewMergeExtraction, rejectExtraction
 } from '../api/kb'
 import { useAuthStore } from '../stores/auth'
 
 const auth = useAuthStore()
-const isAdmin = computed(() => (auth.user?.roles || []).includes('ADMIN'))
+// 审核权限：管理员 + 审核员（既有 ADMIN 能力不回归）
+const canReview = computed(() => {
+  const roles = auth.user?.roles || []
+  return roles.includes('ADMIN') || roles.includes('REVIEWER')
+})
 
 const statusMap = { DRAFT: '草稿', PENDING: '待审核', PUBLISHED: '已发布', REJECTED: '已驳回' }
 function statusType(s) {
@@ -532,15 +560,38 @@ async function doRejectExtract(row) {
 
 const mergeVisible = ref(false)
 const mergeSaving = ref(false)
+const mergePreviewLoading = ref(false)
 const mergeRow = ref(null)
 const mergeTargetTitle = ref('')
-const mergeForm = reactive({ targetId: null })
+const mergePreview = ref(null)
+const mergeForm = reactive({ targetId: null, mode: 'CONCAT' })
+
+const selectedMergeOption = computed(() =>
+  mergePreview.value?.options?.find(o => o.mode === mergeForm.mode) || null)
 
 function openMerge(row) {
   mergeRow.value = row
   mergeForm.targetId = row.dedupTargetId || null
+  mergeForm.mode = 'CONCAT'
   mergeTargetTitle.value = row.dedupTargetTitle || ''
+  mergePreview.value = null
   mergeVisible.value = true
+  if (mergeForm.targetId) loadMergePreview()
+}
+
+async function loadMergePreview() {
+  mergePreviewLoading.value = true
+  try {
+    const p = await previewMergeExtraction(mergeRow.value.id, mergeForm.targetId)
+    mergePreview.value = p
+    mergeTargetTitle.value = p.targetTitle
+  } catch (_) {
+    mergePreview.value = null
+    mergeTargetTitle.value = ''
+    ElMessage.error('目标条目不存在或不可合并（仅支持已发布条目）')
+  } finally {
+    mergePreviewLoading.value = false
+  }
 }
 
 async function verifyMergeTarget() {
@@ -548,14 +599,7 @@ async function verifyMergeTarget() {
     ElMessage.warning('请输入目标条目ID')
     return
   }
-  try {
-    const k = await getKnowledge(mergeForm.targetId)
-    mergeTargetTitle.value = k.title
-    ElMessage.success(`目标条目：${k.title}`)
-  } catch (_) {
-    mergeTargetTitle.value = ''
-    ElMessage.error('目标条目不存在')
-  }
+  await loadMergePreview()
 }
 
 async function doMergeExtract() {
@@ -563,13 +607,14 @@ async function doMergeExtract() {
     ElMessage.warning('请输入目标条目ID')
     return
   }
+  const modeLabel = selectedMergeOption.value?.label || mergeForm.mode
   await ElMessageBox.confirm(
-    `确认将「${mergeRow.value?.title}」合并到 #${mergeForm.targetId}？原条目会先写入历史快照，不会被覆盖。`,
+    `确认将「${mergeRow.value?.title}」合并到 #${mergeForm.targetId}？\n正文取舍：${modeLabel}。\n原条目会先写入全量历史快照，动作类型会记录为 ${mergeForm.mode}。`,
     '人工确认合并', { type: 'warning' })
   mergeSaving.value = true
   try {
-    await mergeExtraction(mergeRow.value.id, mergeForm.targetId)
-    ElMessage.success('已合并，原条目已留历史快照')
+    await mergeExtraction(mergeRow.value.id, mergeForm.targetId, mergeForm.mode)
+    ElMessage.success(`已合并（${modeLabel}），原条目已留历史快照`)
     mergeVisible.value = false
     loadExtraction()
     load()
@@ -594,6 +639,9 @@ onMounted(async () => {
 .score { color: #409eff; margin-right: 6px; }
 .target { color: #909399; font-size: 12px; }
 .diff { color: #606266; font-size: 12px; line-height: 1.6; }
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.diff-pane, .diff-result { border: 1px solid #ebeef5; border-radius: 4px; padding: 8px; }
+.diff-pre { max-height: 180px; overflow: auto; white-space: pre-wrap; font-size: 12px; line-height: 1.6; margin: 0; background: #f5f7fa; padding: 8px; border-radius: 4px; }
 h4 { margin: 12px 0 4px; font-size: 13px; color: #303133; }
 .card-head { display: flex; justify-content: space-between; align-items: center; }
 .search-bar { display: flex; gap: 10px; align-items: center; }

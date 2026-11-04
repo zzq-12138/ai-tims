@@ -24,7 +24,8 @@ import java.util.Map;
  * GET  /api/kb/extraction/{id}                详情
  * PUT  /api/kb/extraction/{id}                人工补录/编辑
  * POST /api/kb/extraction/{id}/approve        人工确认新建（写 PUBLISHED，10s 内向量同步）
- * POST /api/kb/extraction/{id}/merge          人工确认合并（先历史快照，再追加）
+ * GET  /api/kb/extraction/preview/{id}        合并前差异预览（目标原文 / 新内容 / 三种取舍结果）
+ * POST /api/kb/extraction/{id}/merge          人工确认合并（先历史快照，再按 mode 取舍正文）
  * POST /api/kb/extraction/{id}/reject         人工驳回/跳过
  * GET  /api/kb/extraction/history/{knowledgeId} 合并留痕
  */
@@ -60,13 +61,25 @@ public class ExtractionController {
         return Result.ok(reviewService.approve(id));
     }
 
+    /** 合并前差异预览：前端据此展示目标原文与新内容，避免误操作 */
+    @GetMapping("/preview/{id}")
+    public Result<Map<String, Object>> preview(@PathVariable Long id,
+                                               @RequestParam(required = false) Long targetId) {
+        return Result.ok(reviewService.mergePreview(id, targetId));
+    }
+
+    /** 合并 mode：CONCAT（默认）/ KEEP_ORIGINAL / REPLACE / MERGE（旧口径=CONCAT） */
     @PostMapping("/{id}/merge")
     public Result<KbKnowledge> merge(@PathVariable Long id, @RequestBody(required = false) Map<String, Object> body) {
         Long targetId = null;
+        String mode = null;
         if (body != null && body.get("targetId") != null) {
             targetId = Long.parseLong(String.valueOf(body.get("targetId")));
         }
-        return Result.ok(reviewService.merge(id, targetId));
+        if (body != null && body.get("mode") != null) {
+            mode = String.valueOf(body.get("mode"));
+        }
+        return Result.ok(reviewService.merge(id, targetId, mode));
     }
 
     @PostMapping("/{id}/reject")

@@ -102,6 +102,30 @@ public class TicketService {
         return authMapper.selectRoleCodes(tenantId, userId).contains("ADMIN");
     }
 
+    /** 工单处理岗（可看全部工单）：ADMIN/DISPATCHER/ENGINEER；其余角色（报障人/审核员）只看自己创建的工单 */
+    private boolean isTicketStaff(Long tenantId, long userId) {
+        List<String> roles = authMapper.selectRoleCodes(tenantId, userId);
+        return roles.contains("ADMIN") || roles.contains("DISPATCHER") || roles.contains("ENGINEER");
+    }
+
+    /** 报障人越权访问他人工单 → 403；无登录态的内部服务调用（M6 事件消费）直接放行 */
+    private void requireVisible(WoTicket t) {
+        try {
+            if (!StpUtil.isLogin()) {
+                return;
+            }
+        } catch (Exception e) {
+            return;
+        }
+        long userId = currentUserId();
+        if (isTicketStaff(tenantId(), userId)) {
+            return;
+        }
+        if (t.getCreateBy() == null || !t.getCreateBy().equals(userId)) {
+            throw new BizException(ErrorCode.FORBIDDEN, "无权访问他人工单");
+        }
+    }
+
     private String userNickname(Long tenantId, long userId) {
         Map<String, Object> simple = authMapper.selectUserSimple(tenantId, userId);
         return simple == null ? ("用户" + userId) : String.valueOf(simple.get("nickname"));
@@ -206,6 +230,10 @@ public class TicketService {
             case "ALL" -> { }
             default -> throw new BizException(ErrorCode.BAD_REQUEST, "非法 tab：" + q.getTab());
         }
+        // 非工单处理岗（报障人/审核员）强制只看自己创建的工单，忽略 tab=ALL
+        if (!isTicketStaff(tenantId, userId)) {
+            w.eq(WoTicket::getCreateBy, userId);
+        }
         if (notBlank(q.getStatus())) w.eq(WoTicket::getStatus, q.getStatus());
         if (notBlank(q.getTicketType())) w.eq(WoTicket::getTicketType, q.getTicketType());
         if (notBlank(q.getTriggerType())) w.eq(WoTicket::getTriggerType, q.getTriggerType());
@@ -239,6 +267,7 @@ public class TicketService {
 
     public TicketDetailVO detail(Long id) {
         WoTicket t = get(id);
+        requireVisible(t);
         TicketDetailVO vo = new TicketDetailVO();
         vo.setTicket(t);
         vo.setFlows(flowMapper.selectList(new LambdaQueryWrapper<WoTicketFlow>()
@@ -261,7 +290,7 @@ public class TicketService {
     }
 
     public List<WoTicketFlow> timeline(Long id) {
-        get(id); // 存在性校验
+        requireVisible(get(id)); // 存在性 + 归属校验
         return flowMapper.selectList(new LambdaQueryWrapper<WoTicketFlow>()
                 .eq(WoTicketFlow::getTicketId, id)
                 .orderByAsc(WoTicketFlow::getCreateTime));
@@ -269,6 +298,7 @@ public class TicketService {
 
     public List<WoTicket> similar(Long id) {
         WoTicket t = get(id);
+        requireVisible(t);
         String keywords = (notBlank(t.getTitle()) ? t.getTitle() : "") + " "
                 + (notBlank(t.getDescription()) ? t.getDescription() : "");
         if (keywords.isBlank()) {
@@ -287,10 +317,11 @@ public class TicketService {
         Long tenantId = tenantId();
         WoTicket t = get(id);
         List<String> roles = authMapper.selectRoleCodes(tenantId, userId);
-        boolean adminOrDispatcher = roles.contains("ADMIN") || roles.contains("DISPATCHER");
+        boolean dispatchRole = roles.contains("ADMIN") || roles.contains("DISPATCHER")
+                || roles.contains("ENGINEER");
         boolean isHandler = t.getHandlerId() != null && t.getHandlerId() == userId;
-        if (!adminOrDispatcher && !isHandler) {
-            throw new BizException(ErrorCode.FORBIDDEN, "仅管理员/调度员/当前处理人可受理");
+        if (!dispatchRole && !isHandler) {
+            throw new BizException(ErrorCode.FORBIDDEN, "仅管理员/调度员/工程师/当前处理人可受理");
         }
         applyTransition(t, TicketAction.ACCEPT, userId, null);
     }
@@ -448,7 +479,7 @@ public class TicketService {
     public WoTicketComment comment(Long ticketId, CommentDTO dto) {
         long userId = currentUserId();
         Long tenantId = tenantId();
-        get(ticketId); // 存在性校验
+        requireVisible(get(ticketId)); // 存在性 + 归属校验
         WoTicketComment c = new WoTicketComment();
         c.setTenantId(tenantId);
         c.setTicketId(ticketId);

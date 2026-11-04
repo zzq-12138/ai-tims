@@ -158,7 +158,17 @@ def main():
     if kb_before[0] != "1":
         raise RuntimeError("审核前知识条目版本已变化，疑似自动合并: " + kb_before[0])
 
-    merged = api("POST", f"/api/kb/extraction/{row2[0]}/merge", {"targetId": kb_id})
+    # 6.1 合并前差异预览（人工选择正文取舍的依据）
+    preview = api("GET", f"/api/kb/extraction/preview/{row2[0]}?targetId={kb_id}")
+    out["steps"]["mergePreview"] = {"targetTitle": preview["targetTitle"],
+                                    "targetVersion": preview["targetVersion"],
+                                    "modes": [o["mode"] for o in preview["options"]],
+                                    "dedupScore": preview["dedupScore"]}
+    if [o["mode"] for o in preview["options"]] != ["CONCAT", "KEEP_ORIGINAL", "REPLACE"]:
+        raise RuntimeError("合并预览未返回三种正文取舍: " + str(preview["options"]))
+
+    # 6.2 人工确认合并，默认 CONCAT；change_type 记录本次选择
+    merged = api("POST", f"/api/kb/extraction/{row2[0]}/merge", {"targetId": kb_id, "mode": "CONCAT"})
     kb_after = db(f"select version,content from kb_knowledge where id={kb_id}")[0]
     hist = db(f"select version,change_type,source_extracted_id from kb_knowledge_history "
               f"where knowledge_id={kb_id} order by create_time desc")
@@ -166,8 +176,8 @@ def main():
                              "contentAppended": "工单补充" in kb_after[1],
                              "historyRows": hist, "extractedStatus": db(
                                  f"select status,knowledge_id from ai_extracted where id={row2[0]}")[0]}
-    if len(hist) != 1 or hist[0][1] != "MERGE":
-        raise RuntimeError("合并未留历史快照: " + str(hist))
+    if len(hist) != 1 or hist[0][1] != "CONCAT":
+        raise RuntimeError("合并未留历史快照或动作类型非 CONCAT: " + str(hist))
     if kb_after[0] != "2":
         raise RuntimeError("合并后版本号异常: " + kb_after[0])
 

@@ -13,7 +13,7 @@
         <el-menu-item v-if="isAdmin" index="/system/users">
           <span>系统管理</span>
         </el-menu-item>
-        <el-menu-item index="/kb">
+        <el-menu-item v-if="canViewKb" index="/kb">
           <span>知识库</span>
         </el-menu-item>
         <el-menu-item index="/assistant">
@@ -89,7 +89,10 @@ import { useAuthStore } from '../stores/auth'
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
-const isAdmin = computed(() => (auth.user?.roles || []).includes('ADMIN'))
+const roles = computed(() => auth.user?.roles || [])
+const isAdmin = computed(() => roles.value.includes('ADMIN'))
+// 知识库对管理员/工程师/审核员开放；报障人仅保留工单相关菜单
+const canViewKb = computed(() => ['ADMIN', 'ENGINEER', 'REVIEWER'].some(r => roles.value.includes(r)))
 
 const drawer = ref(false)
 const cards = ref([])

@@ -103,18 +103,18 @@ public class KnowledgeService {
         knowledgeMapper.updateById(k);
     }
 
-    /** PENDING → PUBLISHED（仅 ADMIN），入库即进入向量同步队列 */
+    /** PENDING → PUBLISHED（ADMIN/REVIEWER），入库即进入向量同步队列 */
     public void publish(Long id) {
-        requireAdmin();
+        requireReviewer();
         KbKnowledge k = detail(id);
         requireTransition(k, "publish", Set.of("PENDING"), "PUBLISHED");
         k.setStatus("PUBLISHED");
         knowledgeMapper.updateById(k);
     }
 
-    /** PENDING → REJECTED（仅 ADMIN），同步撤下向量（不可检索） */
+    /** PENDING → REJECTED（ADMIN/REVIEWER），同步撤下向量（不可检索） */
     public void reject(Long id, String reason) {
-        requireAdmin();
+        requireReviewer();
         KbKnowledge k = detail(id);
         requireTransition(k, "reject", Set.of("PENDING"), "REJECTED");
         k.setStatus("REJECTED");
@@ -142,12 +142,13 @@ public class KnowledgeService {
         }
     }
 
-    private void requireAdmin() {
+    /** 审核守卫：ADMIN 或 REVIEWER；既有 ADMIN 权限保持不变 */
+    private void requireReviewer() {
         long userId = StpUtil.getLoginIdAsLong();
         Long tenantId = com.tims.knowledge.config.TenantContext.resolve();
         List<String> roles = sysAuthMapper.selectRoleCodes(tenantId, userId);
-        if (roles == null || !roles.contains("ADMIN")) {
-            throw new BizException(10403, "仅 ADMIN 可审核知识");
+        if (roles == null || !(roles.contains("ADMIN") || roles.contains("REVIEWER"))) {
+            throw new BizException(10403, "仅 ADMIN/REVIEWER 可审核知识");
         }
     }
 }

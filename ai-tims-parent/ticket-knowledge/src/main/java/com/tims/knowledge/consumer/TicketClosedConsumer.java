@@ -12,6 +12,10 @@ import java.util.Map;
  * M6 ticket.closed 消费者（归属 ticket-knowledge：知识落库/审核/合并/向量同步均在本服务，
  * LLM 能力由 ticket-ai 以内部接口提供，职责边界清晰）。
  * 队列 q.kb.extract 与 ticket-push 的 q.push.ticket 各收一份，不互斥。
+ *
+ * 本消费者只做“幂等占位 + 投递内部抽取执行器”，方法在毫秒级返回：
+ * 9~10s 的同步抽取不再占用 RabbitMQ 消费线程（concurrency=2, prefetch=1），
+ * 集中关单时后续工单不会因线程被占而排队。
  */
 @Component
 public class TicketClosedConsumer {

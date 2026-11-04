@@ -58,6 +58,8 @@ public class ExtractionReviewService {
     public Page<AiExtracted> page(long current, long size, String status) {
         LambdaQueryWrapper<AiExtracted> w = new LambdaQueryWrapper<AiExtracted>()
                 .eq(status != null && !status.isBlank(), AiExtracted::getStatus, status)
+                // 异步抽取进行中的占位行不进入审核中心（终态才可见）
+                .ne(status == null || status.isBlank(), AiExtracted::getStatus, "PROCESSING")
                 .orderByDesc(AiExtracted::getCreateTime);
         Page<AiExtracted> page = extractedMapper.selectPage(new Page<>(current, size), w);
         fillTargetTitle(page.getRecords());

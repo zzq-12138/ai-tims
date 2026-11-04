@@ -24,6 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * M6 工单关闭 → 知识抽取编排。
@@ -44,6 +46,9 @@ public class ExtractionService {
     private final OrderClient orderClient;
     private final EmbeddingService embeddingService;
     private final MilvusVectorStore vectorStore;
+    /** 抽取异步执行器（与 MQ 消费线程解耦）与积压指标 */
+    private final ThreadPoolExecutor extractExecutor;
+    private final ExtractQueueMetrics queueMetrics;
 
     @Value("${tims.kb.extract.dedup-threshold:0.92}")
     private double dedupThreshold;
@@ -57,21 +62,33 @@ public class ExtractionService {
     @Value("${tims.kb.extract.model:glm-4-flash}")
     private String extractModel;
 
+    /** 抽取失败后是否即时重试 1 次（不做退避自动重试） */
+    @Value("${tims.kb.extract.executor.retry-once:true}")
+    private boolean retryOnce;
+
     public ExtractionService(AiExtractedMapper extractedMapper,
                              KbKnowledgeMapper knowledgeMapper,
                              ExtractAiClient aiClient,
                              OrderClient orderClient,
                              EmbeddingService embeddingService,
-                             MilvusVectorStore vectorStore) {
+                             MilvusVectorStore vectorStore,
+                             @org.springframework.beans.factory.annotation.Qualifier("extractExecutor")
+                             ThreadPoolExecutor extractExecutor,
+                             ExtractQueueMetrics queueMetrics) {
         this.extractedMapper = extractedMapper;
         this.knowledgeMapper = knowledgeMapper;
         this.aiClient = aiClient;
         this.orderClient = orderClient;
         this.embeddingService = embeddingService;
         this.vectorStore = vectorStore;
+        this.extractExecutor = extractExecutor;
+        this.queueMetrics = queueMetrics;
     }
 
-    /** 消费入口：任何非致命异常都在内部消化，避免重试风暴影响关单 */
+    /**
+     * 消费入口：只做幂等占位（ai_extracted → PROCESSING）+ 投递内部执行器，随即返回。
+     * 真正 9~10s 的抽取在独立线程池执行，集中关单时不再占住 MQ 消费线程造成排队雪崩。
+     */
     public void handleClosedEvent(Map<String, Object> event, Long tenantId) {
         Long ticketId = toLong(event == null ? null : event.get("ticketId"));
         if (ticketId == null) {
@@ -81,13 +98,62 @@ public class ExtractionService {
         String ticketNo = str(event.get("ticketNo"));
         String deviceType = str(event.get("deviceType"));
 
+        AiExtracted row = new AiExtracted();
+        row.setTenantId(tenantId);
+        row.setSourceTicketId(ticketId);
+        row.setSourceTicketNo(ticketNo);
+        row.setSourceDeviceType(deviceType);
+        row.setModel(extractModel);
+        row.setDedupAction("NEW");
+        row.setStatus("PROCESSING");
+        row.setCreateTime(LocalDateTime.now());
+
         TenantContext.setOverride(tenantId);
         try {
             if (alreadyExtracted(tenantId, ticketId)) {
                 log.info("[m6] 工单 {} 已抽取过，重复消息跳过", ticketNo);
                 return;
             }
+            try {
+                extractedMapper.insert(row);
+            } catch (DuplicateKeyException e) {
+                log.info("[m6] 工单 {} 并发重复消息，唯一键拦截，忽略", ticketId);
+                return;
+            }
+        } finally {
+            TenantContext.clearOverride();
+        }
 
+        long enqueueAt = System.currentTimeMillis();
+        try {
+            extractExecutor.execute(() -> {
+                queueMetrics.recordStart(System.currentTimeMillis() - enqueueAt);
+                processRow(row, tenantId, ticketId, ticketNo, deviceType);
+            });
+            queueMetrics.recordSubmit();
+            log.info("[m6] 工单 {} 已入抽取队列 queue={} active={}", ticketNo,
+                    extractExecutor.getQueue().size(), extractExecutor.getActiveCount());
+        } catch (RejectedExecutionException e) {
+            queueMetrics.recordReject();
+            log.warn("[m6] 工单 {} 抽取队列已满，转人工补录", ticketNo);
+            row.setStatus("MANUAL_REQUIRED");
+            row.setSourceTitle(ticketNo);
+            row.setTitle(ticketNo);
+            row.setTags("[]");
+            row.setErrorMsg("抽取队列已满，未执行 AI 抽取，请人工补录");
+            row.setDedupNote("队列拒绝，未做相似度判定；请人工补录后提交审核");
+            try {
+                extractedMapper.updateById(row);
+            } catch (Exception ignore) {
+                log.warn("[m6] 队列拒绝后落库失败 ticket={}", ticketId);
+            }
+        }
+    }
+
+    /** 执行器任务：工单详情 → AI 抽取（失败即时重试 1 次）→ 落库；异常一律转人工补录，不向上抛出 */
+    private void processRow(AiExtracted row, Long tenantId, Long ticketId, String ticketNo, String deviceType) {
+        TenantContext.setOverride(tenantId);
+        try {
             OrderClient.Detail detail = null;
             String errMsg = null;
             try {
@@ -97,24 +163,31 @@ public class ExtractionService {
                 log.warn("[m6] 工单 {} 详情获取失败: {}", ticketNo, e.getMessage());
             }
 
+            Map<String, Object> payload = detail == null ? null
+                    : buildPayload(tenantId, ticketId, ticketNo, deviceType, detail);
             ExtractResult result = null;
-            if (detail != null) {
+            if (payload != null) {
                 try {
-                    result = aiClient.extract(tenantId, buildPayload(tenantId, ticketId, ticketNo, deviceType, detail));
+                    result = aiClient.extract(tenantId, payload);
                 } catch (Exception e) {
                     errMsg = "AI 抽取失败: " + e.getMessage();
-                    log.warn("[m6] 工单 {} 抽取失败: {}", ticketNo, e.getMessage());
+                    log.warn("[m6] 工单 {} 抽取失败: {}，即时重试 1 次", ticketNo, e.getMessage());
+                    if (retryOnce) {
+                        queueMetrics.recordRetry();
+                        try {
+                            result = aiClient.extract(tenantId, payload);
+                            errMsg = null;
+                        } catch (Exception e2) {
+                            errMsg = "AI 抽取失败(已重试 1 次): " + e2.getMessage();
+                            log.warn("[m6] 工单 {} 重试仍失败: {}", ticketNo, e2.getMessage());
+                        }
+                    }
                 }
             }
 
-            AiExtracted row = new AiExtracted();
-            row.setTenantId(tenantId);
-            row.setSourceTicketId(ticketId);
             row.setSourceTicketNo(detail != null && !detail.ticketNo.isEmpty() ? detail.ticketNo : ticketNo);
             row.setSourceDeviceType(detail != null && !detail.deviceType.isEmpty() ? detail.deviceType : deviceType);
             row.setModel(result != null ? result.getModel() : extractModel);
-            row.setCreateTime(LocalDateTime.now());
-            row.setDedupAction("NEW");
 
             if (result == null) {
                 row.setSourceTitle(detail != null ? detail.title : ticketNo);
@@ -138,12 +211,28 @@ public class ExtractionService {
                 applyDedupSuggestion(row, result, tenantId);
             }
 
-            insertIdempotent(row, tenantId, ticketId);
+            if (result == null) {
+                queueMetrics.recordFailure();
+            } else {
+                queueMetrics.recordSuccess();
+            }
+            extractedMapper.updateById(row);
             if (result != null) {
                 orderClient.markAiExtracted(tenantId, ticketId);
             }
             log.info("[m6] 工单 {} 抽取完成 status={} dedup={} target={}",
                     row.getSourceTicketNo(), row.getStatus(), row.getDedupAction(), row.getDedupTargetId());
+        } catch (Exception e) {
+            queueMetrics.recordFailure();
+            log.error("[m6] 工单 {} 异步抽取异常: {}", ticketNo, e.getMessage(), e);
+            row.setStatus("MANUAL_REQUIRED");
+            row.setErrorMsg(truncate("抽取异常: " + e.getMessage(), 250));
+            row.setDedupNote("异步执行异常，请人工补录");
+            try {
+                extractedMapper.updateById(row);
+            } catch (Exception ignore) {
+                log.warn("[m6] 异常兜底落库失败 ticket={}", ticketId);
+            }
         } finally {
             TenantContext.clearOverride();
         }
@@ -153,14 +242,6 @@ public class ExtractionService {
         return extractedMapper.selectCount(new LambdaQueryWrapper<AiExtracted>()
                 .eq(AiExtracted::getTenantId, tenantId)
                 .eq(AiExtracted::getSourceTicketId, ticketId)) > 0;
-    }
-
-    private void insertIdempotent(AiExtracted row, Long tenantId, Long ticketId) {
-        try {
-            extractedMapper.insert(row);
-        } catch (DuplicateKeyException e) {
-            log.info("[m6] 工单 {} 并发重复消息，唯一键拦截，忽略", ticketId);
-        }
     }
 
     private Map<String, Object> buildPayload(Long tenantId, Long ticketId, String ticketNo,

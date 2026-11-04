@@ -1,10 +1,14 @@
 # AI-TIMS k3s 单节点搭建手册（亲手执行版）
 
-> **环境**：VM `ubuntu-server`（192.168.40.10，Ubuntu Server 22.04.5，4 vCPU / 16G / 根分区 96G LVM），已装 Docker 29.1.3 与本地镜像仓库 `localhost:5000`（`tims-registry` 容器），VM 可用宿主机 Clash 代理 `http://192.168.40.1:7897`。
+> **环境**：VM `ubuntu-server`（192.168.40.10，Ubuntu Server 22.04.5，**内核 5.15.0-202-generic**——由旧版本升级而来，不是 24.04 默认的 6.8），4 vCPU / 15Gi 内存 / 根分区 96G LVM（实测已用 25%），**swap 4G（`/swap.img`）**，已装 Docker 29.1.3 与本地镜像仓库 `localhost:5000`（`tims-registry` 容器），VM 可用宿主机 Clash 代理 `http://192.168.40.1:7897`。
 >
 > **定位与排期**：DEVLOG 拍板——VM k3s 单节点搭建在开题后（寒假）执行，任务书硬验收只需 k3s 单节点；预算约 8.5G/16G 内存（含精简监控）。本手册按「一条命令 → 预期输出 → 判断标准 → 失败怎么读报错」编写，照着敲即可。
 >
-> **诚实声明**：k3s 在写本文时尚未在 VM 上实际安装过，手册中的安装/排错命令基于 k3s 官方文档与本机已知环境写成；标注「需现场确认」处请在执行时以实际输出为准，遇到手册没写的现象先查 `journalctl -u k3s` 再补录 DEVLOG。
+> **标注体系（重要）**：本文分两类内容——
+> - **纸面推导**：写手册时（2026-11-03）VM 尚未装过 k3s，命令与判据基于 k3s 官方文档与本机已知环境推演，标注「需现场确认」处请以实际输出为准；
+> - **实测确认（2026-11-04）**：用户按本手册走阶段一前置检查时实际执行所得，已就地补进对应小节并标 `【实测】`，汇总见文末「实测记录（2026-11-04）」。
+>
+> **复制命令注意**：只复制代码块内的命令，**不要连 Markdown 的反引号一起复制**。反引号在 shell 中是命令替换，实测踩过：把 `` `代码` `` 整段粘进终端会报 `NO_BRIDGE_SYSCTL: command not found`、`1: command not found`（反引号内的词被当作命令执行了）。
 
 ---
 
@@ -30,15 +34,71 @@ ss -lntp | grep -E ':(6443|80|443|10250)\b' || echo "PORTS FREE"
 - **判断标准**：四端口全部无监听。任何一行输出都是一个冲突源。
 - **失败时**：输出里第一列进程名就是占用者。历史上 8080 曾被 tomcat9 占用（DEVLOG 2026-11-02，已 disable）；若 80/443 被占而暂不需要 Traefik，安装时加 `--disable traefik` 绕开；6443 被占通常是旧 k3s 未卸干净，先执行第 9 节卸载脚本。
 
-### 1.2 内核模块
+### 1.2 内核模块（含四级验证与持久化）
+
+**【实测】先记住最大的坑：`modprobe` 一次只加载一个模块。** `sudo modprobe overlay br_netfilter` 的效果是——加载 `overlay`，并试图把 `br_netfilter` 当成 **overlay 的模块参数**传进去，结果 `lsmod` 只见 `overlay`，`br_netfilter` 永远不出现。必须分两条：
 
 ```bash
-sudo modprobe overlay br_netfilter && lsmod | grep -E 'overlay|br_netfilter'
+sudo modprobe overlay
+sudo modprobe br_netfilter
+# 或者：sudo modprobe overlay && sudo modprobe br_netfilter
 ```
 
-- **预期输出**：两行，`overlay` 与 `br_netfilter` 各一行。
-- **判断标准**：两个模块都在列表里。
-- **失败时**：`modprobe: FATAL: Module ... not found` 说明内核太精简——VM 用的是 Ubuntu 22.04 标准内核，一般不会缺；真缺则检查 `uname -r` 与 `linux-modules-extra` 包。
+- **现象**：`lsmod | grep br_netfilter` 无输出，且 `cat /proc/sys/net/bridge/bridge-nf-call-iptables` 报 `No such file or directory`。
+- **原因**：`modprobe` 的语法是 `modprobe <模块名> [模块参数...]`，空格后的第二个词是参数不是模块。
+- **正确做法**：一条一个模块，逐条验证。**实测：单独执行 `modprobe br_netfilter` 后，`lsmod` 立即出现该模块，`bridge` 的引用计数由 0 变 1，sysctl 值为 1。**
+
+**四级验证（从弱到强，手册原来只写了 `lsmod | grep`）**：
+
+```bash
+lsmod | grep br_netfilter                  # ① 可加载模块方式（加载后才有）
+ls -d /sys/module/br_netfilter              # ② built-in 或已加载都会出现该目录（更宽松）
+grep br_netfilter /proc/modules             # ③ 运行内核的模块清单
+modinfo br_netfilter | head -5              # ④ 确认 ko 属于「当前运行内核」
+uname -r                                    # 与上一条 filename 里的版本对照
+```
+
+- **预期输出**：①③ 各一行 `br_netfilter ... Live ...`；②输出 `/sys/module/br_netfilter`；④`filename: /lib/modules/5.15.0-202-generic/kernel/net/bridge/br_netfilter.ko`，其版本段必须等于 `uname -r`。
+- **判断标准（唯一硬判据）**：
+
+```bash
+cat /proc/sys/net/bridge/bridge-nf-call-iptables     # 预期 1
+```
+
+该文件**只有在 br_netfilter 加载后才存在**，能读出 `1` 即表示模块生效且桥接流量已交给 iptables——比 `lsmod` 更可靠（`lsmod` 会有残留/别名干扰）。
+
+**模块持久化（`modprobe` 重启即失效，必须写文件）**：
+
+```bash
+sudo tee /etc/modules-load.d/k3s.conf >/dev/null <<'EOF'
+overlay
+br_netfilter
+EOF
+```
+
+- **为什么必须**：这台 VM 此前已多次重启；不写这个文件会出现经典的「**装的时候好好的、重启后 k3s 起不来**」（k3s 起来后 overlay 缺失 → containerd 报 snapshotter 错误，br_netfilter 缺失 → CNI 桥接规则不生效、Pod 网络不通）。
+- **验证**：`sudo reboot` 后重跑上面四级验证，仍应为 `1`。
+
+**sysctl 三项（k3s 网络前提）**：
+
+```bash
+sudo tee /etc/sysctl.d/99-k3s.conf >/dev/null <<'EOF'
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
+EOF
+sudo sysctl --system
+```
+
+- **预期输出**：大量 `* Applying ...`，最后三行包含上面三项。
+- **【实测】可忽略的两条噪音**：`net.ipv4.conf.all.accept_source_route` 与 `net.ipv4.conf.all.promote_secondaries` 会报 `Invalid argument`——这是镜像内既有 sysctl 配置与 5.15 内核版本不匹配导致的，**与 k3s 无关**，不用处理。
+- **判断标准**：只核对三条 `= 1`：
+
+```bash
+sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+```
+
+- **失败时**：若三项仍为 0 或文件不存在 → 回到上一段确认 `br_netfilter` 真加载了（`bridge-nf-call-*` 依赖它）；`ip_forward = 1` 不生效 → 检查是否有 `sysctl.d` 里后续文件覆盖（`grep -r ip_forward /etc/sysctl.d /etc/sysctl.conf`）。
 
 ### 1.3 cgroup 版本
 
@@ -57,7 +117,8 @@ swapon --show && free -h | grep -i swap
 ```
 
 - **预期输出**：`swapon --show` 无输出（Ubuntu Server 默认无 swap）；`free -h` 里 Swap 行为 0B。
-- **判断标准**：swap = 0。
+- **【实测】本 VM 不是默认零 swap**：存在 **4G 的 `/swap.img`**（此前为应对 Milvus 内存压力开过）。**k3s 的 kubelet 默认拒跑在开着 swap 的节点上**，所以装前必须关：`sudo swapoff -a`，并把 `/etc/fstab` 里 `/swap.img` 那行注释掉（否则重启后又回来，症状是「重启后节点 NotReady」）。关 swap 后 Milvus 三件套的 OOM 兜底会变薄——正好配合 1.7 的「装前停 Milvus」策略。
+- **判断标准**：`swapon --show` 无输出且 `free -h` 的 Swap 为 0。
 - **失败时**：若非 0：`sudo swapoff -a` 临时关，再编辑 `/etc/fstab` 注释 swap 行永久关。不关的后果：节点 NotReady，`journalctl -u k3s` 里有 kubelet 报 `running with swap on` 类错误。
 
 ### 1.5 防火墙
@@ -86,8 +147,21 @@ df -h /
 free -h
 ```
 
-- **预期输出**：available ≥ 8G（DEVLOG 预算 k3s 全家桶 ≈8.5G/16G，若还要跑全套中间件 + 应用，建议先把非必需容器停掉分时使用——4 vCPU 是瓶颈，DEVLOG 拍板「编译/压测/推理不同时段争核」）。
-- **判断标准**：available 足够；不够就先 `docker stop tims-milvus tims-etcd tims-minio` 之类腾内存（用完 `docker start` 恢复）。
+- **预期输出**：**【实测】** 全中间件在跑（Docker + Nacos + Milvus 三件套 + RabbitMQ + registry + 6 个 Java 服务）时 `used 5.7G / available 9.5G`（总 15Gi）。
+- **判断标准**：available ≥ 8G 可装；6~8G 之间建议先腾；<6G 必须腾。
+- **【实测】怎么腾内存（原来只写了预算，没写实际操作）**：优先停 Milvus 三件套（三容器限额合计 2G、实测峰值 1.5G 左右，是最大的可回收项），且它们与 k3s 控制面争的是同一批内存：
+
+```bash
+# 装 k3s 前
+docker stop tims-milvus tims-etcd tims-minio
+free -h                                  # 确认 available 上去了
+# 装完且节点 Ready 后恢复
+docker start tims-etcd tims-minio tims-milvus   # 顺序：etcd/minio 先，milvus 后
+```
+
+  > ⚠ 停 Milvus 期间 `ticket-knowledge` 的向量检索会走降级（纯关键词，返回体带 fallback 标记）——这是设计好的降级路径，属预期，不是故障。恢复启动后健康检查约 1~2 分钟。
+  > ⚠ 不要停 Nacos/MySQL/网关等业务必需组件；也不要停 `tims-registry`（阶段五要用它）。
+- **失败时**：腾完仍不够 → `docker stats --no-stream` 找真正的大户，再考虑分时段（DEVLOG 已拍板「编译/压测/推理不同时段争核」，4 vCPU 是瓶颈）。
 
 ---
 
@@ -183,7 +257,27 @@ kubectl get nodes
 
 - **预期输出**：与 3.1 相同的节点列表，但无需 sudo。
 - **判断标准**：`kubectl get nodes` 返回 Ready。
-- **失败时**：`connection refused :6443` → kubeconfig 里 server 地址是 127.0.0.1 就应该通，若被改成了主机名/IP 则改回 `https://127.0.0.1:6443`（单机本地使用场景）。
+- **失败时**：`connection refused :6443` → kubeconfig 里 server 地址是 127.0.0.1 就应该通，若被改成了主机名/IP 则改回 `https://127.0.0.1:6443`（单机本地使用场景）。`The connection to the server localhost:8080 was refused` → 没读到 kubeconfig（对照第 8 节表第 6 行）。
+
+### 3.5 三条验证命令（一次看全，装完必跑）
+
+```bash
+kubectl get nodes -o wide                          # ① 节点
+kubectl get pods -A                                # ② 全 namespace 的 Pod
+systemctl status k3s --no-pager | head -5          # ③ 服务状态
+```
+
+- **① 预期**：一行，`STATUS=Ready`，`INTERNAL-IP` 为本机地址，`VERSION` 形如 `v1.31.x+k3s1`（具体版本 **需现场确认**）。判断标准：`Ready`。
+- **② 预期**：`kube-system` 下出现 `traefik`（1 个）、`coredns`（1 个）、`local-path-provisioner`（1 个）、`metrics-server`（1 个），全部 `Running`。判断标准：**Traefik + CoreDNS + local-path 三者都在 Running**——它们是 k3s 默认自带组件的「活着」的证明（Traefik 没起通常是 80/443 被占，见第 8 节表第 4 行；CoreDNS 没起通常是节点 NotReady 连带）。
+- **③ 预期**：`Active: active (running)`，`Loaded: ... enabled`（enabled 表示重启自启已开）。
+- **失败时**：先看 ③ 的 `Active:` 行；`activating (start)` 卡住超过 1 分钟 → `journalctl -u k3s -e --no-pager | tail -30`，按最后一段报错对应第 8 节表格。
+
+### 3.6 为什么 `docker images` 里看不到 k3s 的镜像（别误判「镜像丢了」）
+
+- **现象**：装完 k3s 后 `docker ps` / `docker images` 里**看不到** k3s 侧的容器与镜像；反过来 `kubectl` 也看不到 `tims-*` 那批 Docker 容器。
+- **原因**：k3s 用**自带的 embedded containerd**，与系统 Docker 是两套完全独立的运行时和镜像存储（`/var/lib/rancher/k3s/agent/containerd` vs `/var/lib/docker`）。两者并存但**镜像互不可见**。
+- **正确做法**：查 k3s 侧用 `sudo k3s crictl ps` / `sudo k3s crictl images`；要让 k3s 用到本地仓库里的镜像，必须走阶段五的 `registries.yaml` + `localhost:5000` 显式地址——**不能指望 containerd 自动“看见”Docker 的本地镜像**。
+- **判断标准**：`sudo k3s crictl images` 能看到 `rancher/*` 等系统镜像、却看不到 `tims/*`（在推送到 registry 之前）→ 这就是正常现象，不是丢镜像。
 
 ---
 
@@ -290,7 +384,8 @@ kubectl delete pod lab-redis    # 练完即删
 
 | 序号 | 拍什么 | 命令 | 建议文件名 |
 |---|---|---|---|
-| 1 | 节点 Ready | `kubectl get nodes -o wide` | `2026MMDD_k3s_nodes_ready.png` |
+| 0 | **前置检查全绿**（开题材料用图）：端口空闲 + `cgroup2fs` + swap 已关 + 磁盘/内存 + `bridge-nf-call-iptables=1` 同屏 | 阶段一 1.1~1.7 各命令连续执行 | `2026MMDD_k3s_precheck_all_green.png` |
+| 1 | 节点 Ready（开题材料用图） | `kubectl get nodes -o wide` | `2026MMDD_k3s_nodes_ready.png` |
 | 2 | 版本与服务 | `k3s --version` + `systemctl status k3s --no-pager` 同屏 | `2026MMDD_k3s_version_systemd.png` |
 | 3 | 第一个 Pod | `kubectl get pod lab-nginx`（Running） | `2026MMDD_k3s_first_pod.png` |
 | 4 | 本地仓库镜像 Pod | `kubectl get pod lab-redis` + `k3s crictl images \| grep localhost:5000` | `2026MMDD_k3s_registry_image_pod.png` |
@@ -312,6 +407,11 @@ kubectl delete pod lab-redis    # 练完即删
 | 5 | 镜像拉取超时，shell 里 `curl` 却通 | describe pod 的 `Failed to pull image ... i/o timeout` | **containerd 不继承 shell 的 http_proxy 环境变量**，也不读 Docker 的 daemon.json | 要么用国内直连镜像前缀（daocloud 等）；要么给 k3s 配代理：写入 `/etc/systemd/system/k3s.service.env`（`HTTP_PROXY=http://192.168.40.1:7897`、`HTTPS_PROXY=...`、`NO_PROXY=localhost,127.0.0.1,10.0.0.0/8,192.168.0.0/16`，**NO_PROXY 必须含 localhost:5000 网段**，否则本地仓库拉取也会被送去代理），然后 `sudo systemctl daemon-reload && sudo systemctl restart k3s` |
 | 6 | `kubectl` 报 `The connection to the server localhost:8080 was refused` | `echo $KUBECONFIG`；`ls ~/.kube/config` | kubeconfig 未配置/未拷贝 | 按 3.4 拷贝配置，或 `export KUBECONFIG=/etc/rancher/k3s/k3s.yaml`（配合 644 权限） |
 | 7 | VM 重启后 k3s 没起来 | `systemctl status k3s` | 安装脚本默认 enable，一般不会发生；若被手动 disable | `sudo systemctl enable --now k3s`（参照 DEVLOG：Docker 也曾因 VM 重启后未自启踩坑，已 `enable docker`） |
+| 8 | **只加载上一个模块**：`lsmod \| grep -E 'overlay\|br_netfilter'` 只见 `overlay`，`br_netfilter` 一直不出现 | `lsmod \| grep br_netfilter`；`cat /proc/sys/net/bridge/bridge-nf-call-iptables`（报 No such file） | **`modprobe overlay br_netfilter` 把第二个词当成了模块参数**，不是加载第二个模块 | 分成两条：`sudo modprobe overlay`、`sudo modprobe br_netfilter`；再写 `/etc/modules-load.d/k3s.conf`（见 1.2） |
+| 9 | `sysctl --system` 报两条 `Invalid argument`：`net.ipv4.conf.all.accept_source_route`、`net.ipv4.conf.all.promote_secondaries` | 报错里的键名 | 镜像内既有 sysctl 配置与 5.15 内核版本不匹配，**与 k3s 无关** | 忽略这两行；只核对 `bridge-nf-call-iptables/-ip6tables`、`ip_forward` 三项为 1（见 1.2） |
+| 10 | 终端报 `NO_BRIDGE_SYSCTL: command not found` 或 `1: command not found` | 报错里被当命令执行的词 | **复制命令时带上了 Markdown 反引号**，反引号被 shell 当作命令替换 | 去掉反引号重敲；习惯上只复制代码块内文本（见文首「复制命令注意」） |
+| 11 | 装完 `docker images` / `docker ps` 看不到 k3s 的镜像与容器，误以为「镜像丢了」 | `sudo k3s crictl images` | k3s 用自带 containerd，与 Docker 镜像存储完全独立，互不可见 | 属正常现象；要让 k3s 用本地仓库镜像须配 `registries.yaml` + `localhost:5000`（见 3.6 与阶段五） |
+| 12 | **装的时候正常、重启后 k3s 起不来**，日志里 containerd/CNI 报错 | `uname -r`；`lsmod \| grep -E 'overlay\|br_netfilter'` | 模块只在内存里 `modprobe` 过，重启后未自动加载 | 写 `/etc/modules-load.d/k3s.conf`（内容 `overlay`、`br_netfilter`）后 `sudo systemctl restart k3s`（见 1.2） |
 
 ---
 
@@ -334,6 +434,27 @@ ss -lntp | grep -E ':(6443|10250)'      # 预期无输出
 - **残留处理**：极少数情况 iptables 规则残留导致 Docker 网络异常 → `sudo reboot`（最省事）；脚本 `k3s-killall.sh` 也在 `/usr/local/bin/` 可用于强制清进程。
 - **不会被删的**：Docker 及其全部容器/卷（含 `tims-registry` 与 `localhost:5000` 里的镜像）——卸载 k3s 不碰 Docker 侧任何东西，这正是共存设计的方便之处。
 - 卸载后若要重装，直接回到阶段二，`registries.yaml` 需重新写入（在 /etc/rancher 下，卸载会删）。
+
+---
+
+## 实测记录（2026-11-04）：阶段一前置检查现场数据
+
+> **性质**：以下为**真实实装记录**（用户按本手册在 VM 上执行），与上文「纸面推导」部分严格区分。实测机型：Ubuntu Server 22.04.5，内核 **5.15.0-202-generic**（旧版本升级而来，非 24.04 默认 6.8），4 vCPU / 15Gi。
+
+| 检查项 | 手册小节 | 实测结果 | 判定 |
+|---|---|---|---|
+| 端口 6443/80/443/10250 | 1.1 | 全部空闲（`PORTS FREE`） | ✅ 过 |
+| 内核模块 | 1.2 | `overlay` 已加载；`br_netfilter` 起初未加载（`modprobe` 语法误用），单独加载后 `lsmod` 出现、`bridge` 引用计数 0→1、`/proc/sys/net/bridge/bridge-nf-call-iptables` = 1 | ✅ 过（经排障） |
+| cgroup | 1.3 | `cgroup2fs`（v2） | ✅ 过 |
+| swap | 1.4 | **4G `/swap.img`**（与手册「预期 0」不符） | ⚠️ 需 `swapoff -a` + 注释 `/etc/fstab` 后重启 k3s（见 1.4 / 表第 2 行） |
+| 防火墙 | 1.5 | `ufw` inactive | ✅ 过 |
+| 磁盘 | 1.6 | 根分区 96G，已用 25%，**可用约 69G** | ✅ 过（远超 ≥10G 门槛） |
+| 内存 | 1.7 | `used 5.7G`、`available 9.5G`（全中间件 + 6 服务在跑） | ✅ 可装；按 1.7 建议装前先停 Milvus 三件套 |
+| sysctl | 1.2 | 三项均 1；`sysctl --system` 有两行 `Invalid argument` 噪音（与 k3s 无关） | ✅ 过（噪音忽略） |
+
+**本次最关键的真坑**：`sudo modprobe overlay br_netfilter` 只加载了 `overlay`——第二个词被当作模块参数。根因与正确做法见 1.2 / 表第 8 行；同时暴露「模块未持久化」的隐患（重启后失效），已补 `/etc/modules-load.d/k3s.conf` 要求。
+
+**装前待办（未完成，供下次继续）**：① 拍 VMware 快照 `aitims-pre-k3s-<日期>` 并记 DEVLOG；② `docker stop tims-milvus tims-etcd tims-minio` 腾内存 + `swapoff`；③ 执行阶段二安装；④ 装后写 `registries.yaml` 并跑阶段四/五；⑤ 截图（见阶段六与 DEVLOG 第七节）。
 
 ---
 

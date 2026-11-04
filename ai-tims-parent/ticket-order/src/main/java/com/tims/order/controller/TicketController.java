@@ -105,6 +105,13 @@ public class TicketController {
         return Result.ok();
     }
 
+    /** M6 内部接口：标记工单已 AI 提炼（供 adoptionRate 统计，ticket-knowledge 消费后回调） */
+    @PostMapping("/ticket/{id}/ai-extracted")
+    public Result<Void> markAiExtracted(@PathVariable Long id) {
+        ticketService.markAiExtracted(id);
+        return Result.ok();
+    }
+
     /** #11 驳回重办（RESOLVED → PROCESSING） */
     @PostMapping("/ticket/{id}/reject")
     public Result<Void> reject(@PathVariable Long id) {

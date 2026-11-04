@@ -28,6 +28,9 @@ tims:
   ai:
     # ===== 模型唯一开关：跑批/消融 glm-4-flash，演示 glm-5.3-flash；只改环境变量 LLM_CHAT_MODEL =====
     model: ${LLM_CHAT_MODEL:glm-4-flash}
+    # M6 知识抽取专用模型（默认 glm-4-flash 省配额，只改 LLM_EXTRACT_MODEL 即可切换）
+    extract-model: ${LLM_EXTRACT_MODEL:glm-4-flash}
+    extract-max-tokens: ${LLM_EXTRACT_MAX_TOKENS:4096}
     base-url: ${LLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}
     completions-path: ${LLM_COMPLETIONS_PATH:/chat/completions}
     # 密钥优先读环境变量，否则读文件（600 权限，严禁入库/入 Git）

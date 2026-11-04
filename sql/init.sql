@@ -411,3 +411,59 @@ CREATE TABLE `ai_call_log` (
   KEY `idx_tenant_time` (`tenant_id`, `create_time`),
   KEY `idx_tenant_scene` (`tenant_id`, `scene`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI调用观测表';
+
+-- ============================================================
+-- M6 提炼闭环：AI 抽取中间表 + 知识历史快照
+-- 口径：抽取结果全部人工审核；系统仅给“新建/合并/跳过”建议，绝不自动合并或覆盖
+-- ============================================================
+CREATE TABLE IF NOT EXISTS `ai_extracted` (
+  `id`                    BIGINT       NOT NULL COMMENT '主键（雪花）',
+  `tenant_id`             BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID（全表统一）',
+  `source_ticket_id`      BIGINT       NOT NULL COMMENT '来源工单ID',
+  `source_ticket_no`      VARCHAR(32)  DEFAULT NULL COMMENT '来源工单号',
+  `source_title`          VARCHAR(128) DEFAULT NULL COMMENT '来源工单标题',
+  `source_device_type`    VARCHAR(64)  DEFAULT NULL COMMENT '来源工单设备类型',
+  `title`                 VARCHAR(128) DEFAULT NULL COMMENT '抽取知识标题',
+  `device_type`           VARCHAR(64)  DEFAULT NULL COMMENT '适用设备类型',
+  `fault_phenomenon`      TEXT         COMMENT '故障现象',
+  `troubleshoot_steps`    TEXT         COMMENT '排查步骤（编号文本）',
+  `solution_steps`        TEXT         COMMENT '解决步骤（编号文本）',
+  `tags`                  JSON         COMMENT '标签数组',
+  `key_points`            TEXT         COMMENT '关键要点',
+  `dedup_action`          VARCHAR(16)  NOT NULL DEFAULT 'NEW' COMMENT '建议：NEW/MERGE/SKIP（仅建议，非执行）',
+  `dedup_target_id`       BIGINT       DEFAULT NULL COMMENT '最相似知识条目ID',
+  `dedup_score`           DECIMAL(6,4) DEFAULT NULL COMMENT '向量余弦相似度',
+  `dedup_note`            VARCHAR(1000) DEFAULT NULL COMMENT '相似度与关键差异摘要',
+  `status`                VARCHAR(32)  NOT NULL DEFAULT 'PENDING_REVIEW' COMMENT 'PENDING_REVIEW/MANUAL_REQUIRED/APPROVED/MERGED/REJECTED',
+  `model`                 VARCHAR(64)  DEFAULT NULL COMMENT '抽取模型（默认 glm-4-flash）',
+  `error_msg`             VARCHAR(255) DEFAULT NULL COMMENT '抽取失败原因（待人工补录）',
+  `knowledge_id`          BIGINT       DEFAULT NULL COMMENT '通过/合并后的知识ID',
+  `review_by`             BIGINT       DEFAULT NULL COMMENT '审核人',
+  `review_time`           DATETIME(3)  DEFAULT NULL COMMENT '审核时间',
+  `reject_reason`         VARCHAR(255) DEFAULT NULL COMMENT '驳回原因',
+  `create_time`           DATETIME(3)  DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  `update_time`           DATETIME(3)  DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '更新时间',
+  `deleted`               TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_tenant_ticket` (`tenant_id`, `source_ticket_id`),
+  KEY `idx_tenant_status` (`tenant_id`, `status`, `create_time`),
+  KEY `idx_knowledge` (`knowledge_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='M6 AI 知识抽取中间表（幂等：同一工单唯一）';
+
+CREATE TABLE IF NOT EXISTS `kb_knowledge_history` (
+  `id`                  BIGINT       NOT NULL COMMENT '主键（雪花）',
+  `tenant_id`           BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `knowledge_id`        BIGINT       NOT NULL COMMENT '知识条目ID',
+  `version`             INT          DEFAULT NULL COMMENT '合并前版本号',
+  `title`               VARCHAR(128) DEFAULT NULL COMMENT '快照标题',
+  `content`             MEDIUMTEXT   COMMENT '快照正文',
+  `summary`             VARCHAR(512) DEFAULT NULL COMMENT '快照摘要',
+  `tags`                JSON         COMMENT '快照标签',
+  `apply_device_type`   VARCHAR(64)  DEFAULT NULL COMMENT '快照设备类型',
+  `change_type`         VARCHAR(16)  NOT NULL DEFAULT 'MERGE' COMMENT 'MERGE/UPDATE/ROLLBACK',
+  `source_extracted_id` BIGINT       DEFAULT NULL COMMENT '来源抽取记录ID（合并引用关系）',
+  `create_by`           BIGINT       DEFAULT NULL COMMENT '操作人',
+  `create_time`         DATETIME(3)  DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_knowledge` (`tenant_id`, `knowledge_id`, `create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='M6 知识条目历史快照（合并留痕）';

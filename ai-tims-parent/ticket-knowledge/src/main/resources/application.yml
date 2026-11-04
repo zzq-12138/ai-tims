@@ -18,6 +18,21 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话共享
+  rabbitmq:
+    host: ${RABBIT_HOST:127.0.0.1}
+    port: ${RABBIT_PORT:5672}
+    username: ${RABBIT_USER:tims}
+    password: ${RABBIT_PASSWORD:}         # 必填，~/secrets/rabbit_pwd 注入
+    listener:
+      simple:
+        concurrency: 2
+        prefetch: 1
+        default-requeue-rejected: false
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1000
+          multiplier: 2
 
 mybatis-plus:
   configuration:
@@ -57,6 +72,19 @@ tims:
     sync:
       interval-ms: 10000                  # 同步扫描间隔（发布后 30s 内可检索的保障）
       batch-size: 16                      # 单批向量化条数（embedding-3 批量上限内）
+    extract:
+      # M6 工单关闭 → 知识抽取 → 审核闭环
+      queue: q.kb.extract
+      exchange: tims.ticket.event
+      routing-key: ticket.closed
+      dead-queue: q.kb.extract.dead
+      ai-base-url: ${AI_BASE_URL:http://ticket-ai}
+      order-base-url: ${ORDER_BASE_URL:http://ticket-order}
+      model: ${LLM_EXTRACT_MODEL:glm-4-flash}
+      # 相似度仅用于“建议”，绝不自动合并：≥0.92 建议合并，≥0.98 建议跳过，其余建议新建
+      dedup-threshold: 0.92
+      dedup-skip-threshold: 0.98
+      top-k: 5
 
 management:
   endpoints:

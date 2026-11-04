@@ -41,3 +41,32 @@ export function listCategories() {
 export function searchKnowledge(params) {
   return request.get('/api/kb/search', { params, timeout: 30000 })
 }
+
+// M6 抽取审核中心（系统只给建议，必须人工确认后才新建/合并/驳回）
+export function pageExtraction(params) {
+  return request.get('/api/kb/extraction/page', { params })
+}
+
+export function getExtraction(id) {
+  return request.get(`/api/kb/extraction/${id}`)
+}
+
+export function updateExtraction(id, data) {
+  return request.put(`/api/kb/extraction/${id}`, data)
+}
+
+export function approveExtraction(id) {
+  return request.post(`/api/kb/extraction/${id}/approve`)
+}
+
+export function mergeExtraction(id, targetId) {
+  return request.post(`/api/kb/extraction/${id}/merge`, { targetId })
+}
+
+export function rejectExtraction(id, reason) {
+  return request.post(`/api/kb/extraction/${id}/reject`, { reason })
+}
+
+export function historyExtraction(knowledgeId) {
+  return request.get(`/api/kb/extraction/history/${knowledgeId}`)
+}

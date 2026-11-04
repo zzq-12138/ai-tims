@@ -251,6 +251,15 @@ public class TicketService {
         return vo;
     }
 
+    /** M6 内部接口：标记工单已完成 AI 知识提炼（adoptionRate 数据源），由 ticket-knowledge 消费后调用 */
+    public void markAiExtracted(Long id) {
+        WoTicket t = get(id);
+        WoTicket patch = new WoTicket();
+        patch.setId(t.getId());
+        patch.setAiExtracted(1);
+        ticketMapper.updateById(patch);
+    }
+
     public List<WoTicketFlow> timeline(Long id) {
         get(id); // 存在性校验
         return flowMapper.selectList(new LambdaQueryWrapper<WoTicketFlow>()

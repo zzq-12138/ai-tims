@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * M5 AI 配置。切换模型只改环境变量 LLM_CHAT_MODEL（跑批/消融 glm-4-flash，演示 glm-5.3-flash），代码零改动。
+ * M6 新增 extractModel：工单关闭后的知识抽取固定走 glm-4-flash 档，独立可配（LLM_EXTRACT_MODEL）。
  */
 @Component
 @ConfigurationProperties(prefix = "tims.ai")
@@ -18,6 +19,12 @@ public class AiProperties {
 
     /** 模型名（唯一切换点） */
     private String model = "glm-4-flash";
+
+    /** 知识抽取专用模型（M6，默认 glm-4-flash 省配额；可配 LLM_EXTRACT_MODEL） */
+    private String extractModel = "glm-4-flash";
+
+    /** 知识抽取输出上限（结构化 JSON 足够） */
+    private int extractMaxTokens = 4096;
 
     /** 直接注入的密钥（优先级高于文件） */
     private String apiKey;
@@ -53,6 +60,10 @@ public class AiProperties {
     public void setCompletionsPath(String completionsPath) { this.completionsPath = completionsPath; }
     public String getModel() { return model; }
     public void setModel(String model) { this.model = model; }
+    public String getExtractModel() { return extractModel; }
+    public void setExtractModel(String extractModel) { this.extractModel = extractModel; }
+    public int getExtractMaxTokens() { return extractMaxTokens; }
+    public void setExtractMaxTokens(int extractMaxTokens) { this.extractMaxTokens = extractMaxTokens; }
     public String getApiKey() { return apiKey; }
     public void setApiKey(String apiKey) { this.apiKey = apiKey; }
     public String getApiKeyFile() { return apiKeyFile; }

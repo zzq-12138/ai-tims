@@ -41,6 +41,61 @@
       <el-empty v-else description="输入检索词后点击检索，可切换三种模式对比返回" :image-size="60" />
     </el-card>
 
+    <!-- M6 AI 抽取审核中心（系统仅给建议，必须人工确认才执行） -->
+    <el-card shadow="never" class="mb12">
+      <template #header>
+        <div class="card-head">
+          <span>AI 抽取审核</span>
+          <div>
+            <el-tag size="small" type="warning" effect="plain" class="mr8">仅给建议，须人工确认</el-tag>
+            <el-button size="small" @click="loadExtraction">刷新</el-button>
+          </div>
+        </div>
+      </template>
+      <div class="filters">
+        <el-select v-model="extractQuery.status" placeholder="状态" clearable style="width: 150px"
+                   @change="loadExtraction">
+          <el-option v-for="(v, k) in extractStatusMap" :key="k" :label="v" :value="k" />
+        </el-select>
+      </div>
+      <el-table :data="extractRecords" v-loading="extractLoading" stripe size="small">
+        <el-table-column prop="title" label="抽取标题" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="sourceTicketNo" label="来源工单" width="150" show-overflow-tooltip />
+        <el-table-column prop="deviceType" label="设备类型" width="100" />
+        <el-table-column label="相似度 / 建议" min-width="240">
+          <template #default="{ row }">
+            <el-tag :type="suggestType(row.dedupAction)" size="small" class="mr4">
+              {{ suggestMap[row.dedupAction] || row.dedupAction }}
+            </el-tag>
+            <span v-if="row.dedupScore != null" class="score">{{ Number(row.dedupScore).toFixed(4) }}</span>
+            <span v-if="row.dedupTargetTitle" class="target">→ {{ row.dedupTargetTitle }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" width="95">
+          <template #default="{ row }">
+            <el-tag :type="extractStatusType(row.status)" size="small">
+              {{ extractStatusMap[row.status] || row.status }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="抽取时间" width="165" />
+        <el-table-column label="操作" width="250" fixed="right">
+          <template #default="{ row }">
+            <el-button link type="primary" @click="openExtractView(row)">查看</el-button>
+            <el-button v-if="pendingExtract(row)" link type="primary" @click="openExtractEdit(row)">补录</el-button>
+            <template v-if="isAdmin && pendingExtract(row)">
+              <el-button link type="success" @click="doApproveExtract(row)">通过</el-button>
+              <el-button link type="warning" @click="openMerge(row)">合并</el-button>
+              <el-button link type="danger" @click="doRejectExtract(row)">驳回</el-button>
+            </template>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination class="pager" layout="total, prev, pager, next" :total="extractTotal"
+                     :page-size="extractQuery.size" v-model:current-page="extractQuery.page"
+                     @current-change="loadExtraction" />
+    </el-card>
+
     <!-- 知识列表 -->
     <el-card shadow="never">
       <template #header>
@@ -146,6 +201,90 @@
       <div class="content">{{ viewRow?.content }}</div>
       <div v-if="viewRow?.rejectReason" class="reject">驳回原因：{{ viewRow.rejectReason }}</div>
     </el-dialog>
+
+    <!-- M6 抽取详情 -->
+    <el-dialog v-model="extractViewVisible" :title="extractView?.title || '抽取详情'" width="720px">
+      <el-descriptions :column="2" size="small" border class="mb12">
+        <el-descriptions-item label="来源工单">{{ extractView?.sourceTicketNo || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="设备类型">{{ extractView?.deviceType || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="相似度">
+          {{ extractView?.dedupScore != null ? Number(extractView.dedupScore).toFixed(4) : '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="处置建议">{{ suggestMap[extractView?.dedupAction] || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="相似条目" :span="2">{{ extractView?.dedupTargetTitle || '无' }}</el-descriptions-item>
+        <el-descriptions-item label="相似度与关键差异" :span="2">
+          {{ extractView?.dedupNote || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="抽取模型" :span="2">{{ extractView?.model || '-' }}</el-descriptions-item>
+        <el-descriptions-item v-if="extractView?.errorMsg" label="失败原因" :span="2">
+          {{ extractView.errorMsg }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <h4>故障现象</h4>
+      <div class="content">{{ extractView?.faultPhenomenon || '-' }}</div>
+      <h4>排查步骤</h4>
+      <div class="content">{{ extractView?.troubleshootSteps || '-' }}</div>
+      <h4>解决步骤</h4>
+      <div class="content">{{ extractView?.solutionSteps || '-' }}</div>
+      <h4>关键要点</h4>
+      <div class="content">{{ extractView?.keyPoints || '-' }}</div>
+      <h4>标签</h4>
+      <el-tag v-for="t in parseTags(extractView?.tags)" :key="t" size="small" class="mr4">{{ t }}</el-tag>
+    </el-dialog>
+
+    <!-- M6 人工补录 -->
+    <el-dialog v-model="extractEditVisible" title="人工补录 / 编辑抽取结果" width="680px">
+      <el-form :model="extractForm" label-width="90px">
+        <el-form-item label="标题" required>
+          <el-input v-model="extractForm.title" maxlength="128" show-word-limit />
+        </el-form-item>
+        <el-form-item label="设备类型">
+          <el-input v-model="extractForm.deviceType" style="width: 220px" />
+        </el-form-item>
+        <el-form-item label="标签">
+          <el-input v-model="extractForm.tagsText" placeholder="逗号分隔，如：MES终端,接口超时" />
+        </el-form-item>
+        <el-form-item label="故障现象">
+          <el-input v-model="extractForm.faultPhenomenon" type="textarea" :rows="2" />
+        </el-form-item>
+        <el-form-item label="排查步骤">
+          <el-input v-model="extractForm.troubleshootSteps" type="textarea" :rows="3" />
+        </el-form-item>
+        <el-form-item label="解决步骤">
+          <el-input v-model="extractForm.solutionSteps" type="textarea" :rows="3" />
+        </el-form-item>
+        <el-form-item label="关键要点">
+          <el-input v-model="extractForm.keyPoints" type="textarea" :rows="2" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="extractEditVisible = false">取消</el-button>
+        <el-button type="primary" :loading="extractSaving" @click="saveExtractEdit">保存补录</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- M6 合并确认（必须人工点击） -->
+    <el-dialog v-model="mergeVisible" title="确认合并到已有条目" width="600px">
+      <el-alert type="warning" :closable="false" show-icon class="mb12"
+                title="合并会先写入原条目历史快照，再追加内容；不会覆盖原条目。" />
+      <el-form label-width="110px">
+        <el-form-item label="目标条目ID">
+          <el-input-number v-model="mergeForm.targetId" :min="1" :controls="false" />
+          <el-button link type="primary" class="ml8" @click="verifyMergeTarget">校验目标</el-button>
+        </el-form-item>
+        <el-form-item label="目标条目">{{ mergeTargetTitle || '请校验目标条目' }}</el-form-item>
+        <el-form-item label="相似度">
+          {{ mergeRow?.dedupScore != null ? Number(mergeRow.dedupScore).toFixed(4) : '-' }}
+        </el-form-item>
+        <el-form-item label="关键差异">
+          <span class="diff">{{ mergeRow?.dedupNote || '-' }}</span>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="mergeVisible = false">取消</el-button>
+        <el-button type="warning" :loading="mergeSaving" @click="doMergeExtract">确认合并</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -154,7 +293,8 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   pageKnowledge, createKnowledge, updateKnowledge, deleteKnowledge,
-  submitKnowledge, publishKnowledge, rejectKnowledge, listCategories, searchKnowledge
+  submitKnowledge, publishKnowledge, rejectKnowledge, listCategories, searchKnowledge,
+  getKnowledge, pageExtraction, updateExtraction, approveExtraction, mergeExtraction, rejectExtraction
 } from '../api/kb'
 import { useAuthStore } from '../stores/auth'
 
@@ -290,8 +430,157 @@ async function doSearch() {
   }
 }
 
+// ---- M6 抽取审核中心（仅建议，人工确认后执行） ----
+const extractStatusMap = {
+  PENDING_REVIEW: '待审核', MANUAL_REQUIRED: '待补录', APPROVED: '已通过', MERGED: '已合并', REJECTED: '已驳回'
+}
+function extractStatusType(s) {
+  return { PENDING_REVIEW: 'warning', MANUAL_REQUIRED: 'danger', APPROVED: 'success', MERGED: 'success', REJECTED: 'info' }[s] || 'info'
+}
+const suggestMap = { NEW: '建议新建', MERGE: '建议合并', SKIP: '建议跳过' }
+function suggestType(a) {
+  return { NEW: 'info', MERGE: 'warning', SKIP: 'danger' }[a] || 'info'
+}
+function pendingExtract(row) {
+  return row && (row.status === 'PENDING_REVIEW' || row.status === 'MANUAL_REQUIRED')
+}
+
+const extractRecords = ref([])
+const extractTotal = ref(0)
+const extractLoading = ref(false)
+const extractQuery = reactive({ page: 1, size: 10, status: 'PENDING_REVIEW' })
+
+async function loadExtraction() {
+  extractLoading.value = true
+  try {
+    const data = await pageExtraction({ ...extractQuery })
+    extractRecords.value = data.records
+    extractTotal.value = data.total
+  } finally {
+    extractLoading.value = false
+  }
+}
+
+const extractView = ref(null)
+const extractViewVisible = computed({
+  get: () => !!extractView.value,
+  set: (v) => { if (!v) extractView.value = null }
+})
+
+async function openExtractView(row) {
+  extractView.value = await getExtraction(row.id)
+}
+
+const extractEditVisible = ref(false)
+const extractSaving = ref(false)
+const extractForm = reactive({
+  id: null, title: '', deviceType: '', tagsText: '', faultPhenomenon: '',
+  troubleshootSteps: '', solutionSteps: '', keyPoints: ''
+})
+
+function openExtractEdit(row) {
+  extractForm.id = row.id
+  extractForm.title = row.title || ''
+  extractForm.deviceType = row.deviceType || ''
+  extractForm.tagsText = parseTags(row.tags).join(',')
+  extractForm.faultPhenomenon = row.faultPhenomenon || ''
+  extractForm.troubleshootSteps = row.troubleshootSteps || ''
+  extractForm.solutionSteps = row.solutionSteps || ''
+  extractForm.keyPoints = row.keyPoints || ''
+  extractEditVisible.value = true
+}
+
+async function saveExtractEdit() {
+  if (!extractForm.title.trim()) {
+    ElMessage.warning('标题必填')
+    return
+  }
+  extractSaving.value = true
+  try {
+    await updateExtraction(extractForm.id, {
+      title: extractForm.title,
+      deviceType: extractForm.deviceType,
+      tags: JSON.stringify(extractForm.tagsText.split(/[,，]/).map(s => s.trim()).filter(Boolean)),
+      faultPhenomenon: extractForm.faultPhenomenon,
+      troubleshootSteps: extractForm.troubleshootSteps,
+      solutionSteps: extractForm.solutionSteps,
+      keyPoints: extractForm.keyPoints
+    })
+    ElMessage.success('已保存补录，状态转为待审核')
+    extractEditVisible.value = false
+    loadExtraction()
+  } finally {
+    extractSaving.value = false
+  }
+}
+
+async function doApproveExtract(row) {
+  await ElMessageBox.confirm(
+    `确认通过「${row.title}」并写入知识库？通过后 30 秒内可被检索。`, '人工确认新建', { type: 'warning' })
+  await approveExtraction(row.id)
+  ElMessage.success('已通过并写入知识库')
+  loadExtraction()
+  load()
+}
+
+async function doRejectExtract(row) {
+  const { value } = await ElMessageBox.prompt('请输入驳回/跳过原因', '人工驳回', { inputValue: '' })
+  await rejectExtraction(row.id, value)
+  ElMessage.success('已驳回')
+  loadExtraction()
+}
+
+const mergeVisible = ref(false)
+const mergeSaving = ref(false)
+const mergeRow = ref(null)
+const mergeTargetTitle = ref('')
+const mergeForm = reactive({ targetId: null })
+
+function openMerge(row) {
+  mergeRow.value = row
+  mergeForm.targetId = row.dedupTargetId || null
+  mergeTargetTitle.value = row.dedupTargetTitle || ''
+  mergeVisible.value = true
+}
+
+async function verifyMergeTarget() {
+  if (!mergeForm.targetId) {
+    ElMessage.warning('请输入目标条目ID')
+    return
+  }
+  try {
+    const k = await getKnowledge(mergeForm.targetId)
+    mergeTargetTitle.value = k.title
+    ElMessage.success(`目标条目：${k.title}`)
+  } catch (_) {
+    mergeTargetTitle.value = ''
+    ElMessage.error('目标条目不存在')
+  }
+}
+
+async function doMergeExtract() {
+  if (!mergeForm.targetId) {
+    ElMessage.warning('请输入目标条目ID')
+    return
+  }
+  await ElMessageBox.confirm(
+    `确认将「${mergeRow.value?.title}」合并到 #${mergeForm.targetId}？原条目会先写入历史快照，不会被覆盖。`,
+    '人工确认合并', { type: 'warning' })
+  mergeSaving.value = true
+  try {
+    await mergeExtraction(mergeRow.value.id, mergeForm.targetId)
+    ElMessage.success('已合并，原条目已留历史快照')
+    mergeVisible.value = false
+    loadExtraction()
+    load()
+  } finally {
+    mergeSaving.value = false
+  }
+}
+
 onMounted(async () => {
   load()
+  loadExtraction()
   try { categories.value = await listCategories() } catch (_) { /* 分类加载失败不阻塞 */ }
 })
 </script>
@@ -300,6 +589,12 @@ onMounted(async () => {
 .mb12 { margin-bottom: 12px; }
 .mt12 { margin-top: 12px; }
 .mr4 { margin-right: 4px; }
+.mr8 { margin-right: 8px; }
+.ml8 { margin-left: 8px; }
+.score { color: #409eff; margin-right: 6px; }
+.target { color: #909399; font-size: 12px; }
+.diff { color: #606266; font-size: 12px; line-height: 1.6; }
+h4 { margin: 12px 0 4px; font-size: 13px; color: #303133; }
 .card-head { display: flex; justify-content: space-between; align-items: center; }
 .search-bar { display: flex; gap: 10px; align-items: center; }
 .filters { display: flex; gap: 8px; margin-bottom: 12px; }

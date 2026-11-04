@@ -12,7 +12,7 @@
 
     <artifactId>ticket-knowledge</artifactId>
     <name>ticket-knowledge</name>
-    <description>知识库服务 :8103 - 知识 CRUD、审核流、向量化同步、混合检索（kb_ 表，M3 实现）</description>
+    <description>知识库服务 :8103 - 知识 CRUD、审核流、向量化同步、混合检索、M6 抽取审核（kb_ 表）</description>
 
     <dependencies>
         <dependency>
@@ -31,6 +31,16 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- M6：消费 ticket-order 的 ticket.closed 事件（topic exchange tims.ticket.event） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <!-- M6：lb:// 服务名调用 ticket-ai / ticket-order 内部接口 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
         <!-- MyBatis-Plus（与 ticket-order 同口径：BaseMapper/LambdaQueryWrapper，禁 XML） -->
         <dependency>

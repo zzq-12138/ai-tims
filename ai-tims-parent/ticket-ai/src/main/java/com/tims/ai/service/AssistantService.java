@@ -1,5 +1,9 @@
 package com.tims.ai.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tims.ai.chat.AiChatMessage;
+import com.tims.ai.chat.AiChatSession;
+import com.tims.ai.chat.AiChatSessionService;
 import com.tims.ai.config.AiProperties;
 import com.tims.ai.dto.AssistantRequest;
 import com.tims.ai.dto.AssistantVO;
@@ -28,6 +32,9 @@ import java.util.List;
 /**
  * 工单助手：ChatClient + 3 个 @Tool（Spring AI 内部完成工具调用循环）。
  * 工具调用明细回传前端并落 ai_call_log(scene=AGENT_TOOL)，可查“调了哪个工具/参数/耗时”。
+ *
+ * 多轮上下文（M6 问题8）：以 sessionId 为准，历史取自 ai_chat_message 的最近 10 条，
+ * 前端不再需要回传整段历史；刷新/切会话/换设备后上下文一致。
  */
 @Service
 public class AssistantService {
@@ -51,25 +58,52 @@ public class AssistantService {
     private final TicketTools ticketTools;
     private final AiProperties props;
     private final AiUsageService usageService;
+    private final AiChatSessionService sessionService;
+    private final ObjectMapper mapper;
 
     public AssistantService(ChatClient chatClient, TicketTools ticketTools,
-                            AiProperties props, AiUsageService usageService) {
+                            AiProperties props, AiUsageService usageService,
+                            AiChatSessionService sessionService, ObjectMapper mapper) {
         this.chatClient = chatClient;
         this.ticketTools = ticketTools;
         this.props = props;
         this.usageService = usageService;
+        this.sessionService = sessionService;
+        this.mapper = mapper;
     }
 
     public AssistantVO chat(Long tenantId, AssistantRequest request) {
         if (!StringUtils.hasText(request.getMessage())) {
             throw new BizException(10400, "message 必填");
         }
+        Long tid = tenantId == null ? 1L : tenantId;
+        Long uid = request.getUserId();
+        if (uid == null) {
+            throw new BizException(10400, "userId 必填");
+        }
+
+        // 会话：传 sessionId 则校验归属并读库内窗口；否则自动建会话
+        AiChatSession session;
+        List<Message> history;
+        if (request.getSessionId() != null) {
+            session = sessionService.require(tid, uid, request.getSessionId());
+            history = toMessagesFromDb(sessionService.recentWindow(tid, uid, session.getId()));
+        } else {
+            session = sessionService.create(tid, uid, null);
+            history = toMessagesFromHistory(request.getHistory());
+        }
+        // 先落用户消息：即使模型超时，刷新后也能看到该问题
+        sessionService.addMessage(tid, uid, session.getId(), "user", request.getMessage(), null, null, null);
+        sessionService.touch(session, request.getMessage());
+
         long t0 = System.currentTimeMillis();
         ToolCallRecorder.begin();
         try {
+            List<Message> promptMessages = new ArrayList<>(history);
+            promptMessages.add(new UserMessage(request.getMessage()));
             ChatResponse resp = chatClient.prompt()
                     .system(SYSTEM_PROMPT)
-                    .messages(toMessages(request))
+                    .messages(promptMessages)
                     .tools(ticketTools)
                     .call()
                     .chatResponse();
@@ -89,15 +123,25 @@ public class AssistantService {
             vo.setDegraded(degraded);
             vo.setUsage(new ChatResponseVO.Usage(prompt, completion, prompt + completion));
             vo.setToolCalls(records);
+            vo.setSessionId(session.getId());
+            vo.setSessionTitle(session.getTitle());
 
-            persistAgent(tenantId, total, prompt, completion, degraded, records, null);
-            log.info("[assistant] done model={} tools={} usage={}/{} total={}ms",
-                    props.getModel(), records.size(), prompt, completion, total);
+            sessionService.addMessage(tid, uid, session.getId(), "assistant", answer,
+                    props.getModel(), toJson(records), toJson(vo.getUsage()));
+            sessionService.touchOnly(session.getId());
+
+            persistAgent(tid, total, prompt, completion, degraded, records, null);
+            log.info("[assistant] done session={} model={} tools={} usage={}/{} total={}ms",
+                    session.getId(), props.getModel(), records.size(), prompt, completion, total);
             return vo;
         } catch (Exception e) {
             long total = System.currentTimeMillis() - t0;
-            persistAgent(tenantId, total, 0, 0, true, ToolCallRecorder.snapshot(), e.getMessage());
-            log.error("[assistant] failed: {}", e.getMessage());
+            String err = truncate(e.getMessage(), 250);
+            sessionService.addMessage(tid, uid, session.getId(), "assistant",
+                    "调用失败：" + (e.getMessage() == null ? "AI 服务不可用" : e.getMessage()), props.getModel(), null, null);
+            sessionService.touchOnly(session.getId());
+            persistAgent(tid, total, 0, 0, true, ToolCallRecorder.snapshot(), e.getMessage());
+            log.error("[assistant] failed session={}: {}", session.getId(), e.getMessage());
             if (e instanceof LlmException le) {
                 throw le;
             }
@@ -138,24 +182,46 @@ public class AssistantService {
         }
     }
 
-    private List<Message> toMessages(AssistantRequest request) {
+    private List<Message> toMessagesFromDb(List<AiChatMessage> rows) {
         List<Message> messages = new ArrayList<>();
-        if (request.getHistory() != null) {
-            List<ChatRequest.HistoryMsg> h = request.getHistory();
-            int from = Math.max(0, h.size() - 6);
-            for (ChatRequest.HistoryMsg m : h.subList(from, h.size())) {
-                if (!StringUtils.hasText(m.getContent())) {
-                    continue;
-                }
-                if ("assistant".equals(m.getRole())) {
-                    messages.add(new AssistantMessage(m.getContent()));
-                } else if ("user".equals(m.getRole())) {
-                    messages.add(new UserMessage(m.getContent()));
-                }
+        for (AiChatMessage m : rows) {
+            if (!StringUtils.hasText(m.getContent())) {
+                continue;
+            }
+            if ("assistant".equals(m.getRole())) {
+                messages.add(new AssistantMessage(m.getContent()));
+            } else if ("user".equals(m.getRole())) {
+                messages.add(new UserMessage(m.getContent()));
             }
         }
-        messages.add(new UserMessage(request.getMessage()));
         return messages;
+    }
+
+    private List<Message> toMessagesFromHistory(List<ChatRequest.HistoryMsg> history) {
+        List<Message> messages = new ArrayList<>();
+        if (history == null) {
+            return messages;
+        }
+        int from = Math.max(0, history.size() - 6);
+        for (ChatRequest.HistoryMsg m : history.subList(from, history.size())) {
+            if (!StringUtils.hasText(m.getContent())) {
+                continue;
+            }
+            if ("assistant".equals(m.getRole())) {
+                messages.add(new AssistantMessage(m.getContent()));
+            } else if ("user".equals(m.getRole())) {
+                messages.add(new UserMessage(m.getContent()));
+            }
+        }
+        return messages;
+    }
+
+    private String toJson(Object v) {
+        try {
+            return v == null ? null : mapper.writeValueAsString(v);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private static String truncate(String s, int max) {

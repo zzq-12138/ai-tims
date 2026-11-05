@@ -222,18 +222,18 @@ onUnmounted(() => timer && clearInterval(timer))
   display: flex;
   gap: 10px;
   font-size: 12px;
-  color: #909399;
+  color: var(--muted);
   margin-top: 4px;
 }
 .pwd-rules .ok {
-  color: #67c23a;
+  color: var(--teal);
 }
 .to-login {
   text-align: center;
   font-size: 13px;
   color: #606266;
 }
-.to-login a { color: var(--amber); font-weight: 600; text-decoration: none; }
+.to-login a { color: var(--amber-deep); font-weight: 600; text-decoration: none; }
 .to-login a:hover { text-decoration: underline; }
 
 @keyframes rise {

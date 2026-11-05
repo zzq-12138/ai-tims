@@ -54,6 +54,15 @@ public class AiProperties {
     /** 单条知识注入 LLM 的最大字符数，防止 prompt 膨胀 */
     private int snippetChars = 500;
 
+    /** 问题9：本地计量预算（元）。智谱无余额查询 API，剩余=预算-估算费用，页面明确标注“估算” */
+    private double budgetCny = 18.0;
+
+    /** 输入 token 单价（元/千 tokens）。默认按 GLM-4-Flash 公开价 0.0001 元/千 tokens，可用环境变量覆盖 */
+    private double priceInputPer1k = 0.0001;
+
+    /** 输出 token 单价（元/千 tokens） */
+    private double priceOutputPer1k = 0.0001;
+
     public String getBaseUrl() { return baseUrl; }
     public void setBaseUrl(String baseUrl) { this.baseUrl = baseUrl; }
     public String getCompletionsPath() { return completionsPath; }
@@ -83,5 +92,11 @@ public class AiProperties {
     public int getTopK() { return topK; }
     public void setTopK(int topK) { this.topK = topK; }
     public int getSnippetChars() { return snippetChars; }
+    public double getBudgetCny() { return budgetCny; }
+    public void setBudgetCny(double budgetCny) { this.budgetCny = budgetCny; }
+    public double getPriceInputPer1k() { return priceInputPer1k; }
+    public void setPriceInputPer1k(double priceInputPer1k) { this.priceInputPer1k = priceInputPer1k; }
+    public double getPriceOutputPer1k() { return priceOutputPer1k; }
+    public void setPriceOutputPer1k(double priceOutputPer1k) { this.priceOutputPer1k = priceOutputPer1k; }
     public void setSnippetChars(int snippetChars) { this.snippetChars = snippetChars; }
 }

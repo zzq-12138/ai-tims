@@ -235,7 +235,7 @@ async function onLogin() {
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: .12em;
-  color: #5f6b76;
+  color: #8d99a3;
 }
 
 /* ---------- 表单浮层 ---------- */
@@ -282,13 +282,13 @@ async function onLogin() {
   font-size: 14px;
 }
 .to-register { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
-.to-register a { color: var(--amber); text-decoration: none; font-weight: 600; }
+.to-register a { color: var(--amber-deep); text-decoration: none; font-weight: 600; }
 .to-register a:hover { text-decoration: underline; }
 .form-note {
   margin-top: 26px;
   padding-top: 14px;
   border-top: 1px dashed var(--line);
-  color: #8b949d;
+  color: var(--muted);
   font-size: 11.5px;
   line-height: 1.7;
 }

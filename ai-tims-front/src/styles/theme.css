@@ -2,7 +2,7 @@
 :root {
   --ink: #1c232a;
   --ink-2: #3b4650;
-  --muted: #6f7a85;
+  --muted: #636d78;
   --paper: #f4f1ea;
   --surface: #fffdf9;
   --surface-2: #faf7f0;
@@ -28,9 +28,9 @@
   --el-color-primary-light-8: #f0cbb0;
   --el-color-primary-light-9: #f7e5d8;
   --el-color-primary-dark-2: #8f4616;
-  --el-color-success: #2f7d66;
+  --el-color-success: #276a56;
   --el-color-success-light-9: #e8f2ee;
-  --el-color-warning: #b7791f;
+  --el-color-warning: #8a5a15;
   --el-color-warning-light-9: #fbf0dd;
   --el-color-danger: #a63a32;
   --el-color-danger-light-9: #f8e7e5;
@@ -38,7 +38,8 @@
   --el-color-info-light-9: #eef1f4;
   --el-text-color-primary: #1c232a;
   --el-text-color-regular: #3b4650;
-  --el-text-color-secondary: #6f7a85;
+  --el-text-color-placeholder: #6b7581;
+  --el-text-color-secondary: #636d78;
   --el-border-color: #e2dcd1;
   --el-border-color-light: #ebe5da;
   --el-border-color-lighter: #f0ebe2;
@@ -139,15 +140,22 @@ p { margin: 0; }
 .el-button:hover:not(.is-disabled) { transform: translateY(-1px); }
 .el-button:active:not(.is-disabled) { transform: translateY(0); }
 .el-button--primary {
-  background: linear-gradient(180deg, #bd642a 0%, #b45a1e 100%);
-  border-color: var(--amber);
+  background: linear-gradient(180deg, #a85320 0%, #8f4616 100%);
+  border-color: var(--amber-deep);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .2) inset, 0 6px 14px -10px rgba(143, 70, 22, .65);
 }
 .el-button--primary:hover:not(.is-disabled) {
-  background: linear-gradient(180deg, #c97b42 0%, #a9541b 100%);
-  border-color: var(--amber-deep);
+  background: linear-gradient(180deg, #96491a 0%, #7f3d13 100%);
+  border-color: #7f3d13;
 }
 .el-button.is-disabled, .el-button.is-disabled:hover { transform: none; box-shadow: none; opacity: .5; }
+/* 禁用主按钮：EP 默认白字压在 light-5 琥珀上仅 2.39:1；改成浅琥珀底 + 深琥珀字（6.0:1），禁用态仍可辨认 */
+.el-button--primary.is-disabled, .el-button--primary.is-disabled:hover {
+  opacity: 1;
+  background: var(--amber-soft);
+  border-color: var(--line-strong);
+  color: var(--amber-deep);
+}
 .el-button--small { height: 30px; padding: 0 12px; }
 .el-input__wrapper, .el-textarea__inner, .el-select__wrapper {
   border-radius: 6px;
@@ -166,6 +174,13 @@ p { margin: 0; }
   letter-spacing: .04em;
   border-color: transparent;
 }
+/* 标签文字对比度：浅色底上统一压深，正文级文字 >=4.5:1 */
+.el-tag.el-tag--primary { --el-tag-text-color: #8f4616; }
+.el-tag.el-tag--success { --el-tag-text-color: #245f4e; }
+.el-tag.el-tag--warning { --el-tag-text-color: #7a4f12; }
+.el-tag.el-tag--info { --el-tag-text-color: #4f5a65; }
+.el-tag--primary.el-tag--dark { --el-tag-bg-color: #8f4616; --el-tag-border-color: #8f4616; }
+.el-tag--warning.el-tag--dark { --el-tag-bg-color: #8a5a15; --el-tag-border-color: #8a5a15; }
 .el-alert { border-radius: 8px; border-left: 3px solid currentColor; }
 .el-alert--warning.is-light { background: #fbf0dd; color: #8a5a15; }
 .el-alert--error.is-light { background: #f8e7e5; color: #8d302a; }

@@ -186,8 +186,13 @@ function pushCard(c) {
   })
 }
 
+// /api/auth/me 返回的是 userId（不是 id）：统一取值，避免消息箱落到 anon 键、REST 兜底永不触发
+function uidOf() {
+  return auth.user?.userId ?? auth.user?.id
+}
+
 function fetchUnread() {
-  const uid = auth.user?.id
+  const uid = uidOf()
   if (!uid) return
   getUnreadMessages(uid).then((list) => (list || []).forEach(pushCard)).catch(() => {})
 }
@@ -208,7 +213,7 @@ function onReconnect() {
 
 onMounted(() => {
   if (!auth.isLoggedIn) return
-  push.loadForUser(auth.user?.id)
+  push.loadForUser(uidOf())
   connect()
   onPush('CARD', pushCard)
   // 上线补推（服务端主动下发）+ REST 兜底拉取
@@ -225,7 +230,7 @@ onMounted(() => {
 })
 
 // 切换账号时装载各自的本地消息箱
-watch(() => auth.user?.id, (uid) => {
+watch(uidOf, (uid) => {
   if (!uid) return
   push.loadForUser(uid)
   fetchUnread()
@@ -305,7 +310,7 @@ async function onCommand(cmd) {
   margin-right: 12px;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: #5f6b76;
+  color: #8d99a3;
 }
 .aside :deep(.el-menu-item:hover) { background: rgba(255, 255, 255, .06); color: #fff; }
 .aside :deep(.el-menu-item.is-active) {

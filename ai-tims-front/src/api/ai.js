@@ -74,3 +74,25 @@ export function usageRecent(limit = 20) {
 export function usageSummary() {
   return request.get('/api/ai/usage/summary')
 }
+
+/* ===== M6 问题8：工单助手会话（持久化 / 切换 / 重命名 / 删除） ===== */
+
+export function listSessions(userId) {
+  return request.get('/api/ai/chat/sessions', { params: { userId } })
+}
+
+export function createSession(userId, title) {
+  return request.post('/api/ai/chat/sessions', { userId, title })
+}
+
+export function renameSession(id, userId, title) {
+  return request.put(`/api/ai/chat/sessions/${id}`, { userId, title })
+}
+
+export function deleteSession(id, userId) {
+  return request.delete(`/api/ai/chat/sessions/${id}`, { params: { userId } })
+}
+
+export function sessionMessages(id, userId) {
+  return request.get(`/api/ai/chat/sessions/${id}/messages`, { params: { userId } })
+}

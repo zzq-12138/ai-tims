@@ -45,6 +45,10 @@ tims:
     order-base-url: ${ORDER_BASE_URL:http://ticket-order}
     top-k: ${LLM_RAG_TOPK:5}
     snippet-chars: ${LLM_SNIPPET_CHARS:500}
+    # 问题9：无官方余额接口，按调用记录本地计量（费用=token×单价），页面标注“估算”
+    budget-cny: ${LLM_BUDGET_CNY:18}
+    price-input-per-1k: ${LLM_PRICE_INPUT_PER_1K:0.0001}
+    price-output-per-1k: ${LLM_PRICE_OUTPUT_PER_1K:0.0001}
 
 management:
   endpoints:

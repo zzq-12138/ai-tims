@@ -636,8 +636,8 @@ onMounted(async () => {
 .mr4 { margin-right: 4px; }
 .mr8 { margin-right: 8px; }
 .ml8 { margin-left: 8px; }
-.score { color: #409eff; margin-right: 6px; }
-.target { color: #909399; font-size: 12px; }
+.score { color: var(--amber-deep); margin-right: 6px; }
+.target { color: var(--muted); font-size: 12px; }
 .diff { color: #606266; font-size: 12px; line-height: 1.6; }
 .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .diff-pane, .diff-result { border: 1px solid #ebeef5; border-radius: 4px; padding: 8px; }
@@ -649,5 +649,5 @@ h4 { margin: 12px 0 4px; font-size: 13px; color: #303133; }
 .pager { margin-top: 12px; justify-content: flex-end; }
 .summary { color: #606266; background: #f5f7fa; padding: 8px; border-radius: 4px; }
 .content { white-space: pre-wrap; line-height: 1.7; margin-top: 8px; }
-.reject { color: #f56c6c; margin-top: 8px; }
+.reject { color: var(--rust); margin-top: 8px; }
 </style>

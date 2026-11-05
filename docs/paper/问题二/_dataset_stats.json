@@ -1,0 +1,63 @@
+{
+  "total": 1000,
+  "by_device": {
+    "贴片机": 200,
+    "AOI检测机": 200,
+    "涂布机": 200,
+    "贴合机": 200,
+    "蚀刻机": 200
+  },
+  "by_style": {
+    "formal": 200,
+    "colloquial": 200,
+    "missing": 200,
+    "typo": 200,
+    "long": 200
+  },
+  "by_structure": {
+    "normal": 600,
+    "excluded": 300,
+    "no_final": 100
+  },
+  "long_text_over_500": 200,
+  "min_text_len": 97,
+  "max_text_len": 776,
+  "avg_text_len": 306.4,
+  "device_x_style": {
+    "贴片机": {
+      "formal": 40,
+      "colloquial": 40,
+      "missing": 40,
+      "typo": 40,
+      "long": 40
+    },
+    "AOI检测机": {
+      "formal": 40,
+      "colloquial": 40,
+      "missing": 40,
+      "typo": 40,
+      "long": 40
+    },
+    "涂布机": {
+      "formal": 40,
+      "colloquial": 40,
+      "missing": 40,
+      "typo": 40,
+      "long": 40
+    },
+    "贴合机": {
+      "formal": 40,
+      "colloquial": 40,
+      "missing": 40,
+      "typo": 40,
+      "long": 40
+    },
+    "蚀刻机": {
+      "formal": 40,
+      "colloquial": 40,
+      "missing": 40,
+      "typo": 40,
+      "long": 40
+    }
+  }
+}

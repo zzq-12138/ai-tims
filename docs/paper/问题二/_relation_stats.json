@@ -1,0 +1,67 @@
+{
+  "mode": "bge",
+  "counts": {
+    "duplicate": 90,
+    "variant": 90,
+    "conflict": 80,
+    "unrelated": 40
+  },
+  "conflict_band": {
+    "low": 0.85,
+    "high": 0.95,
+    "n": 80,
+    "min": 0.8935,
+    "p25": 0.9174,
+    "median": 0.9317,
+    "p75": 0.9419,
+    "max": 0.9495,
+    "mean": 0.9286
+  },
+  "conflict_in_band": 80,
+  "conflict_out_of_band": 0,
+  "conflict_candidate_pool": 1350,
+  "conflict_encoded": 400,
+  "conflict_candidate_dist": {
+    "n": 400,
+    "min": 0.8153,
+    "p25": 0.8885,
+    "median": 0.9068,
+    "p75": 0.924,
+    "max": 0.9693,
+    "mean": 0.9054
+  },
+  "conflict_per_device": {
+    "贴片机": 16,
+    "AOI检测机": 16,
+    "涂布机": 16,
+    "贴合机": 16,
+    "蚀刻机": 16
+  },
+  "duplicate_sample_dist": {
+    "n": 30,
+    "min": 0.9631,
+    "p25": 0.9867,
+    "median": 0.9905,
+    "p75": 0.9935,
+    "max": 0.9997,
+    "mean": 0.9899
+  },
+  "variant_sample_dist": {
+    "n": 30,
+    "min": 0.7945,
+    "p25": 0.8232,
+    "median": 0.8454,
+    "p75": 0.861,
+    "max": 0.92,
+    "mean": 0.8453
+  },
+  "unrelated_sample_dist": {
+    "n": 30,
+    "min": 0.4969,
+    "p25": 0.545,
+    "median": 0.5908,
+    "p75": 0.6343,
+    "max": 0.6748,
+    "mean": 0.5902
+  }
+}

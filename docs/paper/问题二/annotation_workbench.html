@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>问题二标注工作台 v1</title>
+<style>
+  :root{--bg:#0f1218;--panel:#171b23;--panel2:#1e232d;--line:#2b3240;--fg:#e6e9ef;--dim:#96a0b0;
+        --acc:#4c8dff;--ok:#3ecf8e;--warn:#f0b849;--err:#f26d6d;--radius:10px}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+            background:var(--bg);color:var(--fg);font-size:14px}
+  body{display:flex;flex-direction:column;overflow:hidden}
+  header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--panel);
+         border-bottom:1px solid var(--line);flex:0 0 auto;flex-wrap:wrap}
+  header h1{font-size:15px;margin:0;font-weight:600;letter-spacing:.3px}
+  .pill{font-size:12px;color:var(--dim);border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+  .grow{flex:1}
+  button{background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:8px;
+         padding:6px 12px;cursor:pointer;font-size:13px}
+  button:hover{border-color:var(--acc)}
+  button.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+  button.ghost{background:transparent}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  #bar{height:3px;background:var(--panel2);flex:0 0 auto}
+  #bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4c8dff,#3ecf8e);transition:width .2s}
+  main{flex:1;display:flex;min-height:0}
+  .pane{overflow:auto;padding:18px 20px}
+  #left{flex:1.05;border-right:1px solid var(--line);background:#12161d}
+  #right{flex:1;background:var(--bg)}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .tag{font-size:12px;color:var(--dim);background:var(--panel2);border-radius:6px;padding:3px 8px}
+  .tag b{color:var(--fg);font-weight:500}
+  #raw{white-space:pre-wrap;line-height:1.85;font-size:15px;letter-spacing:.2px;
+       background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .field{margin-bottom:14px}
+  .field>label{display:block;font-size:12px;color:var(--dim);margin-bottom:5px}
+  .field .hint{color:#6f7a8c;font-size:11px;margin-left:6px}
+  input[type=text],textarea,select{width:100%;background:var(--panel);color:var(--fg);
+        border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;
+        font-family:inherit;line-height:1.6;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--acc)}
+  .row{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+  .row select{flex:0 0 150px}
+  .row input{flex:1}
+  .row .x{flex:0 0 30px;padding:4px 0;text-align:center;color:var(--dim)}
+  .row .x:hover{color:var(--err);border-color:var(--err)}
+  .radios{display:flex;gap:16px;align-items:center;padding:4px 0}
+  .radios label{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--fg);cursor:pointer}
+  .dual{display:flex;gap:10px}
+  .dual>div{flex:1}
+  .panel-title{font-size:13px;font-weight:600;margin:18px 0 10px;color:#cfd6e4;
+               border-left:3px solid var(--acc);padding-left:8px}
+  footer{flex:0 0 auto;border-top:1px solid var(--line);background:var(--panel);padding:10px 16px;
+         display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  #jump{width:80px}
+  .stats{font-size:12px;color:var(--dim)}
+  .stats b{color:var(--fg)}
+  #sug{display:none;margin-bottom:14px;padding:12px 14px;border-radius:var(--radius);
+       border:1px dashed var(--warn);background:rgba(240,184,73,.07)}
+  #sug .w{color:var(--warn);font-size:12px;margin-bottom:8px;font-weight:600}
+  #sug pre{white-space:pre-wrap;margin:0;font-size:12.5px;color:#cfd6e4;line-height:1.7}
+  .empty{color:var(--dim);text-align:center;padding:60px 20px;line-height:2}
+  .empty code{background:var(--panel2);padding:2px 6px;border-radius:5px;color:#cfd6e4}
+  .kv{font-size:12px;color:var(--dim);margin-top:8px}
+  .kv b{color:var(--ok);font-weight:500}
+  .toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#2a3242;
+         border:1px solid var(--line);border-radius:8px;padding:8px 16px;font-size:13px;
+         opacity:0;transition:opacity .2s;pointer-events:none;z-index:99}
+  .toast.show{opacity:1}
+  .pairtxt{white-space:pre-wrap;background:var(--panel);border:1px solid var(--line);
+           border-radius:var(--radius);padding:12px;line-height:1.75;margin-bottom:12px}
+  .warnbox{font-size:12px;color:var(--warn);background:rgba(240,184,73,.08);
+           border:1px solid rgba(240,184,73,.35);border-radius:8px;padding:8px 10px;margin-bottom:10px}
+  @media (max-width:900px){main{flex-direction:column}#left{border-right:none;border-bottom:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>问题二标注工作台</h1>
+  <span class="pill" id="dsname">未加载数据</span>
+  <span class="pill" id="mode">—</span>
+  <span class="grow"></span>
+  <label class="pill" title="显示 glm-4-flash 零样本抽取结果，仅作参考">
+    <input type="checkbox" id="sugToggle" style="vertical-align:-1px"> 预填建议值
+  </label>
+  <button id="loadBtn" class="ghost">导入数据</button>
+  <input type="file" id="fileInput" accept=".csv,.jsonl,.json,.js" hidden>
+  <button id="expJson" class="ghost">导出 JSONL</button>
+  <button id="expCsv" class="ghost">导出 CSV</button>
+</header>
+<div id="bar"><i></i></div>
+
+<main>
+  <section class="pane" id="left">
+    <div id="leftBody" class="empty">
+      正在尝试加载 <code>annotation_data.js</code> …<br>
+      若长时间无内容，请点右上角「导入数据」，选择
+      <code>annotation_set_v1.csv</code>（工单）或 <code>annotation_relation_v1.csv</code>（关系对）。
+    </div>
+  </section>
+  <section class="pane" id="right">
+    <div id="sug">
+      <div class="w">参考值（模型零样本抽取，可能错误，以你的判断为准）</div>
+      <pre id="sugBody"></pre>
+      <div style="margin-top:8px"><button id="applySug" class="ghost">一键填入（仍可修改）</button></div>
+    </div>
+    <div id="form"></div>
+  </section>
+</main>
+
+<footer>
+  <button id="prev">← 上一条</button>
+  <button id="saveNext" class="primary">保存并下一条 →</button>
+  <span class="stats">跳转 <input type="text" id="jump" placeholder="序号/ID"></span>
+  <button id="goJump" class="ghost">Go</button>
+  <span class="grow"></span>
+  <span class="stats" id="stats">—</span>
+  <button id="clear" class="ghost" title="清空本条标注">清空本条</button>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script src="annotation_data.js" onerror="void 0"></script>
+<script>
+"use strict";
+const LS_PREFIX = "tims_annot_v1_";
+let DATA = [], MODE = "ticket", CURSOR = 0, SUGG = {}, START_TS = Date.now();
+let DS_KEY = "default";
+const $ = (s) => document.querySelector(s);
+const el = (t, a, kids) => { const n = document.createElement(t);
+  if (a) for (const k in a) { if (k === "class") n.className = a[k]; else if (k === "html") n.innerHTML = a[k]; else n.setAttribute(k, a[k]); }
+  (kids || []).forEach(k => n.appendChild(k)); return n; };
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 1600); }
+
+/* ---------------- 数据加载 ---------------- */
+function normTicket(r, i){
+  return { id: r.ticket_id || r.id || ("ROW" + (i + 1)),
+    device: r.device_type || r.device || "", model: r.device_model || r.model || "",
+    code: r.error_code || r.code || "", text: r.ticket_text || r.text || "" };
+}
+function normPair(r, i){
+  return { id: r.pair_id || r.id || ("PAIR" + (i + 1)), a: r.text_a || "", b: r.text_b || "",
+    hint: r.evidence_hint || "" };
+}
+function setData(arr, kind, name, key){
+  DATA = arr; MODE = kind; CURSOR = 0; DS_KEY = key || (kind + "_" + arr.length);
+  $("#dsname").textContent = name || (kind + " · " + arr.length + " 条");
+  $("#mode").textContent = kind === "ticket" ? "工单槽位标注" : "关系对标注";
+  render();
+}
+
+/* 极简 CSV 解析（支持引号内逗号/换行） */
+function parseCSV(text){
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){
+      if (c === '"' && text[i + 1] === '"'){ cur += '"'; i++; }
+      else if (c === '"'){ q = false; }
+      else cur += c;
+    } else if (c === '"'){ q = true; }
+    else if (c === ","){ row.push(cur); cur = ""; }
+    else if (c === "\n"){ row.push(cur); rows.push(row); row = []; cur = ""; }
+    else if (c !== "\r"){ cur += c; }
+  }
+  if (cur.length || row.length){ row.push(cur); rows.push(row); }
+  if (!rows.length) return [];
+  const h = rows[0];
+  return rows.slice(1).filter(r => r.length && r.join("").trim())
+    .map(r => { const o = {}; h.forEach((k, i) => o[k.trim()] = (r[i] || "").trim()); return o; });
+}
+function parseJSONL(text){
+  return text.split(/\r?\n/).filter(l => l.trim()).map(l => JSON.parse(l));
+}
+function ingest(text, filename, fromFileInput){
+  let recs = [], kind = "ticket";
+  const t = text.trim();
+  if (t.startsWith("[") || t.startsWith("{")){
+    let obj;
+    try { obj = JSON.parse(t); } catch (e) { recs = parseJSONL(t); obj = null; }
+    if (obj && obj.window){ /* noop */ }
+    if (obj && Array.isArray(obj)) recs = obj;
+    else if (obj && obj.data) recs = obj.data;
+    else if (obj && obj.ANNOTATION_DATA) recs = obj.ANNOTATION_DATA;
+  } else if (filename && filename.endsWith(".js")){
+    const m = t.match(/ANNOTATION_DATA\s*=\s*(\[[\s\S]*\]);/);
+    if (m) recs = JSON.parse(m[1]);
+  } else {
+    recs = parseCSV(t);
+  }
+  if (!recs.length){ toast("未解析到数据"); return; }
+  if (recs[0].text_a !== undefined || recs[0].a !== undefined) kind = "pair";
+  if (!fromFileInput) { $("#sugToggle").checked = false; }
+  setData(kind === "pair" ? recs.map(normPair) : recs.map(normTicket),
+          kind, (filename || "导入数据") + " · " + recs.length + " 条",
+          (filename || "import") + "_" + recs.length);
+}
+if (window.ANNOTATION_DATA && window.ANNOTATION_DATA.length){
+  const meta = window.ANNOTATION_META || {};
+  const raw = window.ANNOTATION_DATA;
+  const kind = (raw[0] && raw[0].text_a !== undefined) ? "pair" : "ticket";
+  setData(kind === "pair" ? raw.map(normPair) : raw.map(normTicket), kind,
+          (meta.name || "annotation_data.js") + " · " + raw.length + " 条",
+          (meta.name || "embedded") + "_" + raw.length);
+}
+
+$("#loadBtn").onclick = () => $("#fileInput").click();
+document.addEventListener("dragover", e => e.preventDefault());
+
+/* ---------------- 记忆读写 ---------------- */
+const keyOf = (id) => LS_PREFIX + DS_KEY + "_" + id;
+function readAnn(id){ try { const s = localStorage.getItem(keyOf(id)); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+function writeAnn(id, obj){ obj.updatedAt = new Date().toISOString(); localStorage.setItem(keyOf(id), JSON.stringify(obj)); }
+
+/* ---------------- 渲染 ---------------- */
+function fmtMins(ms){ return (ms / 60000).toFixed(1) + " min"; }
+function renderStats(){
+  let done = 0, unc = 0;
+  DATA.forEach(d => { const a = readAnn(d.id); if (a && a.__done) done++; if (a && a.uncertain === "1") unc++; });
+  const pct = DATA.length ? Math.round(done / DATA.length * 100) : 0;
+  $("#bar>i") && ($("#bar>i").style.width = pct + "%");
+  $("#stats").innerHTML = "已标 <b>" + done + "</b>/" + DATA.length + "（" + pct + "%） · 存疑 <b>" + unc + "</b> · 本条耗时 <b id='curms'>0</b>";
+}
+function render(){
+  if (!DATA.length) return;
+  CURSOR = Math.max(0, Math.min(CURSOR, DATA.length - 1));
+  $("#leftBody").className = "";
+  const d = DATA[CURSOR];
+  $("#leftBody").innerHTML = MODE === "ticket" ? ticketLeftHTML(d) : pairLeftHTML(d);
+  $("#form").innerHTML = "";
+  if (MODE === "ticket") renderTicketForm(d); else renderPairForm(d);
+  $("#jump").placeholder = "1-" + DATA.length;
+  renderStats();
+  refreshSug();
+  document.getElementById("left").scrollTop = 0;
+  document.getElementById("right").scrollTop = 0;
+}
+function ticketLeftHTML(d){
+  const meta = [["工单号", d.id], ["设备", d.device || "（未填）"],
+    ["型号", d.model || "（未填）"], ["错误码", d.code || "（未填）"]]
+    .map(x => '<span class="tag">' + x[0] + ' <b>' + esc(x[1]) + '</b></span>').join("");
+  return '<div class="meta">' + meta + '</div>' +
+    '<div id="raw">' + esc(d.text) + '</div>' +
+    '<div class="kv">字数 <b>' + d.text.length + '</b> ｜ 第 ' + (CURSOR + 1) + ' / ' + DATA.length + ' 条</div>';
+}
+function pairLeftHTML(d){
+  return '<div class="meta"><span class="tag">编号 <b>' + esc(d.id) + '</b></span>' +
+    '<span class="tag">第 <b>' + (CURSOR + 1) + '</b> / ' + DATA.length + ' 对</span></div>' +
+    '<div style="font-size:12px;color:#96a0b0;margin-bottom:6px">知识 A</div>' +
+    '<div class="pairtxt">' + esc(d.a) + '</div>' +
+    '<div style="font-size:12px;color:#96a0b0;margin-bottom:6px">知识 B</div>' +
+    '<div class="pairtxt">' + esc(d.b) + '</div>' +
+    (d.hint ? '<div class="warnbox">判定提示：' + esc(d.hint) + '</div>' : '');
+}
+function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+function fld(label, inner, hint){
+  const f = el("div", { class: "field" });
+  f.innerHTML = '<label>' + label + (hint ? '<span class="hint">' + hint + '</span>' : '') + '</label>';
+  f.appendChild(inner); return f;
+}
+function ta(id, val, ph, rows){
+  const t = el("textarea", { id: id, rows: rows || 2, placeholder: ph || "" });
+  t.value = val || ""; return t;
+}
+function txt(id, val, ph){
+  const t = el("input", { type: "text", id: id, placeholder: ph || "" });
+  t.value = val || ""; return t;
+}
+function radioGroup(name, opts, val){
+  const w = el("div", { class: "radios" });
+  opts.forEach(o => {
+    const l = el("label");
+    const r = el("input", { type: "radio", name: name, value: o[0] });
+    if (String(val) === String(o[0])) r.checked = true;
+    l.appendChild(r); l.appendChild(document.createTextNode(o[1])); w.appendChild(l);
+  });
+  return w;
+}
+
+/* ---------------- 工单表单 ---------------- */
+function renderTicketForm(d){
+  const a = readAnn(d.id) || {};
+  const box = $("#form");
+  const sel = el("select", { id: "f_device" });
+  ["", "贴片机", "AOI检测机", "涂布机", "贴合机", "蚀刻机", "其他"].forEach(v => {
+    const o = el("option", { value: v }); o.textContent = v || "（请选择）";
+    if ((a.device_type || d.device || "") === v) o.selected = true; sel.appendChild(o);
+  });
+  box.appendChild(fld("设备类型 device_type", sel));
+
+  box.appendChild(el("div", { class: "panel-title", html: "五元组" }));
+  box.appendChild(fld("现象 symptom", ta("f_symptom", a.symptom, "哪台设备 + 对什么对象 + 什么可观测异常（可带数值）", 2),
+    "不要写原因与动作"));
+  box.appendChild(fld("现象证据句 symptom_evidence", txt("f_sym_ev", a.symptom_evidence, "原文句，可留空"), "可留空"));
+  box.appendChild(fld("根因 root_cause", ta("f_root", a.root_cause, "经处置/验证确认的直接原因；无最终根因则留空", 2),
+    "排除假设与未验证猜测不得写在这里"));
+  box.appendChild(fld("根因证据句 root_cause_evidence", txt("f_root_ev", a.root_cause_evidence, "拆检/读数/复测证据"), ""));
+  box.appendChild(fld("本工单是否存在最终确认根因 has_final_root_cause", 
+    radioGroup("f_present", [["1", "有"], ["0", "没有（只排除/待跟进）"]], a.has_final_root_cause || "")));
+  box.appendChild(fld("措施 measures", ta("f_meas", a.measures, "一条一个动作，动词开头，用换行分隔", 3),
+    "只写实际做过的"));
+  box.appendChild(fld("验证结果 verification", ta("f_ver", a.verification, "方法 + 结果（数值/状态）", 2), "只有「已修复」请标存疑"));
+  box.appendChild(fld("验证证据句 verification_evidence", txt("f_ver_ev", a.verification_evidence, "可留空")));
+
+  box.appendChild(el("div", { class: "panel-title", html: "适用条件 conditions" }));
+  const cwrap = el("div", { id: "conds" });
+  (a.conditions && a.conditions.length ? a.conditions : [{ type: "", value: "" }]).forEach(c => cwrap.appendChild(condRow(c)));
+  box.appendChild(cwrap);
+  const addC = el("button", { class: "ghost" }); addC.textContent = "+ 增加条件";
+  addC.onclick = () => cwrap.appendChild(condRow({ type: "", value: "" }));
+  box.appendChild(addC);
+
+  box.appendChild(el("div", { class: "panel-title", html: "排除假设（重点）" }));
+  const ewrap = el("div", { id: "excls" });
+  (a.excluded_hypotheses && a.excluded_hypotheses.length ? a.excluded_hypotheses : []).forEach(x => ewrap.appendChild(exclRow(x)));
+  box.appendChild(ewrap);
+  const addE = el("button", { class: "ghost" }); addE.textContent = "+ 增加排除假设";
+  addE.onclick = () => ewrap.appendChild(exclRow({ hypothesis: "", evidence: "" }));
+  box.appendChild(addE);
+  box.appendChild(fld("本工单是否含排除假设 is_excluded_hypothesis",
+    radioGroup("f_isexc", [["1", "有"], ["0", "没有"]], a.is_excluded_hypothesis || "")));
+  box.appendChild(fld("未验证猜测 unverified_hypotheses", ta("f_unver", a.unverified_hypotheses, "怀疑但没验证的，用换行分隔（不进根因）", 2)));
+
+  box.appendChild(el("div", { class: "panel-title", html: "元信息" }));
+  box.appendChild(fld("存疑 uncertain", radioGroup("f_unc", [["0", "有把握"], ["1", "存疑（需仲裁）"]], a.uncertain || "")));
+  box.appendChild(fld("备注 note", ta("f_note", a.note, "多故障、口径分歧、需仲裁点", 2)));
+
+  $("#form").querySelectorAll("input,textarea,select").forEach(n => {
+    n.addEventListener("input", () => autoSave());
+    n.addEventListener("change", () => autoSave());
+  });
+}
+function condRow(c){
+  const w = el("div", { class: "row condrow" });
+  const s = el("select", { class: "ct" });
+  [["", "（类型）"], ["device_model", "设备型号"], ["process_stage", "工艺段"],
+   ["material_or_batch", "材料/批次"], ["param_range", "参数区间"], ["precondition", "前置状态"]]
+    .forEach(x => { const o = el("option", { value: x[0] }); o.textContent = x[1];
+      if (c.type === x[0]) o.selected = true; s.appendChild(o); });
+  const v = el("input", { type: "text", class: "cv", placeholder: "取值" }); v.value = c.value || "";
+  const x = el("button", { class: "ghost x" }); x.textContent = "×"; x.onclick = () => w.remove();
+  [s, v, x].forEach(n => { n.addEventListener("input", autoSave); n.addEventListener("change", autoSave); });
+  w.appendChild(s); w.appendChild(v); w.appendChild(x); return w;
+}
+function exclRow(c){
+  const w = el("div", { class: "row exclrow" });
+  const h = el("input", { type: "text", class: "eh", placeholder: "被排除的原因（词表标签）" }); h.value = c.hypothesis || "";
+  const e = el("input", { type: "text", class: "ee", placeholder: "排除证据（原文句）" }); e.value = c.evidence || "";
+  const x = el("button", { class: "ghost x" }); x.textContent = "×"; x.onclick = () => w.remove();
+  [h, e, x].forEach(n => { n.addEventListener("input", autoSave); n.addEventListener("change", autoSave); });
+  w.appendChild(h); w.appendChild(e); w.appendChild(x); return w;
+}
+
+/* ---------------- 关系对表单 ---------------- */
+function renderPairForm(d){
+  const a = readAnn(d.id) || {};
+  const box = $("#form");
+  box.appendChild(fld("关系 relation", radioGroup("p_rel",
+    [["duplicate", "重复 duplicate（可合并）"], ["variant", "变体 variant（不合并，建边）"],
+     ["conflict", "冲突 conflict（进冲突队列）"], ["unrelated", "无关 unrelated"]], a.relation || "")));
+  box.appendChild(fld("条件重叠 condition_overlap", radioGroup("p_ov",
+    [["overlap", "重叠"], ["exclusive", "互斥（条件分叉）"], ["na", "不适用"]], a.condition_overlap || "")));
+  box.appendChild(fld("置信度 confidence", txt("p_conf", a.confidence, "0–1，可留空")));
+  box.appendChild(fld("判定理由 evidence", ta("p_ev", a.evidence, "一句话说明为什么这样判", 3)));
+  box.appendChild(fld("存疑 uncertain", radioGroup("p_unc", [["0", "有把握"], ["1", "存疑"]], a.uncertain || "")));
+  $("#form").querySelectorAll("input,textarea,select").forEach(n => {
+    n.addEventListener("input", () => autoSave()); n.addEventListener("change", () => autoSave());
+  });
+}
+
+/* ---------------- 采集与保存 ---------------- */
+function collect(){
+  const d = DATA[CURSOR];
+  if (MODE === "pair"){
+    return { pair_id: d.id,
+      relation: (document.querySelector('input[name=p_rel]:checked') || {}).value || "",
+      condition_overlap: (document.querySelector('input[name=p_ov]:checked') || {}).value || "",
+      confidence: ($("#p_conf") || {}).value || "",
+      evidence: ($("#p_ev") || {}).value || "",
+      uncertain: (document.querySelector('input[name=p_unc]:checked') || {}).value || "" };
+  }
+  const g = (id) => { const n = document.getElementById(id); return n ? n.value : ""; };
+  const conds = [...document.querySelectorAll("#conds .condrow")].map(r => ({
+    type: r.querySelector(".ct").value, value: r.querySelector(".cv").value }))
+    .filter(x => x.type || x.value);
+  const excls = [...document.querySelectorAll("#excls .exclrow")].map(r => ({
+    hypothesis: r.querySelector(".eh").value, evidence: r.querySelector(".ee").value }))
+    .filter(x => x.hypothesis || x.evidence);
+  return { ticket_id: d.id,
+    device_type: g("f_device"),
+    symptom: g("f_symptom"), symptom_evidence: g("f_sym_ev"),
+    root_cause: g("f_root"), root_cause_evidence: g("f_root_ev"),
+    has_final_root_cause: (document.querySelector('input[name=f_present]:checked') || {}).value || "",
+    measures: g("f_meas"), verification: g("f_ver"), verification_evidence: g("f_ver_ev"),
+    conditions: conds,
+    excluded_hypotheses: excls,
+    is_excluded_hypothesis: (document.querySelector('input[name=f_isexc]:checked') || {}).value || "",
+    unverified_hypotheses: g("f_unver"),
+    uncertain: (document.querySelector('input[name=f_unc]:checked') || {}).value || "",
+    note: g("f_note") };
+}
+function filled(o){
+  if (MODE === "pair") return !!(o.relation);
+  return !!(o.symptom || o.root_cause || o.device_type || o.has_final_root_cause);
+}
+let saveTimer = null;
+function autoSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    const o = collect();
+    const prev = readAnn(DATA[CURSOR].id) || {};
+    o.__done = filled(o); o.elapsedMs = (prev.elapsedMs || 0);
+    writeAnn(DATA[CURSOR].id, o);
+    renderStats();
+    tick();
+  }, 250);
+}
+function tick(){
+  const n = document.getElementById("curms");
+  if (!n) return; n.textContent = ((Date.now() - START_TS) / 1000).toFixed(0) + " s";
+}
+setInterval(tick, 1000);
+
+/* ---------------- 预填建议 ---------------- */
+$("#sugToggle").onchange = refreshSug;
+function refreshSug(){
+  const on = $("#sugToggle").checked;
+  const s = $("#sug"), d = DATA[CURSOR];
+  if (!on || !d){ s.style.display = "none"; return; }
+  const sug = SUGG[d.id];
+  s.style.display = "block";
+  $("#sugBody").textContent = sug ? JSON.stringify(sug, null, 2)
+    : "尚未加载参考值。请点「导入数据」选择 s1_suggestions.jsonl（在标注集同目录，由 gen_seed_1000.py --with-s1 生成）。";
+}
+$("#applySug").onclick = () => {
+  const d = DATA[CURSOR]; const sug = SUGG[d.id];
+  if (!sug){ toast("没有可用的参考值"); return; }
+  const set = (id, v) => { const n = document.getElementById(id); if (n && v != null) n.value = v; };
+  if (MODE === "ticket"){
+    set("f_symptom", sug.symptom); set("f_root", sug.root_cause);
+    set("f_ver", sug.verification);
+    set("f_meas", Array.isArray(sug.measures) ? sug.measures.join("\n") : sug.measures);
+    set("f_unver", Array.isArray(sug.unverified_hypotheses) ? sug.unverified_hypotheses.join("\n") : "");
+    const r = document.querySelector('input[name=f_present][value="' + (sug.has_final_root_cause ? "1" : "0") + '"]');
+    if (r) r.checked = true;
+  }
+  autoSave(); toast("已填入参考值，请逐项核对");
+};
+
+/* ---------------- 导航 ---------------- */
+$("#prev").onclick = () => { CURSOR = Math.max(0, CURSOR - 1); START_TS = Date.now(); render(); };
+$("#saveNext").onclick = () => {
+  const o = collect(); o.__done = true;
+  const prev = readAnn(DATA[CURSOR].id) || {};
+  o.elapsedMs = (prev.elapsedMs || 0) + (Date.now() - START_TS);
+  writeAnn(DATA[CURSOR].id, o);
+  if (CURSOR < DATA.length - 1){ CURSOR++; START_TS = Date.now(); render(); }
+  else { renderStats(); toast("已是最后一条"); }
+};
+$("#clear").onclick = () => {
+  if (!confirm("清空本条标注？")) return;
+  localStorage.removeItem(keyOf(DATA[CURSOR].id)); render(); toast("已清空");
+};
+$("#goJump").onclick = () => {
+  const v = $("#jump").value.trim(); if (!v) return;
+  let i = DATA.findIndex(d => d.id === v);
+  if (i < 0) i = parseInt(v, 10) - 1;
+  if (i >= 0 && i < DATA.length){ CURSOR = i; START_TS = Date.now(); render(); }
+  else toast("未找到：" + v);
+};
+document.addEventListener("keydown", (e) => {
+  if (e.altKey && e.key === "ArrowLeft") $("#prev").click();
+  if (e.altKey && e.key === "ArrowRight") $("#saveNext").click();
+  if ((e.ctrlKey || e.metaKey) && e.key === "s"){ e.preventDefault(); autoSave(); toast("已保存"); }
+});
+
+/* ---------------- 导出 ---------------- */
+function download(name, text, mime){
+  const b = new Blob([text], { type: mime || "application/octet-stream" });
+  const u = URL.createObjectURL(b), a = document.createElement("a");
+  a.href = u; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(u), 1000);
+}
+$("#expJson").onclick = () => {
+  const out = DATA.map(d => readAnn(d.id)).filter(Boolean);
+  download("annotations_" + (MODE === "ticket" ? "extract" : "relation") + "_" + new Date()
+    .toISOString().slice(0, 10) + ".jsonl",
+    out.map(o => JSON.stringify(o)).join("\n"), "application/jsonl");
+  toast("已导出 " + out.length + " 条");
+};
+$("#expCsv").onclick = () => {
+  const recs = DATA.map(d => readAnn(d.id)).filter(Boolean);
+  if (!recs.length){ toast("没有已保存的标注"); return; }
+  const cols = MODE === "ticket"
+    ? ["ticket_id", "device_type", "symptom", "symptom_evidence", "root_cause", "root_cause_evidence",
+       "has_final_root_cause", "measures", "verification", "verification_evidence", "conditions",
+       "excluded_hypotheses", "is_excluded_hypothesis", "unverified_hypotheses", "uncertain", "note", "elapsedMs"]
+    : ["pair_id", "relation", "condition_overlap", "confidence", "evidence", "uncertain"];
+  const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const lines = [cols.join(",")];
+  recs.forEach(r => lines.push(cols.map(c => {
+    let v = r[c];
+    if (Array.isArray(v)) v = MODE === "ticket"
+      ? (c === "conditions" ? v.map(x => x.type + "=" + x.value).join("; ")
+                            : v.map(x => x.hypothesis + "|" + x.evidence).join("; "))
+      : JSON.stringify(v);
+    return q(v);
+  }).join(",")));
+  download("annotations_" + new Date().toISOString().slice(0, 10) + ".csv", "\ufeff" + lines.join("\r\n"), "text/csv");
+};
+
+/* 建议值文件导入：识别 jsonl 且首行含 suggestion */
+const origIngest = ingest;
+window.ingest = function(text, filename, fromFile){
+  if (filename && /s1_suggestions/.test(filename)){
+    parseJSONL(text).forEach(o => { SUGG[o.ticket_id] = o.suggestion || o; });
+    toast("已加载 " + Object.keys(SUGG).length + " 条参考值");
+    $("#sugToggle").checked = true; refreshSug(); return;
+  }
+  origIngest(text, filename, fromFile);
+};
+$("#fileInput").onchange = (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => window.ingest(rd.result, f.name, true);
+  rd.readAsText(f, "utf-8"); e.target.value = "";
+};
+document.addEventListener("drop", e => {
+  e.preventDefault(); const f = e.dataTransfer.files[0]; if (!f) return;
+  const rd = new FileReader(); rd.onload = () => window.ingest(rd.result, f.name, true); rd.readAsText(f, "utf-8");
+});
+renderStats();
+</script>
+</body>
+</html>

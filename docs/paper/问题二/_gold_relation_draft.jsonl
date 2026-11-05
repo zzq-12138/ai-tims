@@ -1,0 +1,300 @@
+{"pair_id": "P-DUP-001", "relation": "duplicate", "source_group": "dup-001", "device": "贴片机"}
+{"pair_id": "P-DUP-002", "relation": "duplicate", "source_group": "dup-002", "device": "贴片机"}
+{"pair_id": "P-DUP-003", "relation": "duplicate", "source_group": "dup-003", "device": "贴片机"}
+{"pair_id": "P-DUP-004", "relation": "duplicate", "source_group": "dup-004", "device": "贴片机"}
+{"pair_id": "P-DUP-005", "relation": "duplicate", "source_group": "dup-005", "device": "贴片机"}
+{"pair_id": "P-DUP-006", "relation": "duplicate", "source_group": "dup-006", "device": "贴片机"}
+{"pair_id": "P-DUP-007", "relation": "duplicate", "source_group": "dup-007", "device": "贴片机"}
+{"pair_id": "P-DUP-008", "relation": "duplicate", "source_group": "dup-008", "device": "贴片机"}
+{"pair_id": "P-DUP-009", "relation": "duplicate", "source_group": "dup-009", "device": "贴片机"}
+{"pair_id": "P-DUP-010", "relation": "duplicate", "source_group": "dup-010", "device": "贴片机"}
+{"pair_id": "P-DUP-011", "relation": "duplicate", "source_group": "dup-011", "device": "AOI检测机"}
+{"pair_id": "P-DUP-012", "relation": "duplicate", "source_group": "dup-012", "device": "AOI检测机"}
+{"pair_id": "P-DUP-013", "relation": "duplicate", "source_group": "dup-013", "device": "AOI检测机"}
+{"pair_id": "P-DUP-014", "relation": "duplicate", "source_group": "dup-014", "device": "AOI检测机"}
+{"pair_id": "P-DUP-015", "relation": "duplicate", "source_group": "dup-015", "device": "AOI检测机"}
+{"pair_id": "P-DUP-016", "relation": "duplicate", "source_group": "dup-016", "device": "AOI检测机"}
+{"pair_id": "P-DUP-017", "relation": "duplicate", "source_group": "dup-017", "device": "AOI检测机"}
+{"pair_id": "P-DUP-018", "relation": "duplicate", "source_group": "dup-018", "device": "AOI检测机"}
+{"pair_id": "P-DUP-019", "relation": "duplicate", "source_group": "dup-019", "device": "AOI检测机"}
+{"pair_id": "P-DUP-020", "relation": "duplicate", "source_group": "dup-020", "device": "AOI检测机"}
+{"pair_id": "P-DUP-021", "relation": "duplicate", "source_group": "dup-021", "device": "涂布机"}
+{"pair_id": "P-DUP-022", "relation": "duplicate", "source_group": "dup-022", "device": "涂布机"}
+{"pair_id": "P-DUP-023", "relation": "duplicate", "source_group": "dup-023", "device": "涂布机"}
+{"pair_id": "P-DUP-024", "relation": "duplicate", "source_group": "dup-024", "device": "涂布机"}
+{"pair_id": "P-DUP-025", "relation": "duplicate", "source_group": "dup-025", "device": "涂布机"}
+{"pair_id": "P-DUP-026", "relation": "duplicate", "source_group": "dup-026", "device": "涂布机"}
+{"pair_id": "P-DUP-027", "relation": "duplicate", "source_group": "dup-027", "device": "涂布机"}
+{"pair_id": "P-DUP-028", "relation": "duplicate", "source_group": "dup-028", "device": "涂布机"}
+{"pair_id": "P-DUP-029", "relation": "duplicate", "source_group": "dup-029", "device": "涂布机"}
+{"pair_id": "P-DUP-030", "relation": "duplicate", "source_group": "dup-030", "device": "涂布机"}
+{"pair_id": "P-DUP-031", "relation": "duplicate", "source_group": "dup-031", "device": "贴合机"}
+{"pair_id": "P-DUP-032", "relation": "duplicate", "source_group": "dup-032", "device": "贴合机"}
+{"pair_id": "P-DUP-033", "relation": "duplicate", "source_group": "dup-033", "device": "贴合机"}
+{"pair_id": "P-DUP-034", "relation": "duplicate", "source_group": "dup-034", "device": "贴合机"}
+{"pair_id": "P-DUP-035", "relation": "duplicate", "source_group": "dup-035", "device": "贴合机"}
+{"pair_id": "P-DUP-036", "relation": "duplicate", "source_group": "dup-036", "device": "贴合机"}
+{"pair_id": "P-DUP-037", "relation": "duplicate", "source_group": "dup-037", "device": "贴合机"}
+{"pair_id": "P-DUP-038", "relation": "duplicate", "source_group": "dup-038", "device": "贴合机"}
+{"pair_id": "P-DUP-039", "relation": "duplicate", "source_group": "dup-039", "device": "贴合机"}
+{"pair_id": "P-DUP-040", "relation": "duplicate", "source_group": "dup-040", "device": "贴合机"}
+{"pair_id": "P-DUP-041", "relation": "duplicate", "source_group": "dup-041", "device": "蚀刻机"}
+{"pair_id": "P-DUP-042", "relation": "duplicate", "source_group": "dup-042", "device": "蚀刻机"}
+{"pair_id": "P-DUP-043", "relation": "duplicate", "source_group": "dup-043", "device": "蚀刻机"}
+{"pair_id": "P-DUP-044", "relation": "duplicate", "source_group": "dup-044", "device": "蚀刻机"}
+{"pair_id": "P-DUP-045", "relation": "duplicate", "source_group": "dup-045", "device": "蚀刻机"}
+{"pair_id": "P-DUP-046", "relation": "duplicate", "source_group": "dup-046", "device": "蚀刻机"}
+{"pair_id": "P-DUP-047", "relation": "duplicate", "source_group": "dup-047", "device": "蚀刻机"}
+{"pair_id": "P-DUP-048", "relation": "duplicate", "source_group": "dup-048", "device": "蚀刻机"}
+{"pair_id": "P-DUP-049", "relation": "duplicate", "source_group": "dup-049", "device": "蚀刻机"}
+{"pair_id": "P-DUP-050", "relation": "duplicate", "source_group": "dup-050", "device": "蚀刻机"}
+{"pair_id": "P-DUP-051", "relation": "duplicate", "source_group": "dup-051", "device": "贴片机"}
+{"pair_id": "P-DUP-052", "relation": "duplicate", "source_group": "dup-052", "device": "贴片机"}
+{"pair_id": "P-DUP-053", "relation": "duplicate", "source_group": "dup-053", "device": "贴片机"}
+{"pair_id": "P-DUP-054", "relation": "duplicate", "source_group": "dup-054", "device": "贴片机"}
+{"pair_id": "P-DUP-055", "relation": "duplicate", "source_group": "dup-055", "device": "贴片机"}
+{"pair_id": "P-DUP-056", "relation": "duplicate", "source_group": "dup-056", "device": "贴片机"}
+{"pair_id": "P-DUP-057", "relation": "duplicate", "source_group": "dup-057", "device": "贴片机"}
+{"pair_id": "P-DUP-058", "relation": "duplicate", "source_group": "dup-058", "device": "贴片机"}
+{"pair_id": "P-DUP-059", "relation": "duplicate", "source_group": "dup-059", "device": "贴片机"}
+{"pair_id": "P-DUP-060", "relation": "duplicate", "source_group": "dup-060", "device": "贴片机"}
+{"pair_id": "P-DUP-061", "relation": "duplicate", "source_group": "dup-061", "device": "AOI检测机"}
+{"pair_id": "P-DUP-062", "relation": "duplicate", "source_group": "dup-062", "device": "AOI检测机"}
+{"pair_id": "P-DUP-063", "relation": "duplicate", "source_group": "dup-063", "device": "AOI检测机"}
+{"pair_id": "P-DUP-064", "relation": "duplicate", "source_group": "dup-064", "device": "AOI检测机"}
+{"pair_id": "P-DUP-065", "relation": "duplicate", "source_group": "dup-065", "device": "AOI检测机"}
+{"pair_id": "P-DUP-066", "relation": "duplicate", "source_group": "dup-066", "device": "AOI检测机"}
+{"pair_id": "P-DUP-067", "relation": "duplicate", "source_group": "dup-067", "device": "AOI检测机"}
+{"pair_id": "P-DUP-068", "relation": "duplicate", "source_group": "dup-068", "device": "AOI检测机"}
+{"pair_id": "P-DUP-069", "relation": "duplicate", "source_group": "dup-069", "device": "AOI检测机"}
+{"pair_id": "P-DUP-070", "relation": "duplicate", "source_group": "dup-070", "device": "AOI检测机"}
+{"pair_id": "P-DUP-071", "relation": "duplicate", "source_group": "dup-071", "device": "涂布机"}
+{"pair_id": "P-DUP-072", "relation": "duplicate", "source_group": "dup-072", "device": "涂布机"}
+{"pair_id": "P-DUP-073", "relation": "duplicate", "source_group": "dup-073", "device": "涂布机"}
+{"pair_id": "P-DUP-074", "relation": "duplicate", "source_group": "dup-074", "device": "涂布机"}
+{"pair_id": "P-DUP-075", "relation": "duplicate", "source_group": "dup-075", "device": "涂布机"}
+{"pair_id": "P-DUP-076", "relation": "duplicate", "source_group": "dup-076", "device": "涂布机"}
+{"pair_id": "P-DUP-077", "relation": "duplicate", "source_group": "dup-077", "device": "涂布机"}
+{"pair_id": "P-DUP-078", "relation": "duplicate", "source_group": "dup-078", "device": "涂布机"}
+{"pair_id": "P-DUP-079", "relation": "duplicate", "source_group": "dup-079", "device": "涂布机"}
+{"pair_id": "P-DUP-080", "relation": "duplicate", "source_group": "dup-080", "device": "涂布机"}
+{"pair_id": "P-DUP-081", "relation": "duplicate", "source_group": "dup-081", "device": "贴合机"}
+{"pair_id": "P-DUP-082", "relation": "duplicate", "source_group": "dup-082", "device": "贴合机"}
+{"pair_id": "P-DUP-083", "relation": "duplicate", "source_group": "dup-083", "device": "贴合机"}
+{"pair_id": "P-DUP-084", "relation": "duplicate", "source_group": "dup-084", "device": "贴合机"}
+{"pair_id": "P-DUP-085", "relation": "duplicate", "source_group": "dup-085", "device": "贴合机"}
+{"pair_id": "P-DUP-086", "relation": "duplicate", "source_group": "dup-086", "device": "贴合机"}
+{"pair_id": "P-DUP-087", "relation": "duplicate", "source_group": "dup-087", "device": "贴合机"}
+{"pair_id": "P-DUP-088", "relation": "duplicate", "source_group": "dup-088", "device": "贴合机"}
+{"pair_id": "P-DUP-089", "relation": "duplicate", "source_group": "dup-089", "device": "贴合机"}
+{"pair_id": "P-DUP-090", "relation": "duplicate", "source_group": "dup-090", "device": "贴合机"}
+{"pair_id": "P-VAR-001", "relation": "variant", "source_group": "var-001", "device": "贴片机"}
+{"pair_id": "P-VAR-002", "relation": "variant", "source_group": "var-002", "device": "贴片机"}
+{"pair_id": "P-VAR-003", "relation": "variant", "source_group": "var-003", "device": "贴片机"}
+{"pair_id": "P-VAR-004", "relation": "variant", "source_group": "var-004", "device": "贴片机"}
+{"pair_id": "P-VAR-005", "relation": "variant", "source_group": "var-005", "device": "贴片机"}
+{"pair_id": "P-VAR-006", "relation": "variant", "source_group": "var-006", "device": "贴片机"}
+{"pair_id": "P-VAR-007", "relation": "variant", "source_group": "var-007", "device": "贴片机"}
+{"pair_id": "P-VAR-008", "relation": "variant", "source_group": "var-008", "device": "贴片机"}
+{"pair_id": "P-VAR-009", "relation": "variant", "source_group": "var-009", "device": "贴片机"}
+{"pair_id": "P-VAR-010", "relation": "variant", "source_group": "var-010", "device": "贴片机"}
+{"pair_id": "P-VAR-011", "relation": "variant", "source_group": "var-011", "device": "AOI检测机"}
+{"pair_id": "P-VAR-012", "relation": "variant", "source_group": "var-012", "device": "AOI检测机"}
+{"pair_id": "P-VAR-013", "relation": "variant", "source_group": "var-013", "device": "AOI检测机"}
+{"pair_id": "P-VAR-014", "relation": "variant", "source_group": "var-014", "device": "AOI检测机"}
+{"pair_id": "P-VAR-015", "relation": "variant", "source_group": "var-015", "device": "AOI检测机"}
+{"pair_id": "P-VAR-016", "relation": "variant", "source_group": "var-016", "device": "AOI检测机"}
+{"pair_id": "P-VAR-017", "relation": "variant", "source_group": "var-017", "device": "AOI检测机"}
+{"pair_id": "P-VAR-018", "relation": "variant", "source_group": "var-018", "device": "AOI检测机"}
+{"pair_id": "P-VAR-019", "relation": "variant", "source_group": "var-019", "device": "AOI检测机"}
+{"pair_id": "P-VAR-020", "relation": "variant", "source_group": "var-020", "device": "AOI检测机"}
+{"pair_id": "P-VAR-021", "relation": "variant", "source_group": "var-021", "device": "涂布机"}
+{"pair_id": "P-VAR-022", "relation": "variant", "source_group": "var-022", "device": "涂布机"}
+{"pair_id": "P-VAR-023", "relation": "variant", "source_group": "var-023", "device": "涂布机"}
+{"pair_id": "P-VAR-024", "relation": "variant", "source_group": "var-024", "device": "涂布机"}
+{"pair_id": "P-VAR-025", "relation": "variant", "source_group": "var-025", "device": "涂布机"}
+{"pair_id": "P-VAR-026", "relation": "variant", "source_group": "var-026", "device": "涂布机"}
+{"pair_id": "P-VAR-027", "relation": "variant", "source_group": "var-027", "device": "涂布机"}
+{"pair_id": "P-VAR-028", "relation": "variant", "source_group": "var-028", "device": "涂布机"}
+{"pair_id": "P-VAR-029", "relation": "variant", "source_group": "var-029", "device": "涂布机"}
+{"pair_id": "P-VAR-030", "relation": "variant", "source_group": "var-030", "device": "涂布机"}
+{"pair_id": "P-VAR-031", "relation": "variant", "source_group": "var-031", "device": "贴合机"}
+{"pair_id": "P-VAR-032", "relation": "variant", "source_group": "var-032", "device": "贴合机"}
+{"pair_id": "P-VAR-033", "relation": "variant", "source_group": "var-033", "device": "贴合机"}
+{"pair_id": "P-VAR-034", "relation": "variant", "source_group": "var-034", "device": "贴合机"}
+{"pair_id": "P-VAR-035", "relation": "variant", "source_group": "var-035", "device": "贴合机"}
+{"pair_id": "P-VAR-036", "relation": "variant", "source_group": "var-036", "device": "贴合机"}
+{"pair_id": "P-VAR-037", "relation": "variant", "source_group": "var-037", "device": "贴合机"}
+{"pair_id": "P-VAR-038", "relation": "variant", "source_group": "var-038", "device": "贴合机"}
+{"pair_id": "P-VAR-039", "relation": "variant", "source_group": "var-039", "device": "贴合机"}
+{"pair_id": "P-VAR-040", "relation": "variant", "source_group": "var-040", "device": "贴合机"}
+{"pair_id": "P-VAR-041", "relation": "variant", "source_group": "var-041", "device": "蚀刻机"}
+{"pair_id": "P-VAR-042", "relation": "variant", "source_group": "var-042", "device": "蚀刻机"}
+{"pair_id": "P-VAR-043", "relation": "variant", "source_group": "var-043", "device": "蚀刻机"}
+{"pair_id": "P-VAR-044", "relation": "variant", "source_group": "var-044", "device": "蚀刻机"}
+{"pair_id": "P-VAR-045", "relation": "variant", "source_group": "var-045", "device": "蚀刻机"}
+{"pair_id": "P-VAR-046", "relation": "variant", "source_group": "var-046", "device": "蚀刻机"}
+{"pair_id": "P-VAR-047", "relation": "variant", "source_group": "var-047", "device": "蚀刻机"}
+{"pair_id": "P-VAR-048", "relation": "variant", "source_group": "var-048", "device": "蚀刻机"}
+{"pair_id": "P-VAR-049", "relation": "variant", "source_group": "var-049", "device": "蚀刻机"}
+{"pair_id": "P-VAR-050", "relation": "variant", "source_group": "var-050", "device": "蚀刻机"}
+{"pair_id": "P-VAR-051", "relation": "variant", "source_group": "var-051", "device": "贴片机"}
+{"pair_id": "P-VAR-052", "relation": "variant", "source_group": "var-052", "device": "贴片机"}
+{"pair_id": "P-VAR-053", "relation": "variant", "source_group": "var-053", "device": "贴片机"}
+{"pair_id": "P-VAR-054", "relation": "variant", "source_group": "var-054", "device": "贴片机"}
+{"pair_id": "P-VAR-055", "relation": "variant", "source_group": "var-055", "device": "贴片机"}
+{"pair_id": "P-VAR-056", "relation": "variant", "source_group": "var-056", "device": "贴片机"}
+{"pair_id": "P-VAR-057", "relation": "variant", "source_group": "var-057", "device": "贴片机"}
+{"pair_id": "P-VAR-058", "relation": "variant", "source_group": "var-058", "device": "贴片机"}
+{"pair_id": "P-VAR-059", "relation": "variant", "source_group": "var-059", "device": "贴片机"}
+{"pair_id": "P-VAR-060", "relation": "variant", "source_group": "var-060", "device": "贴片机"}
+{"pair_id": "P-VAR-061", "relation": "variant", "source_group": "var-061", "device": "AOI检测机"}
+{"pair_id": "P-VAR-062", "relation": "variant", "source_group": "var-062", "device": "AOI检测机"}
+{"pair_id": "P-VAR-063", "relation": "variant", "source_group": "var-063", "device": "AOI检测机"}
+{"pair_id": "P-VAR-064", "relation": "variant", "source_group": "var-064", "device": "AOI检测机"}
+{"pair_id": "P-VAR-065", "relation": "variant", "source_group": "var-065", "device": "AOI检测机"}
+{"pair_id": "P-VAR-066", "relation": "variant", "source_group": "var-066", "device": "AOI检测机"}
+{"pair_id": "P-VAR-067", "relation": "variant", "source_group": "var-067", "device": "AOI检测机"}
+{"pair_id": "P-VAR-068", "relation": "variant", "source_group": "var-068", "device": "AOI检测机"}
+{"pair_id": "P-VAR-069", "relation": "variant", "source_group": "var-069", "device": "AOI检测机"}
+{"pair_id": "P-VAR-070", "relation": "variant", "source_group": "var-070", "device": "AOI检测机"}
+{"pair_id": "P-VAR-071", "relation": "variant", "source_group": "var-071", "device": "涂布机"}
+{"pair_id": "P-VAR-072", "relation": "variant", "source_group": "var-072", "device": "涂布机"}
+{"pair_id": "P-VAR-073", "relation": "variant", "source_group": "var-073", "device": "涂布机"}
+{"pair_id": "P-VAR-074", "relation": "variant", "source_group": "var-074", "device": "涂布机"}
+{"pair_id": "P-VAR-075", "relation": "variant", "source_group": "var-075", "device": "涂布机"}
+{"pair_id": "P-VAR-076", "relation": "variant", "source_group": "var-076", "device": "涂布机"}
+{"pair_id": "P-VAR-077", "relation": "variant", "source_group": "var-077", "device": "涂布机"}
+{"pair_id": "P-VAR-078", "relation": "variant", "source_group": "var-078", "device": "涂布机"}
+{"pair_id": "P-VAR-079", "relation": "variant", "source_group": "var-079", "device": "涂布机"}
+{"pair_id": "P-VAR-080", "relation": "variant", "source_group": "var-080", "device": "涂布机"}
+{"pair_id": "P-VAR-081", "relation": "variant", "source_group": "var-081", "device": "贴合机"}
+{"pair_id": "P-VAR-082", "relation": "variant", "source_group": "var-082", "device": "贴合机"}
+{"pair_id": "P-VAR-083", "relation": "variant", "source_group": "var-083", "device": "贴合机"}
+{"pair_id": "P-VAR-084", "relation": "variant", "source_group": "var-084", "device": "贴合机"}
+{"pair_id": "P-VAR-085", "relation": "variant", "source_group": "var-085", "device": "贴合机"}
+{"pair_id": "P-VAR-086", "relation": "variant", "source_group": "var-086", "device": "贴合机"}
+{"pair_id": "P-VAR-087", "relation": "variant", "source_group": "var-087", "device": "贴合机"}
+{"pair_id": "P-VAR-088", "relation": "variant", "source_group": "var-088", "device": "贴合机"}
+{"pair_id": "P-VAR-089", "relation": "variant", "source_group": "var-089", "device": "贴合机"}
+{"pair_id": "P-VAR-090", "relation": "variant", "source_group": "var-090", "device": "贴合机"}
+{"pair_id": "P-CON-001", "relation": "conflict", "source_group": "con-001", "device": "贴片机", "cos": 0.9495, "shared_context_lines": 1, "in_band": true}
+{"pair_id": "P-CON-002", "relation": "conflict", "source_group": "con-002", "device": "AOI检测机", "cos": 0.9394, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-003", "relation": "conflict", "source_group": "con-003", "device": "涂布机", "cos": 0.947, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-004", "relation": "conflict", "source_group": "con-004", "device": "贴合机", "cos": 0.948, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-005", "relation": "conflict", "source_group": "con-005", "device": "蚀刻机", "cos": 0.9485, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-006", "relation": "conflict", "source_group": "con-006", "device": "贴片机", "cos": 0.9479, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-007", "relation": "conflict", "source_group": "con-007", "device": "AOI检测机", "cos": 0.921, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-008", "relation": "conflict", "source_group": "con-008", "device": "涂布机", "cos": 0.9461, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-009", "relation": "conflict", "source_group": "con-009", "device": "贴合机", "cos": 0.9442, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-010", "relation": "conflict", "source_group": "con-010", "device": "蚀刻机", "cos": 0.9479, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-011", "relation": "conflict", "source_group": "con-011", "device": "贴片机", "cos": 0.945, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-012", "relation": "conflict", "source_group": "con-012", "device": "AOI检测机", "cos": 0.9175, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-013", "relation": "conflict", "source_group": "con-013", "device": "涂布机", "cos": 0.9436, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-014", "relation": "conflict", "source_group": "con-014", "device": "贴合机", "cos": 0.9428, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-015", "relation": "conflict", "source_group": "con-015", "device": "蚀刻机", "cos": 0.9462, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-016", "relation": "conflict", "source_group": "con-016", "device": "贴片机", "cos": 0.9448, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-017", "relation": "conflict", "source_group": "con-017", "device": "AOI检测机", "cos": 0.9123, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-018", "relation": "conflict", "source_group": "con-018", "device": "涂布机", "cos": 0.9421, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-019", "relation": "conflict", "source_group": "con-019", "device": "贴合机", "cos": 0.9412, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-020", "relation": "conflict", "source_group": "con-020", "device": "蚀刻机", "cos": 0.9431, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-021", "relation": "conflict", "source_group": "con-021", "device": "贴片机", "cos": 0.9444, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-022", "relation": "conflict", "source_group": "con-022", "device": "AOI检测机", "cos": 0.9122, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-023", "relation": "conflict", "source_group": "con-023", "device": "涂布机", "cos": 0.942, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-024", "relation": "conflict", "source_group": "con-024", "device": "贴合机", "cos": 0.9402, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-025", "relation": "conflict", "source_group": "con-025", "device": "蚀刻机", "cos": 0.9424, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-026", "relation": "conflict", "source_group": "con-026", "device": "贴片机", "cos": 0.9442, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-027", "relation": "conflict", "source_group": "con-027", "device": "AOI检测机", "cos": 0.9086, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-028", "relation": "conflict", "source_group": "con-028", "device": "涂布机", "cos": 0.9413, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-029", "relation": "conflict", "source_group": "con-029", "device": "贴合机", "cos": 0.938, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-030", "relation": "conflict", "source_group": "con-030", "device": "蚀刻机", "cos": 0.9415, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-031", "relation": "conflict", "source_group": "con-031", "device": "贴片机", "cos": 0.9427, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-032", "relation": "conflict", "source_group": "con-032", "device": "AOI检测机", "cos": 0.904, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-033", "relation": "conflict", "source_group": "con-033", "device": "涂布机", "cos": 0.9371, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-034", "relation": "conflict", "source_group": "con-034", "device": "贴合机", "cos": 0.9377, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-035", "relation": "conflict", "source_group": "con-035", "device": "蚀刻机", "cos": 0.941, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-036", "relation": "conflict", "source_group": "con-036", "device": "贴片机", "cos": 0.9419, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-037", "relation": "conflict", "source_group": "con-037", "device": "AOI检测机", "cos": 0.9039, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-038", "relation": "conflict", "source_group": "con-038", "device": "涂布机", "cos": 0.9361, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-039", "relation": "conflict", "source_group": "con-039", "device": "贴合机", "cos": 0.9372, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-040", "relation": "conflict", "source_group": "con-040", "device": "蚀刻机", "cos": 0.9409, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-041", "relation": "conflict", "source_group": "con-041", "device": "贴片机", "cos": 0.9408, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-042", "relation": "conflict", "source_group": "con-042", "device": "AOI检测机", "cos": 0.9006, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-043", "relation": "conflict", "source_group": "con-043", "device": "涂布机", "cos": 0.9358, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-044", "relation": "conflict", "source_group": "con-044", "device": "贴合机", "cos": 0.9308, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-045", "relation": "conflict", "source_group": "con-045", "device": "蚀刻机", "cos": 0.9338, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-046", "relation": "conflict", "source_group": "con-046", "device": "贴片机", "cos": 0.9369, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-047", "relation": "conflict", "source_group": "con-047", "device": "AOI检测机", "cos": 0.8976, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-048", "relation": "conflict", "source_group": "con-048", "device": "涂布机", "cos": 0.934, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-049", "relation": "conflict", "source_group": "con-049", "device": "贴合机", "cos": 0.9236, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-050", "relation": "conflict", "source_group": "con-050", "device": "蚀刻机", "cos": 0.9337, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-051", "relation": "conflict", "source_group": "con-051", "device": "贴片机", "cos": 0.9321, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-052", "relation": "conflict", "source_group": "con-052", "device": "AOI检测机", "cos": 0.8976, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-053", "relation": "conflict", "source_group": "con-053", "device": "涂布机", "cos": 0.9312, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-054", "relation": "conflict", "source_group": "con-054", "device": "贴合机", "cos": 0.9208, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-055", "relation": "conflict", "source_group": "con-055", "device": "蚀刻机", "cos": 0.9317, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-056", "relation": "conflict", "source_group": "con-056", "device": "贴片机", "cos": 0.9294, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-057", "relation": "conflict", "source_group": "con-057", "device": "AOI检测机", "cos": 0.8968, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-058", "relation": "conflict", "source_group": "con-058", "device": "涂布机", "cos": 0.9299, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-059", "relation": "conflict", "source_group": "con-059", "device": "贴合机", "cos": 0.9181, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-060", "relation": "conflict", "source_group": "con-060", "device": "蚀刻机", "cos": 0.9272, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-061", "relation": "conflict", "source_group": "con-061", "device": "贴片机", "cos": 0.9217, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-062", "relation": "conflict", "source_group": "con-062", "device": "AOI检测机", "cos": 0.8965, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-063", "relation": "conflict", "source_group": "con-063", "device": "涂布机", "cos": 0.9293, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-064", "relation": "conflict", "source_group": "con-064", "device": "贴合机", "cos": 0.9172, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-065", "relation": "conflict", "source_group": "con-065", "device": "蚀刻机", "cos": 0.9269, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-066", "relation": "conflict", "source_group": "con-066", "device": "贴片机", "cos": 0.9174, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-067", "relation": "conflict", "source_group": "con-067", "device": "AOI检测机", "cos": 0.894, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-068", "relation": "conflict", "source_group": "con-068", "device": "涂布机", "cos": 0.9292, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-069", "relation": "conflict", "source_group": "con-069", "device": "贴合机", "cos": 0.9163, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-070", "relation": "conflict", "source_group": "con-070", "device": "蚀刻机", "cos": 0.9242, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-071", "relation": "conflict", "source_group": "con-071", "device": "贴片机", "cos": 0.9167, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-072", "relation": "conflict", "source_group": "con-072", "device": "AOI检测机", "cos": 0.8937, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-073", "relation": "conflict", "source_group": "con-073", "device": "涂布机", "cos": 0.9268, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-074", "relation": "conflict", "source_group": "con-074", "device": "贴合机", "cos": 0.9159, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-075", "relation": "conflict", "source_group": "con-075", "device": "蚀刻机", "cos": 0.9204, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-076", "relation": "conflict", "source_group": "con-076", "device": "贴片机", "cos": 0.916, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-077", "relation": "conflict", "source_group": "con-077", "device": "AOI检测机", "cos": 0.8935, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-078", "relation": "conflict", "source_group": "con-078", "device": "涂布机", "cos": 0.9264, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-079", "relation": "conflict", "source_group": "con-079", "device": "贴合机", "cos": 0.9116, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-CON-080", "relation": "conflict", "source_group": "con-080", "device": "蚀刻机", "cos": 0.92, "shared_context_lines": 2, "in_band": true}
+{"pair_id": "P-UNR-001", "relation": "unrelated", "source_group": "unr-001", "device": "贴片机->AOI检测机"}
+{"pair_id": "P-UNR-002", "relation": "unrelated", "source_group": "unr-002", "device": "贴片机->涂布机"}
+{"pair_id": "P-UNR-003", "relation": "unrelated", "source_group": "unr-003", "device": "贴片机->涂布机"}
+{"pair_id": "P-UNR-004", "relation": "unrelated", "source_group": "unr-004", "device": "贴片机->贴合机"}
+{"pair_id": "P-UNR-005", "relation": "unrelated", "source_group": "unr-005", "device": "贴片机->蚀刻机"}
+{"pair_id": "P-UNR-006", "relation": "unrelated", "source_group": "unr-006", "device": "贴片机->蚀刻机"}
+{"pair_id": "P-UNR-007", "relation": "unrelated", "source_group": "unr-007", "device": "贴片机->AOI检测机"}
+{"pair_id": "P-UNR-008", "relation": "unrelated", "source_group": "unr-008", "device": "贴片机->涂布机"}
+{"pair_id": "P-UNR-009", "relation": "unrelated", "source_group": "unr-009", "device": "贴片机->涂布机"}
+{"pair_id": "P-UNR-010", "relation": "unrelated", "source_group": "unr-010", "device": "贴片机->贴合机"}
+{"pair_id": "P-UNR-011", "relation": "unrelated", "source_group": "unr-011", "device": "AOI检测机->蚀刻机"}
+{"pair_id": "P-UNR-012", "relation": "unrelated", "source_group": "unr-012", "device": "AOI检测机->贴片机"}
+{"pair_id": "P-UNR-013", "relation": "unrelated", "source_group": "unr-013", "device": "AOI检测机->贴片机"}
+{"pair_id": "P-UNR-014", "relation": "unrelated", "source_group": "unr-014", "device": "AOI检测机->涂布机"}
+{"pair_id": "P-UNR-015", "relation": "unrelated", "source_group": "unr-015", "device": "AOI检测机->贴合机"}
+{"pair_id": "P-UNR-016", "relation": "unrelated", "source_group": "unr-016", "device": "AOI检测机->贴合机"}
+{"pair_id": "P-UNR-017", "relation": "unrelated", "source_group": "unr-017", "device": "AOI检测机->蚀刻机"}
+{"pair_id": "P-UNR-018", "relation": "unrelated", "source_group": "unr-018", "device": "AOI检测机->贴片机"}
+{"pair_id": "P-UNR-019", "relation": "unrelated", "source_group": "unr-019", "device": "AOI检测机->贴片机"}
+{"pair_id": "P-UNR-020", "relation": "unrelated", "source_group": "unr-020", "device": "AOI检测机->涂布机"}
+{"pair_id": "P-UNR-021", "relation": "unrelated", "source_group": "unr-021", "device": "涂布机->贴合机"}
+{"pair_id": "P-UNR-022", "relation": "unrelated", "source_group": "unr-022", "device": "涂布机->蚀刻机"}
+{"pair_id": "P-UNR-023", "relation": "unrelated", "source_group": "unr-023", "device": "涂布机->蚀刻机"}
+{"pair_id": "P-UNR-024", "relation": "unrelated", "source_group": "unr-024", "device": "涂布机->贴片机"}
+{"pair_id": "P-UNR-025", "relation": "unrelated", "source_group": "unr-025", "device": "涂布机->AOI检测机"}
+{"pair_id": "P-UNR-026", "relation": "unrelated", "source_group": "unr-026", "device": "涂布机->AOI检测机"}
+{"pair_id": "P-UNR-027", "relation": "unrelated", "source_group": "unr-027", "device": "涂布机->贴合机"}
+{"pair_id": "P-UNR-028", "relation": "unrelated", "source_group": "unr-028", "device": "涂布机->蚀刻机"}
+{"pair_id": "P-UNR-029", "relation": "unrelated", "source_group": "unr-029", "device": "涂布机->蚀刻机"}
+{"pair_id": "P-UNR-030", "relation": "unrelated", "source_group": "unr-030", "device": "涂布机->贴片机"}
+{"pair_id": "P-UNR-031", "relation": "unrelated", "source_group": "unr-031", "device": "贴合机->AOI检测机"}
+{"pair_id": "P-UNR-032", "relation": "unrelated", "source_group": "unr-032", "device": "贴合机->涂布机"}
+{"pair_id": "P-UNR-033", "relation": "unrelated", "source_group": "unr-033", "device": "贴合机->涂布机"}
+{"pair_id": "P-UNR-034", "relation": "unrelated", "source_group": "unr-034", "device": "贴合机->蚀刻机"}
+{"pair_id": "P-UNR-035", "relation": "unrelated", "source_group": "unr-035", "device": "贴合机->贴片机"}
+{"pair_id": "P-UNR-036", "relation": "unrelated", "source_group": "unr-036", "device": "贴合机->贴片机"}
+{"pair_id": "P-UNR-037", "relation": "unrelated", "source_group": "unr-037", "device": "贴合机->AOI检测机"}
+{"pair_id": "P-UNR-038", "relation": "unrelated", "source_group": "unr-038", "device": "贴合机->涂布机"}
+{"pair_id": "P-UNR-039", "relation": "unrelated", "source_group": "unr-039", "device": "贴合机->涂布机"}
+{"pair_id": "P-UNR-040", "relation": "unrelated", "source_group": "unr-040", "device": "贴合机->蚀刻机"}

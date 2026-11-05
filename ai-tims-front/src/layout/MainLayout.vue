@@ -30,13 +30,28 @@
     <el-container>
       <el-header class="header">
         <div class="header-left">
-          <!-- M4：WS 连接状态指示 -->
-          <el-tag :type="statusType" size="small" effect="dark" class="ws-tag" @click="drawer = true">
-            {{ statusText }}
-          </el-tag>
-          <!-- M4：实时知识卡片入口（未读角标） -->
-          <el-badge :value="cards.length" :hidden="!cards.length" class="card-badge">
-            <el-button size="small" text @click="drawer = true">实时推送</el-button>
+          <!-- 状态归状态：连接诊断只在状态面板中展示 -->
+          <el-popover v-model:visible="statusVisible" trigger="click" placement="bottom-start" width="300" @show="loadOnline">
+            <template #reference>
+              <el-tag :type="statusType" size="small" effect="dark" class="ws-tag">
+                {{ statusText }}
+              </el-tag>
+            </template>
+            <div class="ws-panel">
+              <div class="ws-panel-head">推送连接诊断</div>
+              <div class="ws-row"><span>连接状态</span><b>{{ statusText }}</b></div>
+              <div class="ws-row"><span>心跳间隔</span><span class="mono">{{ HEARTBEAT_MS / 1000 }}s</span></div>
+              <div class="ws-row"><span>最近心跳</span><span class="mono">{{ fmtTime(wsLastBeatAt) }}</span></div>
+              <div class="ws-row"><span>最近消息</span><span class="mono">{{ fmtTime(wsLastMessageAt) }}</span></div>
+              <div class="ws-row"><span>重连次数</span><span class="mono">{{ wsReconnectCount }}</span></div>
+              <div class="ws-row"><span>在线坐席</span><span class="mono">{{ onlineCount }}</span></div>
+              <el-button size="small" class="ws-reconnect" @click="onReconnect">重新连接</el-button>
+              <div class="ws-hint">这里是连接状态；消息请从「消息中心」查看</div>
+            </div>
+          </el-popover>
+          <!-- 消息归消息：可读列表 + 未读数 -->
+          <el-badge :value="push.unreadCount" :max="99" :hidden="!push.unreadCount" class="card-badge">
+            <el-button size="small" text @click="drawer = true">消息中心</el-button>
           </el-badge>
         </div>
         <el-dropdown @command="onCommand">
@@ -56,67 +71,112 @@
       </el-main>
     </el-container>
 
-    <!-- 实时知识卡片侧栏 -->
-    <el-drawer v-model="drawer" title="实时知识推送" size="420px">
-      <el-empty v-if="!cards.length" description="暂无推送，新工单的知识卡片会实时出现在这里" />
-      <el-card v-for="c in cards" :key="c.cardKey" shadow="hover" class="push-card">
-        <template #header>
-          <div class="card-head">
-            <span class="card-title">{{ c.title }}</span>
-            <el-tag v-if="c.offline" type="info" size="small">补推</el-tag>
-            <el-tag v-if="c.degraded" type="warning" size="small">已降级</el-tag>
-          </div>
-        </template>
-        <div class="card-meta">
-          <el-tag size="small">{{ c.ticketNo }}</el-tag>
-          <el-tag size="small" type="info">{{ c.deviceType }}</el-tag>
-          <span class="card-time">{{ c.createTime }}</span>
+    <!-- 消息中心：知识卡片 / 工单关闭通知，支持单条已读、全部已读、清空 -->
+    <el-drawer v-model="drawer" size="460px">
+      <template #header>
+        <div class="drawer-head">
+          <span>消息中心</span>
+          <el-tag v-if="push.unreadCount" type="danger" size="small" effect="plain">未读 {{ push.unreadCount }}</el-tag>
+          <el-tag v-else type="info" size="small" effect="plain">全部已读</el-tag>
         </div>
-        <el-alert v-if="c.notice" :title="c.notice" type="warning" :closable="false" class="card-notice" />
-        <div v-for="it in c.items" :key="it.id" class="kb-item">
+      </template>
+
+      <div class="msg-toolbar">
+        <el-button size="small" :disabled="!push.unreadCount" @click="push.markAllRead()">全部标为已读</el-button>
+        <el-popconfirm title="清空全部消息？未读数会归零" width="220" @confirm="push.clearAll()">
+          <template #reference>
+            <el-button size="small" type="danger" plain :disabled="!push.messages.length">清空消息</el-button>
+          </template>
+        </el-popconfirm>
+        <span class="msg-total">共 {{ push.messages.length }} 条</span>
+      </div>
+
+      <el-empty v-if="!push.messages.length" description="暂无消息，新工单的知识卡片会实时出现在这里" />
+
+      <div v-for="m in push.messages" :key="m.id" class="msg-item" :class="{ 'is-read': m.read }">
+        <div class="msg-head">
+          <span class="msg-dot" />
+          <span class="msg-title">{{ m.title }}</span>
+          <el-tag v-if="m.offline" type="info" size="small">补推</el-tag>
+          <el-tag v-if="m.degraded" type="warning" size="small">已降级</el-tag>
+          <span class="msg-spacer" />
+          <el-button v-if="!m.read" size="small" link type="primary" @click="push.markRead(m.id)">标为已读</el-button>
+        </div>
+        <div class="msg-meta">
+          <el-tag size="small">{{ m.ticketNo || m.ticketId }}</el-tag>
+          <el-tag v-if="m.deviceType && m.deviceType !== 'NOTICE'" size="small" type="info">{{ m.deviceType }}</el-tag>
+          <span class="msg-time">{{ fmtCreate(m.createTime) }}</span>
+        </div>
+        <el-alert v-if="m.notice" :title="m.notice" type="warning" :closable="false" class="msg-notice" />
+        <div v-for="it in m.items" :key="it.id" class="kb-item">
           <div class="kb-title">{{ it.title }}</div>
           <div class="kb-summary">{{ it.summary || it.content }}</div>
           <div class="kb-tags">
-            <el-tag v-for="t in (it.tags || []).slice(0, 4)" :key="t" size="small" type="success">{{ t }}</el-tag>
+            <el-tag v-for="t in tagsOf(it)" :key="t" size="small" type="success">{{ t }}</el-tag>
           </div>
         </div>
-        <div v-if="!c.items?.length" class="kb-empty">无推荐知识</div>
-      </el-card>
+        <div v-if="m.deviceType === 'NOTICE'" class="msg-body">工单状态变更通知</div>
+        <div v-else-if="!m.items.length" class="kb-empty">无推荐知识</div>
+      </div>
     </el-drawer>
   </el-container>
 </template>
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
-import { ElNotification } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { logout } from '../api/auth'
-import { getUnreadMessages } from '../api/push'
-import { connect, closePush, onPush, wsStatus } from '../utils/ws'
+import { getOnlineUsers, getUnreadMessages } from '../api/push'
+import {
+  HEARTBEAT_MS, closePush, connect, onPush, reconnectNow,
+  wsConnectedAt, wsLastBeatAt, wsLastMessageAt, wsReconnectCount, wsStatus
+} from '../utils/ws'
 import { useAuthStore } from '../stores/auth'
+import { usePushStore } from '../stores/push'
 
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
+const push = usePushStore()
 const roles = computed(() => auth.user?.roles || [])
 const isAdmin = computed(() => roles.value.includes('ADMIN'))
 // 知识库对管理员/工程师/审核员开放；报障人仅保留工单相关菜单
 const canViewKb = computed(() => ['ADMIN', 'ENGINEER', 'REVIEWER'].some(r => roles.value.includes(r)))
 
 const drawer = ref(false)
-const cards = ref([])
+const statusVisible = ref(false)
+const onlineCount = ref(0)
 
 const statusType = computed(() => ({ ONLINE: 'success', CONNECTING: 'warning', RECONNECT: 'danger', OFF: 'info' }[wsStatus.value] || 'info'))
 const statusText = computed(() => ({ ONLINE: '推送在线', CONNECTING: '推送连接中', RECONNECT: '推送断线重连中', OFF: '推送未连接' }[wsStatus.value]))
 
-function cardKey(c) {
-  return `${c.messageId || ''}-${c.ticketId}-${c.createTime}`
+function fmtTime(ts) {
+  if (!ts) return '—'
+  return new Date(ts).toLocaleTimeString('zh-CN', { hour12: false })
+}
+
+function fmtCreate(t) {
+  if (!t) return ''
+  return String(t).replace('T', ' ').replace(/\.\d+$/, '')
+}
+
+// 卡片 tags 兼容后端返回的 JSON 字符串与数组两种形态
+function tagsOf(item) {
+  const raw = item && item.tags
+  if (Array.isArray(raw)) return raw.slice(0, 4)
+  if (typeof raw === 'string') {
+    try {
+      const v = JSON.parse(raw)
+      if (Array.isArray(v)) return v.slice(0, 4)
+    } catch (_) { /* 非 JSON 则按分隔符拆分 */ }
+    return raw.split(/[,，|]/).map((s) => s.trim()).filter(Boolean).slice(0, 4)
+  }
+  return []
 }
 
 function pushCard(c) {
-  if (!c || cards.value.some((x) => cardKey(x) === cardKey(c))) return
-  cards.value.unshift(c)
-  if (cards.value.length > 50) cards.value.pop()
+  if (!push.addCard(c)) return
   ElNotification({
     title: c.offline ? '知识卡片（离线补推）' : '新工单知识卡片',
     message: `${c.ticketNo} ${c.title}\n命中 ${c.items?.length || 0} 条知识${c.degraded ? '（已降级）' : ''}`,
@@ -126,26 +186,50 @@ function pushCard(c) {
   })
 }
 
+function fetchUnread() {
+  const uid = auth.user?.id
+  if (!uid) return
+  getUnreadMessages(uid).then((list) => (list || []).forEach(pushCard)).catch(() => {})
+}
+
+async function loadOnline() {
+  try {
+    const r = await getOnlineUsers()
+    onlineCount.value = r?.count ?? 0
+  } catch (_) {
+    onlineCount.value = 0
+  }
+}
+
+function onReconnect() {
+  reconnectNow()
+  ElMessage.success('已发起重新连接')
+}
+
 onMounted(() => {
   if (!auth.isLoggedIn) return
+  push.loadForUser(auth.user?.id)
   connect()
-  // 实时卡片
   onPush('CARD', pushCard)
   // 上线补推（服务端主动下发）+ REST 兜底拉取
   onPush('UNREAD_CARD', pushCard)
-  // 工单关闭通知
-  onPush('TICKET_CLOSED', () => {})
+  // 工单关闭通知进入消息箱（不再静默丢弃）
+  onPush('TICKET_CLOSED', (d) => {
+    const ev = d || {}
+    const added = push.addNotice(ev.ticketNo, ev.ticketNo ? `工单 ${ev.ticketNo} 已关闭` : '工单已关闭', ev.ticketId)
+    if (added) {
+      ElNotification({ title: '工单关闭通知', message: ev.ticketNo || String(ev.ticketId || ''), type: 'info', duration: 5000 })
+    }
+  })
+  fetchUnread()
 })
 
-// 站内信 REST 兜底（进入布局时拉一次未读）
-watch(() => auth.isLoggedIn, (v) => {
-  if (!v) return
-  connect()
-  const uid = auth.user?.id
-  if (uid) {
-    getUnreadMessages(uid).then((list) => (list || []).forEach(pushCard)).catch(() => {})
-  }
-}, { immediate: false })
+// 切换账号时装载各自的本地消息箱
+watch(() => auth.user?.id, (uid) => {
+  if (!uid) return
+  push.loadForUser(uid)
+  fetchUnread()
+})
 
 onUnmounted(() => closePush())
 
@@ -154,6 +238,7 @@ async function onCommand(cmd) {
     try { await logout() } catch (_) { /* 忽略登出接口异常，本地照常清理 */ }
     closePush()
     auth.clear()
+    // 记住密码的留存由登录页勾选状态决定，退出登录不额外清理
     router.push('/login')
   }
 }
@@ -256,16 +341,53 @@ async function onCommand(cmd) {
 .user-pill:hover { border-color: var(--line-strong); box-shadow: var(--shadow-sm); }
 .user-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px rgba(47, 125, 102, .14); }
 .user { color: var(--ink); font-weight: 600; font-size: 13px; }
-.card-head { display: flex; align-items: center; gap: 8px; }
-.card-title { font-weight: 600; }
-.card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.card-time { color: var(--muted); font-family: var(--font-mono); font-size: 11px; }
-.card-notice { margin-bottom: 8px; }
-.kb-item { border-top: 1px dashed var(--line); padding: 10px 0; }
-.kb-title { font-weight: 600; font-size: 13px; }
-.kb-summary { color: var(--ink-2); font-size: 12px; margin: 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ---------- 连接诊断面板 ---------- */
+.ws-panel { display: flex; flex-direction: column; gap: 7px; }
+.ws-panel-head { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+.ws-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
+.ws-row b { color: var(--ink); font-size: 12px; }
+.ws-row .mono { font-family: var(--font-mono); color: var(--ink-2); }
+.ws-reconnect { margin-top: 8px; width: 100%; }
+.ws-hint { margin-top: 4px; font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+/* ---------- 消息中心 ---------- */
+.drawer-head { display: flex; align-items: center; gap: 10px; }
+.msg-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.msg-total { margin-left: auto; color: var(--muted); font-size: 11.5px; font-family: var(--font-mono); }
+.msg-item {
+  position: relative;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  background: var(--surface);
+  transition: border-color .18s ease, background-color .18s ease;
+}
+.msg-item.is-read { border-left-color: var(--line-strong); background: var(--surface-2); }
+.msg-item.is-read .msg-title { color: var(--muted); font-weight: 500; }
+.msg-head { display: flex; align-items: center; gap: 7px; }
+.msg-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rust); flex: none; }
+.msg-item.is-read .msg-dot { background: var(--line-strong); }
+.msg-title { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.msg-spacer { flex: 1; }
+.msg-meta { display: flex; align-items: center; gap: 8px; margin: 6px 0 4px; padding-left: 14px; }
+.msg-time { color: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+.msg-notice { margin: 8px 0; }
+.msg-body { color: var(--ink-2); font-size: 12px; padding-left: 14px; }
+.kb-item { border-top: 1px dashed var(--line); padding: 9px 0 2px; padding-left: 14px; }
+.kb-title { font-weight: 600; font-size: 12.5px; }
+.kb-summary { color: var(--ink-2); font-size: 12px; margin: 3px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .kb-tags { display: flex; gap: 4px; flex-wrap: wrap; }
-.kb-empty { color: var(--muted); font-size: 12px; }
+.kb-empty { color: var(--muted); font-size: 12px; padding-left: 14px; }
 
 @media (max-width: 820px) {
   .layout { flex-direction: column; }
@@ -275,5 +397,6 @@ async function onCommand(cmd) {
   .aside :deep(.el-menu-item) { flex: 0 0 auto; margin: 0 4px; padding: 0 12px; }
   .aside :deep(.el-menu-item::before) { display: none; }
   .header { height: 50px; padding: 0 14px; }
+  .ws-tag { font-size: 11px; }
 }
 </style>

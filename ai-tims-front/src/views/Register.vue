@@ -1,7 +1,20 @@
 <template>
-  <div class="register-wrap">
-    <el-card class="register-card">
-      <h2 class="title">注册 AI-TIMS 账号</h2>
+  <div class="auth-canvas register-wrap">
+    <!-- 与登录页同源的品牌标识，避免表单孤立在空白背景上 -->
+    <div class="register-brand">
+      <span class="brand-mark">T</span>
+      <span class="brand-name">
+        <strong>AI-TIMS</strong>
+        <small>智能工单 · 知识闭环</small>
+      </span>
+    </div>
+
+    <el-card class="register-card" shadow="never">
+      <div class="card-head">
+        <div class="form-eyebrow">CREATE ACCOUNT</div>
+        <h2 class="title">注册 AI-TIMS 账号</h2>
+        <p class="sub">填写工号信息，注册后由管理员分配角色</p>
+      </div>
       <el-form ref="formRef" :model="form" :rules="rules" label-position="top" @keyup.enter="onRegister">
         <el-form-item prop="username" label="用户名">
           <el-input v-model="form.username" placeholder="3-32 位字母、数字或下划线" />
@@ -161,18 +174,50 @@ onUnmounted(() => timer && clearInterval(timer))
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 24px 0;
-  background: linear-gradient(135deg, #1f2d3d 0%, #2b4a6f 100%);
+  padding: 72px 22px 40px;
 }
+.register-brand {
+  position: absolute;
+  top: clamp(18px, 3.4vw, 34px);
+  left: clamp(18px, 3.4vw, 38px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--amber);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .18) inset, 0 8px 18px -10px rgba(180, 90, 30, .9);
+}
+.brand-name { display: flex; flex-direction: column; line-height: 1.2; }
+.brand-name strong { color: #f4efe7; font-size: 15px; letter-spacing: .16em; }
+.brand-name small { color: #8d99a3; font-size: 10px; letter-spacing: .12em; margin-top: 2px; }
 .register-card {
-  width: 420px;
-  padding: 8px 12px;
+  width: min(420px, 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, .55);
+  background: rgba(255, 253, 249, .97);
+  box-shadow: 0 34px 80px -34px rgba(0, 0, 0, .65), 0 2px 0 rgba(255, 255, 255, .4) inset;
+  animation: rise .55s ease both;
 }
-.title {
-  text-align: center;
-  margin: 8px 0 20px;
-  color: #1f2d3d;
+.register-card :deep(.el-card__body) { padding: 30px 30px 26px; }
+.card-head { margin-bottom: 18px; }
+.form-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .3em;
+  color: var(--amber);
 }
+.title { margin: 8px 0 4px; color: var(--ink); font-size: 24px; }
+.sub { color: var(--muted); font-size: 12.5px; }
 .pwd-rules {
   display: flex;
   gap: 10px;
@@ -187,5 +232,19 @@ onUnmounted(() => timer && clearInterval(timer))
   text-align: center;
   font-size: 13px;
   color: #606266;
+}
+.to-login a { color: var(--amber); font-weight: 600; text-decoration: none; }
+.to-login a:hover { text-decoration: underline; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 760px) {
+  .register-wrap { padding: 82px 16px 28px; align-items: flex-start; }
+  .register-brand { top: 20px; left: 18px; }
+  .register-card :deep(.el-card__body) { padding: 22px 18px 20px; }
+  .title { font-size: 21px; }
 }
 </style>

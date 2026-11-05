@@ -214,6 +214,51 @@ p { margin: 0; }
 .el-loading-mask { background-color: rgba(255, 253, 249, .82); backdrop-filter: blur(1px); }
 .el-loading-spinner .path { stroke: var(--amber); }
 
+/* ---------- 登录/注册共用背景 ---------- */
+/* 纯 CSS 渐变 + 网格 + 装饰环，无外部图片依赖，断网可用、体积为 0 */
+.auth-canvas {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #e8e3da;
+  background:
+    radial-gradient(900px 520px at 14% 6%, rgba(180, 90, 30, .26), transparent 62%),
+    radial-gradient(700px 480px at 88% 92%, rgba(47, 125, 102, .16), transparent 60%),
+    linear-gradient(160deg, #0c1217 0%, #131f28 52%, #0a1117 100%);
+}
+.auth-canvas::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(120% 90% at 20% 10%, #000 30%, transparent 78%);
+}
+.auth-canvas::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -18vw;
+  right: -14vw;
+  width: 52vw;
+  height: 52vw;
+  min-width: 460px;
+  min-height: 460px;
+  border-radius: 50%;
+  border: 1px solid rgba(180, 90, 30, .22);
+  box-shadow:
+    0 0 0 34px rgba(180, 90, 30, .035),
+    0 0 0 76px rgba(180, 90, 30, .028),
+    0 0 0 130px rgba(180, 90, 30, .022);
+  pointer-events: none;
+}
+/* 内容层高于背景装饰 */
+.auth-canvas > * { position: relative; z-index: 1; }
+
 /* ---------- 通用页面骨架 ---------- */
 .el-main { padding: 22px 26px 28px; }
 .el-header { height: 64px; }

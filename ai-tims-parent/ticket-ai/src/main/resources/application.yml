@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: ticket-ai
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}       # Sa-Token 会话共享（与 ticket-system/order 同一 Redis）
+      port: ${REDIS_PORT:6379}
   cloud:
     nacos:
       server-addr: ${NACOS_ADDR:127.0.0.1:8848}
@@ -23,6 +27,16 @@ mybatis-plus:
     banner: false
     db-config:
       id-type: assign_id
+
+sa-token:
+  token-name: Authorization               # 与 ticket-system/order 一致，只读登录态
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  is-read-cookie: false
+  is-log: false
 
 tims:
   ai:

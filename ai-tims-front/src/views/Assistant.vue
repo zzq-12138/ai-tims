@@ -162,13 +162,11 @@
 <script setup>
 import { nextTick, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useAuthStore } from '../stores/auth'
 import {
   assistantChat, createSession, deleteSession, listSessions, renameSession,
   sessionMessages, usageRecent, usageSummary
 } from '../api/ai'
 
-const auth = useAuthStore()
 const sessions = ref([])
 const sessionId = ref(null)
 const sessionTitle = ref('')
@@ -185,10 +183,7 @@ const quickPrompts = [
   '查询最近工单状态'
 ]
 
-// /api/auth/me 返回 userId（不是 id），与消息中心保持同一种取法
-function uid() {
-  return auth.user?.userId ?? auth.user?.id
-}
+const LAST_SESSION_KEY = 'ai-chat-last-session'
 
 function parseJson(raw, fallback) {
   if (raw == null || raw === '') return fallback
@@ -219,7 +214,7 @@ async function scrollBottom() {
 
 async function loadSessions() {
   try {
-    const list = (await listSessions(uid())) || []
+    const list = (await listSessions()) || []
     sessions.value = list
     if (!list.length) {
       sessionId.value = null
@@ -229,7 +224,10 @@ async function loadSessions() {
     }
     const stillThere = list.some((s) => String(s.id) === String(sessionId.value))
     if (!stillThere) {
-      await openSession(list[0])
+      // 刷新/重新打开时优先恢复上次查看的会话（仅本地导航状态，归属仍由服务端校验）
+      const remembered = localStorage.getItem(LAST_SESSION_KEY)
+      const target = remembered && list.find((x) => String(x.id) === remembered)
+      await openSession(target || list[0])
     }
   } catch (e) {
     // 列表失败不打断当前对话
@@ -240,8 +238,9 @@ async function openSession(s) {
   if (loading.value) return
   sessionId.value = s.id
   sessionTitle.value = s.title
+  localStorage.setItem(LAST_SESSION_KEY, String(s.id))
   try {
-    const list = (await sessionMessages(s.id, uid())) || []
+    const list = (await sessionMessages(s.id)) || []
     messages.value = list.map(toBubble)
   } catch (e) {
     messages.value = []
@@ -253,7 +252,7 @@ async function openSession(s) {
 async function newSession() {
   if (loading.value) return
   try {
-    const s = await createSession(uid())
+    const s = await createSession()
     sessions.value.unshift(s)
     sessionId.value = s.id
     sessionTitle.value = s.title
@@ -272,7 +271,7 @@ async function renamePrompt(s) {
       cancelButtonText: '取消',
       inputValidator: (v) => (v && v.trim() ? true : '名称不能为空')
     })
-    const updated = await renameSession(s.id, uid(), value.trim())
+    const updated = await renameSession(s.id, value.trim())
     s.title = (updated && updated.title) || value.trim()
     if (String(sessionId.value) === String(s.id)) sessionTitle.value = s.title
     ElMessage.success('已重命名')
@@ -288,7 +287,7 @@ async function removeSession(s) {
       confirmButtonText: '删除',
       cancelButtonText: '取消'
     })
-    await deleteSession(s.id, uid())
+    await deleteSession(s.id)
     sessions.value = sessions.value.filter((x) => String(x.id) !== String(s.id))
     if (String(sessionId.value) === String(s.id)) {
       sessionId.value = null
@@ -322,7 +321,7 @@ async function send(text) {
   input.value = ''
   if (!sessionId.value) {
     try {
-      const s = await createSession(uid())
+      const s = await createSession()
       sessions.value.unshift(s)
       sessionId.value = s.id
       sessionTitle.value = s.title
@@ -336,7 +335,7 @@ async function send(text) {
   scrollBottom()
   try {
     // 多轮上下文由后端按 sessionId 从 ai_chat_message 取窗口，这里不再回传 history
-    const data = await assistantChat({ message: content, sessionId: sessionId.value, userId: uid() })
+    const data = await assistantChat({ message: content, sessionId: sessionId.value })
     messages.value.push({
       role: 'assistant',
       content: data.answer,

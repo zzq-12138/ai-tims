@@ -72,15 +72,15 @@ public class AssistantService {
         this.mapper = mapper;
     }
 
-    public AssistantVO chat(Long tenantId, AssistantRequest request) {
+    public AssistantVO chat(Long tenantId, Long userId, AssistantRequest request) {
         if (!StringUtils.hasText(request.getMessage())) {
             throw new BizException(10400, "message 必填");
         }
         Long tid = tenantId == null ? 1L : tenantId;
-        Long uid = request.getUserId();
-        if (uid == null) {
-            throw new BizException(10400, "userId 必填");
+        if (userId == null) {
+            throw new BizException(10401, "未登录或凭证失效");
         }
+        Long uid = userId;
 
         // 会话：传 sessionId 则校验归属并读库内窗口；否则自动建会话
         AiChatSession session;

@@ -77,22 +77,22 @@ export function usageSummary() {
 
 /* ===== M6 问题8：工单助手会话（持久化 / 切换 / 重命名 / 删除） ===== */
 
-export function listSessions(userId) {
-  return request.get('/api/ai/chat/sessions', { params: { userId } })
+export function listSessions() {
+  return request.get('/api/ai/chat/sessions')
 }
 
-export function createSession(userId, title) {
-  return request.post('/api/ai/chat/sessions', { userId, title })
+export function createSession(title) {
+  return request.post('/api/ai/chat/sessions', { title })
 }
 
-export function renameSession(id, userId, title) {
-  return request.put(`/api/ai/chat/sessions/${id}`, { userId, title })
+export function renameSession(id, title) {
+  return request.put(`/api/ai/chat/sessions/${id}`, { title })
 }
 
-export function deleteSession(id, userId) {
-  return request.delete(`/api/ai/chat/sessions/${id}`, { params: { userId } })
+export function deleteSession(id) {
+  return request.delete(`/api/ai/chat/sessions/${id}`)
 }
 
-export function sessionMessages(id, userId) {
-  return request.get(`/api/ai/chat/sessions/${id}/messages`, { params: { userId } })
+export function sessionMessages(id) {
+  return request.get(`/api/ai/chat/sessions/${id}/messages`)
 }

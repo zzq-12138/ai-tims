@@ -11,11 +11,20 @@ public final class RequestUtils {
     }
 
     public static Long tenantId() {
+        Long v = tenantIdOrNull();
+        return v == null ? 1L : v;
+    }
+
+    /** 网关透传的租户；未携带或非法返回 null（供登录态回退判断） */
+    public static Long tenantIdOrNull() {
         String h = header("X-Tenant-Id");
+        if (h == null || h.isBlank()) {
+            return null;
+        }
         try {
-            return h == null || h.isBlank() ? 1L : Long.parseLong(h.trim());
+            return Long.parseLong(h.trim());
         } catch (NumberFormatException e) {
-            return 1L;
+            return null;
         }
     }
 

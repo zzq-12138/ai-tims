@@ -32,7 +32,7 @@ def main():
             break
         page += 1
 
-    keep = [r for r in recs if not any(str(r.get("title", "")).startswith(t) for t in TEST)]
+    keep = [r for r in recs if not any(str(r.get("title", "") or "").strip().startswith(t) for t in TEST)]
     keep.sort(key=lambda r: (r.get("applyDeviceType") or "未标注", r["title"]))
     print("PUBLISHED总:", len(recs), "剔除测试条目后:", len(keep))
 

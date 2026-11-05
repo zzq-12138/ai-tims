@@ -57,6 +57,8 @@ public class LeaveGoldOut {
                 System.out.println("ids=" + ids);
             } else if (args[0].equals("run")) {
                 run(args[1], args[2]);
+            } else if (args[0].equals("purge")) {
+                purge(args[1]);
             }
         } finally {
             client.close();
@@ -115,6 +117,23 @@ public class LeaveGoldOut {
 
     static void flush() {
         client.flush(FlushParam.newBuilder().withCollectionNames(List.of(COLL)).build());
+    }
+
+    /** 清理残留向量：按主键删除 + flush + 校验消失（仅用于逻辑删除的知识条目） */
+    static void purge(String csv) throws Exception {
+        List<Long> ids = new ArrayList<>();
+        for (String x : csv.split(",")) ids.add(Long.parseLong(x.trim()));
+        long before = count();
+        delete(ids);
+        flush();
+        long after = count();
+        for (int i = 0; i < 30 && after == before; i++) {
+            Thread.sleep(1000);
+            flush();
+            after = count();
+        }
+        System.out.println("[PURGE] count " + before + " -> " + after + " (removed=" + (before - after) + ")");
+        for (Long id : ids) System.out.println("[PURGE] id=" + id + " present=" + present(id));
     }
 
     static boolean present(long id) {

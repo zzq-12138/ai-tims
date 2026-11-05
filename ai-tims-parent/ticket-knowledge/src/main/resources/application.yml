@@ -57,6 +57,13 @@ sa-token:
 
 tims:
   kb:
+    gate:
+      # 门控三档：A=正常推送 / B=软带内仅供参考 / C=低于阈值不返回
+      # 默认按真实上线口径开启；回滚时设置 KB_GATE_ENABLED=false 即可恢复无门控行为
+      enabled: ${KB_GATE_ENABLED:true}
+      threshold: ${KB_GATE_THRESHOLD:0.75}
+      soft-band: ${KB_GATE_SOFT_BAND:0.07}
+      fallback-tiers: ${KB_GATE_FALLBACK_TIERS:true}
     embedding:
       # 智谱 embedding-3：维度 1024（平衡精度与 Milvus 内存），key 从环境变量注入
       api-url: ${ZHIPU_EMBEDDING_URL:https://open.bigmodel.cn/api/paas/v4/embeddings}

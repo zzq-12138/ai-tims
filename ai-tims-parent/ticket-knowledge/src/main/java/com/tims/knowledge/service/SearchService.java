@@ -5,6 +5,7 @@ import com.tims.knowledge.entity.KbKnowledge;
 import com.tims.knowledge.mapper.KbKnowledgeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +24,10 @@ import java.util.stream.Collectors;
  * - HYBRID：两路各 Top10 → RRF(k=60) 融合 → 设备类型/标签加权 → 输出 Top5。
  * 降级矩阵：Milvus 不可用（isAvailable()=false）或向量检索异常时自动退纯关键词，
  * 返回体带 fallback=true（VECTOR 与 HYBRID 均适用）。
+ *
+ * M7 追加（B0 基线）：返回体透出原始余弦 vectorScore 与 rrfScore，并新增 kb.gate 三档门控
+ * （A=正常推送 / B=软带内仅供参考 / C=低于阈值不返回），tier 与 reason 为新增字段，
+ * 老字段（score/items/fallback/total）保持不变。
  */
 @Service
 public class SearchService {
@@ -37,6 +42,15 @@ public class SearchService {
     private static final double DEVICE_BOOST = 1.5;
     /** 标签命中加权系数 */
     private static final double TAG_BOOST = 1.2;
+
+    @Value("${tims.kb.gate.enabled:true}")
+    private boolean gateEnabled;
+    @Value("${tims.kb.gate.threshold:0.75}")
+    private double gateThreshold;
+    @Value("${tims.kb.gate.soft-band:0.07}")
+    private double gateSoftBand;
+    @Value("${tims.kb.gate.fallback-tiers:true}")
+    private boolean gateFallbackTiers;
 
     private final KbKnowledgeMapper knowledgeMapper;
     private final EmbeddingService embeddingService;
@@ -53,7 +67,7 @@ public class SearchService {
     /**
      * 检索入口。
      *
-     * @return {query, mode, fallback, total, items:[知识全字段 + score]}
+     * @return {query, mode, fallback, total, maxVectorScore, tier, reason, items:[知识全字段 + score + rrfScore + vectorScore]}
      */
     public Map<String, Object> search(Long tenantId, String query, String mode, Integer topK) {
         if (!StringUtils.hasText(query)) {
@@ -95,6 +109,7 @@ public class SearchService {
         }
 
         List<Map<String, Object>> items = new ArrayList<>(results.size());
+        double maxVec = -1;
         for (Scored s : results) {
             Map<String, Object> item = new LinkedHashMap<>();
             KbKnowledge k0 = s.knowledge();
@@ -109,17 +124,64 @@ public class SearchService {
             item.put("version", k0.getVersion());
             item.put("quoteCount", k0.getQuoteCount());
             item.put("updateTime", k0.getUpdateTime());
-            item.put("score", Math.round(s.score() * 10000) / 10000.0);
+            item.put("score", round4(s.score()));
+            // 新增：rrfScore 仅 HYBRID 且未降级时有值；vectorScore 仅 VECTOR/HYBRID 有值
+            item.put("rrfScore", ("HYBRID".equals(m) && !fallback) ? round4(s.score()) : null);
+            item.put("vectorScore", s.vectorScore() == null ? null : round4(s.vectorScore()));
+            if (s.vectorScore() != null) {
+                maxVec = Math.max(maxVec, s.vectorScore());
+            }
             items.add(item);
+        }
+
+        Double maxVectorScore = maxVec < 0 ? null : round4(maxVec);
+        String tier;
+        String reason;
+        if (!"VECTOR".equals(m) && !"HYBRID".equals(m)) {
+            tier = "A";
+            reason = "KEYWORD 模式不做向量门控";
+        } else if (!gateEnabled) {
+            tier = "A";
+            reason = "门控未启用（tims.kb.gate.enabled=false），保持原行为";
+        } else if (maxVectorScore == null) {
+            if (gateFallbackTiers) {
+                tier = "B";
+                reason = "无向量相似度（向量检索降级或候选为空），保留原结果，仅供参考";
+            } else {
+                tier = "C";
+                reason = "无向量相似度且 fallback-tiers=false，拒绝返回";
+                items.clear();
+            }
+        } else if (maxVectorScore < gateThreshold) {
+            tier = "C";
+            reason = String.format("top1 余弦 %.4f < 阈值 %.2f，知识库无可用案例", maxVectorScore, gateThreshold);
+            items.clear();
+        } else if (maxVectorScore < gateThreshold + gateSoftBand) {
+            tier = "B";
+            reason = String.format("top1 余弦 %.4f 位于软带 [%.2f, %.2f)，结果仅供参考",
+                    maxVectorScore, gateThreshold, gateThreshold + gateSoftBand);
+        } else {
+            tier = "A";
+            reason = String.format("top1 余弦 %.4f ≥ 软带上限 %.2f",
+                    maxVectorScore, gateThreshold + gateSoftBand);
         }
 
         Map<String, Object> resp = new LinkedHashMap<>();
         resp.put("query", query);
         resp.put("mode", m);
         resp.put("fallback", fallback);
+        resp.put("gateEnabled", gateEnabled);
+        resp.put("gateThreshold", gateThreshold);
+        resp.put("maxVectorScore", maxVectorScore);
+        resp.put("tier", tier);
+        resp.put("reason", reason);
         resp.put("total", items.size());
         resp.put("items", items);
         return resp;
+    }
+
+    private static double round4(double v) {
+        return Math.round(v * 10000) / 10000.0;
     }
 
     /** 向量检索；Milvus 不可用/异常返回 null（调用方降级），正常返回可能为空列表 */
@@ -136,7 +198,7 @@ public class SearchService {
             for (MilvusVectorStore.VecHit h : hits) {
                 KbKnowledge kb = byId.get(h.knowledgeId());
                 if (kb != null) { // 刚被驳回/删除的向量尚未撤下时过滤掉
-                    out.add(new Scored(kb, h.score()));
+                    out.add(new Scored(kb, h.score(), (double) h.score()));
                 }
             }
             return out;
@@ -164,19 +226,21 @@ public class SearchService {
             double score = r.get("ft_score") == null ? 0 : ((Number) r.get("ft_score")).doubleValue();
             KbKnowledge kb = byId.get(id);
             if (kb != null) {
-                out.add(new Scored(kb, score));
+                out.add(new Scored(kb, score, null));
             }
         }
         return out;
     }
 
-    /** RRF 融合 + 设备类型/标签加权 */
+    /** RRF 融合 + 设备类型/标签加权；保留每个条目的原始余弦用于门控 */
     private List<Scored> rrfFuse(List<Scored> vec, List<Scored> kw, String query, int topK) {
         Map<Long, Double> rrf = new HashMap<>();
         Map<Long, KbKnowledge> pool = new HashMap<>();
+        Map<Long, Double> vecScore = new HashMap<>();
         for (int i = 0; i < vec.size(); i++) {
             rrf.merge(vec.get(i).knowledge().getId(), 1.0 / (RRF_K + i + 1), Double::sum);
             pool.put(vec.get(i).knowledge().getId(), vec.get(i).knowledge());
+            vecScore.put(vec.get(i).knowledge().getId(), vec.get(i).vectorScore());
         }
         for (int i = 0; i < kw.size(); i++) {
             rrf.merge(kw.get(i).knowledge().getId(), 1.0 / (RRF_K + i + 1), Double::sum);
@@ -193,7 +257,7 @@ public class SearchService {
             if (tagHit(kb.getTags(), query)) {
                 score *= TAG_BOOST;
             }
-            fused.add(new Scored(kb, score));
+            fused.add(new Scored(kb, score, vecScore.get(e.getKey())));
         }
         fused.sort((a, b) -> Double.compare(b.score(), a.score()));
         return fused.size() > topK ? fused.subList(0, topK) : fused;
@@ -224,7 +288,7 @@ public class SearchService {
                 .collect(Collectors.toMap(KbKnowledge::getId, Function.identity(), (a, b) -> a));
     }
 
-    /** 带得分条目 */
-    private record Scored(KbKnowledge knowledge, double score) {
+    /** 带得分条目：score 为模式内排序分（VECTOR=余弦/HYBRID=RRF/KEYWORD=全文分），vectorScore 为原始余弦 */
+    private record Scored(KbKnowledge knowledge, double score, Double vectorScore) {
     }
 }

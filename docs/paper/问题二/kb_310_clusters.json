@@ -1,0 +1,1622 @@
+[
+  {
+    "cluster_key": "SIM-PM-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴片机",
+    "shared_symptom": "贴装后元件位置相对焊盘偏移，X/Y 方向偏差 0.05–0.20 mm",
+    "shared_cause": "",
+    "members": [
+      "PM-S03",
+      "PM-S08",
+      "PM-N01"
+    ],
+    "member_titles": [
+      "贴片机贴装偏移处理",
+      "贴片机锡膏印刷偏移处理",
+      "贴片机视觉标定漂移导致贴装偏移"
+    ]
+  },
+  {
+    "cluster_key": "SIM-PM-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴片机",
+    "shared_symptom": "设备在运行中触发报警并停机，复位后可短时恢复或反复报警",
+    "shared_cause": "",
+    "members": [
+      "PM-N02",
+      "PM-N03",
+      "PM-N04"
+    ],
+    "member_titles": [
+      "贴片机安全联锁误触发停机",
+      "贴片机伺服过载报警",
+      "贴片机电源与接地异常引起随机报警"
+    ]
+  },
+  {
+    "cluster_key": "SIM-PM-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴片机",
+    "shared_symptom": "贴片过程中元件被抛落或吸取失败，抛料率高于 0.5%",
+    "shared_cause": "",
+    "members": [
+      "PM-S01",
+      "PM-S02",
+      "PM-S10"
+    ],
+    "member_titles": [
+      "贴片机抛料处理SOP",
+      "贴片机吸嘴堵塞处理",
+      "贴片机气路压力异常处理"
+    ]
+  },
+  {
+    "cluster_key": "SIM-PM-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴片机",
+    "shared_symptom": "元件贴装后出现立碑、侧立或旋转偏移",
+    "shared_cause": "",
+    "members": [
+      "PM-S09",
+      "PM-N05"
+    ],
+    "member_titles": [
+      "贴片机元器件立碑故障",
+      "贴片机供料器送料不到位"
+    ]
+  },
+  {
+    "cluster_key": "SIM-PM-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴片机",
+    "shared_symptom": "PCB 在传送轨道上卡板或定位不到位",
+    "shared_cause": "",
+    "members": [
+      "PM-S07",
+      "PM-N06"
+    ],
+    "member_titles": [
+      "贴片机传送轨道卡板故障",
+      "贴片机轨道夹持松动导致定位偏移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-PM-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴片机",
+    "shared_symptom": "",
+    "shared_cause": "气源含水含油，导致真空与气缸动作异常",
+    "members": [
+      "PM-N07",
+      "PM-N08",
+      "PM-N09"
+    ],
+    "member_titles": [
+      "贴片机真空压力波动",
+      "贴片机贴装头气缸动作迟缓",
+      "贴片机破真空延迟导致元件带起"
+    ]
+  },
+  {
+    "cluster_key": "SIC-PM-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴片机",
+    "shared_symptom": "",
+    "shared_cause": "导轨与传动件润滑不足，摩擦阻力增大",
+    "members": [
+      "PM-N10",
+      "PM-N11",
+      "PM-N12"
+    ],
+    "member_titles": [
+      "贴片机导轨润滑不足导致定位爬行",
+      "贴片机贴装头运行异响",
+      "贴片机伺服空载电流升高"
+    ]
+  },
+  {
+    "cluster_key": "SIC-PM-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴片机",
+    "shared_symptom": "",
+    "shared_cause": "产线静电与粉尘控制失效",
+    "members": [
+      "PM-N13",
+      "PM-N14",
+      "PM-N15"
+    ],
+    "member_titles": [
+      "贴片机元件表面粉尘导致识别失败",
+      "贴片机静电击穿导致元件损伤",
+      "贴片机静电吸附导致元件贴装偏移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-PM-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴片机",
+    "shared_symptom": "",
+    "shared_cause": "供料器压带轮与送料齿轮磨损",
+    "members": [
+      "PM-S04",
+      "PM-N16"
+    ],
+    "member_titles": [
+      "贴片机供料器卡料维修",
+      "贴片机供料器压带轮磨损导致送料偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIC-PM-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴片机",
+    "shared_symptom": "",
+    "shared_cause": "贴装工艺参数漂移或设置不当",
+    "members": [
+      "PM-N17",
+      "PM-N18"
+    ],
+    "member_titles": [
+      "贴片机贴装压力漂移",
+      "贴片机贴装速度过高导致偏移"
+    ]
+  },
+  {
+    "cluster_key": "SIM-AO-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "AOI检测机",
+    "shared_symptom": "同一类焊点在固定方向出现大量误报，原图形态基本正常",
+    "shared_cause": "",
+    "members": [
+      "AO-S01",
+      "AO-N01",
+      "AO-N02"
+    ],
+    "member_titles": [
+      "AOI误报率过高处理",
+      "AOI 光源入射角偏移导致误报集中",
+      "AOI 程序位号与模板错配导致误报"
+    ]
+  },
+  {
+    "cluster_key": "SIM-AO-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "AOI检测机",
+    "shared_symptom": "检测图像模糊、边缘不清，缺陷判定不稳定",
+    "shared_cause": "",
+    "members": [
+      "AO-S03",
+      "AO-S07",
+      "AO-N03"
+    ],
+    "member_titles": [
+      "AOI图像模糊故障处理",
+      "AOI相机对焦异常",
+      "AOI 镜头保护玻璃污染导致图像模糊"
+    ]
+  },
+  {
+    "cluster_key": "SIM-AO-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "AOI检测机",
+    "shared_symptom": "AOI 随机离线或与上位机通讯中断",
+    "shared_cause": "",
+    "members": [
+      "AO-S09",
+      "AO-N04",
+      "AO-N05"
+    ],
+    "member_titles": [
+      "AOI检测机通讯中断",
+      "AOI 网线或交换机端口故障导致通讯中断",
+      "AOI 终端 IP 地址冲突导致通讯中断"
+    ]
+  },
+  {
+    "cluster_key": "SIM-AO-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "AOI检测机",
+    "shared_symptom": "焊点缺陷漏检率升高，复判可发现但当时未报警",
+    "shared_cause": "",
+    "members": [
+      "AO-S02",
+      "AO-N06"
+    ],
+    "member_titles": [
+      "AOI漏检故障处理",
+      "AOI 曝光时间不足导致漏检"
+    ]
+  },
+  {
+    "cluster_key": "SIM-AO-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "AOI检测机",
+    "shared_symptom": "PCB 过板时卡板或定位不到位",
+    "shared_cause": "",
+    "members": [
+      "AO-S06",
+      "AO-N08"
+    ],
+    "member_titles": [
+      "AOI过板卡板故障",
+      "AOI 挡停气缸回位慢导致过板卡板"
+    ]
+  },
+  {
+    "cluster_key": "SIC-AO-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "AOI检测机",
+    "shared_symptom": "",
+    "shared_cause": "光源系统老化或散热不良，发光效率下降",
+    "members": [
+      "AO-S04",
+      "AO-N09",
+      "AO-N10"
+    ],
+    "member_titles": [
+      "AOI光源亮度衰减维修",
+      "AOI 光源散热不良导致亮度衰减",
+      "AOI 光源驱动电流漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-AO-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "AOI检测机",
+    "shared_symptom": "",
+    "shared_cause": "光学窗口与腔体污染，光路被散射或衰减",
+    "members": [
+      "AO-N11",
+      "AO-N12",
+      "AO-N13"
+    ],
+    "member_titles": [
+      "AOI 保护玻璃油雾附着",
+      "AOI 相机传感器灰尘",
+      "AOI 反光板污染导致判定偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIC-AO-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "AOI检测机",
+    "shared_symptom": "",
+    "shared_cause": "软件版本与参数基线不一致",
+    "members": [
+      "AO-S08",
+      "AO-N14",
+      "AO-N15"
+    ],
+    "member_titles": [
+      "AOI检测机算法阈值漂移处理",
+      "AOI 模型版本与程序不匹配",
+      "AOI 参数备份未恢复导致判定异常"
+    ]
+  },
+  {
+    "cluster_key": "SIC-AO-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "AOI检测机",
+    "shared_symptom": "",
+    "shared_cause": "接地与链路屏蔽不良，引入共模干扰",
+    "members": [
+      "AO-N16",
+      "AO-N17"
+    ],
+    "member_titles": [
+      "AOI 接地不良导致图像干扰",
+      "AOI 交换机端口错包导致数据丢帧"
+    ]
+  },
+  {
+    "cluster_key": "SIC-AO-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "AOI检测机",
+    "shared_symptom": "",
+    "shared_cause": "机械结构与支架存在残余振动",
+    "members": [
+      "AO-N18",
+      "AO-N19"
+    ],
+    "member_titles": [
+      "AOI 相机支架松动导致图像位移",
+      "AOI 轨道振动导致成像拖影"
+    ]
+  },
+  {
+    "cluster_key": "SIM-CO-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "涂布机",
+    "shared_symptom": "涂层厚度超出 ±2% 规格，横向或纵向分布不均",
+    "shared_cause": "",
+    "members": [
+      "CO-S01",
+      "CO-N01",
+      "CO-N02"
+    ],
+    "member_titles": [
+      "涂布机涂布厚度不均",
+      "涂布机模唇间隙变化导致横向厚度偏差",
+      "涂布机浆料黏度变化导致厚度漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIM-CO-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "涂布机",
+    "shared_symptom": "涂层出现气泡、针孔等点状缺陷",
+    "shared_cause": "",
+    "members": [
+      "CO-S02",
+      "CO-N03",
+      "CO-N04"
+    ],
+    "member_titles": [
+      "涂布机涂层气泡处理",
+      "涂布机供液管路漏气导致气泡",
+      "涂布机浆料脱泡不足导致针孔"
+    ]
+  },
+  {
+    "cluster_key": "SIM-CO-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "涂布机",
+    "shared_symptom": "涂层边缘出现漏涂、缺料或留白宽度超差",
+    "shared_cause": "",
+    "members": [
+      "CO-S03",
+      "CO-N05",
+      "CO-N06"
+    ],
+    "member_titles": [
+      "涂布机边缘漏涂处理",
+      "涂布机模唇唇口损伤导致边缘漏涂",
+      "涂布机背辊平行度超差导致单边厚"
+    ]
+  },
+  {
+    "cluster_key": "SIM-CO-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "涂布机",
+    "shared_symptom": "料带张力波动并伴随厚度或褶皱异常",
+    "shared_cause": "",
+    "members": [
+      "CO-S04",
+      "CO-N07"
+    ],
+    "member_titles": [
+      "涂布机张力波动故障",
+      "涂布机张力摆辊气缸压力不足导致张力波动"
+    ]
+  },
+  {
+    "cluster_key": "SIM-CO-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "涂布机",
+    "shared_symptom": "生产过程中料带断带停机",
+    "shared_cause": "",
+    "members": [
+      "CO-S10",
+      "CO-N08"
+    ],
+    "member_titles": [
+      "涂布机料卷接头断带故障",
+      "涂布机料卷接头强度不足导致断带"
+    ]
+  },
+  {
+    "cluster_key": "SIC-CO-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "涂布机",
+    "shared_symptom": "",
+    "shared_cause": "辊面与浆料系统污染，异物进入涂布区",
+    "members": [
+      "CO-S08",
+      "CO-N09",
+      "CO-N10"
+    ],
+    "member_titles": [
+      "涂布机背辊粘胶处理",
+      "涂布机导辊积料导致涂层划伤",
+      "涂布机浆料异物导致针孔与划伤"
+    ]
+  },
+  {
+    "cluster_key": "SIC-CO-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "涂布机",
+    "shared_symptom": "",
+    "shared_cause": "烘箱温度检测与热风循环异常",
+    "members": [
+      "CO-S05",
+      "CO-N11",
+      "CO-N12"
+    ],
+    "member_titles": [
+      "涂布机烘干温度异常",
+      "涂布机烘箱热电偶漂移",
+      "涂布机烘箱风道堵塞导致温度不均"
+    ]
+  },
+  {
+    "cluster_key": "SIC-CO-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "涂布机",
+    "shared_symptom": "",
+    "shared_cause": "纠偏闭环的检测或执行环节失效",
+    "members": [
+      "CO-S07",
+      "CO-N13",
+      "CO-N14"
+    ],
+    "member_titles": [
+      "涂布机纠偏失灵维修",
+      "涂布机纠偏传感器污染导致跑偏",
+      "涂布机纠偏执行器响应慢"
+    ]
+  },
+  {
+    "cluster_key": "SIC-CO-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "涂布机",
+    "shared_symptom": "",
+    "shared_cause": "主传动速度反馈失真",
+    "members": [
+      "CO-S09",
+      "CO-N15"
+    ],
+    "member_titles": [
+      "涂布机速度同步异常维修",
+      "涂布机编码器信号丢失导致速度不同步"
+    ]
+  },
+  {
+    "cluster_key": "SIC-CO-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "涂布机",
+    "shared_symptom": "",
+    "shared_cause": "供液系统输出能力下降",
+    "members": [
+      "CO-S06",
+      "CO-N16"
+    ],
+    "member_titles": [
+      "涂布机涂布头堵塞维修",
+      "涂布机供液泵磨损导致供液不足"
+    ]
+  },
+  {
+    "cluster_key": "SIM-LA-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴合机",
+    "shared_symptom": "贴合后出现气泡，面积占比超过 0.1%",
+    "shared_cause": "",
+    "members": [
+      "LA-S01",
+      "LA-N01",
+      "LA-N02"
+    ],
+    "member_titles": [
+      "贴合机气泡故障",
+      "贴合机压合压力不足导致气泡",
+      "贴合机胶层含气导致气泡"
+    ]
+  },
+  {
+    "cluster_key": "SIM-LA-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴合机",
+    "shared_symptom": "贴合位置相对定位标记偏移超过 0.10 mm",
+    "shared_cause": "",
+    "members": [
+      "LA-S02",
+      "LA-N03",
+      "LA-N04"
+    ],
+    "member_titles": [
+      "贴合机贴合偏移故障",
+      "贴合机定位相机标定漂移导致偏移",
+      "贴合机送料纠偏失效导致偏移"
+    ]
+  },
+  {
+    "cluster_key": "SIM-LA-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴合机",
+    "shared_symptom": "材料在贴合前或贴合中出现褶皱",
+    "shared_cause": "",
+    "members": [
+      "LA-S03",
+      "LA-N05",
+      "LA-N06"
+    ],
+    "member_titles": [
+      "贴合机材料褶皱处理",
+      "贴合机张力过大导致材料褶皱",
+      "贴合机辊面平行度超差导致褶皱"
+    ]
+  },
+  {
+    "cluster_key": "SIM-LA-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴合机",
+    "shared_symptom": "贴合后边缘翘起或脱胶，剥离强度不足",
+    "shared_cause": "",
+    "members": [
+      "LA-S04",
+      "LA-N07"
+    ],
+    "member_titles": [
+      "贴合机脱胶维修",
+      "贴合机压合时间不足导致脱胶"
+    ]
+  },
+  {
+    "cluster_key": "SIM-LA-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "贴合机",
+    "shared_symptom": "定位标记识别失败，设备无法完成对位",
+    "shared_cause": "",
+    "members": [
+      "LA-S07",
+      "LA-N08"
+    ],
+    "member_titles": [
+      "贴合机定位标记识别故障",
+      "贴合机定位标记污染导致识别失败"
+    ]
+  },
+  {
+    "cluster_key": "SIC-LA-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴合机",
+    "shared_symptom": "",
+    "shared_cause": "贴合辊表面存在划伤、残胶或异物",
+    "members": [
+      "LA-S06",
+      "LA-N09",
+      "LA-N10"
+    ],
+    "member_titles": [
+      "贴合机辊筒磨损维修",
+      "贴合机辊面划伤导致压痕",
+      "贴合机辊面残胶导致压合不良"
+    ]
+  },
+  {
+    "cluster_key": "SIC-LA-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴合机",
+    "shared_symptom": "",
+    "shared_cause": "辊面温度检测或加热回路异常",
+    "members": [
+      "LA-S08",
+      "LA-N11",
+      "LA-N12"
+    ],
+    "member_titles": [
+      "贴合机温控异常处理",
+      "贴合机加热棒局部失效",
+      "贴合机温度传感器漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-LA-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴合机",
+    "shared_symptom": "",
+    "shared_cause": "送料纠偏的检测与执行环节失效",
+    "members": [
+      "LA-S09",
+      "LA-N13",
+      "LA-N14"
+    ],
+    "member_titles": [
+      "贴合机送料偏斜维修",
+      "贴合机纠偏传感器安装偏移",
+      "贴合机送料轮打滑"
+    ]
+  },
+  {
+    "cluster_key": "SIC-LA-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴合机",
+    "shared_symptom": "",
+    "shared_cause": "静电消除回路失效（放电针积尘/高压模块衰减）",
+    "members": [
+      "LA-S10",
+      "LA-N15"
+    ],
+    "member_titles": [
+      "贴合机静电吸附不良",
+      "贴合机离子风机失效导致静电吸附"
+    ]
+  },
+  {
+    "cluster_key": "SIC-LA-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "贴合机",
+    "shared_symptom": "",
+    "shared_cause": "压合压力回路输出不足（气缸内泄/减压阀疲劳）",
+    "members": [
+      "LA-S05",
+      "LA-N17"
+    ],
+    "member_titles": [
+      "贴合机压力不均故障",
+      "贴合机压合气缸压力不足"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ET-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "蚀刻机",
+    "shared_symptom": "蚀刻速率低于工艺下限，蚀刻深度整体偏浅",
+    "shared_cause": "",
+    "members": [
+      "ET-S01",
+      "ET-N01",
+      "ET-N02"
+    ],
+    "member_titles": [
+      "蚀刻机蚀刻速率偏差",
+      "蚀刻机药液温度偏低导致速率下降",
+      "蚀刻机喷淋压力不足导致速率偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ET-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "蚀刻机",
+    "shared_symptom": "同一板面蚀刻不均，出现条带或周期性过蚀/欠蚀",
+    "shared_cause": "",
+    "members": [
+      "ET-S05",
+      "ET-N03",
+      "ET-N04"
+    ],
+    "member_titles": [
+      "蚀刻机蚀刻不均",
+      "蚀刻机喷嘴角度偏移导致蚀刻不均",
+      "蚀刻机传送速度波动导致蚀刻不均"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ET-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "蚀刻机",
+    "shared_symptom": "线宽变细、边缘锯齿，侧蚀量超过线宽 15%",
+    "shared_cause": "",
+    "members": [
+      "ET-S04",
+      "ET-N05"
+    ],
+    "member_titles": [
+      "蚀刻机过蚀刻处理",
+      "蚀刻机蚀刻时间过长导致过蚀刻"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ET-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "蚀刻机",
+    "shared_symptom": "水洗后板面残留药液或出现结晶",
+    "shared_cause": "",
+    "members": [
+      "ET-S09",
+      "ET-N06"
+    ],
+    "member_titles": [
+      "蚀刻机水洗残留处理",
+      "蚀刻机水洗喷嘴堵塞导致残留"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ET-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "蚀刻机",
+    "shared_symptom": "废液液位异常并触发报警",
+    "shared_cause": "",
+    "members": [
+      "ET-S08",
+      "ET-N07",
+      "ET-N08"
+    ],
+    "member_titles": [
+      "蚀刻机废液排放报警处理",
+      "蚀刻机液位传感器污染导致误报警",
+      "蚀刻机排液管路结晶导致排液不畅"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ET-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "蚀刻机",
+    "shared_symptom": "",
+    "shared_cause": "药液浓度检测与加药计量失准",
+    "members": [
+      "ET-S02",
+      "ET-N09",
+      "ET-N10"
+    ],
+    "member_titles": [
+      "蚀刻机药水浓度异常处理",
+      "蚀刻机加药泵计量偏差导致浓度异常",
+      "蚀刻机浓度传感器漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ET-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "蚀刻机",
+    "shared_symptom": "",
+    "shared_cause": "喷淋回路流量下降（过滤、泵、喷嘴）",
+    "members": [
+      "ET-S03",
+      "ET-N11",
+      "ET-N12"
+    ],
+    "member_titles": [
+      "蚀刻机喷嘴堵塞处理",
+      "蚀刻机过滤网堵塞导致喷淋不足",
+      "蚀刻机喷淋泵磨损导致流量下降"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ET-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "蚀刻机",
+    "shared_symptom": "",
+    "shared_cause": "传送机构污染或漏液",
+    "members": [
+      "ET-S06",
+      "ET-N13",
+      "ET-N14"
+    ],
+    "member_titles": [
+      "蚀刻机传送轮污染处理",
+      "蚀刻机传送轮面结垢导致板面污染",
+      "蚀刻机传送轴端漏液"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ET-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "蚀刻机",
+    "shared_symptom": "",
+    "shared_cause": "槽体加热与测温回路异常",
+    "members": [
+      "ET-S07",
+      "ET-N15"
+    ],
+    "member_titles": [
+      "蚀刻机腔体温度漂移处理",
+      "蚀刻机加热器结垢导致温度漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ET-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "蚀刻机",
+    "shared_symptom": "",
+    "shared_cause": "腔体排风能力不足",
+    "members": [
+      "ET-S10",
+      "ET-N16"
+    ],
+    "member_titles": [
+      "蚀刻机腔体压力异常处理",
+      "蚀刻机排风机故障导致腔体负压异常"
+    ]
+  },
+  {
+    "cluster_key": "SIM-RF-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "回流焊",
+    "shared_symptom": "炉温曲线失控或实际温度高于设定，焊点发暗、板面变色",
+    "shared_cause": "",
+    "members": [
+      "RF-S01",
+      "RF-N01",
+      "RF-N02"
+    ],
+    "member_titles": [
+      "回流焊炉温失控处理",
+      "回流焊热电偶漂移导致炉温失控",
+      "回流焊固态继电器粘连导致持续加热"
+    ]
+  },
+  {
+    "cluster_key": "SIM-RF-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "回流焊",
+    "shared_symptom": "焊点润湿不良、冷焊或虚焊批量出现",
+    "shared_cause": "",
+    "members": [
+      "RF-N03",
+      "RF-N04",
+      "RF-N05"
+    ],
+    "member_titles": [
+      "回流焊预热不足导致冷焊",
+      "回流焊链速过快导致虚焊",
+      "回流焊热风风机故障导致温区不均"
+    ]
+  },
+  {
+    "cluster_key": "SIM-RF-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "回流焊",
+    "shared_symptom": "小尺寸元件立碑或位置偏移",
+    "shared_cause": "",
+    "members": [
+      "RF-N06",
+      "RF-N07"
+    ],
+    "member_titles": [
+      "回流焊温区温差过大导致立碑",
+      "回流焊传送振动导致元件偏移"
+    ]
+  },
+  {
+    "cluster_key": "SIM-RF-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "回流焊",
+    "shared_symptom": "回流后出现锡珠、爆锡与飞溅",
+    "shared_cause": "",
+    "members": [
+      "RF-N08",
+      "RF-N09"
+    ],
+    "member_titles": [
+      "回流焊升温速率过快导致锡珠",
+      "回流焊锡膏吸潮导致飞溅"
+    ]
+  },
+  {
+    "cluster_key": "SIM-RF-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "回流焊",
+    "shared_symptom": "焊点与铜面氧化发暗，润湿角偏大",
+    "shared_cause": "",
+    "members": [
+      "RF-N10",
+      "RF-N11",
+      "RF-N24"
+    ],
+    "member_titles": [
+      "回流焊氮气浓度不足导致氧化",
+      "回流焊排风不畅导致助焊剂回流",
+      "回流焊炉膛保温层损坏导致边缘温度偏低"
+    ]
+  },
+  {
+    "cluster_key": "SIC-RF-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "回流焊",
+    "shared_symptom": "",
+    "shared_cause": "热风循环能力下降（风机、风道、加热）",
+    "members": [
+      "RF-N12",
+      "RF-N13",
+      "RF-N14"
+    ],
+    "member_titles": [
+      "回流焊热风风机皮带松弛",
+      "回流焊风道积尘导致热风不均",
+      "回流焊加热管局部损坏"
+    ]
+  },
+  {
+    "cluster_key": "SIC-RF-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "回流焊",
+    "shared_symptom": "",
+    "shared_cause": "链条传送系统异常",
+    "members": [
+      "RF-N15",
+      "RF-N16",
+      "RF-N17"
+    ],
+    "member_titles": [
+      "回流焊链条张紧不足导致抖动",
+      "回流焊导轨变形导致卡板",
+      "回流焊链条编码器打滑导致速度失真"
+    ]
+  },
+  {
+    "cluster_key": "SIC-RF-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "回流焊",
+    "shared_symptom": "",
+    "shared_cause": "冷却区换热能力不足",
+    "members": [
+      "RF-N18",
+      "RF-N19"
+    ],
+    "member_titles": [
+      "回流焊冷却区水流量不足",
+      "回流焊冷却风机故障"
+    ]
+  },
+  {
+    "cluster_key": "SIC-RF-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "回流焊",
+    "shared_symptom": "",
+    "shared_cause": "氮气供给与氧含量监测异常",
+    "members": [
+      "RF-N20",
+      "RF-N21"
+    ],
+    "member_titles": [
+      "回流焊氮气流量不足",
+      "回流焊氧分析仪漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-RF-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "回流焊",
+    "shared_symptom": "",
+    "shared_cause": "助焊剂与锡膏管理不当",
+    "members": [
+      "RF-N22",
+      "RF-N23",
+      "RF-N25"
+    ],
+    "member_titles": [
+      "回流焊助焊剂回收管路堵塞",
+      "回流焊锡膏回温不足",
+      "回流焊助焊剂喷嘴堵塞"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ME-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "MES终端",
+    "shared_symptom": "报工请求超时或失败，终端转圈后提示错误",
+    "shared_cause": "",
+    "members": [
+      "ME-S01",
+      "ME-N01",
+      "ME-N02"
+    ],
+    "member_titles": [
+      "MES终端报工接口超时处理",
+      "MES 网关限流导致报工超时",
+      "MES 服务端慢 SQL 导致报工超时"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ME-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "MES终端",
+    "shared_symptom": "报工数据与工单数量不一致，出现重复或丢失",
+    "shared_cause": "",
+    "members": [
+      "ME-N03",
+      "ME-N04",
+      "ME-N05"
+    ],
+    "member_titles": [
+      "MES 重复提交导致数据重复",
+      "MES 主从延迟导致查询不一致",
+      "MES 事务回滚导致报工丢失"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ME-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "MES终端",
+    "shared_symptom": "终端登录失败或登录异常缓慢",
+    "shared_cause": "",
+    "members": [
+      "ME-N06",
+      "ME-N07"
+    ],
+    "member_titles": [
+      "MES 账号锁定导致登录失败",
+      "MES 域认证超时导致登录失败"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ME-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "MES终端",
+    "shared_symptom": "客户端界面卡顿、保存失败或日志停止写入",
+    "shared_cause": "",
+    "members": [
+      "ME-N08",
+      "ME-N09"
+    ],
+    "member_titles": [
+      "MES 客户端内存泄漏导致卡顿",
+      "MES 终端磁盘满导致工单无法保存"
+    ]
+  },
+  {
+    "cluster_key": "SIM-ME-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "MES终端",
+    "shared_symptom": "报表或看板数据延迟，查询超时",
+    "shared_cause": "",
+    "members": [
+      "ME-N10",
+      "ME-N11",
+      "ME-N28"
+    ],
+    "member_titles": [
+      "MES 报表查询缺少索引导致延迟",
+      "MES 消息队列积压导致数据延迟",
+      "MES 缓存穿透导致数据库压力升高"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ME-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "MES终端",
+    "shared_symptom": "",
+    "shared_cause": "终端与服务端时钟不同步",
+    "members": [
+      "ME-N12",
+      "ME-N13",
+      "ME-N14"
+    ],
+    "member_titles": [
+      "MES 终端时钟不同步导致重复报工",
+      "MES 时间戳乱序导致工序顺序错误",
+      "MES 跨天班次时间口径不一致导致报表错误"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ME-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "MES终端",
+    "shared_symptom": "",
+    "shared_cause": "产线网络抖动与重传",
+    "members": [
+      "ME-N15",
+      "ME-N16",
+      "ME-N17"
+    ],
+    "member_titles": [
+      "MES 网络抖动导致终端偶发断连",
+      "MES 网络重传导致重复提交",
+      "MES 扫码枪网络模式丢包导致扫码失败"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ME-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "MES终端",
+    "shared_symptom": "",
+    "shared_cause": "角色与权限配置错误",
+    "members": [
+      "ME-N18",
+      "ME-N19",
+      "ME-N20"
+    ],
+    "member_titles": [
+      "MES 角色权限配置错误导致菜单不可见",
+      "MES 越权审批导致流程异常",
+      "MES 工单状态卡滞无法关闭"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ME-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "MES终端",
+    "shared_symptom": "",
+    "shared_cause": "服务端资源不足或实例异常",
+    "members": [
+      "ME-N21",
+      "ME-N22"
+    ],
+    "member_titles": [
+      "MES 服务端 GC 停顿导致响应变慢",
+      "MES 服务实例异常导致间歇 502"
+    ]
+  },
+  {
+    "cluster_key": "SIC-ME-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "MES终端",
+    "shared_symptom": "",
+    "shared_cause": "主数据与工艺路线版本不一致",
+    "members": [
+      "ME-N23",
+      "ME-N24"
+    ],
+    "member_titles": [
+      "MES 物料主数据不一致导致报工校验失败",
+      "MES 工艺路线版本冲突导致工序错配"
+    ]
+  },
+  {
+    "cluster_key": "SIM-SP-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "锡膏体积或高度数据超出 ±10% 规格",
+    "shared_cause": "",
+    "members": [
+      "SP-S01",
+      "SP-N01",
+      "SP-N02"
+    ],
+    "member_titles": [
+      "SPI锡膏检测机3D光源亮度漂移修复",
+      "SPI 高度标定漂移导致体积偏差",
+      "SPI 锡膏塌陷导致体积判定偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIM-SP-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "固定位置或固定方向误报集中，误报率超过 1%",
+    "shared_cause": "",
+    "members": [
+      "SP-N03",
+      "SP-N04",
+      "SP-N11"
+    ],
+    "member_titles": [
+      "SPI 钢板开口污染导致误报",
+      "SPI 光源角度偏移导致误报",
+      "SPI 镜头窗口污染导致误报"
+    ]
+  },
+  {
+    "cluster_key": "SIM-SP-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "少锡、偏移等缺陷未被拦截，漏检率升高",
+    "shared_cause": "",
+    "members": [
+      "SP-N05",
+      "SP-N06"
+    ],
+    "member_titles": [
+      "SPI 曝光不足导致漏检",
+      "SPI 算法阈值过严导致漏检"
+    ]
+  },
+  {
+    "cluster_key": "SIM-SP-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "锡膏面积不足或位置偏移超差",
+    "shared_cause": "",
+    "members": [
+      "SP-N07",
+      "SP-N08",
+      "SP-N22"
+    ],
+    "member_titles": [
+      "SPI 印刷偏移导致面积与位置偏差",
+      "SPI 基板定位不准导致数据偏移",
+      "SPI 钢板张力不足导致面积偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIM-SP-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "同一焊盘重复测量结果不一致，重复性差",
+    "shared_cause": "",
+    "members": [
+      "SP-N09",
+      "SP-N10"
+    ],
+    "member_titles": [
+      "SPI 载具振动导致重复性差",
+      "SPI 环境温度漂移导致高度测量偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIC-SP-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "",
+    "shared_cause": "光学窗口、反光板或光源污染老化",
+    "members": [
+      "SP-N12",
+      "SP-N13",
+      "SP-N24"
+    ],
+    "member_titles": [
+      "SPI 保护玻璃与反光板污染",
+      "SPI 基准板污染导致标定偏差",
+      "SPI 光源寿命到期导致亮度不足"
+    ]
+  },
+  {
+    "cluster_key": "SIC-SP-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "",
+    "shared_cause": "锡膏状态与环境条件偏离工艺窗口",
+    "members": [
+      "SP-N14",
+      "SP-N15",
+      "SP-N23"
+    ],
+    "member_titles": [
+      "SPI 锡膏黏度变化导致体积波动",
+      "SPI 锡膏回温不足导致印刷异常",
+      "SPI 环境温湿度波动导致测量漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-SP-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "",
+    "shared_cause": "标定基准与清洁周期管理失效",
+    "members": [
+      "SP-N16",
+      "SP-N17",
+      "SP-N25"
+    ],
+    "member_titles": [
+      "SPI 标定块磨损导致精度下降",
+      "SPI 高度基准未更新",
+      "SPI 清洁周期设置过长导致精度下降"
+    ]
+  },
+  {
+    "cluster_key": "SIC-SP-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "",
+    "shared_cause": "检测数据上传与系统接口异常",
+    "members": [
+      "SP-N18",
+      "SP-N19"
+    ],
+    "member_titles": [
+      "SPI 与 SPC 系统数据丢包",
+      "SPI 与 MES 接口超时"
+    ]
+  },
+  {
+    "cluster_key": "SIC-SP-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "SPI锡膏检测机",
+    "shared_symptom": "",
+    "shared_cause": "板件夹持与载具支撑不良",
+    "members": [
+      "SP-N20",
+      "SP-N21"
+    ],
+    "member_titles": [
+      "SPI 轨道夹持松动导致数据偏移",
+      "SPI 载具变形导致板件不平"
+    ]
+  },
+  {
+    "cluster_key": "SIM-WF-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "波峰焊",
+    "shared_symptom": "相邻焊点之间出现连锡或锡桥",
+    "shared_cause": "",
+    "members": [
+      "WF-N01",
+      "WF-N02",
+      "WF-N03"
+    ],
+    "member_titles": [
+      "波峰焊锡波高度过高导致连锡",
+      "波峰焊助焊剂涂布不足导致连锡",
+      "波峰焊预热不足导致连锡"
+    ]
+  },
+  {
+    "cluster_key": "SIM-WF-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "波峰焊",
+    "shared_symptom": "通孔焊点上锡不足、虚焊或漏焊",
+    "shared_cause": "",
+    "members": [
+      "WF-N04",
+      "WF-N05",
+      "WF-N06"
+    ],
+    "member_titles": [
+      "波峰焊锡波接触深度不足导致漏焊",
+      "波峰焊锡渣过多导致虚焊",
+      "波峰焊链速过快导致虚焊"
+    ]
+  },
+  {
+    "cluster_key": "SIM-WF-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "波峰焊",
+    "shared_symptom": "板面出现锡珠、爆锡与飞溅",
+    "shared_cause": "",
+    "members": [
+      "WF-N07",
+      "WF-N08"
+    ],
+    "member_titles": [
+      "波峰焊助焊剂含水导致锡珠飞溅",
+      "波峰焊预热温度过高导致锡珠"
+    ]
+  },
+  {
+    "cluster_key": "SIM-WF-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "波峰焊",
+    "shared_symptom": "板件过炉后翘曲或变形",
+    "shared_cause": "",
+    "members": [
+      "WF-N09",
+      "WF-N10"
+    ],
+    "member_titles": [
+      "波峰焊预热不均导致板面变形",
+      "波峰焊冷却过快导致板面翘曲"
+    ]
+  },
+  {
+    "cluster_key": "SIM-WF-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "波峰焊",
+    "shared_symptom": "焊点出现拉尖、冰柱或表面不亮",
+    "shared_cause": "",
+    "members": [
+      "WF-N11",
+      "WF-N12",
+      "WF-N24"
+    ],
+    "member_titles": [
+      "波峰焊脱离角度不当导致拉尖",
+      "波峰焊锡温偏低导致拉尖",
+      "波峰焊锡条成分偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIC-WF-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "波峰焊",
+    "shared_symptom": "",
+    "shared_cause": "锡炉加热与测温回路异常",
+    "members": [
+      "WF-N13",
+      "WF-N14"
+    ],
+    "member_titles": [
+      "波峰焊锡炉加热管损坏",
+      "波峰焊锡炉热电偶漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-WF-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "波峰焊",
+    "shared_symptom": "",
+    "shared_cause": "助焊剂喷涂与计量系统异常",
+    "members": [
+      "WF-N15",
+      "WF-N16"
+    ],
+    "member_titles": [
+      "波峰焊助焊剂喷嘴堵塞",
+      "波峰焊助焊剂流量计漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-WF-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "波峰焊",
+    "shared_symptom": "",
+    "shared_cause": "锡炉氧化与排烟控制不良",
+    "members": [
+      "WF-N17",
+      "WF-N18",
+      "WF-N27"
+    ],
+    "member_titles": [
+      "波峰焊锡渣清理不及时",
+      "波峰焊氮气不足导致氧化",
+      "波峰焊排风不畅导致氧化加剧"
+    ]
+  },
+  {
+    "cluster_key": "SIC-WF-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "波峰焊",
+    "shared_symptom": "",
+    "shared_cause": "传送链条与链爪异常",
+    "members": [
+      "WF-N19",
+      "WF-N20",
+      "WF-N21"
+    ],
+    "member_titles": [
+      "波峰焊链爪变形导致板件倾斜",
+      "波峰焊链条抖动",
+      "波峰焊链速不稳"
+    ]
+  },
+  {
+    "cluster_key": "SIC-WF-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "波峰焊",
+    "shared_symptom": "",
+    "shared_cause": "预热系统热量输出不足",
+    "members": [
+      "WF-N22",
+      "WF-N23",
+      "WF-N25"
+    ],
+    "member_titles": [
+      "波峰焊预热管损坏",
+      "波峰焊预热风道堵塞",
+      "波峰焊夹具遮罩不当导致局部焊接不良"
+    ]
+  },
+  {
+    "cluster_key": "SIM-XR-01",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "图像模糊、细节分辨不足，微小气孔无法判读",
+    "shared_cause": "",
+    "members": [
+      "XR-N01",
+      "XR-N02",
+      "XR-N03"
+    ],
+    "member_titles": [
+      "X-Ray 焦点漂移导致图像模糊",
+      "X-Ray 探测器窗口污染导致图像模糊",
+      "X-Ray 几何放大倍率设置不当"
+    ]
+  },
+  {
+    "cluster_key": "SIM-XR-02",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "气孔面积或尺寸判定与实际不符，误判率高",
+    "shared_cause": "",
+    "members": [
+      "XR-N04",
+      "XR-N05",
+      "XR-N06"
+    ],
+    "member_titles": [
+      "X-Ray 气孔判定阈值设置不当",
+      "X-Ray 曝光参数不当导致气孔误判",
+      "X-Ray 样品倾斜导致测量偏差"
+    ]
+  },
+  {
+    "cluster_key": "SIM-XR-03",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "图像亮度或对比度异常，穿透不稳定",
+    "shared_cause": "",
+    "members": [
+      "XR-N07",
+      "XR-N08"
+    ],
+    "member_titles": [
+      "X-Ray 管电流漂移导致亮度异常",
+      "X-Ray 管电压漂移导致对比度异常"
+    ]
+  },
+  {
+    "cluster_key": "SIM-XR-04",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "图像拼接错位或定位偏移",
+    "shared_cause": "",
+    "members": [
+      "XR-N09",
+      "XR-N10"
+    ],
+    "member_titles": [
+      "X-Ray 载物台重复定位精度下降",
+      "X-Ray 图像拼接标定失效"
+    ]
+  },
+  {
+    "cluster_key": "SIM-XR-05",
+    "cluster_type": "same_symptom_diff_cause",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "设备无法出束或出束中断",
+    "shared_cause": "",
+    "members": [
+      "XR-N11",
+      "XR-N12",
+      "XR-N13"
+    ],
+    "member_titles": [
+      "X-Ray 安全联锁触发导致无法出束",
+      "X-Ray 高压电缆放电导致无法出束",
+      "X-Ray 灯丝老化导致发射不足"
+    ]
+  },
+  {
+    "cluster_key": "SIC-XR-01",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "",
+    "shared_cause": "射线管老化与冷却不足",
+    "members": [
+      "XR-N14",
+      "XR-N15",
+      "XR-N25"
+    ],
+    "member_titles": [
+      "X-Ray 射线管管电压不稳",
+      "X-Ray 射线管灯丝发射衰减",
+      "X-Ray 射线管冷却系统故障"
+    ]
+  },
+  {
+    "cluster_key": "SIC-XR-02",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "",
+    "shared_cause": "探测器性能下降与环境温湿度影响",
+    "members": [
+      "XR-N16",
+      "XR-N17",
+      "XR-N26"
+    ],
+    "member_titles": [
+      "X-Ray 探测器坏点增多",
+      "X-Ray 探测器增益漂移",
+      "X-Ray 环境温湿度超标导致测量漂移"
+    ]
+  },
+  {
+    "cluster_key": "SIC-XR-03",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "",
+    "shared_cause": "载物台机械精度与夹持失效",
+    "members": [
+      "XR-N18",
+      "XR-N19",
+      "XR-N20"
+    ],
+    "member_titles": [
+      "X-Ray 载物台丝杠间隙增大",
+      "X-Ray 导轨磨损导致运动异响",
+      "X-Ray 载物台夹持松动"
+    ]
+  },
+  {
+    "cluster_key": "SIC-XR-04",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "",
+    "shared_cause": "辐射安全联锁与剂量监测异常",
+    "members": [
+      "XR-N21",
+      "XR-N22"
+    ],
+    "member_titles": [
+      "X-Ray 铅门联锁误动作",
+      "X-Ray 剂量报警异常"
+    ]
+  },
+  {
+    "cluster_key": "SIC-XR-05",
+    "cluster_type": "same_cause_diff_symptom",
+    "device_type": "X-Ray检测机",
+    "shared_symptom": "",
+    "shared_cause": "图像软件版本与数据链路异常",
+    "members": [
+      "XR-N23",
+      "XR-N24"
+    ],
+    "member_titles": [
+      "X-Ray 重建算法版本不一致",
+      "X-Ray 图像存储与传输异常"
+    ]
+  }
+]

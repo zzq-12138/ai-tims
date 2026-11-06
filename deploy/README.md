@@ -85,6 +85,9 @@ bash deploy/scripts/validate-manifests.sh
 `deploy/k8s/base/secret.example.yaml` 只是模板，**不包含在 kustomization 中**，不会被 `apply -k` 误创建。
 
 ```bash
+# 4.0 先建命名空间（后面的 -n ai-tims 才有意义）
+kubectl apply -f deploy/k8s/base/namespace.yaml
+
 # 4.1 应用密钥（所有 REPLACE_ME 必须替换；禁止提交真实值）
 kubectl -n ai-tims create secret generic tims-app-secret \
   --from-literal=MYSQL_ROOT_PASSWORD='...' \

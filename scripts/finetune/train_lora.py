@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Qwen2.5-7B-Instruct LoRA 训练脚本（工单文本 → 五元组 JSON）。
+"""Qwen2.5-7B-Instruct LoRA 训练脚本（工单文本 → 结构化知识 JSON）。
 
 设计取舍：
-- 用 transformers `Trainer` + peft，避开 trl 1.x 的 SFTTrainer API 变更（当前 trl 1.17 已把
-  `max_seq_length` 改成 `max_length`，不同小版本差异大），训练循环完全可控、易复现。
+- 用 transformers `Trainer` + peft，避开 trl 1.x 的 SFTTrainer API 变更，训练循环完全可控、易复现。
 - prompt 段 label 置 -100，只在 JSON 答案上计 loss（避免模型学会复述问题）。
 - 支持断点续训（`--resume` 读 `output_dir/checkpoint-*`）。
 - 数据格式见同目录 `data_format.md`。
@@ -12,13 +11,14 @@
 **版本要求（实测）**：必须 `transformers==4.46.x`。
 transformers 5.22.1 的 Qwen2 实现里没有 `_gradient_checkpointing_func` 调用点，
 `gradient_checkpointing_enable()` 只置标志、显存不降，导致 4090(24G) 上 seq_len≥768 必 OOM。
+另需 `datasets==3.6.0`（配套 hub 0.36.2）。
 
 用法：
     python scripts/finetune/train_lora.py \
       --model_dir /root/autodl-tmp/models/Qwen2.5-7B-Instruct \
-      --train_file data/train.jsonl \
+      --train_file /root/autodl-tmp/data/train.jsonl \
       --output_dir /root/autodl-tmp/ckpt/qwen25-7b-lora \
-      --seq_len 1024 --batch_size 2 --grad_accum 4 --epochs 3 --grad_ckpt
+      --seq_len 1024 --batch_size 1 --grad_accum 8 --epochs 3 --grad_ckpt
 """
 import argparse
 import json
@@ -39,10 +39,14 @@ from transformers import (
 
 SYSTEM_PROMPT = (
     "你是半导体封装测试设备的知识抽取助手。请从工单文本中抽取结构化知识，"
-    "只输出一个 JSON 对象，不要输出解释、不要加代码块。字段必须齐全："
-    "phenomenon（现象）、root_cause（根因）、measures（措施，字符串数组）、"
-    "verification（验证结果）、applicable_conditions（适用条件对象：device/model/process/preconditions）、"
-    "excluded_hypotheses（被排除的假设，数组，元素含 hypothesis/reason，可为空数组）。"
+    "只输出一个 JSON 对象，不要输出解释、不要加代码块。字段必须齐全且同名："
+    "symptom（现象）、symptom_evidence（现象证据原文）、root_cause（根因）、"
+    "root_cause_evidence（根因证据原文）、measures（措施，字符串数组）、"
+    "verification（验证结果）、verification_evidence（验证证据原文）、"
+    "conditions（适用条件，数组，元素为 {\"type\",\"value\"}）、"
+    "excluded_hypotheses（被排除的假设，数组，元素为 {\"hypothesis\",\"evidence\"}，可为空数组）、"
+    "is_excluded_hypothesis（0/1）、unverified_hypotheses（未验证假设，字符串数组，可为空）、"
+    "has_final_root_cause（0/1）、uncertain（0/1）、note（备注，无则空字符串）。"
 )
 
 LORA_TARGETS = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]

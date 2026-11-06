@@ -42,6 +42,29 @@
 - 粗排的意义：直接在 CPU 上精算 1350 条要编码 1500+ 条文本（约 15 分钟），粗排后只编码 454 条（约 5 分钟）。
 - variant 的上尾（0.92）与 conflict 下尾（0.89）有重叠，说明**单靠相似度分不开「变体」与「冲突」**，这正是需要人工标 `condition_overlap` 的原因。
 
+## 校准包与外行复核（今天就能用）
+
+| 文件 | 给谁 | 说明 |
+|---|---|---|
+| `校准包_30条.md` | 标注者本人 | 30 条（10 含排除 / 10 正常 / 5 仅排除无根因 / 3 长文本 / 1 缺字段 / 1 错别字），只给 id + 摘要 + 分层类型，**不含答案** |
+| `外行复核表_C30.md` | 外行复核人 | 30 条完整原文 + 3 道是/否/不确定题，可直接打印打勾 |
+| `外行复核表_C30.csv` | 外行复核人 | 同上，Excel / 记事本填写；三个答案列留空 |
+| `annotation_set_v1.csv` 的 `calib_batch` 列 | 工作台 | 这 30 条标 `C30`，工作台勾「仅显示 C30」即只看这 30 条 |
+
+```bash
+# 重新生成校准包（会同时刷新 calib_batch 列与 annotation_data.js）
+python3 scripts/annotation/make_calib_package.py --seed 20261106
+
+# 外行复核 → 两个二值字段的一致性（不是你全槽位标注的 κ）
+python3 scripts/annotation/compute_kappa.py --mode layperson \
+  --a annot_extract_user.jsonl \
+  --b docs/paper/问题二/外行复核表_C30.csv \
+  --gold docs/paper/问题二/_gold_draft.jsonl \
+  --out docs/paper/问题二/kappa_layperson_C30.md
+```
+
+外行复核只覆盖「是否含排除假设」「有无最终根因」两个二值字段，**论文中不得表述为全量双人标注**，详见手册 §10。
+
 ## 重新生成
 
 ```bash

@@ -56,7 +56,7 @@ def load(path):
             recs = [json.loads(l) for l in t.splitlines() if l.strip()]
     out = {}
     for r in recs:
-        rid = r.get("ticket_id") or r.get("pair_id") or r.get("id")
+        rid = r.get("ticket_id") or r.get("pair_id") or r.get("id") or r.get("编号")
         if rid:
             out[str(rid)] = r
     return out
@@ -124,14 +124,172 @@ def fmt(k, po, pe, n):
     return f"{k:.3f}", f"{po:.3f}", f"{pe:.3f}", str(n)
 
 
+YES = {"是", "有", "对", "y", "yes", "true", "1"}
+NO = {"否", "没有", "无", "不", "n", "no", "false", "0"}
+
+
+def tri(v):
+    """把「是/否/不确定」归一成 1 / 0 / None"""
+    s = (v or "").strip().lower()
+    if s in YES:
+        return 1
+    if s in NO:
+        return 0
+    return None
+
+
+def user_bin(rec, key):
+    """用户 JSONL 里的二值字段 → 1/0/None（空值返回 None）"""
+    v = rec.get(key)
+    if v is None:
+        return None
+    if isinstance(v, bool):
+        return 1 if v else 0
+    s = str(v).strip()
+    return tri(s) if s else None
+
+
+def run_layperson(A, L, G, out):
+    """外行复核表 ↔ 用户标注：两个二值字段的双人一致性"""
+    lines = []
+    w = lines.append
+    w("# 外行复核一致性报告（两个二值字段）\n")
+    w("本报告只覆盖两个维度：**有没有说某原因被排除**、**有没有给出最终结论**。")
+    w("不等价于全槽位双人标注，论文中只能表述为「两个关键二值字段的双人一致性」。\n")
+
+    # 外行表列名是中文（问题1_/问题2_/问题3_），统一映射成 q1/q2/q3
+    cols = list(next(iter(L.values())).keys()) if L else []
+
+    def col(pref):
+        for c in cols:
+            if str(c).strip().lower().startswith(pref):
+                return c
+        return pref
+
+    c1, c2, c3 = col("问题1"), col("问题2"), col("问题3")
+    L = {k: dict(v, q1=v.get(c1, v.get("q1", "")), q2=v.get(c2, v.get("q2", "")),
+                 q3=v.get(c3, v.get("q3", ""))) for k, v in L.items()}
+
+    ids = [k for k in L if k in A]
+    miss = sorted(set(L) - set(A))
+    if miss:
+        w(f"- 外行表里有 {len(miss)} 条在你的标注里找不到，已跳过：{', '.join(miss[:10])}")
+    w(f"- 参与计算：{len(ids)} 条（外行 {len(L)} 条 / 你的标注 {len(A)} 条）\n")
+
+    fields = [
+        ("excl", "Q1 有没有说某原因「检查是好的 / 已排除」", "is_excluded_hypothesis", "q1"),
+        ("final", "Q2 最后有没有明确说「就是某个原因造成的」", "has_final_root_cause", "q2"),
+    ]
+    summary = []
+    for key, title, ukey, qkey in fields:
+        pairs, rows, unsure = [], [], 0
+        for i in ids:
+            lp = tri(L[i].get(qkey))
+            uv = user_bin(A[i], ukey)
+            if lp is None:
+                unsure += 1
+                continue
+            if uv is None:
+                continue
+            pairs.append((uv, lp))
+            rows.append((i, uv, lp))
+        k, po, pe, n = cohen_kappa([(str(a), str(b)) for a, b in pairs])
+        cm = Counter((a, b) for _, a, b in rows)
+        summary.append((key, title, k, po, pe, n, unsure, cm))
+        w(f"## {title}\n")
+        w(f"| 指标 | 值 |\n|---|---|")
+        w(f"| 一致率 p_o | **{po:.3f}**（{sum(cm[(a, a)] for a in (0, 1))}/{n}） |")
+        w(f"| 期望一致率 p_e | {pe:.3f} |")
+        w(f"| Cohen's κ | **{k:.3f}**（{band(k)}） |")
+        w(f"| 有效样本 | {n}（外行答「不确定」{unsure} 条，未计入） |\n")
+        w("| 混淆矩阵 | 外行=否 | 外行=是 |\n|---|---|---|")
+        w(f"| **你=否** | {cm[(0, 0)]} | {cm[(0, 1)]} |")
+        w(f"| **你=是** | {cm[(1, 0)]} | {cm[(1, 1)]} |\n")
+        big = max(((cm[(0, 1)], "你判否、外行判是（漏判）"), (cm[(1, 0)], "你判是、外行判否（多判）"),
+                   (cm[(0, 0)], ""), (cm[(1, 1)], "")))
+        if big[1] and big[0]:
+            w(f"- 主要分歧：{big[1]} 共 {big[0]} 条 → 拿这 {big[0]} 条原文回看，判断是"
+              f"「文字本身有两种读法」还是「你按专业经验补全了字面没写的内容」。\n")
+
+    # 外行 vs 构造真值（注意力校验，不用于论文主结论）
+    if G:
+        w("## 附：外行 vs 构造真值（仅作注意力校验）\n")
+        w("构造真值是生成时记录的，外行看不到也不该看到；这里只用来确认「外行是否真的读懂了题」，"
+          "不作为一致性结论。\n")
+        w("| 字段 | κ | 一致率 | n |\n|---|---|---|---|")
+        for key, title, ukey, qkey in fields:
+            pairs = []
+            for i in ids:
+                lp = tri(L[i].get(qkey))
+                st = (G.get(i) or {}).get("structure")
+                if st is None:
+                    continue
+                gv = 1 if (st in ("excluded", "no_final") if key == "excl"
+                           else st in ("normal", "excluded")) else 0
+                if lp is None:
+                    continue
+                pairs.append((str(gv), str(lp)))
+            k, po, pe, n = cohen_kappa(pairs)
+            w(f"| {title} | {k:.3f} | {po:.3f} | {n} |")
+        w("")
+
+    # Q3 一致性（阅读追踪，不是标签）
+    q3 = Counter(L[i].get("q3", "").strip() or "空" for i in ids)
+    contradictory = [i for i in ids
+                     if tri(L[i].get("q3")) == 1 and tri(L[i].get("q2")) == 1]
+    w("## Q3（最后认定的原因，前面是否被说过正常）\n")
+    w(f"- 答案分布：{dict(q3)}")
+    w(f"- 同时答「Q3=是」且「Q2=是」的有 **{len(contradictory)}** 条："
+      f"这代表记录里「先排除、后又认定为原因」，属于**前后矛盾的可疑记录**，"
+      f"应回到你的标注里核对 `is_excluded_hypothesis` 与 `has_final_root_cause` 是否同时为是。")
+    if contradictory:
+        w(f"- 可疑 id：{', '.join(contradictory[:20])}")
+    w("")
+
+    w("## 一致率 → κ 的换算（怎么读这个数）\n")
+    w("κ = (p_o − p_e) / (1 − p_e)，p_e 由两边的作答比例决定（越偏科 p_e 越高，κ 越被压低）。")
+    w("同样 0.90 的一致率，在不同作答比例下 κ 差别很大：\n")
+    w("| 一致率 p_o | p_e=0.50 | p_e=0.60 | p_e=0.70 | p_e=0.80 |\n|---|---|---|---|---|")
+    for po in (0.80, 0.85, 0.90, 0.95):
+        w(f"| {po:.2f} | " + " | ".join(f"{(po - pe) / (1 - pe):.2f}" for pe in (0.5, 0.6, 0.7, 0.8)) + " |")
+    w("")
+    w("本批实测 p_e 已在上表列出：若 p_e 接近 0.5，一致率 0.90 ≈ κ 0.80；"
+      "若 p_e 到 0.8（两边绝大多数都答「否」），一致率 0.90 只有 κ 0.50。"
+      "所以**不能只看一致率报喜**。\n")
+    w("## 结论怎么写\n")
+    w("- 达标口径：两个字段 κ 均 ≥ 0.60，且「不一致」集中在少数可解释样本上。")
+    w("- κ < 0.60 时：先看混淆矩阵的主分歧格，再回看那几条原文——"
+      "如果是外行把「提到过某现象」当成「已排除」，就改外行表的提示语；"
+      "如果是你按经验补全了字面没写的内容，就改你自己的标注，而不是改外行。")
+    w("- 论文表述固定为：「两名标注者在『是否含排除假设』与『有无最终根因』两个二值字段上的 "
+      f"Cohen's κ 分别为 {summary[0][2]:.2f} 与 {summary[1][2]:.2f}」。不得写成全量双人标注。")
+
+    text = "\n".join(lines) + "\n"
+    if out:
+        os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
+        with open(out, "w", encoding="utf-8") as f:
+            f.write(text)
+        print(f"已写入 {out}")
+    else:
+        print(text)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--a", required=True, help="标注者 A（用户）")
-    ap.add_argument("--b", required=True, help="标注者 B / gold 复核")
+    ap.add_argument("--mode", default="slot", choices=["slot", "layperson"],
+                    help="slot=全槽位双人标注；layperson=外行复核表（两个二值字段）")
+    ap.add_argument("--a", default="", help="标注者 A（用户 JSONL）")
+    ap.add_argument("--b", default="", help="标注者 B / gold / 外行复核表 CSV")
+    ap.add_argument("--gold", default="", help="layperson 模式可选：_gold_draft.jsonl")
     ap.add_argument("--data", default="", help="原始标注集 CSV，用于长文本切片")
     ap.add_argument("--meta", default="", help="_gold_draft.jsonl，用于结构/风格切片")
     ap.add_argument("--out", default="", help="Markdown 输出路径；留空则打印")
     args = ap.parse_args()
+    if not args.a or not args.b:
+        sys.exit("需要 --a 与 --b")
+    if args.mode == "layperson":
+        run_layperson(load(args.a), load(args.b), load(args.gold) if args.gold else {}, args.out)
+        return
 
     A, B = load(args.a), load(args.b)
     common = sorted(set(A) & set(B))

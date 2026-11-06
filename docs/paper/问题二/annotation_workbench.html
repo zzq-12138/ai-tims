@@ -84,6 +84,9 @@
   <label class="pill" title="显示 glm-4-flash 零样本抽取结果，仅作参考">
     <input type="checkbox" id="sugToggle" style="vertical-align:-1px"> 预填建议值
   </label>
+  <label class="pill" title="只显示校准包 30 条（calib_batch=C30）">
+    <input type="checkbox" id="calibOnly" style="vertical-align:-1px"> 仅显示 C30
+  </label>
   <button id="loadBtn" class="ghost">导入数据</button>
   <input type="file" id="fileInput" accept=".csv,.jsonl,.json,.js" hidden>
   <button id="expJson" class="ghost">导出 JSONL</button>
@@ -124,7 +127,7 @@
 <script>
 "use strict";
 const LS_PREFIX = "tims_annot_v1_";
-let DATA = [], MODE = "ticket", CURSOR = 0, SUGG = {}, START_TS = Date.now();
+let DATA = [], ALL = [], DS_NAME = "", MODE = "ticket", CURSOR = 0, SUGG = {}, START_TS = Date.now();
 let DS_KEY = "default";
 const $ = (s) => document.querySelector(s);
 const el = (t, a, kids) => { const n = document.createElement(t);
@@ -137,16 +140,25 @@ function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add
 function normTicket(r, i){
   return { id: r.ticket_id || r.id || ("ROW" + (i + 1)),
     device: r.device_type || r.device || "", model: r.device_model || r.model || "",
-    code: r.error_code || r.code || "", text: r.ticket_text || r.text || "" };
+    code: r.error_code || r.code || "", text: r.ticket_text || r.text || "",
+    calib: (r.calib_batch || r.calib || "").toString().trim() };
 }
 function normPair(r, i){
   return { id: r.pair_id || r.id || ("PAIR" + (i + 1)), a: r.text_a || "", b: r.text_b || "",
     hint: r.evidence_hint || "" };
 }
 function setData(arr, kind, name, key){
-  DATA = arr; MODE = kind; CURSOR = 0; DS_KEY = key || (kind + "_" + arr.length);
-  $("#dsname").textContent = name || (kind + " · " + arr.length + " 条");
+  ALL = arr; MODE = kind; DS_NAME = name || (kind + " · " + arr.length + " 条");
+  CURSOR = 0; DS_KEY = key || (kind + "_" + arr.length);
   $("#mode").textContent = kind === "ticket" ? "工单槽位标注" : "关系对标注";
+  applyFilter();
+}
+/* 仅显示校准包 C30：从 ALL 过滤，不影响 localStorage 的 key */
+function applyFilter(){
+  const only = $("#calibOnly").checked && MODE === "ticket";
+  DATA = only ? ALL.filter(d => d.calib === "C30") : ALL;
+  CURSOR = 0;
+  $("#dsname").textContent = DS_NAME + (only ? "（仅 C30 · " + DATA.length + " 条）" : "");
   render();
 }
 
@@ -206,6 +218,7 @@ if (window.ANNOTATION_DATA && window.ANNOTATION_DATA.length){
 }
 
 $("#loadBtn").onclick = () => $("#fileInput").click();
+$("#calibOnly").onchange = applyFilter;
 document.addEventListener("dragover", e => e.preventDefault());
 
 /* ---------------- 记忆读写 ---------------- */
@@ -223,7 +236,11 @@ function renderStats(){
   $("#stats").innerHTML = "已标 <b>" + done + "</b>/" + DATA.length + "（" + pct + "%） · 存疑 <b>" + unc + "</b> · 本条耗时 <b id='curms'>0</b>";
 }
 function render(){
-  if (!DATA.length) return;
+  if (!DATA.length){
+    $("#leftBody").className = "empty";
+    $("#leftBody").innerHTML = "当前筛选下没有数据。取消「仅显示 C30」或先导入包含 calib_batch 列的数据。";
+    $("#form").innerHTML = ""; $("#stats").innerHTML = "已标 <b>0</b>/0"; return;
+  }
   CURSOR = Math.max(0, Math.min(CURSOR, DATA.length - 1));
   $("#leftBody").className = "";
   const d = DATA[CURSOR];

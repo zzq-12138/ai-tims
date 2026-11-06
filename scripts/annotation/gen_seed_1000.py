@@ -32,6 +32,29 @@ import time
 DEVICES = ["贴片机", "AOI检测机", "涂布机", "贴合机", "蚀刻机"]
 STYLES = ["formal", "colloquial", "missing", "typo", "long"]
 
+# 文案腔替换表（2026-11-06 抽检后新增）：只改正文措辞，不触碰任何槽位与真值。
+# 这些短语只出现在叙述句里，不落在排除假设证据的截取区间内，替换后 evidence 保持逐字不变。
+PHRASE_FIXES = {
+    "又闹脾气了": "又出问题了",
+    "这才算完事": "这才恢复",
+    "先这么跑着": "先这样运行",
+}
+BANNED_PHRASES = list(PHRASE_FIXES)
+
+
+def apply_phrase_fixes(text):
+    for a, b in PHRASE_FIXES.items():
+        text = text.replace(a, b)
+    return text
+
+
+def assert_no_banned(texts):
+    """生成后自检：正文不得残留文案腔。命中即失败，不靠人工抽检兜底。"""
+    bad = [(i, p) for i, t in enumerate(texts) for p in BANNED_PHRASES if p in t]
+    if bad:
+        raise SystemExit(f"[gen] 正文仍含禁用文案腔 {bad[:5]}，请改模板后重跑")
+    print(f"[gen] 文案腔自检通过：{len(texts)} 条正文均不含 {BANNED_PHRASES}")
+
 
 def sc(device, topic, model, code, symptom, cause, alt, evidence,
        m1, m2, verify, cond):
@@ -585,7 +608,7 @@ def main():
         pool = by_device[p["device"]]
         s = pool[k % len(pool)]
         builder = BUILDERS[p["style"]]
-        text = builder(s, p["idx"], p["struct"])
+        text = apply_phrase_fixes(builder(s, p["idx"], p["struct"]))
         tid = f"T{k + 1:04d}"
         line, shift, op = _ctx(p["idx"])
         model = "" if p["style"] == "missing" else s["model"]
@@ -662,6 +685,7 @@ def main():
     with open(os.path.join(args.out_dir, "_dataset_stats.json"), "w", encoding="utf-8") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2)
 
+    assert_no_banned([r["ticket_text"] for r in rows])
     print(json.dumps(stats, ensure_ascii=False, indent=2))
 
     if args.with_s1:

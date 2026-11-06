@@ -20,9 +20,9 @@
     "no_final": 100
   },
   "long_text_over_500": 200,
-  "min_text_len": 97,
+  "min_text_len": 96,
   "max_text_len": 776,
-  "avg_text_len": 307.5,
+  "avg_text_len": 307.4,
   "device_x_style": {
     "贴片机": {
       "formal": 40,

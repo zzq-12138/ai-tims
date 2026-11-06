@@ -26,7 +26,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_seed_1000 import (ALT2_POOL, DEVICES, LINE_POOL, OP_POOL, SCEN,  # noqa: E402
-                           SHIFT_POOL, sync_evidence)
+                           SHIFT_POOL, apply_phrase_fixes, assert_no_banned, sync_evidence)
 
 BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT_DIR = os.path.join(BASE, "docs", "paper", "问题二")
@@ -153,7 +153,7 @@ def main():
     for k, p in enumerate(plan):
         pool = by_device[p["device"]]
         s = pool[(k * 3 + OFFSET) % len(pool)]      # 与训练集取场景的顺序错开
-        text = BUILDERS[p["style"]](s, p["idx"], p["struct"])
+        text = apply_phrase_fixes(BUILDERS[p["style"]](s, p["idx"], p["struct"]))
         tid = f"H{k + 1:04d}"
         line, shift, op = ctx(p["idx"])
         rows.append(dict(ticket_id=tid, device_type=s["device"], device_model=s["model"],
@@ -197,6 +197,7 @@ def main():
                  avg_text_len=round(sum(len(r["ticket_text"]) for r in rows) / len(rows), 1))
     with open(os.path.join(args.out_dir, "_heldout_stats.json"), "w", encoding="utf-8") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2)
+    assert_no_banned([r["ticket_text"] for r in rows])
     print(json.dumps(stats, ensure_ascii=False, indent=2))
 
 

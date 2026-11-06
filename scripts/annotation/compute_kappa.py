@@ -309,9 +309,9 @@ def main():
 
     lines = []
     w = lines.append
-    w("# 标注一致性报告（Cohen's κ）\n")
-    w(f"- 标注 A：`{args.a}`（{len(A)} 条）")
-    w(f"- 标注 B：`{args.b}`（{len(B)} 条）")
+    w("# 一致性报告（Cohen's κ）\n")
+    w(f"- 条目 A：`{args.a}`（{len(A)} 条）")
+    w(f"- 条目 B：`{args.b}`（{len(B)} 条）")
     w(f"- 共同样本：**{len(common)}** 条；模式：**{'关系对' if is_pair else '工单槽位'}**")
     w("")
     w("## 1. 总表\n")

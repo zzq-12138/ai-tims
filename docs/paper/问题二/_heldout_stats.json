@@ -1,0 +1,24 @@
+{
+  "total": 200,
+  "seed": 20261107,
+  "by_device": {
+    "贴片机": 40,
+    "AOI检测机": 40,
+    "涂布机": 40,
+    "贴合机": 40,
+    "蚀刻机": 40
+  },
+  "by_style": {
+    "dispatch": 67,
+    "wechat": 67,
+    "logbook": 66
+  },
+  "by_structure": {
+    "normal": 120,
+    "excluded": 60,
+    "no_final": 20
+  },
+  "min_text_len": 125,
+  "max_text_len": 293,
+  "avg_text_len": 214.2
+}

@@ -3,15 +3,35 @@
 > 本目录数据**全部由脚本合成**，不含任何真实企业工单、客户信息或产线数据。论文中须写「合成语料 / 模拟工单」，不得写「真实企业工单验证」。
 
 - 生成日期：2026-11-06
-- 对应文档：`docs/paper/研究方向/技术路线四步_v2_问题二.md` §3.1、`docs/paper/研究方向/标注手册_v1.md` §9
-- 生成脚本：`scripts/annotation/gen_seed_1000.py`、`gen_relation_pairs.py`
+- 对应文档：`docs/paper/研究方向/技术路线四步_v2_问题二.md` §3.1、`docs/paper/研究方向/标注手册_v1.md` §9、`标注方案变更说明.md`
+- 生成脚本：`scripts/annotation/gen_seed_1000.py`、`gen_relation_pairs.py`、`gen_heldout_cross_template.py`
+
+## 现行方案（2026-11-06 起）
+
+人工标注方案已停用。真值在生成时就已确定，属于 **construction-based gold（弱监督）**，不是人工标注。三层核验：
+
+| 层 | 做什么 | 产物 | 状态 |
+|---|---|---|---|
+| L1 自动核验 | 5 项可程序判定的自洽性检查 | `构造真值自检报告.md` | 五项 100% |
+| L2 独立模型盲评 | glm-4-flash 按手册规则独立抽取，与构造真值比对 | `blind_predictions.jsonl`、`盲评一致性报告.md` | 见报告 |
+| L3 极小人工抽检 | 10 条只答两个是非题，估计生成器保真度 | `人工抽检_10条.md` | 待填 |
+
+跨模板留出集（只测试、不进训练）：`heldout_cross_template.csv` + `_heldout_gold_draft.jsonl`。
+
+> 禁止表述：「人工标注」「专家标注」「双人标注」「标注者间 κ」。正确表述：「构造真值」「弱监督标签」「构造真值与独立模型判定的一致性」。
 
 ## 文件
 
 | 文件 | 说明 |
 |---|---|
-| `annotation_set_v1.csv` | 1000 条工单。前 5 列为原文与元信息，其余为**空标签列**，人工填写 |
-| `_gold_draft.jsonl` | 生成真值（结构 / 风格 / 根因 / 排除假设）。**标注时不要打开**，只用于 κ 与错误分析 |
+| `annotation_set_v1.csv` | 1000 条工单。前 5 列为原文与元信息，其余为空标签列（现行方案不再人工填写，仅保留 schema） |
+| `_gold_draft.jsonl` | 构造真值（生成时确定）。盲评时模型不得接触 |
+| `constructed_gold.jsonl` / `constructed_gold_alpaca.json` | 导出为训练/评测标准格式的真值（1000 条），schema 与被测模型输出一致 |
+| `构造真值自检报告.md` | L1 自动核验报告（5 项） |
+| `blind_predictions.jsonl` / `盲评一致性报告.md` | L2 盲评原始输出与一致性/κ 报告 |
+| `人工抽检_10条.md` | L3 保真度抽检表（10 条、两个是非题、10 分钟） |
+| `heldout_cross_template.csv` / `_heldout_gold_draft.jsonl` / `_heldout_stats.json` | 跨模板留出集 200 条（只测试，不进训练） |
+| `标注方案变更说明.md` | 方案变更原因、三层结构与论文写法 |
 | `annotation_data.js` | 工作台自动加载（`window.ANNOTATION_DATA`），不含真值 |
 | `annotation_workbench.html` | 单文件标注工作台，Chrome/Edge 双击打开 |
 | `annotation_relation_v1.csv` | 300 对关系集，`relation` 列空 |
@@ -40,30 +60,45 @@
 
 - conflict 候选池 1350 条 → 字符 n-gram 粗排保留 400 条 → BGE 精算，**80/80 全部落在 0.85–0.95**，无需区间外补足；每类设备各 16 对。
 - 粗排的意义：直接在 CPU 上精算 1350 条要编码 1500+ 条文本（约 15 分钟），粗排后只编码 454 条（约 5 分钟）。
-- variant 的上尾（0.92）与 conflict 下尾（0.89）有重叠，说明**单靠相似度分不开「变体」与「冲突」**，这正是需要人工标 `condition_overlap` 的原因。
+- variant 的上尾（0.92）与 conflict 下尾（0.89）有重叠，说明**单靠相似度分不开「变体」与「冲突」**，这正是必须引入 `condition_overlap` 判定的原因。
+- 关系真值同样由构造确定（`_gold_relation_draft.jsonl`），不做人工标注；一致性同样按「构造真值 vs 独立模型判定」口径报告。
 
-## 校准包与外行复核（今天就能用）
+## 校准包与外行复核（**已停用**）
 
-| 文件 | 给谁 | 说明 |
+| 文件 | 状态 | 说明 |
 |---|---|---|
-| `校准包_30条.md` | 标注者本人 | 30 条（10 含排除 / 10 正常 / 5 仅排除无根因 / 3 长文本 / 1 缺字段 / 1 错别字），只给 id + 摘要 + 分层类型，**不含答案** |
-| `外行复核表_C30.md` | 外行复核人 | 30 条完整原文 + 3 道是/否/不确定题，可直接打印打勾 |
-| `外行复核表_C30.csv` | 外行复核人 | 同上，Excel / 记事本填写；三个答案列留空 |
-| `annotation_set_v1.csv` 的 `calib_batch` 列 | 工作台 | 这 30 条标 `C30`，工作台勾「仅显示 C30」即只看这 30 条 |
+| `校准包_30条.md` | 已停用 | 30 条校准包，原用于人工标注前校准口径 |
+| `外行复核表_C30.md` / `外行复核表_C30.csv` | 已停用 | 原用于外行复核两个二值字段 |
+| `annotation_set_v1.csv` 的 `calib_batch` 列 | 保留 | 仍标 `C30`，工作台可按此过滤，仅供回溯 |
+| `compute_kappa.py --mode layperson` | 已停用 | 无第二读者，不再使用 |
+
+**停用原因**：1000 条 × 每条 1–2 分钟对非专业者是硬门槛，实测确认无法完成，也不再找第二人做 κ。
+文件保留不删，便于答辩时说明「曾设计过、因成本不可行而停用」。详见 `标注方案变更说明.md`。
+
+## 真值导出与三层核验
 
 ```bash
-# 重新生成校准包（会同时刷新 calib_batch 列与 annotation_data.js）
-python3 scripts/annotation/make_calib_package.py --seed 20261106
+# L1 真值导出 + 自动核验
+python3 scripts/annotation/export_constructed_gold.py
+python3 scripts/annotation/verify_gold.py
 
-# 外行复核 → 两个二值字段的一致性（不是你全槽位标注的 κ）
-python3 scripts/annotation/compute_kappa.py --mode layperson \
-  --a annot_extract_user.jsonl \
-  --b docs/paper/问题二/外行复核表_C30.csv \
-  --gold docs/paper/问题二/_gold_draft.jsonl \
-  --out docs/paper/问题二/kappa_layperson_C30.md
+# L2 独立模型盲评（glm-4-flash，不接触构造真值）
+python3 scripts/annotation/blind_eval.py run --workers 14
+python3 scripts/annotation/blind_eval.py compare
+
+# L3 人工抽检：打开 人工抽检_10条.md，勾 10 组是非题
 ```
 
-外行复核只覆盖「是否含排除假设」「有无最终根因」两个二值字段，**论文中不得表述为全量双人标注**，详见手册 §10。
+## 跨模板留出集
+
+```bash
+python3 scripts/annotation/gen_heldout_cross_template.py --n 200 --seed 20261107
+```
+
+- 模板族：`dispatch` / `wechat` / `logbook`（与训练集 5 种模板不重叠）
+- 种子：20261107（训练集 20261106）；上下文索引偏移 137
+- 分层：5 设备 × 40；normal 120 / excluded 60 / no_final 20
+- 用途：只测试、不进训练；若跨模板性能显著下降，须在论文如实报告
 
 ## 重新生成
 
@@ -77,19 +112,10 @@ python3 scripts/annotation/gen_relation_pairs.py --embed hash              # 无
 
 生成是确定性的（固定 seed），重跑会覆盖同名文件。
 
-## 标注 → κ
-
-```bash
-python3 scripts/annotation/compute_kappa.py \
-  --a annot_extract_user.jsonl --b annot_extract_b.jsonl \
-  --data docs/paper/问题二/annotation_set_v1.csv \
-  --meta docs/paper/问题二/_gold_draft.jsonl \
-  --out docs/paper/问题二/kappa_report.md
-```
-
 ## 已知局限
 
 1. 文本由模板 + 同义替换 + 噪声生成，句式多样性低于真实工单；已用 5 种风格缓解，但**不能替代真实数据**。
-2. 现象描述的真实性由人工在标注时把关（发现与设备原理不符即标 `uncertain=1`）。
+2. **真值来自构造而非标注**：标签在生成时确定，只能保证「自洽 + 可学习 + 跨模板可迁移」，不能保证「符合真实维修语义」；后者仅由 10 条保真度抽检粗略估计。
 3. 知识库反推样本仅作补充（<15%），避免「库里有答案」的检索天花板偏差。
 4. 关系集相似度用 BGE-M3 CPU 实测；生产检索用的是 embedding-3，落点会有差异，论文报告时须注明模型。
+5. 跨模板留出集只有 200 条、3 套模板，仍属「生成分布内」的模板迁移，不是真实分布外泛化。

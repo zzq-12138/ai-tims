@@ -463,13 +463,42 @@ def build_colloquial(s, i, struct):
             f"{s['m1']}、{s['m2']}也做了，好一点但没断根，后面还得叫厂家来看，先这么跑着。")
 
 
+def _clause_after(text, anchor):
+    i = text.find(anchor)
+    if i < 0:
+        return ""
+    seg = text[i + len(anchor):].lstrip("，,、 ")
+    cut = len(seg)
+    for p in ("。", "；", ";", "\n"):
+        j = seg.find(p)
+        if 0 < j < cut:
+            cut = j
+    return seg[:cut].strip("，,、 ").split("，排除")[0].strip("，,、 ")
+
+
+def sync_evidence(text, excls):
+    """把 gold 里的排除证据对齐成工单原文的真实子串（风格扰动后仍可校验）。"""
+    out = []
+    for h in excls:
+        ev = _clause_after(text, h["hypothesis"])
+        if len(ev) < 6:  # typo 风格可能改了关键词，退回通用「未改善」分句
+            for marker in ("现象无任何改善", "现象未改善", "没用", "老样子"):
+                j = text.find(marker)
+                if j >= 0:
+                    ev = text[max(0, j - 20): j + len(marker)].lstrip("，,、 ")
+                    break
+        out.append(dict(hypothesis=h["hypothesis"],
+                        evidence=ev if len(ev) >= 6 else h["evidence"]))
+    return out
+
+
 def build_missing(s, i, struct):
     line, shift, op = _ctx(i)
     text = build_formal(s, i, struct)
     # 去掉错误码、型号、具体数值与复测数据
     text = re.sub(r"（错误码 [A-Z]\d+）", "", text)
     text = re.sub(r"（型号 [^）]+）", "", text)
-    text = re.sub(r"\d+(\.\d+)?\s*(kPa|lx|μm|mm|℃|MPa|N|%|°|g/L|L/min|Pa|cP|h)", "某数值", text)
+    text = re.sub(r"\d+(\.\d+)?\s*(kPa|lx|μm|mm|℃|MPa|N|%|°|g/L|L/min|Pa|cP|h)", "（未记录）", text)
     text = text.replace("复测结论：", "复测结论：已恢复生产，具体数据未记录，")
     if struct == "normal":
         text = text.replace("据此判定为", "估计是")
@@ -589,6 +618,7 @@ def main():
             unverified_hypotheses=[],
             line=line, shift=shift, operator=op,
         )
+        g["excluded_hypotheses"] = sync_evidence(text, g["excluded_hypotheses"])
         gold.append(g)
 
     csv_path = os.path.join(args.out_dir, "annotation_set_v1.csv")

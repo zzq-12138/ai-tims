@@ -1,0 +1,2 @@
+# shell 脚本必须以 LF 落盘，否则在 Linux/VM 上 shebang 会报 bad interpreter
+*.sh text eol=lf

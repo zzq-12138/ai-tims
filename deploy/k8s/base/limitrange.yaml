@@ -1,0 +1,21 @@
+# 兜底默认值：任何容器漏写 resources 时仍能满足 ResourceQuota 的准入要求。
+# 各工作负载的显式 requests/limits 优先级更高。
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: ai-tims-limits
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 200m
+        memory: 256Mi
+      default:
+        cpu: "1"
+        memory: 1Gi
+      min:
+        cpu: 50m
+        memory: 64Mi
+      max:
+        cpu: "4"
+        memory: 8Gi

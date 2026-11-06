@@ -1,0 +1,120 @@
+# MySQL 8 单实例（StatefulSet + 默认 StorageClass）
+# 初始化 SQL 由 deploy/k8s/base/middleware/mysql/init-job.yaml 单独执行，
+# 不在 kustomize 默认资源里，避免每次 apply 都 DROP TABLE。
+apiVersion: v1
+kind: Service
+metadata:
+  name: tims-mysql
+  labels:
+    app: tims-mysql
+spec:
+  clusterIP: None
+  selector:
+    app: tims-mysql
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tims-mysql
+  labels:
+    app: tims-mysql
+spec:
+  serviceName: tims-mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tims-mysql
+  template:
+    metadata:
+      labels:
+        app: tims-mysql
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: mysql
+          image: registry.company.internal/ai-tims/mysql:8.0.36
+          imagePullPolicy: IfNotPresent
+          args:
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_0900_ai_ci
+            - --default-time-zone=+08:00
+          ports:
+            - name: mysql
+              containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              value: aitims
+            # 初始化 Job 从另一个 Pod 以 root 连接，必须放开 root 的远程来源
+            - name: MYSQL_ROOT_HOST
+              value: "%"
+            - name: MYSQL_USER
+              value: tims
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MYSQL_PASSWORD
+            - name: TZ
+              value: Asia/Shanghai
+          resources:
+            requests:
+              cpu: 250m
+              memory: 768Mi
+            limits:
+              cpu: "1"
+              memory: 1536Mi
+          startupProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+            - name: run
+              mountPath: /var/run/mysqld
+      volumes:
+        - name: run
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi

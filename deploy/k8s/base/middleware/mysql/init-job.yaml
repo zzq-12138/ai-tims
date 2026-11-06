@@ -1,0 +1,63 @@
+# 一次性数据库初始化：执行仓库根目录 sql/init.sql。
+#
+# 前置（在仓库根目录执行）：
+#   kubectl -n ai-tims create configmap tims-mysql-init \
+#     --from-file=init.sql=sql/init.sql --dry-run=client -o yaml | kubectl apply -f -
+#   kubectl apply -f deploy/k8s/base/middleware/mysql/init-job.yaml
+#   kubectl -n ai-tims logs job/tims-mysql-init
+#
+# 重跑：kubectl -n ai-tims delete job tims-mysql-init
+# 警告：init.sql 含 DROP TABLE，只允许在首次初始化或确认可重建时执行。
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: tims-mysql-init
+  namespace: ai-tims
+  labels:
+    app: tims-mysql-init
+spec:
+  backoffLimit: 6
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app: tims-mysql-init
+    spec:
+      restartPolicy: OnFailure
+      automountServiceAccountToken: false
+      containers:
+        - name: init
+          image: registry.company.internal/ai-tims/mysql:8.0.36
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              until mysqladmin ping -h tims-mysql -uroot -p"$MYSQL_ROOT_PASSWORD" --silent; do
+                echo "waiting for tims-mysql ..."
+                sleep 5
+              done
+              mysql -h tims-mysql -uroot -p"$MYSQL_ROOT_PASSWORD" < /init/init.sql
+              echo "init.sql applied"
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: init-sql
+              mountPath: /init
+              readOnly: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      volumes:
+        - name: init-sql
+          configMap:
+            name: tims-mysql-init

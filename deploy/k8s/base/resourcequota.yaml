@@ -1,0 +1,18 @@
+# 按 13 个工作负载的 requests 合计约 3 CPU / 8Gi 预留，
+# 如公司 namespace 配额更小，优先调低本文件数值，不要删掉 requests/limits。
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: ai-tims-quota
+spec:
+  hard:
+    requests.cpu: "6"
+    requests.memory: 16Gi
+    limits.cpu: "16"
+    limits.memory: 32Gi
+    requests.storage: 100Gi
+    persistentvolumeclaims: "12"
+    pods: "40"
+    services: "20"
+    configmaps: "30"
+    secrets: "30"

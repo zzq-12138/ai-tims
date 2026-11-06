@@ -1,0 +1,27 @@
+# 统一入口。所有 HTTP/WS 流量先到 gateway，再由 gateway 按 /api/** 与 /ws/** 转发。
+# ingressClassName 必须与公司集群实际的 IngressClass 名称一致（见准入核查清单）。
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai-tims
+  labels:
+    app: ai-tims-ingress
+  annotations:
+    # 附件单文件 20MB，留 25MB 余量（与 ticket-order multipart 配置一致）
+    nginx.ingress.kubernetes.io/proxy-body-size: 25m
+    # SSE / WebSocket 长连接
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: tims.company.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ticket-gateway
+                port:
+                  number: 8080

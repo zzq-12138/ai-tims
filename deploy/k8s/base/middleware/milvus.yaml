@@ -1,0 +1,336 @@
+# Milvus standalone 三件套：etcd（元数据）+ MinIO（对象存储）+ milvus（向量引擎）。
+# 与 docker/docker-compose.yml 的镜像版本保持一致。
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tims-etcd
+  labels:
+    app: tims-etcd
+spec:
+  selector:
+    app: tims-etcd
+  ports:
+    - name: client
+      port: 2379
+      targetPort: client
+    - name: peer
+      port: 2380
+      targetPort: peer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tims-etcd
+  labels:
+    app: tims-etcd
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tims-etcd
+  template:
+    metadata:
+      labels:
+        app: tims-etcd
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        # etcd 镜像以非 root 用户运行；PVC 需要可写组
+        fsGroup: 1000
+      containers:
+        - name: etcd
+          image: registry.company.internal/ai-tims/etcd:v3.5.14
+          imagePullPolicy: IfNotPresent
+          command:
+            - etcd
+            - --advertise-client-urls=http://tims-etcd:2379
+            - --listen-client-urls=http://0.0.0.0:2379
+            - --data-dir=/etcd
+          ports:
+            - name: client
+              containerPort: 2379
+            - name: peer
+              containerPort: 2380
+          env:
+            - name: ETCD_AUTO_COMPACTION_MODE
+              value: revision
+            - name: ETCD_AUTO_COMPACTION_RETENTION
+              value: "1000"
+            - name: ETCD_QUOTA_BACKEND_BYTES
+              value: "4294967296"
+            - name: TZ
+              value: Asia/Shanghai
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            tcpSocket:
+              port: client
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: client
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: client
+            periodSeconds: 20
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /etcd
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tims-etcd-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tims-etcd-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tims-minio
+  labels:
+    app: tims-minio
+spec:
+  selector:
+    app: tims-minio
+  ports:
+    - name: api
+      port: 9000
+      targetPort: api
+    - name: console
+      port: 9001
+      targetPort: console
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tims-minio
+  labels:
+    app: tims-minio
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tims-minio
+  template:
+    metadata:
+      labels:
+        app: tims-minio
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: minio
+          image: registry.company.internal/ai-tims/minio:RELEASE.2024-05-28T17-19-04Z
+          imagePullPolicy: IfNotPresent
+          command: ["minio", "server", "/minio_data", "--console-address", ":9001"]
+          ports:
+            - name: api
+              containerPort: 9000
+            - name: console
+              containerPort: 9001
+          env:
+            # 同时兼容 MinIO 新旧两套环境变量名
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MINIO_ROOT_USER
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MINIO_ROOT_PASSWORD
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MINIO_ROOT_USER
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MINIO_ROOT_PASSWORD
+            - name: TZ
+              value: Asia/Shanghai
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /minio/health/live
+              port: api
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: api
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: api
+            periodSeconds: 30
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /minio_data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tims-minio-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tims-minio-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tims-milvus
+  labels:
+    app: tims-milvus
+spec:
+  selector:
+    app: tims-milvus
+  ports:
+    - name: grpc
+      port: 19530
+      targetPort: grpc
+    - name: http
+      port: 9091
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tims-milvus
+  labels:
+    app: tims-milvus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tims-milvus
+  template:
+    metadata:
+      labels:
+        app: tims-milvus
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: milvus
+          image: registry.company.internal/ai-tims/milvus:v2.4.15
+          imagePullPolicy: IfNotPresent
+          command: ["milvus", "run", "standalone"]
+          ports:
+            - name: grpc
+              containerPort: 19530
+            - name: http
+              containerPort: 9091
+          env:
+            - name: ETCD_ENDPOINTS
+              value: tims-etcd:2379
+            - name: ETCD_USE_SSL
+              value: "false"
+            - name: MINIO_ADDRESS
+              value: tims-minio:9000
+            - name: MINIO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MINIO_ROOT_USER
+            - name: MINIO_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MINIO_ROOT_PASSWORD
+            - name: COMMON_STORAGETYPE
+              value: local
+            - name: TZ
+              value: Asia/Shanghai
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1536Mi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/milvus
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tims-milvus-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tims-milvus-data
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 20Gi

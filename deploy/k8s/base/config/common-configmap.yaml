@@ -1,0 +1,35 @@
+# 全服务共享的非敏感配置。密码/Token 一律走 Secret（tims-app-secret）。
+# 注意：公司内网不出外网时，LLM_BASE_URL / ZHIPU_EMBEDDING_URL 必须改成
+#      公司内可达的代理或内网推理服务地址，否则 knowledge / ai 服务会在调用时超时。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tims-common-config
+  labels:
+    app.kubernetes.io/part-of: ai-tims
+data:
+  TZ: Asia/Shanghai
+  JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=25 -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8"
+  MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
+
+  # 注册中心
+  NACOS_ADDR: tims-nacos:8848
+  NACOS_NAMESPACE: public
+
+  # 数据层
+  MYSQL_HOST: tims-mysql
+  MYSQL_PORT: "3306"
+  MYSQL_DB: aitims
+  MYSQL_USER: tims
+  REDIS_HOST: tims-redis
+  REDIS_PORT: "6379"
+  RABBIT_HOST: tims-rabbitmq
+  RABBIT_PORT: "5672"
+  MILVUS_HOST: tims-milvus
+  MILVUS_PORT: "19530"
+
+  # 大模型 / 向量化：默认值仅适用于可出外网的环境。
+  # 公司内网部署请在 company overlay 或本文件改成内网地址。
+  LLM_BASE_URL: https://open.bigmodel.cn/api/paas/v4
+  LLM_CHAT_MODEL: glm-4-flash
+  ZHIPU_EMBEDDING_URL: https://open.bigmodel.cn/api/paas/v4/embeddings

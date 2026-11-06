@@ -1,0 +1,9 @@
+# 业务命名空间。Pod 安全策略/PSA 标签故意不在此处硬编码，
+# 由公司管理员按集群实际策略决定（见 docs/ops/公司集群准入核查清单.md）。
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-tims
+  labels:
+    app.kubernetes.io/part-of: ai-tims
+    app.kubernetes.io/managed-by: kustomize

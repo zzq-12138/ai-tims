@@ -1,0 +1,10 @@
+# 业务镜像只需 ai-tims-parent/**/target/*.jar，其余内容不进构建上下文
+.git
+.github
+dist
+deploy/dist
+docs
+ai-tims-front
+.screenshots
+.trae-html-share-packages
+**/target/*.original

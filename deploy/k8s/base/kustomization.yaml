@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# kubectl 1.24 自带 kustomize v4.5.x，以下字段均在其支持范围内：
+# resources / namespace / commonLabels / images（不使用 kustomize v5 的 labels、patches 新语法）。
+namespace: ai-tims
+
+resources:
+  - namespace.yaml
+  - resourcequota.yaml
+  - limitrange.yaml
+  - config/common-configmap.yaml
+
+  - middleware/mysql.yaml
+  - middleware/redis.yaml
+  - middleware/rabbitmq.yaml
+  - middleware/nacos.yaml
+  - middleware/milvus.yaml
+
+  - apps/gateway.yaml
+  - apps/system.yaml
+  - apps/order.yaml
+  - apps/knowledge.yaml
+  - apps/ai.yaml
+  - apps/push.yaml
+
+  - ingress.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: ai-tims
+  app.kubernetes.io/managed-by: kustomize

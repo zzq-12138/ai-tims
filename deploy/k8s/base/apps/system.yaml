@@ -1,0 +1,116 @@
+# 系统服务 :8101（登录/用户/角色/部门）
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-system-config
+  labels:
+    app: ticket-system
+data:
+  SERVER_PORT: "8101"
+  # 公司内网不出外网时 SMTP 不可达，保持 mock；需要真实发信先确认出口策略
+  TIMS_VERIFICATION_SENDER: mock
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticket-system
+  labels:
+    app: ticket-system
+spec:
+  selector:
+    app: ticket-system
+  ports:
+    - name: http
+      port: 8101
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-system
+  labels:
+    app: ticket-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ticket-system
+  template:
+    metadata:
+      labels:
+        app: ticket-system
+    spec:
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: tims-registry
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: system
+          image: registry.company.internal/ai-tims/ticket-system:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8101
+          envFrom:
+            - configMapRef:
+                name: tims-common-config
+            - configMapRef:
+                name: ticket-system-config
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MYSQL_PASSWORD
+            - name: SPRING_DATA_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: REDIS_PASSWORD
+            - name: SMTP_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: SMTP_AUTH
+          resources:
+            requests:
+              cpu: 300m
+              memory: 768Mi
+            limits:
+              cpu: 1500m
+              memory: 1536Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3

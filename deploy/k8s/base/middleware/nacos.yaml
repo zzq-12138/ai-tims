@@ -1,0 +1,122 @@
+# Nacos 3 standalone（内嵌 derby，数据落 PVC）。
+# 鉴权关闭；Nacos 3 启动脚本仍强制要求 NACOS_AUTH_TOKEN，故由 Secret 注入。
+apiVersion: v1
+kind: Service
+metadata:
+  name: tims-nacos
+  labels:
+    app: tims-nacos
+spec:
+  clusterIP: None
+  selector:
+    app: tims-nacos
+  ports:
+    - name: http
+      port: 8848
+      targetPort: http
+    - name: grpc-client
+      port: 9848
+      targetPort: grpc-client
+    - name: grpc-server
+      port: 9849
+      targetPort: grpc-server
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tims-nacos
+  labels:
+    app: tims-nacos
+spec:
+  serviceName: tims-nacos
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tims-nacos
+  template:
+    metadata:
+      labels:
+        app: tims-nacos
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        # Nacos 镜像以非 root 用户运行；PVC 需要可写组
+        fsGroup: 1000
+      containers:
+        - name: nacos
+          image: registry.company.internal/ai-tims/nacos:3.0.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8848
+            - name: grpc-client
+              containerPort: 9848
+            - name: grpc-server
+              containerPort: 9849
+          env:
+            - name: MODE
+              value: standalone
+            - name: PREFER_HOST_MODE
+              value: hostname
+            - name: NACOS_AUTH_ENABLE
+              value: "false"
+            - name: NACOS_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: NACOS_AUTH_TOKEN
+            - name: NACOS_AUTH_IDENTITY_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: NACOS_AUTH_IDENTITY_KEY
+            - name: NACOS_AUTH_IDENTITY_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: NACOS_AUTH_IDENTITY_VALUE
+            - name: JVM_XMS
+              value: 256m
+            - name: JVM_XMX
+              value: 512m
+            - name: TZ
+              value: Asia/Shanghai
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 30
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /home/nacos/data
+            - name: logs
+              mountPath: /home/nacos/logs
+      volumes:
+        - name: logs
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi

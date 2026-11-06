@@ -1,0 +1,5 @@
+# K8s 实际密钥清单（secret.example.yaml 模板仍入库）
+k8s/**/secret.yaml
+
+# 离线镜像交付产物
+dist/

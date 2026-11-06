@@ -1,0 +1,56 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 公司集群交付入口：kubectl apply -k deploy/k8s/overlays/company
+#
+# 使用前必须替换：
+#   1) harbor.example.com → 公司镜像仓库实际域名
+#   2) Ingress 域名 tims.company.local（base/ingress.yaml）
+#   3) ingressClassName（base/ingress.yaml，当前为 nginx）
+#   4) ConfigMap 中的 LLM_BASE_URL / ZHIPU_EMBEDDING_URL（若内网无外网出口）
+namespace: ai-tims
+
+resources:
+  - ../../base
+
+images:
+  - name: registry.company.internal/ai-tims/ticket-gateway
+    newName: harbor.example.com/ai-tims/ticket-gateway
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-system
+    newName: harbor.example.com/ai-tims/ticket-system
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-order
+    newName: harbor.example.com/ai-tims/ticket-order
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-knowledge
+    newName: harbor.example.com/ai-tims/ticket-knowledge
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-ai
+    newName: harbor.example.com/ai-tims/ticket-ai
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-push
+    newName: harbor.example.com/ai-tims/ticket-push
+    newTag: "1.0.0"
+
+  - name: registry.company.internal/ai-tims/mysql
+    newName: harbor.example.com/ai-tims/mysql
+    newTag: "8.0.36"
+  - name: registry.company.internal/ai-tims/redis
+    newName: harbor.example.com/ai-tims/redis
+    newTag: "7-alpine"
+  - name: registry.company.internal/ai-tims/rabbitmq
+    newName: harbor.example.com/ai-tims/rabbitmq
+    newTag: "3-management"
+  - name: registry.company.internal/ai-tims/nacos
+    newName: harbor.example.com/ai-tims/nacos
+    newTag: "3.0.3"
+  - name: registry.company.internal/ai-tims/etcd
+    newName: harbor.example.com/ai-tims/etcd
+    newTag: "v3.5.14"
+  - name: registry.company.internal/ai-tims/minio
+    newName: harbor.example.com/ai-tims/minio
+    newTag: "RELEASE.2024-05-28T17-19-04Z"
+  - name: registry.company.internal/ai-tims/milvus
+    newName: harbor.example.com/ai-tims/milvus
+    newTag: "v2.4.15"

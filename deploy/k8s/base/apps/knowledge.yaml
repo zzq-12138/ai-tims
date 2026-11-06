@@ -1,0 +1,119 @@
+# 知识服务 :8103（知识库 + Milvus 向量检索 + 智谱 embedding）
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-knowledge-config
+  labels:
+    app: ticket-knowledge
+data:
+  SERVER_PORT: "8103"
+  TIMS_KB_EMBEDDING_MODEL: embedding-3
+  TIMS_KB_EMBEDDING_DIMENSIONS: "1024"
+  TIMS_KB_MILVUS_COLLECTION: kb_knowledge_vec
+  TIMS_KB_SYNC_INTERVAL_MS: "10000"
+  TIMS_KB_SYNC_BATCH_SIZE: "16"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticket-knowledge
+  labels:
+    app: ticket-knowledge
+spec:
+  selector:
+    app: ticket-knowledge
+  ports:
+    - name: http
+      port: 8103
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-knowledge
+  labels:
+    app: ticket-knowledge
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: ticket-knowledge
+  template:
+    metadata:
+      labels:
+        app: ticket-knowledge
+    spec:
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: tims-registry
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: knowledge
+          image: registry.company.internal/ai-tims/ticket-knowledge:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8103
+          envFrom:
+            - configMapRef:
+                name: tims-common-config
+            - configMapRef:
+                name: ticket-knowledge-config
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: MYSQL_PASSWORD
+            - name: SPRING_DATA_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: REDIS_PASSWORD
+            - name: ZHIPU_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tims-app-secret
+                  key: ZHIPU_API_KEY
+          resources:
+            requests:
+              cpu: 250m
+              memory: 640Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3

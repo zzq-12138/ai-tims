@@ -14,6 +14,9 @@ export MYSQL_PASSWORD=$(cat /home/dev/secrets/mysql_pwd)
 export RABBIT_PASSWORD=$(cat /home/dev/secrets/rabbit_pwd)
 export ZHIPU_API_KEY=$(cat /home/dev/secrets/zhipu_api_key)
 export LLM_API_KEY_FILE=/home/dev/secrets/zhipu_api_key
+# M6.1：主模型/抽取模型默认 glm-5.3-flash（有 5000 万专属资源包）
+export LLM_CHAT_MODEL="${LLM_CHAT_MODEL:-glm-5.3-flash}"
+export LLM_EXTRACT_MODEL="${LLM_EXTRACT_MODEL:-glm-5.3-flash}"
 export SMTP_AUTH=$(cat /home/dev/secrets/smtp_auth)
 
 # 服务清单：jar 相对路径|端口|日志

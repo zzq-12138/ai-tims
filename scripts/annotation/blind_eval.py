@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 """独立模型盲评（第二层）：用 glm-4-flash 按标注手册规则独立抽取，再与构造真值比对。
 
+M6.1 口径说明：主业务模型已切 glm-5.3-flash（S3 抽取口径），但本盲评脚本刻意固定
+glm-4-flash —— 评审模型必须与被评模型不同，否则独立性失效；已有 1000 条结果继续有效。
+
 口径：这是「构造真值 vs 独立模型判定」的一致性，**不是人工 κ**。
 模型看不到 _gold_draft.jsonl，只拿到工单原文。
 
@@ -29,6 +32,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from export_constructed_gold import INSTRUCTION, to_label  # noqa: E402
 
 GLM_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+# 【M6.1 固定不切】盲评评审模型必须与被评模型（glm-5.3-flash）不同，否则独立性消失。
+# 该值刻意与 tims.ai.model / tims.ai.extract-model 解耦，禁止跟随主模型切换。
+# 另：线上 KB v1 由 glm-4-flash 抽取并冻结，检索类结论口径不变。
 MODEL = "glm-4-flash"
 KEY_PATH = "/home/dev/secrets/zhipu_api_key"
 PRED = os.path.join(OUT, "blind_predictions.jsonl")

@@ -40,10 +40,14 @@ sa-token:
 
 tims:
   ai:
-    # ===== 模型唯一开关：跑批/消融 glm-4-flash，演示 glm-5.3-flash；只改环境变量 LLM_CHAT_MODEL =====
-    model: ${LLM_CHAT_MODEL:glm-4-flash}
-    # M6 知识抽取专用模型（默认 glm-4-flash 省配额，只改 LLM_EXTRACT_MODEL 即可切换）
-    extract-model: ${LLM_EXTRACT_MODEL:glm-4-flash}
+    # ===== 主模型（对话/助手/Agent）：默认 glm-5.3-flash（有 5000 万专属包）=====
+    # 注意：知识库 KB v1 的 320 条抽取记录（ai_extracted，均为 glm-4-flash；其中 310 条 PUBLISHED）已冻结不重抽；
+    #       检索类结论（E1–E8 消融、门控 B0、阈值评估、正负样本打分）口径不变。
+    model: ${LLM_CHAT_MODEL:glm-5.3-flash}
+    # ===== 抽取模型：默认 glm-5.3-flash（S3 实验口径）=====
+    # S1 基线 = glm-4-flash 的 316 条现成抽取数据（不再重跑）；S3 = glm-5.3-flash，同标注集对比。
+    # 若把 S3 产物写回线上 KB，则 KB v2 生效，检索类指标必须整链重跑。
+    extract-model: ${LLM_EXTRACT_MODEL:glm-5.3-flash}
     extract-max-tokens: ${LLM_EXTRACT_MAX_TOKENS:4096}
     base-url: ${LLM_BASE_URL:https://open.bigmodel.cn/api/paas/v4}
     completions-path: ${LLM_COMPLETIONS_PATH:/chat/completions}
@@ -72,6 +76,9 @@ tims:
       glm-4.7-flash: { input-per-1k: 0.0001, output-per-1k: 0.0001 }
       glm-5.3-flash: { input-per-1k: 0.0008, output-per-1k: 0.0028 }
       glm-5.3-flashx: { input-per-1k: 0.0008, output-per-1k: 0.0028 }
+      # embedding-3：已购 5000 万 tokens 专属资源包（预付），不再扣通用包，故通用包口径按 0 计；
+      # 其 token 量单独计入「专属包」口径展示。如后续按量计费，改这两行为 0.0005/0 即可。
+      embedding-3: { input-per-1k: 0.0, output-per-1k: 0.0 }
 
 management:
   endpoints:

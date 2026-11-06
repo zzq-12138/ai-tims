@@ -37,7 +37,13 @@ public class EmbeddingService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final UsageReporter usageReporter;
+
     private volatile RestClient restClient;
+
+    public EmbeddingService(UsageReporter usageReporter) {
+        this.usageReporter = usageReporter;
+    }
 
     /**
      * 批量向量化。入参顺序与返回向量顺序一一对应。
@@ -48,6 +54,7 @@ public class EmbeddingService {
             return List.of();
         }
         RestClient client = ensureClient();
+        long startedAt = System.currentTimeMillis();
         List<String> trimmed = texts.stream().map(t -> t == null ? "" : truncate(t)).toList();
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("model", model);
@@ -69,6 +76,12 @@ public class EmbeddingService {
                 throw new IllegalStateException("embedding 返回条数不匹配: "
                         + (data == null ? "null" : data.size()) + " vs " + trimmed.size());
             }
+            // M6：用量回传（批量按 1 条记，tokens 取响应 usage.prompt_tokens）
+            JsonNode usage = root.get("usage");
+            int promptTokens = usage != null && usage.get("prompt_tokens") != null
+                    ? usage.get("prompt_tokens").asInt() : 0;
+            usageReporter.report("EMBED", model, promptTokens, System.currentTimeMillis() - startedAt);
+
             List<float[]> result = new ArrayList<>(trimmed.size());
             for (JsonNode item : data) {
                 JsonNode vec = item.get("embedding");

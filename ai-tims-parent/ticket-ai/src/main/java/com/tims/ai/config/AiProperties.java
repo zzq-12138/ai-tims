@@ -7,8 +7,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * M5 AI 配置。切换模型只改环境变量 LLM_CHAT_MODEL（跑批/消融 glm-4-flash，演示 glm-5.3-flash），代码零改动。
- * M6 新增 extractModel：工单关闭后的知识抽取固定走 glm-4-flash 档，独立可配（LLM_EXTRACT_MODEL）。
+ * M5 AI 配置。切换模型只改环境变量 LLM_CHAT_MODEL，代码零改动。
+ * M6 新增 extractModel：工单关闭后的知识抽取独立可配（LLM_EXTRACT_MODEL）。
+ * M6.1 默认全部切 glm-5.3-flash（有 5000 万专属资源包）。注意：线上 KB v1 的 320 条知识点
+ * 为 glm-4-flash 抽取（320 条 ai_extracted，其中 310 条 PUBLISHED）并冻结，
+ * 检索类结论（E1–E8 消融、门控 B0、阈值评估、正负样本打分）口径不变。
  */
 @Component
 @ConfigurationProperties(prefix = "tims.ai")
@@ -20,11 +23,11 @@ public class AiProperties {
     /** 兼容端点路径（智谱无 /v1 前缀） */
     private String completionsPath = "/chat/completions";
 
-    /** 模型名（唯一切换点） */
-    private String model = "glm-4-flash";
+    /** 对话/助手/Agent 主模型（glm-5.3-flash，有 5000 万专属资源包） */
+    private String model = "glm-5.3-flash";
 
-    /** 知识抽取专用模型（M6，默认 glm-4-flash 省配额；可配 LLM_EXTRACT_MODEL） */
-    private String extractModel = "glm-4-flash";
+    /** 知识抽取专用模型（M6，默认 glm-5.3-flash 走 S3 口径；可配 LLM_EXTRACT_MODEL） */
+    private String extractModel = "glm-5.3-flash";
 
     /** 知识抽取输出上限（结构化 JSON 足够） */
     private int extractMaxTokens = 4096;

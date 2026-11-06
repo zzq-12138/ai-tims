@@ -121,6 +121,34 @@ public class AiUsageService {
         }
         total.put("byModel", modelRows);
 
+        // 资源包口径拆分：通用包（按 token 计费，如 glm-4-flash） vs 专属包（预付，如 glm-5.3-flash / embedding-3）
+        long genericTokens = 0L;
+        long dedicatedTokens = 0L;
+        for (Map<String, Object> row : modelRows) {
+            String m = String.valueOf(row.get("model"));
+            long t = num(row.get("tokens"));
+            if (m.startsWith("glm-5.3") || m.startsWith("embedding")) {
+                dedicatedTokens += t;
+            } else {
+                genericTokens += t;
+            }
+        }
+        Map<String, Object> scope = new LinkedHashMap<>();
+        scope.put("genericTokens", genericTokens);
+        scope.put("dedicatedTokens", dedicatedTokens);
+        scope.put("genericNote", "通用按 token 包（起始 2,000,000，用户控制台确认）");
+        scope.put("dedicatedNote", "专属预付包：glm-5.3-flash 5000 万 + embedding-3 5000 万");
+        total.put("byScope", scope);
+
+        // 未记账期估算：2026-11-05 前 embedding 直调未落库，按「950 次×30 + 320 条×300」估算，明确标注估算
+        Map<String, Object> unmetered = new LinkedHashMap<>();
+        unmetered.put("scene", "EMBED");
+        unmetered.put("tokens", 124500);
+        unmetered.put("source", "ESTIMATE");
+        unmetered.put("note", "2026-11-05 前 embedding 未记账，按 950×30 + 320×300 估算，非精确值");
+        total.put("unmetered", unmetered);
+        total.put("dataSource", "METERED（ai_call_log 实测）+ unmetered（估算）");
+
         // 近 7 天走势（按天聚合，仅返回有调用的日期）
         QueryWrapper<AiCallLog> daily = new QueryWrapper<AiCallLog>()
                 .select("DATE(create_time) AS day", "COUNT(*) AS calls", "COALESCE(SUM(total_tokens),0) AS tokens")
@@ -146,7 +174,8 @@ public class AiUsageService {
         total.put("remainingCny", round(remaining, 4));
         total.put("usedPercent", budget <= 0 ? 0.0 : round(Math.min(100.0, cost / budget * 100.0), 2));
         total.put("balanceSource", "LOCAL_ESTIMATE");
-        total.put("priceSource", "智谱开放平台定价页（元/百万 Tokens）：glm-4-flash 0.1；glm-5.3-flash 输入 0.8 / 输出 2.8");
+        total.put("priceSource", "智谱开放平台定价页（元/百万 Tokens）：glm-4-flash 0.1（扣通用包）；"
+                + "glm-5.3-flash 输入 0.8 / 输出 2.8（专属包）；embedding-3 已购 5000 万专属包，通用包口径按 0 计");
         total.put("balanceApiAvailable", false);
         return total;
     }

@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * M6 工单知识抽取：已关闭工单 → 结构化知识（glm-4-flash 档，模型名可配）。
+ * M6 工单知识抽取：已关闭工单 → 结构化知识（模型名可配）。
+ * M6.1 默认 glm-5.3-flash（S3 口径）；S1 基线用 glm-4-flash 的 316 条现成数据，同标注集对比。
  * - 只负责 LLM 调用与结构化解析，不落库、不做去重（落库/审核/合并归 ticket-knowledge）；
  * - 每次调用落 ai_call_log（scene=EXTRACT），供配额观测；
  * - 解析失败/模型不可用抛 LlmException，由 ticket-knowledge 落“待人工补录”记录，不阻塞工单关闭。

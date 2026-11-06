@@ -64,6 +64,11 @@ tims:
       threshold: ${KB_GATE_THRESHOLD:0.75}
       soft-band: ${KB_GATE_SOFT_BAND:0.07}
       fallback-tiers: ${KB_GATE_FALLBACK_TIERS:true}
+    # M6：embedding 用量回传 ticket-ai 记账；失败只记日志，不阻断检索
+    usage-report:
+      enabled: ${EMBED_USAGE_REPORT:true}
+      url: ${EMBED_USAGE_URL:http://localhost:8104/api/ai/usage/record}
+      tenant-id: ${EMBED_USAGE_TENANT:1}
     embedding:
       # 智谱 embedding-3：维度 1024（平衡精度与 Milvus 内存），key 从环境变量注入
       api-url: ${ZHIPU_EMBEDDING_URL:https://open.bigmodel.cn/api/paas/v4/embeddings}

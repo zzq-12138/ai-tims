@@ -93,16 +93,32 @@
         <div class="usage-head">
           <span class="usage-title">已用 tokens</span>
           <b>{{ fmtNum(summary.totalTokens) }}</b>
-          <el-tag size="small" type="info">本地计量 · 估算</el-tag>
+          <el-tag size="small" type="info">本地实测 · 估算</el-tag>
         </div>
         <div class="usage-money">
           <span>估算费用 <b>¥{{ fmtMoney(summary.estimatedCostCny) }}</b></span>
           <span>预算 ¥{{ fmtMoney(summary.budgetCny) }} · 剩余 <b>¥{{ fmtMoney(summary.remainingCny) }}</b></span>
         </div>
         <el-progress :percentage="Number(summary.usedPercent) || 0" :stroke-width="8" :show-text="false" />
+        <div v-if="summary.byScope" class="usage-scope">
+          <div class="scope-row">
+            <span>通用包（按 token 计费）</span>
+            <b>{{ fmtNum(summary.byScope.genericTokens) }}</b>
+          </div>
+          <div class="scope-row">
+            <span>专属包 / 预付额度</span>
+            <b>{{ fmtNum(summary.byScope.dedicatedTokens) }}</b>
+          </div>
+          <div class="scope-note">{{ summary.byScope.genericNote }}；{{ summary.byScope.dedicatedNote }}</div>
+        </div>
         <div class="usage-note">
-          智谱开放平台未提供余额/额度查询 API（实测 /balance、/usage、/quota 均 404），此处按调用记录 usage 累计、
-          按配置单价（输入 ¥{{ summary.priceInputPer1k }}/千、输出 ¥{{ summary.priceOutputPer1k }}/千）折算，非官方余额。
+          数据来源：{{ summary.dataSource || 'METERED（ai_call_log 实测）' }}。
+          智谱开放平台未提供余额/额度查询 API（实测 /balance、/usage、/quota 均 404），此处按调用记录 usage 累计，
+          按分模型单价折算（元/百万 Tokens），非官方余额。
+        </div>
+        <div v-if="summary.unmetered" class="usage-note">
+          注：{{ summary.unmetered.note }}，约 {{ fmtNum(summary.unmetered.tokens) }} tokens 标记为「未记账期估算」，
+          不计入上方实测合计。
         </div>
       </div>
 
@@ -127,7 +143,8 @@
         <div class="split-col">
           <div class="split-title">按模型</div>
           <div v-for="m in summary.byModel || []" :key="m.model" class="split-row">
-            <span>{{ m.model }}</span><b>{{ fmtNum(m.tokens) }}</b>
+            <span>{{ m.model }}</span>
+            <b>{{ fmtNum(m.tokens) }}<i v-if="m.estimatedCostCny !== undefined" class="cost">¥{{ fmtMoney(m.estimatedCostCny) }}</i></b>
           </div>
         </div>
       </div>
@@ -462,6 +479,11 @@ onMounted(async () => {
 .usage-money { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: var(--muted); margin: 8px 0 6px; flex-wrap: wrap; }
 .usage-money b { color: var(--amber-deep); }
 .usage-note { font-size: 11px; line-height: 1.6; color: var(--muted); margin-top: 8px; }
+.usage-scope { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--line); }
+.scope-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink); padding: 2px 0; }
+.scope-row b { color: var(--amber-deep); }
+.scope-note { font-size: 11px; line-height: 1.6; color: var(--muted); margin-top: 4px; }
+.split-row .cost { font-style: normal; color: var(--muted); font-weight: 400; margin-left: 6px; font-size: 11px; }
 .usage-chart { margin-top: 10px; }
 .bars { display: flex; align-items: flex-end; gap: 12px; height: 92px; padding: 6px 2px 0; }
 .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }

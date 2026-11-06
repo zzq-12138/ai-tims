@@ -9,17 +9,20 @@
 - 支持断点续训（`--resume` 读 `output_dir/checkpoint-*`）。
 - 数据格式见同目录 `data_format.md`。
 
+**版本要求（实测）**：必须 `transformers==4.46.x`。
+transformers 5.22.1 的 Qwen2 实现里没有 `_gradient_checkpointing_func` 调用点，
+`gradient_checkpointing_enable()` 只置标志、显存不降，导致 4090(24G) 上 seq_len≥768 必 OOM。
+
 用法：
     python scripts/finetune/train_lora.py \
       --model_dir /root/autodl-tmp/models/Qwen2.5-7B-Instruct \
       --train_file data/train.jsonl \
       --output_dir /root/autodl-tmp/ckpt/qwen25-7b-lora \
-      --seq_len 1024 --batch_size 1 --grad_accum 8 --epochs 3
+      --seq_len 1024 --batch_size 2 --grad_accum 4 --epochs 3 --grad_ckpt
 """
 import argparse
 import json
 import os
-import random
 from dataclasses import dataclass
 from typing import Dict, List
 
@@ -126,8 +129,6 @@ def main():
 
     model = _from_pretrained(args.model_dir, device_map={"": 0})
     model.config.use_cache = False
-    if args.grad_ckpt:
-        model.gradient_checkpointing_enable()
 
     lora = LoraConfig(
         r=args.lora_r,
@@ -138,6 +139,12 @@ def main():
         task_type="CAUSAL_LM",
     )
     model = get_peft_model(model, lora)
+    if args.grad_ckpt:
+        # 必须在 peft 包装之后开启；use_reentrant=False 才与「只有 adapter 需要梯度」兼容。
+        # 实测（4090 24G, bf16）：seq_len=1024 峰值 17.04 GB，seq_len=2048 峰值 19.27 GB。
+        model.gradient_checkpointing_enable(
+            gradient_checkpointing_kwargs={"use_reentrant": False})
+        model.enable_input_require_grads()
     model.print_trainable_parameters()
 
     ds = load_dataset("json", data_files=args.train_file, split="train")
@@ -156,14 +163,15 @@ def main():
         num_train_epochs=args.epochs,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_steps=10,              # transformers 5.x 已移除 warmup_ratio 字段
+        warmup_steps=10,
         bf16=True,
         logging_steps=1,
         save_strategy="epoch",
         save_total_limit=2,
         report_to="none",
         dataloader_pin_memory=False,
-        gradient_checkpointing=args.grad_ckpt,
+        # 不交给 Trainer 开 gc：它会用默认 use_reentrant=True，与 LoRA 不兼容；已在上面手动开
+        gradient_checkpointing=False,
         remove_unused_columns=False,
         seed=args.seed,
     )

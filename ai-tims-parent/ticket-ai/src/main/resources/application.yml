@@ -61,8 +61,17 @@ tims:
     snippet-chars: ${LLM_SNIPPET_CHARS:500}
     # 问题9：无官方余额接口，按调用记录本地计量（费用=token×单价），页面标注“估算”
     budget-cny: ${LLM_BUDGET_CNY:18}
-    price-input-per-1k: ${LLM_PRICE_INPUT_PER_1K:0.0001}
-    price-output-per-1k: ${LLM_PRICE_OUTPUT_PER_1K:0.0001}
+    # 缺省单价（元/千 tokens）：取 glm-5.3-flash 标准价，避免切模型后低估
+    price-input-per-1k: ${LLM_PRICE_INPUT_PER_1K:0.0008}
+    price-output-per-1k: ${LLM_PRICE_OUTPUT_PER_1K:0.0028}
+    # 分模型单价（元/千 tokens），来源：智谱开放平台定价页「元/百万 Tokens」折算
+    # glm-4-flash 0.1 元/百万（扣“通用按 token 包”，控制台实测有消耗）；
+    # glm-5.3-flash 标准价 输入 0.8 / 输出 2.8 元/百万（有专属资源包）
+    model-prices:
+      glm-4-flash: { input-per-1k: 0.0001, output-per-1k: 0.0001 }
+      glm-4.7-flash: { input-per-1k: 0.0001, output-per-1k: 0.0001 }
+      glm-5.3-flash: { input-per-1k: 0.0008, output-per-1k: 0.0028 }
+      glm-5.3-flashx: { input-per-1k: 0.0008, output-per-1k: 0.0028 }
 
 management:
   endpoints:

@@ -98,15 +98,28 @@ public class AiUsageService {
                 .orderByDesc("tokens");
         total.put("byScene", mapper.selectMaps(byScene));
 
-        // 按模型拆分
+        // 按模型拆分（含各自单价与费用，避免用单一单价对全部模型计价）
         QueryWrapper<AiCallLog> byModel = new QueryWrapper<AiCallLog>()
-                .select("model AS model", "COUNT(*) AS calls", "COALESCE(SUM(total_tokens),0) AS tokens")
+                .select("model AS model", "COUNT(*) AS calls", "COALESCE(SUM(total_tokens),0) AS tokens",
+                        "COALESCE(SUM(prompt_tokens),0) AS promptTokens",
+                        "COALESCE(SUM(completion_tokens),0) AS completionTokens")
                 .eq("tenant_id", tid)
                 .isNotNull("model")
                 .ne("model", "")
                 .groupBy("model")
                 .orderByDesc("tokens");
-        total.put("byModel", mapper.selectMaps(byModel));
+        List<Map<String, Object>> modelRows = mapper.selectMaps(byModel);
+        double modelCost = 0.0;
+        for (Map<String, Object> row : modelRows) {
+            AiProperties.Price price = props.priceOf(String.valueOf(row.get("model")));
+            double c = num(row.get("promptTokens")) / 1000.0 * price.getInputPer1k()
+                    + num(row.get("completionTokens")) / 1000.0 * price.getOutputPer1k();
+            row.put("priceInputPer1k", round(price.getInputPer1k(), 6));
+            row.put("priceOutputPer1k", round(price.getOutputPer1k(), 6));
+            row.put("estimatedCostCny", round(c, 4));
+            modelCost += c;
+        }
+        total.put("byModel", modelRows);
 
         // 近 7 天走势（按天聚合，仅返回有调用的日期）
         QueryWrapper<AiCallLog> daily = new QueryWrapper<AiCallLog>()
@@ -118,11 +131,12 @@ public class AiUsageService {
         total.put("daily", mapper.selectMaps(daily));
 
         // 本地估算预算（无官方余额接口）
-        long prompt = num(total.get("promptTokens"));
-        long completion = num(total.get("completionTokens"));
         double pIn = props.getPriceInputPer1k();
         double pOut = props.getPriceOutputPer1k();
-        double cost = prompt / 1000.0 * pIn + completion / 1000.0 * pOut;
+        // 费用按模型单价逐项累加；无模型记录时按缺省单价兜底
+        double cost = modelRows.isEmpty()
+                ? num(total.get("promptTokens")) / 1000.0 * pIn + num(total.get("completionTokens")) / 1000.0 * pOut
+                : modelCost;
         double budget = props.getBudgetCny();
         double remaining = Math.max(0.0, budget - cost);
         total.put("budgetCny", round(budget, 4));
@@ -132,6 +146,7 @@ public class AiUsageService {
         total.put("remainingCny", round(remaining, 4));
         total.put("usedPercent", budget <= 0 ? 0.0 : round(Math.min(100.0, cost / budget * 100.0), 2));
         total.put("balanceSource", "LOCAL_ESTIMATE");
+        total.put("priceSource", "智谱开放平台定价页（元/百万 Tokens）：glm-4-flash 0.1；glm-5.3-flash 输入 0.8 / 输出 2.8");
         total.put("balanceApiAvailable", false);
         return total;
     }

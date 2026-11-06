@@ -3,6 +3,9 @@ package com.tims.ai.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * M5 AI 配置。切换模型只改环境变量 LLM_CHAT_MODEL（跑批/消融 glm-4-flash，演示 glm-5.3-flash），代码零改动。
  * M6 新增 extractModel：工单关闭后的知识抽取固定走 glm-4-flash 档，独立可配（LLM_EXTRACT_MODEL）。
@@ -57,12 +60,40 @@ public class AiProperties {
     /** 问题9：本地计量预算（元）。智谱无余额查询 API，剩余=预算-估算费用，页面明确标注“估算” */
     private double budgetCny = 18.0;
 
-    /** 输入 token 单价（元/千 tokens）。默认按 GLM-4-Flash 公开价 0.0001 元/千 tokens，可用环境变量覆盖 */
-    private double priceInputPer1k = 0.0001;
+    /** 缺省输入 token 单价（元/千 tokens），取 glm-5.3-flash 标准价 0.8 元/百万 */
+    private double priceInputPer1k = 0.0008;
 
-    /** 输出 token 单价（元/千 tokens） */
-    private double priceOutputPer1k = 0.0001;
+    /** 缺省输出 token 单价（元/千 tokens），取 glm-5.3-flash 标准价 2.8 元/百万 */
+    private double priceOutputPer1k = 0.0028;
 
+    /** 分模型单价（元/千 tokens）；未命中时回退缺省单价。glm-4-flash 按 0.1 元/百万计（扣通用包） */
+    private Map<String, Price> modelPrices = new LinkedHashMap<>();
+
+    /** 单模型计价单元 */
+    public static class Price {
+        private double inputPer1k;
+        private double outputPer1k;
+
+        public double getInputPer1k() { return inputPer1k; }
+        public void setInputPer1k(double inputPer1k) { this.inputPer1k = inputPer1k; }
+        public double getOutputPer1k() { return outputPer1k; }
+        public void setOutputPer1k(double outputPer1k) { this.outputPer1k = outputPer1k; }
+    }
+
+    /** 取某模型单价；未配置则回退缺省单价 */
+    public Price priceOf(String model) {
+        Price p = model == null ? null : modelPrices.get(model);
+        if (p != null) {
+            return p;
+        }
+        Price d = new Price();
+        d.setInputPer1k(priceInputPer1k);
+        d.setOutputPer1k(priceOutputPer1k);
+        return d;
+    }
+
+    public Map<String, Price> getModelPrices() { return modelPrices; }
+    public void setModelPrices(Map<String, Price> modelPrices) { this.modelPrices = modelPrices; }
     public String getBaseUrl() { return baseUrl; }
     public void setBaseUrl(String baseUrl) { this.baseUrl = baseUrl; }
     public String getCompletionsPath() { return completionsPath; }

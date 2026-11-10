@@ -67,6 +67,9 @@ spec:
                 name: tims-common-config
             - configMapRef:
                 name: ticket-gateway-config
+            # 密码类统一注入（MYSQL/REDIS/RABBIT/ZHIPU 等），缺一个连接即认证失败
+            - secretRef:
+                name: tims-app-secret
           env:
             - name: SPRING_DATA_REDIS_PASSWORD
               valueFrom:

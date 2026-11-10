@@ -13,6 +13,10 @@ RUN groupadd -g 10001 tims \
 WORKDIR /app
 COPY ${JAR_FILE} /app/app.jar
 
+# logback 写 ./logs/ai-tims.log：目录必须存在且归 10001，否则非 root 启动即失败
+RUN mkdir -p /app/logs \
+    && chown -R 10001:10001 /app
+
 USER 10001:10001
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

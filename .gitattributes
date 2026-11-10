@@ -1,2 +1,5 @@
 # shell 脚本必须以 LF 落盘，否则在 Linux/VM 上 shebang 会报 bad interpreter
 *.sh text eol=lf
+# 部署产物（Dockerfile / YAML / env）会被原样带进 Linux 容器与集群：
+# Dockerfile 的 "\" 续行、脚本 source 的 env 都不能带 CRLF，否则容器构建/kustomize 会失败
+deploy/** text eol=lf

@@ -1,5 +1,13 @@
 <template>
   <div>
+    <!-- 分类加载失败：页面级可见提示，避免编辑时下拉为空被当成“没有分类” -->
+    <el-alert v-if="categoryLoadError" type="warning" :closable="false" class="mb12">
+      <template #title>
+        分类列表加载失败，
+        <el-button link type="primary" size="small" :loading="categoryLoading"
+                   @click="loadCategories()">点此重试</el-button>
+      </template>
+    </el-alert>
     <!-- 检索测试面板 -->
     <el-card shadow="never" class="mb12">
       <template #header>
@@ -52,11 +60,28 @@
           </div>
         </div>
       </template>
-      <div class="filters">
-        <el-select v-model="extractQuery.status" placeholder="状态" clearable style="width: 150px"
-                   @change="loadExtraction">
+      <div class="filters wrap">
+        <el-select v-model="extractQuery.status" placeholder="状态" clearable style="width: 130px"
+                   @change="searchExtraction">
           <el-option v-for="(v, k) in extractStatusMap" :key="k" :label="v" :value="k" />
         </el-select>
+        <el-input v-model="extractQuery.title" placeholder="标题关键字" clearable style="width: 160px"
+                  @keyup.enter="searchExtraction" @clear="searchExtraction" />
+        <el-input v-model="extractQuery.sourceTicketNo" placeholder="工单号关键字" clearable style="width: 160px"
+                  @keyup.enter="searchExtraction" @clear="searchExtraction" />
+        <el-select v-model="extractQuery.deviceType" placeholder="设备类型" clearable style="width: 150px"
+                   @change="searchExtraction">
+          <el-option v-for="d in extractDeviceTypes" :key="d" :label="d" :value="d" />
+        </el-select>
+        <el-select v-model="extractQuery.dedupAction" placeholder="建议" clearable style="width: 130px"
+                   @change="searchExtraction">
+          <el-option v-for="(v, k) in suggestMap" :key="k" :label="v" :value="k" />
+        </el-select>
+        <el-date-picker v-model="extractQuery.timeRange" type="datetimerange" unlink-panels
+                        value-format="YYYY-MM-DD HH:mm:ss" start-placeholder="抽取开始时间"
+                        end-placeholder="抽取结束时间" style="width: 350px" @change="searchExtraction" />
+        <el-button type="primary" @click="searchExtraction">查询</el-button>
+        <el-button @click="resetExtractFilters">重置</el-button>
       </div>
       <el-table :data="extractRecords" v-loading="extractLoading" stripe size="small">
         <el-table-column prop="title" label="抽取标题" min-width="180" show-overflow-tooltip />
@@ -167,6 +192,8 @@
           <el-select v-model="editForm.categoryId" clearable style="width: 200px">
             <el-option v-for="c in categories" :key="c.id" :label="c.categoryName" :value="c.id" />
           </el-select>
+          <el-button v-if="categoryLoadError" link type="warning" size="small" style="margin-left: 8px"
+                     :loading="categoryLoading" @click="loadCategories()">分类加载失败，点此重试</el-button>
         </el-form-item>
         <el-form-item label="摘要">
           <el-input v-model="editForm.summary" type="textarea" :rows="2" maxlength="512" />
@@ -204,6 +231,12 @@
 
     <!-- M6 抽取详情 -->
     <el-dialog v-model="extractViewVisible" :title="extractView?.title || '抽取详情'" width="720px">
+      <el-alert v-if="extractView?.chainDegraded" type="warning" :closable="false" show-icon class="mb12"
+                title="链式抽取发生降级：部分步骤未返回合法 JSON，对应字段可能缺失，请人工核对后再入库。">
+        <div v-if="chainErrors(extractView?.chainTrace).length" class="degraded-errors">
+          降级原因：{{ chainErrors(extractView.chainTrace).join('；') }}
+        </div>
+      </el-alert>
       <el-descriptions :column="2" size="small" border class="mb12">
         <el-descriptions-item label="来源工单">{{ extractView?.sourceTicketNo || '-' }}</el-descriptions-item>
         <el-descriptions-item label="设备类型">{{ extractView?.deviceType || '-' }}</el-descriptions-item>
@@ -211,6 +244,13 @@
           {{ extractView?.dedupScore != null ? Number(extractView.dedupScore).toFixed(4) : '-' }}
         </el-descriptions-item>
         <el-descriptions-item label="处置建议">{{ suggestMap[extractView?.dedupAction] || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="关系判别">
+          {{ relationLabel(extractView?.relationType) }}
+          <span v-if="extractView?.relationConfidence != null" class="target">
+            （置信度 {{ Number(extractView.relationConfidence).toFixed(3) }}）
+          </span>
+        </el-descriptions-item>
+        <el-descriptions-item label="条件键">{{ extractView?.conditionKeys || '-' }}</el-descriptions-item>
         <el-descriptions-item label="相似条目" :span="2">{{ extractView?.dedupTargetTitle || '无' }}</el-descriptions-item>
         <el-descriptions-item label="相似度与关键差异" :span="2">
           {{ extractView?.dedupNote || '-' }}
@@ -222,6 +262,18 @@
       </el-descriptions>
       <h4>故障现象</h4>
       <div class="content">{{ extractView?.faultPhenomenon || '-' }}</div>
+      <h4>根因</h4>
+      <div class="content">{{ extractView?.rootCause || '（无最终根因）' }}</div>
+      <h4>验证方式 / 结果</h4>
+      <div class="content">{{ extractView?.verification || '（未验证）' }}</div>
+      <h4>适用条件</h4>
+      <el-tag v-for="c in parseConditions(extractView?.applyConditions)" :key="c.type + c.value"
+              size="small" class="mr4 mb4">
+        {{ conditionTypeLabels[c.type] || c.type }}：{{ c.value }}
+      </el-tag>
+      <span v-if="parseConditions(extractView?.applyConditions).length === 0" class="target">未抽取到适用条件</span>
+      <h4>被排除假设</h4>
+      <div class="content">{{ excludedText(extractView?.excludedHypotheses) }}</div>
       <h4>排查步骤</h4>
       <div class="content">{{ extractView?.troubleshootSteps || '-' }}</div>
       <h4>解决步骤</h4>
@@ -233,7 +285,7 @@
     </el-dialog>
 
     <!-- M6 人工补录 -->
-    <el-dialog v-model="extractEditVisible" title="人工补录 / 编辑抽取结果" width="680px">
+    <el-dialog v-model="extractEditVisible" title="人工补录 / 编辑抽取结果" width="720px">
       <el-form :model="extractForm" label-width="90px">
         <el-form-item label="标题" required>
           <el-input v-model="extractForm.title" maxlength="128" show-word-limit />
@@ -246,6 +298,29 @@
         </el-form-item>
         <el-form-item label="故障现象">
           <el-input v-model="extractForm.faultPhenomenon" type="textarea" :rows="2" />
+        </el-form-item>
+        <el-form-item label="根因">
+          <el-input v-model="extractForm.rootCause" type="textarea" :rows="2"
+                    placeholder="无最终根因时留空" />
+        </el-form-item>
+        <el-form-item label="验证方式">
+          <el-input v-model="extractForm.verification" type="textarea" :rows="2"
+                    placeholder="复测/结果记录里的结果值，不要把维修动作当验证" />
+        </el-form-item>
+        <el-form-item label="适用条件">
+          <div class="cond-list">
+            <div v-for="(c, i) in extractForm.conditions" :key="i" class="cond-row">
+              <el-select v-model="c.type" style="width: 132px">
+                <el-option v-for="(label, type) in conditionTypeLabels" :key="type" :label="label" :value="type" />
+              </el-select>
+              <el-input v-model="c.value" placeholder="条件值，如 LAM-600" style="flex: 1" />
+              <el-button link type="danger" @click="extractForm.conditions.splice(i, 1)">删除</el-button>
+            </div>
+            <el-button link type="primary"
+                       @click="extractForm.conditions.push({ type: 'device_model', value: '' })">
+              + 添加条件
+            </el-button>
+          </div>
         </el-form-item>
         <el-form-item label="排查步骤">
           <el-input v-model="extractForm.troubleshootSteps" type="textarea" :rows="3" />
@@ -317,8 +392,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   pageKnowledge, createKnowledge, updateKnowledge, deleteKnowledge,
   submitKnowledge, publishKnowledge, rejectKnowledge, listCategories, searchKnowledge,
-  pageExtraction, updateExtraction, approveExtraction, mergeExtraction,
-  previewMergeExtraction, rejectExtraction
+  pageExtraction, getExtraction, updateExtraction, approveExtraction, mergeExtraction,
+  previewMergeExtraction, rejectExtraction, listExtractionDeviceTypes
 } from '../api/kb'
 import { useAuthStore } from '../stores/auth'
 
@@ -347,6 +422,9 @@ const total = ref(0)
 const loading = ref(false)
 const query = reactive({ page: 1, size: 10, status: '', deviceType: '', keyword: '' })
 const categories = ref([])
+// 分类列表加载失败标记：失败时给出提示与重试，避免下拉为空被当成“系统里没有分类”
+const categoryLoadError = ref(false)
+const categoryLoading = ref(false)
 
 function categoryName(id) {
   const c = categories.value.find(x => x.id === id)
@@ -356,7 +434,11 @@ function categoryName(id) {
 async function load() {
   loading.value = true
   try {
-    const data = await pageKnowledge({ ...query })
+    // 分页参数名与后端一致为 current/size（此前误传 page，导致知识列表也恒为第 1 页）
+    const data = await pageKnowledge({
+      current: query.page, size: query.size,
+      status: query.status, deviceType: query.deviceType, keyword: query.keyword
+    })
     records.value = data.records
     total.value = data.total
   } finally {
@@ -476,16 +558,59 @@ function pendingExtract(row) {
 const extractRecords = ref([])
 const extractTotal = ref(0)
 const extractLoading = ref(false)
-const extractQuery = reactive({ page: 1, size: 10, status: 'PENDING_REVIEW' })
+const extractDeviceTypes = ref([])
+// page 仅用于分页组件绑定；请求参数名与后端一致为 current/size（此前误传 page，导致恒为第 1 页）
+const extractQuery = reactive({
+  page: 1, size: 10, status: 'PENDING_REVIEW',
+  title: '', sourceTicketNo: '', deviceType: '', dedupAction: '', timeRange: []
+})
+
+function buildExtractParams() {
+  const p = { current: extractQuery.page, size: extractQuery.size }
+  if (extractQuery.status) p.status = extractQuery.status
+  if (extractQuery.title.trim()) p.title = extractQuery.title.trim()
+  if (extractQuery.sourceTicketNo.trim()) p.sourceTicketNo = extractQuery.sourceTicketNo.trim()
+  if (extractQuery.deviceType) p.deviceType = extractQuery.deviceType
+  if (extractQuery.dedupAction) p.dedupAction = extractQuery.dedupAction
+  const [start, end] = extractQuery.timeRange || []
+  if (start) p.startTime = start
+  if (end) p.endTime = end
+  return p
+}
 
 async function loadExtraction() {
   extractLoading.value = true
   try {
-    const data = await pageExtraction({ ...extractQuery })
+    const data = await pageExtraction(buildExtractParams())
     extractRecords.value = data.records
     extractTotal.value = data.total
   } finally {
     extractLoading.value = false
+  }
+}
+
+/** 筛选条件变化：页码回到第 1 页，避免停留在超出总页数的空页 */
+function searchExtraction() {
+  extractQuery.page = 1
+  loadExtraction()
+}
+
+/** 重置只清新增筛选项；状态默认「待审核」属于审核列表固定过滤，不清空 */
+function resetExtractFilters() {
+  extractQuery.title = ''
+  extractQuery.sourceTicketNo = ''
+  extractQuery.deviceType = ''
+  extractQuery.dedupAction = ''
+  extractQuery.timeRange = []
+  searchExtraction()
+}
+
+async function loadExtractDeviceTypes() {
+  try {
+    extractDeviceTypes.value = (await listExtractionDeviceTypes()) || []
+  } catch (e) {
+    extractDeviceTypes.value = []
+    ElMessage.warning(e.message || '设备类型选项加载失败')
   }
 }
 
@@ -503,8 +628,54 @@ const extractEditVisible = ref(false)
 const extractSaving = ref(false)
 const extractForm = reactive({
   id: null, title: '', deviceType: '', tagsText: '', faultPhenomenon: '',
+  rootCause: '', verification: '', conditions: [],
   troubleshootSteps: '', solutionSteps: '', keyPoints: ''
 })
+
+/** 五类适用条件（与服务端 ConditionSupport.TYPES 对齐） */
+const conditionTypeLabels = {
+  device_model: '设备型号',
+  process_stage: '工艺段',
+  material_or_batch: '物料/批次',
+  param_range: '参数区间',
+  precondition: '前置条件'
+}
+
+function parseConditions(json) {
+  if (!json) return []
+  try {
+    const arr = typeof json === 'string' ? JSON.parse(json) : json
+    return Array.isArray(arr) ? arr.filter(c => c && c.type && c.value) : []
+  } catch (e) {
+    return []
+  }
+}
+
+function relationLabel(type) {
+  return { duplicate: '重复', variant: '变体', conflict: '冲突', unrelated: '无关' }[type] || '未判别'
+}
+
+/** 从 chain_trace JSON 中取降级原因（后端 detail 返回 chainDegraded + chainTrace 字符串） */
+function chainErrors(trace) {
+  if (!trace) return []
+  try {
+    const obj = typeof trace === 'string' ? JSON.parse(trace) : trace
+    return Array.isArray(obj && obj.errors) ? obj.errors.map(String) : []
+  } catch (e) {
+    return []
+  }
+}
+
+function excludedText(json) {
+  if (!json) return '无'
+  try {
+    const arr = typeof json === 'string' ? JSON.parse(json) : json
+    if (!Array.isArray(arr) || arr.length === 0) return '无'
+    return arr.map(x => `- ${x.hypothesis || ''}${x.evidence ? `（依据：${x.evidence}）` : ''}`).join('\n')
+  } catch (e) {
+    return '无'
+  }
+}
 
 function openExtractEdit(row) {
   extractForm.id = row.id
@@ -512,6 +683,9 @@ function openExtractEdit(row) {
   extractForm.deviceType = row.deviceType || ''
   extractForm.tagsText = parseTags(row.tags).join(',')
   extractForm.faultPhenomenon = row.faultPhenomenon || ''
+  extractForm.rootCause = row.rootCause || ''
+  extractForm.verification = row.verification || ''
+  extractForm.conditions = parseConditions(row.applyConditions).map(c => ({ type: c.type, value: c.value }))
   extractForm.troubleshootSteps = row.troubleshootSteps || ''
   extractForm.solutionSteps = row.solutionSteps || ''
   extractForm.keyPoints = row.keyPoints || ''
@@ -525,11 +699,15 @@ async function saveExtractEdit() {
   }
   extractSaving.value = true
   try {
+    const conditions = extractForm.conditions.filter(c => c.type && c.value && c.value.trim())
     await updateExtraction(extractForm.id, {
       title: extractForm.title,
       deviceType: extractForm.deviceType,
       tags: JSON.stringify(extractForm.tagsText.split(/[,，]/).map(s => s.trim()).filter(Boolean)),
       faultPhenomenon: extractForm.faultPhenomenon,
+      rootCause: extractForm.rootCause,
+      verification: extractForm.verification,
+      applyConditions: JSON.stringify(conditions),
       troubleshootSteps: extractForm.troubleshootSteps,
       solutionSteps: extractForm.solutionSteps,
       keyPoints: extractForm.keyPoints
@@ -623,10 +801,25 @@ async function doMergeExtract() {
   }
 }
 
+async function loadCategories() {
+  if (categoryLoading.value) return
+  categoryLoading.value = true
+  try {
+    categories.value = (await listCategories()) || []
+    categoryLoadError.value = false
+  } catch (e) {
+    categoryLoadError.value = true
+    ElMessage.error(e.message || '分类加载失败，可点击重试')
+  } finally {
+    categoryLoading.value = false
+  }
+}
+
 onMounted(async () => {
   load()
   loadExtraction()
-  try { categories.value = await listCategories() } catch (_) { /* 分类加载失败不阻塞 */ }
+  loadExtractDeviceTypes()
+  loadCategories()
 })
 </script>
 
@@ -634,6 +827,10 @@ onMounted(async () => {
 .mb12 { margin-bottom: 12px; }
 .mt12 { margin-top: 12px; }
 .mr4 { margin-right: 4px; }
+.mb4 { margin-bottom: 4px; }
+.cond-list { width: 100%; }
+.cond-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+.degraded-errors { font-size: 12px; line-height: 1.6; margin-top: 4px; }
 .mr8 { margin-right: 8px; }
 .ml8 { margin-left: 8px; }
 .score { color: var(--amber-deep); margin-right: 6px; }
@@ -646,6 +843,7 @@ h4 { margin: 12px 0 4px; font-size: 13px; color: #303133; }
 .card-head { display: flex; justify-content: space-between; align-items: center; }
 .search-bar { display: flex; gap: 10px; align-items: center; }
 .filters { display: flex; gap: 8px; margin-bottom: 12px; }
+.filters.wrap { flex-wrap: wrap; }
 .pager { margin-top: 12px; justify-content: flex-end; }
 .summary { color: #606266; background: #f5f7fa; padding: 8px; border-radius: 4px; }
 .content { white-space: pre-wrap; line-height: 1.7; margin-top: 8px; }

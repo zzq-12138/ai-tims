@@ -2,6 +2,7 @@ package com.tims.knowledge.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import com.tims.knowledge.mapper.KbKnowledgeMapper;
 import com.tims.knowledge.mapper.SysAuthMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +25,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * M6 抽取审核中心（ADMIN / REVIEWER 可审核）。
@@ -55,15 +59,38 @@ public class ExtractionReviewService {
         this.sysAuthMapper = sysAuthMapper;
     }
 
-    public Page<AiExtracted> page(long current, long size, String status) {
+    public Page<AiExtracted> page(long current, long size, String status, String title,
+                                  String sourceTicketNo, String deviceType, String dedupAction,
+                                  LocalDateTime startTime, LocalDateTime endTime) {
         LambdaQueryWrapper<AiExtracted> w = new LambdaQueryWrapper<AiExtracted>()
-                .eq(status != null && !status.isBlank(), AiExtracted::getStatus, status)
+                .eq(StringUtils.hasText(status), AiExtracted::getStatus, status)
                 // 异步抽取进行中的占位行不进入审核中心（终态才可见）
-                .ne(status == null || status.isBlank(), AiExtracted::getStatus, "PROCESSING")
-                .orderByDesc(AiExtracted::getCreateTime);
+                .ne(!StringUtils.hasText(status), AiExtracted::getStatus, "PROCESSING")
+                .like(StringUtils.hasText(title), AiExtracted::getTitle, trim(title))
+                .like(StringUtils.hasText(sourceTicketNo), AiExtracted::getSourceTicketNo, trim(sourceTicketNo))
+                .eq(StringUtils.hasText(deviceType), AiExtracted::getDeviceType, deviceType)
+                .eq(StringUtils.hasText(dedupAction), AiExtracted::getDedupAction, dedupAction)
+                .ge(startTime != null, AiExtracted::getCreateTime, startTime)
+                .le(endTime != null, AiExtracted::getCreateTime, endTime)
+                // create_time 可能重复，追加 id 兜底保证翻页稳定（不重不漏）
+                .orderByDesc(AiExtracted::getCreateTime)
+                .orderByDesc(AiExtracted::getId);
         Page<AiExtracted> page = extractedMapper.selectPage(new Page<>(current, size), w);
         fillTargetTitle(page.getRecords());
         return page;
+    }
+
+    /** 设备类型下拉选项：取 ai_extracted 中实际存在的非空值 */
+    public List<String> deviceTypes() {
+        QueryWrapper<AiExtracted> w = new QueryWrapper<AiExtracted>()
+                .select("DISTINCT device_type")
+                .isNotNull("device_type")
+                .ne("device_type", "")
+                .orderByAsc("device_type");
+        return extractedMapper.selectObjs(w).stream()
+                .filter(Objects::nonNull)
+                .map(String::valueOf)
+                .collect(Collectors.toList());
     }
 
     public AiExtracted detail(Long id) {
@@ -75,6 +102,7 @@ public class ExtractionReviewService {
             KbKnowledge target = knowledgeMapper.selectById(row.getDedupTargetId());
             row.setDedupTargetTitle(target == null ? null : target.getTitle());
         }
+        row.setChainDegraded(isChainDegraded(row.getChainTrace()));
         return row;
     }
 
@@ -90,6 +118,20 @@ public class ExtractionReviewService {
         if (in.getSolutionSteps() != null) row.setSolutionSteps(in.getSolutionSteps());
         if (in.getKeyPoints() != null) row.setKeyPoints(in.getKeyPoints());
         if (in.getTags() != null) row.setTags(validateTags(in.getTags()));
+        // P0/P2：五元组字段可人工补录/修正（条件按五类校验，入库前重算 condition_keys）
+        if (in.getRootCause() != null) row.setRootCause(blankToNull(in.getRootCause()));
+        if (in.getRootCauseEvidence() != null) row.setRootCauseEvidence(blankToNull(in.getRootCauseEvidence()));
+        if (in.getVerification() != null) row.setVerification(blankToNull(in.getVerification()));
+        if (in.getVerificationEvidence() != null) row.setVerificationEvidence(blankToNull(in.getVerificationEvidence()));
+        if (in.getApplyConditions() != null) {
+            String condJson = ConditionSupport.toJson(in.getApplyConditions());
+            row.setApplyConditions("[]".equals(condJson) ? null : condJson);
+            row.setConditionKeys(ConditionSupport.keys(condJson));
+        }
+        if (in.getExcludedHypotheses() != null) row.setExcludedHypotheses(blankToNull(in.getExcludedHypotheses()));
+        if (in.getRootCause() != null) {
+            row.setHasFinalRootCause(blankToNull(in.getRootCause()) == null ? 0 : 1);
+        }
         if ("MANUAL_REQUIRED".equals(row.getStatus())) {
             row.setStatus("PENDING_REVIEW");
             row.setErrorMsg(null);
@@ -118,6 +160,11 @@ public class ExtractionReviewService {
                 ? row.getTitle() : row.getFaultPhenomenon(), 500));
         k.setTags(row.getTags() == null || row.getTags().isBlank() ? "[]" : validateTags(row.getTags()));
         k.setApplyDeviceType(row.getDeviceType());
+        // P2 条件化入库：根因/验证/适用条件按条件分支写入，condition_keys 供检索过滤
+        k.setRootCause(blankToNull(row.getRootCause()));
+        k.setVerification(blankToNull(row.getVerification()));
+        k.setApplyConditions(row.getApplyConditions());
+        k.setConditionKeys(row.getApplyConditions() == null ? null : ConditionSupport.keys(row.getApplyConditions()));
         k.setCategoryId(1L);
         k.setSourceTicketId(row.getSourceTicketId());
         k.setStatus("PUBLISHED");
@@ -186,6 +233,16 @@ public class ExtractionReviewService {
                     + "\n\n【工单补充 " + nvl(row.getSourceTicketNo()) + "】\n" + append);
         }
         target.setTags(unionTags(target.getTags(), row.getTags()));
+        // P2 条件化合并：缺则补、有则并，绝不覆盖已有根因/条件
+        if (blankToNull(target.getRootCause()) == null && blankToNull(row.getRootCause()) != null) {
+            target.setRootCause(row.getRootCause());
+        }
+        if (blankToNull(target.getVerification()) == null && blankToNull(row.getVerification()) != null) {
+            target.setVerification(row.getVerification());
+        }
+        String mergedConditions = unionConditions(target.getApplyConditions(), row.getApplyConditions());
+        target.setApplyConditions(mergedConditions);
+        target.setConditionKeys(mergedConditions == null ? null : ConditionSupport.keys(mergedConditions));
         target.setVersion((target.getVersion() == null ? 1 : target.getVersion()) + 1);
         target.setUpdateTime(LocalDateTime.now());
         knowledgeMapper.updateById(target);
@@ -379,6 +436,51 @@ public class ExtractionReviewService {
         if (roles == null || !(roles.contains("ADMIN") || roles.contains("REVIEWER"))) {
             throw new BizException(10403, "仅 ADMIN/REVIEWER 可审核抽取结果");
         }
+    }
+
+    /** chain_trace 中 degraded=true 视为链式降级（供审核页显式提示，不静默） */
+    private boolean isChainDegraded(String chainTrace) {
+        if (chainTrace == null || chainTrace.isBlank()) {
+            return false;
+        }
+        try {
+            JsonNode n = MAPPER.readTree(chainTrace);
+            return n != null && n.path("degraded").asBoolean(false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /** 条件并集：按 (type,value) 去重；两侧皆空返回 null */
+    private String unionConditions(String oldJson, String newJson) {
+        List<Map<String, String>> merged = new ArrayList<>();
+        java.util.Set<String> seen = new HashSet<>();
+        for (Map<String, String> c : ConditionSupport.parse(oldJson)) {
+            if (seen.add(c.get("type") + "\u0000" + c.get("value"))) {
+                merged.add(c);
+            }
+        }
+        for (Map<String, String> c : ConditionSupport.parse(newJson)) {
+            if (seen.add(c.get("type") + "\u0000" + c.get("value"))) {
+                merged.add(c);
+            }
+        }
+        if (merged.isEmpty()) {
+            return null;
+        }
+        try {
+            return MAPPER.writeValueAsString(merged);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static String blankToNull(String s) {
+        return s == null || s.isBlank() ? null : s;
+    }
+
+    private static String trim(String s) {
+        return s == null ? null : s.trim();
     }
 
     private static String nvl(String s) {

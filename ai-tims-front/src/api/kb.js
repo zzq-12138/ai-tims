@@ -43,8 +43,14 @@ export function searchKnowledge(params) {
 }
 
 // M6 抽取审核中心（系统只给建议，必须人工确认后才新建/合并/驳回）
+// 分页参数与后端一致：current/size；筛选：status/title/sourceTicketNo/deviceType/dedupAction/startTime/endTime
 export function pageExtraction(params) {
   return request.get('/api/kb/extraction/page', { params })
+}
+
+// 设备类型下拉选项：由后端按 ai_extracted 实际数据去重返回
+export function listExtractionDeviceTypes() {
+  return request.get('/api/kb/extraction/device-types')
 }
 
 export function getExtraction(id) {

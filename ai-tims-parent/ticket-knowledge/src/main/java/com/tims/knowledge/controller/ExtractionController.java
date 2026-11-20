@@ -2,6 +2,7 @@ package com.tims.knowledge.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tims.common.api.Result;
+import com.tims.common.exception.BizException;
 import com.tims.knowledge.entity.AiExtracted;
 import com.tims.knowledge.entity.KbKnowledge;
 import com.tims.knowledge.entity.KbKnowledgeHistory;
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 
 /**
  * M6 抽取审核中心（网关 /api/kb/** → 本服务）：
  * GET  /api/kb/extraction/page                抽取结果分页（含相似度/差异/建议）
+ * GET  /api/kb/extraction/device-types        设备类型下拉选项（取实际数据）
  * GET  /api/kb/extraction/{id}                详情
  * PUT  /api/kb/extraction/{id}                人工补录/编辑
  * POST /api/kb/extraction/{id}/approve        人工确认新建（写 PUBLISHED，10s 内向量同步）
@@ -39,11 +44,28 @@ public class ExtractionController {
         this.reviewService = reviewService;
     }
 
+    /**
+     * 抽取结果分页：分页参数统一为 current/size（与 /api/kb/knowledge/page 同口径）。
+     * 筛选项：status 精确、title/sourceTicketNo 模糊、deviceType/dedupAction 精确、createTime 区间。
+     */
     @GetMapping("/page")
     public Result<Page<AiExtracted>> page(@RequestParam(defaultValue = "1") long current,
                                           @RequestParam(defaultValue = "10") long size,
-                                          @RequestParam(required = false) String status) {
-        return Result.ok(reviewService.page(current, size, status));
+                                          @RequestParam(required = false) String status,
+                                          @RequestParam(required = false) String title,
+                                          @RequestParam(required = false) String sourceTicketNo,
+                                          @RequestParam(required = false) String deviceType,
+                                          @RequestParam(required = false) String dedupAction,
+                                          @RequestParam(required = false) String startTime,
+                                          @RequestParam(required = false) String endTime) {
+        return Result.ok(reviewService.page(current, size, status, title, sourceTicketNo, deviceType,
+                dedupAction, parseTime(startTime, "startTime"), parseTime(endTime, "endTime")));
+    }
+
+    /** 设备类型下拉选项：取自 ai_extracted 实际数据，避免前端写死 */
+    @GetMapping("/device-types")
+    public Result<List<String>> deviceTypes() {
+        return Result.ok(reviewService.deviceTypes());
     }
 
     @GetMapping("/{id}")
@@ -92,5 +114,21 @@ public class ExtractionController {
     @GetMapping("/history/{knowledgeId}")
     public Result<List<KbKnowledgeHistory>> history(@PathVariable Long knowledgeId) {
         return Result.ok(reviewService.history(knowledgeId));
+    }
+
+    /** 支持 yyyy-MM-dd（按当天 00:00:00）与 yyyy-MM-dd HH:mm:ss / ISO 两种写法 */
+    private static LocalDateTime parseTime(String value, String field) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        String v = value.trim();
+        try {
+            if (v.length() == 10) {
+                return LocalDate.parse(v).atStartOfDay();
+            }
+            return LocalDateTime.parse(v.replace(' ', 'T'));
+        } catch (DateTimeParseException e) {
+            throw new BizException(10400, field + " 时间格式非法，应为 yyyy-MM-dd HH:mm:ss");
+        }
     }
 }

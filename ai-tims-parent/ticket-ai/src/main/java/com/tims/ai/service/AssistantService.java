@@ -1,6 +1,7 @@
 package com.tims.ai.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tims.ai.apikey.AiTenantContext;
 import com.tims.ai.chat.AiChatMessage;
 import com.tims.ai.chat.AiChatSession;
 import com.tims.ai.chat.AiChatSessionService;
@@ -9,7 +10,10 @@ import com.tims.ai.dto.AssistantRequest;
 import com.tims.ai.dto.AssistantVO;
 import com.tims.ai.dto.ChatRequest;
 import com.tims.ai.dto.ChatResponseVO;
+import com.tims.ai.guard.GuardService;
 import com.tims.ai.llm.LlmException;
+import com.tims.ai.observe.AiTrace;
+import com.tims.ai.prompt.PromptRegistry;
 import com.tims.ai.tool.TicketTools;
 import com.tims.ai.tool.ToolCallRecorder;
 import com.tims.ai.usage.AiCallLog;
@@ -41,35 +45,27 @@ public class AssistantService {
 
     private static final Logger log = LoggerFactory.getLogger(AssistantService.class);
 
-    private static final String SYSTEM_PROMPT = """
-            你是 AI-TIMS 智能制造工单系统的工单助手，服务设备工程师与产线主管。
-            你可以调用工具：
-            - query_ticket_status：查工单状态/进度
-            - search_knowledge：检索维修知识库
-            - ticket_statistics：查工单统计概览
-            规则：
-            1. 用户问工单进度、故障处理办法、工单统计时，必须先调用对应工具，不要凭记忆编造。
-            2. 用户消息中出现工单编号（WO 开头）或工单 ID 时，直接调用 query_ticket_status(keyword=该编号/ID)，不要反问。
-            3. 工具结果不足或为空时如实说明，不虚构工单号、参数或统计数字。
-            4. 回答简洁、可执行，中文 Markdown；引用知识用 [K1] 形式标注。
-            """;
-
     private final ChatClient chatClient;
     private final TicketTools ticketTools;
     private final AiProperties props;
     private final AiUsageService usageService;
     private final AiChatSessionService sessionService;
     private final ObjectMapper mapper;
+    private final GuardService guard;
+    private final PromptRegistry promptRegistry;
 
     public AssistantService(ChatClient chatClient, TicketTools ticketTools,
                             AiProperties props, AiUsageService usageService,
-                            AiChatSessionService sessionService, ObjectMapper mapper) {
+                            AiChatSessionService sessionService, ObjectMapper mapper,
+                            GuardService guard, PromptRegistry promptRegistry) {
         this.chatClient = chatClient;
         this.ticketTools = ticketTools;
         this.props = props;
         this.usageService = usageService;
         this.sessionService = sessionService;
         this.mapper = mapper;
+        this.guard = guard;
+        this.promptRegistry = promptRegistry;
     }
 
     public AssistantVO chat(Long tenantId, Long userId, AssistantRequest request) {
@@ -82,6 +78,14 @@ public class AssistantService {
         }
         Long uid = userId;
 
+        GuardService.Decision in = guard.inspectInput(request.getMessage());
+        if (in.blocked()) {
+            recordBlocked(tid, uid, "请求被安全护栏拦截：" + String.join(",", in.reasons()));
+            throw new LlmException(40301, "请求被安全护栏拦截：" + String.join(",", in.reasons()));
+        }
+        String userMessage = guard.mask(request.getMessage());
+        AiTrace.start();
+
         // 会话：传 sessionId 则校验归属并读库内窗口；否则自动建会话
         AiChatSession session;
         List<Message> history;
@@ -92,29 +96,47 @@ public class AssistantService {
             session = sessionService.create(tid, uid, null);
             history = toMessagesFromHistory(request.getHistory());
         }
+        // 引用回复：校验被引用消息属于同一会话，并保存快照（截断），刷新后引用关系仍在
+        AiChatMessage quoted = null;
+        if (request.getQuotedMessageId() != null) {
+            quoted = sessionService.requireMessage(tid, uid, session.getId(), request.getQuotedMessageId());
+        }
+        String quotedContent = quoted == null ? null : truncate(quoted.getContent(), 200);
         // 先落用户消息：即使模型超时，刷新后也能看到该问题
-        sessionService.addMessage(tid, uid, session.getId(), "user", request.getMessage(), null, null, null);
-        sessionService.touch(session, request.getMessage());
+        AiChatMessage userRow = sessionService.addMessage(tid, uid, session.getId(), "user", userMessage,
+                null, null, null, quoted == null ? null : quoted.getId(),
+                quoted == null ? null : quoted.getRole(), quotedContent);
+        sessionService.touch(session, userMessage);
 
+        PromptRegistry.Active sysPrompt = promptRegistry.active(tid, "ASSISTANT");
         long t0 = System.currentTimeMillis();
         ToolCallRecorder.begin();
         try {
             List<Message> promptMessages = new ArrayList<>(history);
-            promptMessages.add(new UserMessage(request.getMessage()));
-            ChatResponse resp = chatClient.prompt()
-                    .system(SYSTEM_PROMPT)
-                    .messages(promptMessages)
-                    .tools(ticketTools)
-                    .call()
-                    .chatResponse();
+            promptMessages.add(new UserMessage(userMessage));
+            ChatResponse resp;
+            AiTenantContext.set(tid);
+            try {
+                resp = chatClient.prompt()
+                        .system(sysPrompt.content())
+                        .messages(promptMessages)
+                        .tools(ticketTools)
+                        .call()
+                        .chatResponse();
+            } finally {
+                AiTenantContext.clear();
+            }
 
-            String answer = resp.getResult() == null ? "" : resp.getResult().getOutput().getText();
+            GuardService.Filtered filtered = guard.filterOutput(
+                    resp.getResult() == null ? "" : resp.getResult().getOutput().getText());
+            String answer = filtered.text();
             List<ToolCallRecorder.Record> records = ToolCallRecorder.snapshot();
             Usage u = resp.getMetadata() == null ? null : resp.getMetadata().getUsage();
             int prompt = u == null || u.getPromptTokens() == null ? 0 : u.getPromptTokens();
             int completion = u == null || u.getCompletionTokens() == null ? 0 : u.getCompletionTokens();
             long total = System.currentTimeMillis() - t0;
-            boolean degraded = records.stream().anyMatch(ToolCallRecorder.Record::degraded);
+            boolean degraded = filtered.blocked()
+                    || records.stream().anyMatch(ToolCallRecorder.Record::degraded);
 
             AssistantVO vo = new AssistantVO();
             vo.setAnswer(answer);
@@ -125,12 +147,23 @@ public class AssistantService {
             vo.setToolCalls(records);
             vo.setSessionId(session.getId());
             vo.setSessionTitle(session.getTitle());
+            vo.setUserMessageId(userRow.getId());
+            if (guard.enabled()) {
+                java.util.Map<String, Object> gm = new java.util.LinkedHashMap<>();
+                gm.put("inputScore", in.score());
+                gm.put("inputReasons", in.reasons());
+                gm.put("outputBlocked", filtered.blocked());
+                gm.put("outputReasons", filtered.reasons());
+                vo.setGuard(gm);
+            }
 
-            sessionService.addMessage(tid, uid, session.getId(), "assistant", answer,
+            AiChatMessage aiRow = sessionService.addMessage(tid, uid, session.getId(), "assistant", answer,
                     props.getModel(), toJson(records), toJson(vo.getUsage()));
+            vo.setAssistantMessageId(aiRow.getId());
             sessionService.touchOnly(session.getId());
 
-            persistAgent(tid, total, prompt, completion, degraded, records, null);
+            persistAgent(tid, uid, sysPrompt.version(), filtered.blocked(), total, prompt, completion,
+                    degraded, records, null);
             log.info("[assistant] done session={} model={} tools={} usage={}/{} total={}ms",
                     session.getId(), props.getModel(), records.size(), prompt, completion, total);
             return vo;
@@ -140,7 +173,8 @@ public class AssistantService {
             sessionService.addMessage(tid, uid, session.getId(), "assistant",
                     "调用失败：" + (e.getMessage() == null ? "AI 服务不可用" : e.getMessage()), props.getModel(), null, null);
             sessionService.touchOnly(session.getId());
-            persistAgent(tid, total, 0, 0, true, ToolCallRecorder.snapshot(), e.getMessage());
+            persistAgent(tid, uid, sysPrompt.version(), false, total, 0, 0, true,
+                    ToolCallRecorder.snapshot(), e.getMessage());
             log.error("[assistant] failed session={}: {}", session.getId(), e.getMessage());
             if (e instanceof LlmException le) {
                 throw le;
@@ -148,11 +182,39 @@ public class AssistantService {
             throw new LlmException(40201, "AI 助手暂不可用：" + e.getMessage());
         } finally {
             ToolCallRecorder.clear();
+            AiTrace.clear();
         }
     }
 
-    private void persistAgent(Long tenantId, long total, int prompt, int completion, boolean degraded,
+    /** 护栏拦截也要留痕：护栏本身不放行，但观测面板能看到被拦的请求 */
+    private void recordBlocked(Long tenantId, Long userId, String reason) {
+        AiTrace.start();
+        try {
+            AiCallLog row = new AiCallLog();
+            row.setTenantId(tenantId);
+            row.setScene("AGENT");
+            row.setModel(props.getModel());
+            row.setPromptTokens(0);
+            row.setCompletionTokens(0);
+            row.setTotalTokens(0);
+            row.setLatencyMs(0L);
+            row.setStatus("BLOCKED");
+            row.setDegraded(false);
+            row.setGuardBlocked(true);
+            row.setPromptVersion("guard-v1");
+            row.setTraceId(AiTrace.id());
+            row.setUserId(userId);
+            row.setErrorMsg(truncate(reason, 250));
+            usageService.record(row);
+        } finally {
+            AiTrace.clear();
+        }
+    }
+
+    private void persistAgent(Long tenantId, Long userId, String promptVersion, boolean guardBlocked,
+                              long total, int prompt, int completion, boolean degraded,
                               List<ToolCallRecorder.Record> records, String error) {
+        String traceId = AiTrace.id();
         AiCallLog row = new AiCallLog();
         row.setTenantId(tenantId);
         row.setScene("AGENT");
@@ -163,7 +225,17 @@ public class AssistantService {
         row.setLatencyMs(total);
         row.setStatus(error == null ? (degraded ? "DEGRADED" : "SUCCESS") : "ERROR");
         row.setDegraded(degraded);
+        row.setGuardBlocked(guardBlocked);
+        row.setPromptVersion(promptVersion);
+        row.setTraceId(traceId);
+        row.setUserId(userId);
         row.setErrorMsg(error == null ? null : truncate(error, 250));
+        // 本次问答的引用数：所有 search_knowledge 命中按知识 id 去重后计数，避免多次检索重复累加
+        java.util.Set<Long> refIds = new java.util.LinkedHashSet<>();
+        for (ToolCallRecorder.Record r : records) {
+            refIds.addAll(r.refIds());
+        }
+        row.setRefCount(refIds.size());
         usageService.record(row);
 
         for (ToolCallRecorder.Record r : records) {
@@ -177,7 +249,13 @@ public class AssistantService {
             t.setFirstTokenMs(r.elapsedMs());
             t.setStatus("OK".equals(r.status()) ? "SUCCESS" : "ERROR");
             t.setDegraded(r.degraded());
+            t.setGuardBlocked(false);
+            t.setPromptVersion(promptVersion);
+            t.setTraceId(traceId);
+            t.setUserId(userId);
             t.setErrorMsg("OK".equals(r.status()) ? null : truncate(r.summary(), 250));
+            // 工具行只记本次 search_knowledge 实际命中条数；其他工具为 0
+            t.setRefCount(r.refCount());
             usageService.record(t);
         }
     }
@@ -189,9 +267,9 @@ public class AssistantService {
                 continue;
             }
             if ("assistant".equals(m.getRole())) {
-                messages.add(new AssistantMessage(m.getContent()));
+                messages.add(new AssistantMessage(guard.mask(m.getContent())));
             } else if ("user".equals(m.getRole())) {
-                messages.add(new UserMessage(m.getContent()));
+                messages.add(new UserMessage(guard.mask(m.getContent())));
             }
         }
         return messages;
@@ -208,9 +286,9 @@ public class AssistantService {
                 continue;
             }
             if ("assistant".equals(m.getRole())) {
-                messages.add(new AssistantMessage(m.getContent()));
+                messages.add(new AssistantMessage(guard.mask(m.getContent())));
             } else if ("user".equals(m.getRole())) {
-                messages.add(new UserMessage(m.getContent()));
+                messages.add(new UserMessage(guard.mask(m.getContent())));
             }
         }
         return messages;

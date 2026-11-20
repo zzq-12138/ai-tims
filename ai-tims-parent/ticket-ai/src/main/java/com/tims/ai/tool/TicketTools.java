@@ -1,5 +1,6 @@
 package com.tims.ai.tool;
 
+import com.tims.ai.guard.GuardService;
 import com.tims.ai.rag.KbRef;
 import com.tims.ai.rag.KnowledgeClient;
 import com.tims.ai.rag.OrderClient;
@@ -28,10 +29,12 @@ public class TicketTools {
 
     private final OrderClient orderClient;
     private final KnowledgeClient knowledgeClient;
+    private final GuardService guard;
 
-    public TicketTools(OrderClient orderClient, KnowledgeClient knowledgeClient) {
+    public TicketTools(OrderClient orderClient, KnowledgeClient knowledgeClient, GuardService guard) {
         this.orderClient = orderClient;
         this.knowledgeClient = knowledgeClient;
+        this.guard = guard;
     }
 
     @Tool(name = "query_ticket_status",
@@ -64,6 +67,7 @@ public class TicketTools {
             result = "工单查询失败：" + e.getMessage();
             log.warn("[tool] query_ticket_status 失败 args={}: {}", args, e.getMessage());
         }
+        result = guard.maskToolOutput(result);
         long ms = System.currentTimeMillis() - t0;
         ToolCallRecorder.add(new ToolCallRecorder.Record("query_ticket_status", args, ms,
                 degraded ? "FAIL" : "OK", truncate(result, 120), degraded));
@@ -81,6 +85,8 @@ public class TicketTools {
         String args = "query=" + query + ", topK=" + k;
         String result;
         boolean degraded = false;
+        int refCount = 0;
+        java.util.Set<Long> refIds = java.util.Set.of();
         try {
             KnowledgeClient.SearchOutcome outcome = knowledgeClient.search(RequestUtils.tenantId(), query, k);
             degraded = outcome.fallback();
@@ -94,6 +100,14 @@ public class TicketTools {
                     sb.append("（知识库检索降级：向量检索不可用，已降级为关键词检索）\n");
                 }
                 List<KbRef> refs = outcome.refs();
+                refCount = refs.size();
+                java.util.Set<Long> ids = new java.util.LinkedHashSet<>();
+                for (KbRef r : refs) {
+                    if (r.id() != null) {
+                        ids.add(r.id());
+                    }
+                }
+                refIds = ids;
                 for (int i = 0; i < refs.size(); i++) {
                     KbRef r = refs.get(i);
                     sb.append("[K").append(i + 1).append("] ").append(r.title());
@@ -112,9 +126,10 @@ public class TicketTools {
             result = "知识库检索失败：" + e.getMessage();
             log.warn("[tool] search_knowledge 失败 args={}: {}", args, e.getMessage());
         }
+        result = guard.maskToolOutput(result);
         long ms = System.currentTimeMillis() - t0;
         ToolCallRecorder.add(new ToolCallRecorder.Record("search_knowledge", args, ms,
-                degraded ? "FAIL" : "OK", truncate(result, 120), degraded));
+                degraded ? "FAIL" : "OK", truncate(result, 120), degraded, refCount, refIds));
         log.info("[tool] search_knowledge args={} elapsed={}ms degraded={}", args, ms, degraded);
         return result;
     }
@@ -141,6 +156,7 @@ public class TicketTools {
             result = "统计查询失败：" + e.getMessage();
             log.warn("[tool] ticket_statistics 失败: {}", e.getMessage());
         }
+        result = guard.maskToolOutput(result);
         long ms = System.currentTimeMillis() - t0;
         ToolCallRecorder.add(new ToolCallRecorder.Record("ticket_statistics", "{}", ms,
                 degraded ? "FAIL" : "OK", truncate(result, 120), degraded));

@@ -21,16 +21,16 @@
 | 检索验证 | **0.7691** 是 11-20 下午控制台模拟检索请求的实测观察值（未落库、无日志，不可事后复核）；**0.7696** 是 11-19 kb310 回放落档（top1 `2117517479423836162`《蚀刻机过蚀刻处理》）；**0.76701** 是 11-19 回流焊 query 单点验证（**全角逗号版**；空格版约低 0.015；310 条 PUBLISHED，B 档）；**0.6589 不可复现、已作废**（属噪声版蚀刻 query）；同 query 现测 VECTOR/HYBRID 均 **0.7737、A 档**；系统性偏移不成立，唯一异常项为回流焊 −0.0173（已归因收尾）。0.7696 是 11-19 旧 embedding 模型下的评测读数，与当前模型不可比 |
 | embedding 现状 | 当前 env：`Qwen/Qwen3-Embedding-8B`、1024 维、collection `kb_knowledge_vec`、`KB_EMBED_QUERY_INSTRUCTION=Given a web search query, retrieve relevant passages that answer the query`；`kb_knowledge` **没有** `embed_model` / `vector_status` / `embedding_time`，只有 `vector_synced_at`；2026-11-23 实查 `MIN=2026-11-18 14:31:19`、`MAX=2026-11-20 14:41:39`、`COUNT=328`、`NULL=0`；按日分布未显示，不能据此推断混有两代向量 |
 | 新代码 | 已提交，当前 HEAD `a926c2b`；审核页分页/筛选项、`ref_count` 修复都已在历史提交里 |
-| 新镜像 | 三个已构建导出：`ticket-ai:1.0.2`、`ticket-knowledge:1.0.2`、`ai-tims-front:1.0.3`，**未发布，待更新**（Harbor 实测：knowledge 仅到 1.0.1、front 仅到 1.0.2、ticket-ai 1.0.2 不存在） |
+| 新镜像 | 三个已发布（2026-11-23）：`ticket-ai:1.0.2`、`ticket-knowledge:1.0.2`、`ai-tims-front:1.0.3` 已进 Harbor 并上线 |
 | 存储（PVC） | `ai-tims` **6 个，全部 Bound**，`nfs-storage`，合计 **72Gi**（rabbitmq 5 / redis 2 / etcd 5 / milvus 20 / minio 20 / order-uploads 20；全集群 54 个） |
 | 对外入口 | `ai-tims/ai-tims` Ingress **对象存在**，但无 IngressClass、无 controller 认领，ADDRESS 空、不生效；对外只走 NodePort `172.27.19.64:31579`（front）、`:30204`（gateway） |
 | 模型链路 | 集群外网关 `172.27.26.253:18892`（chat）/ `:18893`（embedding）；`Qwen/Qwen3.8-27B-dev` + `Qwen/Qwen3-Embedding-8B`/1024；**不用集群内 `alg-llm-service`** |
 | 模型鉴权 | `/v1/models` 返回 `{"error":"Unauthorized"}`；embeddings 401；`LLM_API_KEY` / `ZHIPU_API_KEY` 各 68 字节 |
 | 抽取运行 | 2026-11-20 11:37–11:44 连续处理 `WO20261118-0085`～`0104`，`steps=3 degraded=false`，6–11 秒/单；之后无新日志已结案：`wo_ticket` 仅 11-18 有 105 条、之后零新单，`ai_call_log` 11-18/19/20 = 154/23/238、11-21 起 0 → **无新业务输入，非链路故障** |
 | Secret 空值 | `NACOS_PASSWORD`、`SMTP_AUTH` 长度为 0；是否预期待确认 |
-| 下一步唯一 P0 | 把三个镜像搬进公司内网（`/data/sdv1/tims/images/` 已确认存在，但三个新包不在）→ load/push → 在 master1 用 `deploy.sh` 发布；回滚基准是 `ticket-ai:1.0.1` / `ticket-knowledge:1.0.1` / `ai-tims-front:1.0.2` |
+| 当前状态 | 三个镜像已于 2026-11-23 推送 Harbor 并上线（`ticket-ai:1.0.2` / `ticket-knowledge:1.0.2` / `ai-tims-front:1.0.3`），仓库清单同日追平（`829b9eb`）；回滚目标是 `ticket-ai:1.0.1` / `ticket-knowledge:1.0.1` / `ai-tims-front:1.0.2`（前端回滚需把 `front.yaml` 改回 1.0.2） |
 
-一句话：**代码和数据都已经就位，卡在「把新镜像送进公司内网并发布」这一步。**
+一句话：**代码、数据、镜像、发布都已完成；剩下的只有 Secret 空值确认等收尾项。**
 
 ---
 

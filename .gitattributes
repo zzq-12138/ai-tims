@@ -1,5 +1,35 @@
+# 文本文件入库统一归一化为 LF（检出侧换行由本文件下方规则与 core.autocrlf 决定）
+* text=auto
+
 # shell 脚本必须以 LF 落盘，否则在 Linux/VM 上 shebang 会报 bad interpreter
 *.sh text eol=lf
 # 部署产物（Dockerfile / YAML / env）会被原样带进 Linux 容器与集群：
 # Dockerfile 的 "\" 续行、脚本 source 的 env 都不能带 CRLF，否则容器构建/kustomize 会失败
 deploy/** text eol=lf
+
+# ===== 二进制资源：禁止换行转换与文本 diff =====
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.docx binary
+*.xlsx binary
+*.pptx binary
+*.pdf  binary
+*.zip  binary
+*.tar  binary
+*.gz   binary
+*.tgz  binary
+*.jar  binary
+*.safetensors binary
+*.bin  binary
+*.npy  binary
+*.npz  binary
+*.pkl  binary
+*.onnx binary
+*.pt   binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary

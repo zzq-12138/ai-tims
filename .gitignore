@@ -3,6 +3,20 @@ target/
 *.class
 *.jar
 !.mvn/wrapper/maven-wrapper.jar
+.eval_out/
+
+# ===== 评测/会话临时产物（按日期建的根目录，如 2026-11-19/、2026-11-20/）=====
+/20??-??-??/
+
+# ===== 模型权重（体积大，不入库）=====
+models/
+
+# ===== 离线镜像包与传输中间物（本地产物）=====
+images/*.tar
+images/*.tar.gz
+images/MANIFEST.md5
+images/MANIFEST.txt
+/tims-k8s.tar.gz
 
 # ===== 日志 =====
 logs/

@@ -39,6 +39,8 @@ sa-token:
   is-log: false
 
 tims:
+  # 服务间调用共享密钥：与 ticket-knowledge 同源；留空时回填投递默认跳过
+  internal-token: ${TIMS_INTERNAL_TOKEN:}
   ai:
     # ===== 主模型（对话/助手/Agent）：默认 glm-5.3-flash（有 5000 万专属包）=====
     # 注意：知识库 KB v1 的 320 条抽取记录（ai_extracted，均为 glm-4-flash；其中 310 条 PUBLISHED）已冻结不重抽；
@@ -98,6 +100,12 @@ tims:
       # 新口径（处置侧覆盖率）判定线：0.60 判“一致”，有效片段 <3 记“样本不足”
       consistent-threshold: ${AI_FALLBACK_CONSISTENT_THRESHOLD:0.60}
       min-segments: ${AI_FALLBACK_MIN_SEGMENTS:3}
+      # 建议→回填→入库（默认关闭）：只投递 ai_extracted 待审，人审通过才进知识库
+      # 灰度 = enabled + gray-ratio（按 pairId 稳定抽样）+ 服务端日上限，三者同时满足才投递
+      intake:
+        enabled: ${AI_FALLBACK_INTAKE_ENABLED:false}
+        gray-ratio: ${AI_FALLBACK_INTAKE_GRAY_RATIO:0.0}
+        min-confidence: ${AI_FALLBACK_INTAKE_MIN_CONFIDENCE:0.60}
     # 问题9：无官方余额接口，按调用记录本地计量（费用=token×单价），页面标注“估算”
     budget-cny: ${LLM_BUDGET_CNY:18}
     # 缺省单价（元/千 tokens）：取 glm-5.3-flash 标准价，避免切模型后低估

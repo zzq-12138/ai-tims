@@ -85,6 +85,13 @@
       </div>
       <el-table :data="extractRecords" v-loading="extractLoading" stripe size="small">
         <el-table-column prop="title" label="抽取标题" min-width="180" show-overflow-tooltip />
+        <el-table-column label="来源" width="92">
+          <template #default="{ row }">
+            <el-tag :type="row.sourceType === 'FALLBACK' ? 'warning' : 'info'" size="small">
+              {{ row.sourceType === 'FALLBACK' ? '建议回填' : '工单抽取' }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="sourceTicketNo" label="来源工单" width="126" show-overflow-tooltip />
         <el-table-column prop="deviceType" label="设备类型" width="88" />
         <el-table-column label="相似度 / 建议" min-width="190">
@@ -238,7 +245,19 @@
         </div>
       </el-alert>
       <el-descriptions :column="2" size="small" border class="mb12">
+        <el-descriptions-item label="来源类型">
+          <el-tag :type="extractView?.sourceType === 'FALLBACK' ? 'warning' : 'info'" size="small">
+            {{ extractView?.sourceType === 'FALLBACK' ? '建议回填' : '工单抽取' }}
+          </el-tag>
+        </el-descriptions-item>
         <el-descriptions-item label="来源工单">{{ extractView?.sourceTicketNo || '-' }}</el-descriptions-item>
+        <template v-if="extractView?.sourceType === 'FALLBACK'">
+          <el-descriptions-item label="来源记录">ai_fallback_pair#{{ extractView?.sourceRefId || '-' }}</el-descriptions-item>
+          <el-descriptions-item label="问答会话">{{ extractView?.sourceSessionId || '未提供' }}</el-descriptions-item>
+          <el-descriptions-item label="来源置信分">
+            {{ extractView?.sourceConfidence != null ? Number(extractView.sourceConfidence).toFixed(4) : '-' }}
+          </el-descriptions-item>
+        </template>
         <el-descriptions-item label="设备类型">{{ extractView?.deviceType || '-' }}</el-descriptions-item>
         <el-descriptions-item label="相似度">
           {{ extractView?.dedupScore != null ? Number(extractView.dedupScore).toFixed(4) : '-' }}

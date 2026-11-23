@@ -33,6 +33,9 @@ public class FallbackPair {
 
     private String promptVersion;
 
+    /** 问答会话ID（可空，供回填入库时做来源回溯） */
+    private String sessionId;
+
     /** 是否无知识库依据：1 是，0 否 */
     private Integer noKbBasis;
 
@@ -92,6 +95,8 @@ public class FallbackPair {
     public void setModel(String model) { this.model = model; }
     public String getPromptVersion() { return promptVersion; }
     public void setPromptVersion(String promptVersion) { this.promptVersion = promptVersion; }
+    public String getSessionId() { return sessionId; }
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
     public Integer getNoKbBasis() { return noKbBasis; }
     public void setNoKbBasis(Integer noKbBasis) { this.noKbBasis = noKbBasis; }
     public LocalDateTime getSuggestTime() { return suggestTime; }

@@ -1,5 +1,6 @@
 import request from '../utils/request'
 import { useAuthStore } from '../stores/auth'
+import { getChatSessionId } from '../utils/chatSession'
 
 /**
  * M5 AI 接口。
@@ -9,11 +10,12 @@ export function chatStream(body, handlers = {}, signal) {
   const auth = useAuthStore()
   const headers = { 'Content-Type': 'application/json', Accept: 'text/event-stream' }
   if (auth.token) headers.Authorization = auth.token
+  const payload = { ...(body || {}), sessionId: (body && body.sessionId) || getChatSessionId() }
 
   return fetch('/api/ai/chat/stream', {
     method: 'POST',
     headers,
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
     signal
   }).then(async (res) => {
     if (!res.ok) throw new Error(`AI 接口 HTTP ${res.status}`)
@@ -60,7 +62,8 @@ export function chatStream(body, handlers = {}, signal) {
 }
 
 export function chatSync(body) {
-  return request.post('/api/ai/chat', body, { timeout: 120000 })
+  const payload = { ...(body || {}), sessionId: (body && body.sessionId) || getChatSessionId() }
+  return request.post('/api/ai/chat', payload, { timeout: 120000 })
 }
 
 export function assistantChat(body) {

@@ -116,12 +116,31 @@ public class AiProperties {
         /** 新口径判定的最小有效片段数；少于该值记“样本不足”，不判一致/不一致 */
         private int minSegments = 3;
 
+        /** 建议→回填→入库（默认关闭）：只投递 ai_extracted 待审，不直写知识库 */
+        private Intake intake = new Intake();
+
         public boolean isEnabled() { return enabled; }
         public void setEnabled(boolean enabled) { this.enabled = enabled; }
         public double getConsistentThreshold() { return consistentThreshold; }
         public void setConsistentThreshold(double consistentThreshold) { this.consistentThreshold = consistentThreshold; }
         public int getMinSegments() { return minSegments; }
         public void setMinSegments(int minSegments) { this.minSegments = minSegments; }
+        public Intake getIntake() { return intake; }
+        public void setIntake(Intake intake) { this.intake = intake; }
+
+        /** 回填入库灰度：enabled + grayRatio 稳定抽样 + 服务端日上限，三者同时满足才投递 */
+        public static class Intake {
+            private boolean enabled = false;
+            private double grayRatio = 0.0;
+            private double minConfidence = 0.60;
+
+            public boolean isEnabled() { return enabled; }
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+            public double getGrayRatio() { return grayRatio; }
+            public void setGrayRatio(double grayRatio) { this.grayRatio = grayRatio; }
+            public double getMinConfidence() { return minConfidence; }
+            public void setMinConfidence(double minConfidence) { this.minConfidence = minConfidence; }
+        }
     }
 
     public Fallback getFallback() { return fallback; }

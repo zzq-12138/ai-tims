@@ -17,6 +17,9 @@ public class ChatRequest {
     /** 可选：检索 TopK，默认 5 */
     private Integer topK;
 
+    /** 可选：问答会话ID，仅用于 C 档建议回填时的来源回溯，不参与检索 */
+    private String sessionId;
+
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }
     public Long getTicketId() { return ticketId; }
@@ -25,6 +28,8 @@ public class ChatRequest {
     public void setHistory(List<HistoryMsg> history) { this.history = history; }
     public Integer getTopK() { return topK; }
     public void setTopK(Integer topK) { this.topK = topK; }
+    public String getSessionId() { return sessionId; }
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
 
     /** 一条历史消息 */
     public static class HistoryMsg {

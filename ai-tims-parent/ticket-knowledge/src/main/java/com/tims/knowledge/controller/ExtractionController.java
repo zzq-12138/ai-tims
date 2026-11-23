@@ -2,16 +2,21 @@ package com.tims.knowledge.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tims.common.api.Result;
+import com.tims.common.enums.ErrorCode;
 import com.tims.common.exception.BizException;
 import com.tims.knowledge.entity.AiExtracted;
 import com.tims.knowledge.entity.KbKnowledge;
 import com.tims.knowledge.entity.KbKnowledgeHistory;
+import com.tims.knowledge.dto.FallbackIntakeRequest;
 import com.tims.knowledge.service.ExtractionReviewService;
+import com.tims.knowledge.service.FallbackIntakeService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,9 +44,16 @@ import java.util.Map;
 public class ExtractionController {
 
     private final ExtractionReviewService reviewService;
+    private final FallbackIntakeService fallbackIntakeService;
 
-    public ExtractionController(ExtractionReviewService reviewService) {
+    /** 服务间共享密钥：必须由环境变量 TIMS_INTERNAL_TOKEN 注入；留空时 intake 接口默认拒绝 */
+    @Value("${tims.internal-token:}")
+    private String internalToken;
+
+    public ExtractionController(ExtractionReviewService reviewService,
+                                FallbackIntakeService fallbackIntakeService) {
         this.reviewService = reviewService;
+        this.fallbackIntakeService = fallbackIntakeService;
     }
 
     /**
@@ -66,6 +78,22 @@ public class ExtractionController {
     @GetMapping("/device-types")
     public Result<List<String>> deviceTypes() {
         return Result.ok(reviewService.deviceTypes());
+    }
+
+    /**
+     * 建议→回填：接收 ticket-ai 投递的待审条目（只写 ai_extracted，不直写知识库）。
+     * 幂等键为 (tenant_id, source_type=FALLBACK, source_ref_id)；日上限与置信阈值在服务端校验。
+     * 服务间调用校验：复用仓库既有 X-Internal-Token 约定；未配置密钥时一律拒绝。
+     */
+    @PostMapping("/intake/fallback")
+    public Result<Map<String, Object>> intakeFallback(
+            @RequestHeader(value = "X-Internal-Token", required = false) String token,
+            @RequestBody FallbackIntakeRequest req) {
+        if (internalToken == null || internalToken.isBlank()
+                || token == null || !token.equals(internalToken)) {
+            throw new BizException(ErrorCode.FORBIDDEN, "内部接口密钥校验失败");
+        }
+        return Result.ok(fallbackIntakeService.intake(req));
     }
 
     @GetMapping("/{id}")

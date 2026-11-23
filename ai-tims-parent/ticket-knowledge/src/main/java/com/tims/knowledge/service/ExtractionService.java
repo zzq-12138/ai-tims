@@ -282,8 +282,9 @@ public class ExtractionService {
     /**
      * 只计算相似度并给出建议，不执行任何合并/覆盖动作。
      * ≥0.98 建议跳过；≥0.92 建议合并；其余建议新建。最终由审核人在审核中心确认。
+     * 供工单抽取与建议回填共用，保证两条链路的去重/关系判别口径一致。
      */
-    private void applyDedupSuggestion(AiExtracted row, ExtractResult result, Long tenantId) {
+    public void applyDedupSuggestion(AiExtracted row, ExtractResult result, Long tenantId) {
         row.setDedupAction("NEW");
         if (!embeddingService.isConfigured() || !vectorStore.isAvailable()) {
             row.setDedupNote("向量库不可用，未计算相似度；请人工判断应新建、合并或跳过");

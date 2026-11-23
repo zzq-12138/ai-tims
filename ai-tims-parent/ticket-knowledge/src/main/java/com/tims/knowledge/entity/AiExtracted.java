@@ -31,6 +31,18 @@ public class AiExtracted {
 
     private String sourceDeviceType;
 
+    /** 知识来源：EXTRACT 工单抽取 / FALLBACK 建议回填（存量行默认 EXTRACT） */
+    private String sourceType;
+
+    /** 来源记录ID：FALLBACK 时为 ai_fallback_pair.id */
+    private Long sourceRefId;
+
+    /** 来源问答会话ID（可空） */
+    private String sourceSessionId;
+
+    /** 来源置信分 0-1（coverage 优先，其次 dice） */
+    private BigDecimal sourceConfidence;
+
     private String title;
 
     private String deviceType;
@@ -132,6 +144,14 @@ public class AiExtracted {
     public void setSourceTitle(String sourceTitle) { this.sourceTitle = sourceTitle; }
     public String getSourceDeviceType() { return sourceDeviceType; }
     public void setSourceDeviceType(String sourceDeviceType) { this.sourceDeviceType = sourceDeviceType; }
+    public String getSourceType() { return sourceType; }
+    public void setSourceType(String sourceType) { this.sourceType = sourceType; }
+    public Long getSourceRefId() { return sourceRefId; }
+    public void setSourceRefId(Long sourceRefId) { this.sourceRefId = sourceRefId; }
+    public String getSourceSessionId() { return sourceSessionId; }
+    public void setSourceSessionId(String sourceSessionId) { this.sourceSessionId = sourceSessionId; }
+    public BigDecimal getSourceConfidence() { return sourceConfidence; }
+    public void setSourceConfidence(BigDecimal sourceConfidence) { this.sourceConfidence = sourceConfidence; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
     public String getDeviceType() { return deviceType; }

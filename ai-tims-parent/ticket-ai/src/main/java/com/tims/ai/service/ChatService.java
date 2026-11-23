@@ -170,7 +170,7 @@ public class ChatService {
                 vo.setTierReason(ctx.tierReason());
                 vo.setNoKbBasis(true);
                 vo.setSuggestionId(fallbackSuggestion.record(
-                        tenantId, ctx.ticketId(), ctx.ticketNo(), answer, ctx.promptVersion()));
+                        tenantId, ctx.ticketId(), ctx.ticketNo(), answer, ctx.promptVersion(), request.getSessionId()));
             }
 
             AiCallLog row = baseLog(tenantId, "CHAT_SYNC", ctx, total, model);
@@ -362,7 +362,7 @@ public class ChatService {
             }
             Long suggestionId = noKb
                     ? fallbackSuggestion.record(tenantId, ctx.ticketId(), ctx.ticketNo(),
-                            acc.toString(), ctx.promptVersion())
+                            acc.toString(), ctx.promptVersion(), request.getSessionId())
                     : null;
 
             AiCallLog row = baseLog(tenantId, "CHAT_STREAM", ctx, result.totalMs(), model);

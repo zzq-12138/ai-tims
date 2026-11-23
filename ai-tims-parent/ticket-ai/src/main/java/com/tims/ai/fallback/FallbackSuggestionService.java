@@ -43,11 +43,14 @@ public class FallbackSuggestionService {
     private final FallbackPairMapper mapper;
     private final AiProperties props;
     private final ObjectMapper json;
+    private final FallbackIntakeClient intakeClient;
 
-    public FallbackSuggestionService(FallbackPairMapper mapper, AiProperties props, ObjectMapper json) {
+    public FallbackSuggestionService(FallbackPairMapper mapper, AiProperties props, ObjectMapper json,
+                                     FallbackIntakeClient intakeClient) {
         this.mapper = mapper;
         this.props = props;
         this.json = json;
+        this.intakeClient = intakeClient;
     }
 
     /** 开关默认 false；关闭时调用方不应产生任何额外行为 */
@@ -61,6 +64,17 @@ public class FallbackSuggestionService {
      * @return 新记录 id；落库失败返回 null
      */
     public Long record(Long tenantId, Long ticketId, String ticketNo, String suggestion, String promptVersion) {
+        return record(tenantId, ticketId, ticketNo, suggestion, promptVersion, null);
+    }
+
+    /**
+     * 记录一条 C 档建议。失败只告警，不影响本次问答返回。
+     *
+     * @param sessionId 可选问答会话ID，仅用于后续回填入库的来源回溯
+     * @return 新记录 id；落库失败返回 null
+     */
+    public Long record(Long tenantId, Long ticketId, String ticketNo, String suggestion, String promptVersion,
+                       String sessionId) {
         if (suggestion == null || suggestion.isBlank()) {
             return null;
         }
@@ -73,6 +87,7 @@ public class FallbackSuggestionService {
             p.setSuggestionText(suggestion.trim());
             p.setModel(props.getModel());
             p.setPromptVersion(promptVersion == null ? "fallback-v1" : promptVersion + PROMPT_VERSION_SUFFIX);
+            p.setSessionId(sessionId);
             p.setNoKbBasis(1);
             p.setSuggestTime(LocalDateTime.now());
             p.setIsTest(0);
@@ -109,6 +124,11 @@ public class FallbackSuggestionService {
         CoverageScorer.Result cov = CoverageScorer.score(p.getSuggestionText(), disposition);
         applyCoverage(p, cov);
         mapper.updateById(p);
+        try {
+            maybeIntake(p);
+        } catch (Exception e) {
+            log.warn("[fallback-intake] pair={} 投递异常，忽略：{}", p.getId(), e.getMessage());
+        }
 
         Map<String, Object> out = new HashMap<>();
         // 雪花 ID 超出 JS 安全整数范围，按字符串返回
@@ -121,6 +141,42 @@ public class FallbackSuggestionService {
         out.put("coverageVerdict", p.getCoverageVerdict());
         out.put("coverageDetail", cov == null ? null : CoverageScorer.toPlain(cov.detail()));
         return out;
+    }
+
+    /**
+     * 建议→回填→入库：回填后按灰度决定是否投递待审条目。
+     * 只投递，不写知识库；enabled=false、非真实样本、非 CONSISTENT、置信分不足、抽样未命中任一不满足即跳过。
+     */
+    private void maybeIntake(FallbackPair p) {
+        AiProperties.Fallback.Intake cfg = props.getFallback() == null ? null : props.getFallback().getIntake();
+        if (cfg == null || !cfg.isEnabled()) {
+            return;
+        }
+        if (p.getIsTest() != null && p.getIsTest() != 0) {
+            return;
+        }
+        if ("synthetic".equalsIgnoreCase(p.getDataSource())) {
+            return;
+        }
+        String verdict = p.getCoverageVerdict();
+        boolean consistent = "CONSISTENT".equals(verdict)
+                || (verdict == null && Integer.valueOf(1).equals(p.getConsistent()));
+        if (!consistent) {
+            return;
+        }
+        BigDecimal conf = p.getCoverageScore() != null ? p.getCoverageScore() : p.getConsistencyScore();
+        if (conf == null || conf.doubleValue() < cfg.getMinConfidence()) {
+            return;
+        }
+        double ratio = cfg.getGrayRatio();
+        if (ratio <= 0) {
+            return;
+        }
+        long bucket = Math.floorMod(p.getId() == null ? 0L : p.getId(), 100L);
+        if (bucket >= Math.round(ratio * 100)) {
+            return;
+        }
+        intakeClient.submit(p, conf.setScale(4, RoundingMode.HALF_UP).toPlainString());
     }
 
     /**

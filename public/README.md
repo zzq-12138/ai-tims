@@ -27,10 +27,10 @@
 | 模型链路 | 集群外网关 `172.27.26.253:18892`（chat）/ `:18893`（embedding）；`Qwen/Qwen3.8-27B-dev` + `Qwen/Qwen3-Embedding-8B`/1024；**不用集群内 `alg-llm-service`** |
 | 模型鉴权 | `/v1/models` 返回 `{"error":"Unauthorized"}`；embeddings 401；`LLM_API_KEY` / `ZHIPU_API_KEY` 各 68 字节 |
 | 抽取运行 | 2026-11-20 11:37–11:44 连续处理 `WO20261118-0085`～`0104`，`steps=3 degraded=false`，6–11 秒/单；之后无新日志已结案：`wo_ticket` 仅 11-18 有 105 条、之后零新单，`ai_call_log` 11-18/19/20 = 154/23/238、11-21 起 0 → **无新业务输入，非链路故障** |
-| Secret 空值 | `NACOS_PASSWORD`、`SMTP_AUTH` 长度为 0；是否预期待确认 |
+| Secret 空值 | `NACOS_PASSWORD`、`SMTP_AUTH` 长度为 0，**已确认属预期**：Nacos 用公司既有环境、无需在本次 Secret 配置；内网部署未启用邮件 |
 | 当前状态 | 三个镜像已于 2026-11-23 推送 Harbor 并上线（`ticket-ai:1.0.2` / `ticket-knowledge:1.0.2` / `ai-tims-front:1.0.3`），仓库清单同日追平（`829b9eb`）；回滚目标是 `ticket-ai:1.0.1` / `ticket-knowledge:1.0.1` / `ai-tims-front:1.0.2`（前端回滚需把 `front.yaml` 改回 1.0.2） |
 
-一句话：**代码、数据、镜像、发布都已完成；剩下的只有 Secret 空值确认等收尾项。**
+一句话：**代码、数据、镜像、发布都已完成，且无待确认阻塞项。**
 
 ---
 

@@ -1,0 +1,1160 @@
+{
+  "meta": {
+    "generated_at": "2026-11-07 09:07:35",
+    "dataset": "scripts/ai_layer/data/cache_set.tsv",
+    "prices": {
+      "glm-4-flash": [
+        0.0001,
+        0.0001
+      ],
+      "glm-4.7-flash": [
+        0.0001,
+        0.0001
+      ],
+      "glm-5.3-flash": [
+        0.0008,
+        0.0028
+      ],
+      "glm-5.3-flashx": [
+        0.0008,
+        0.0028
+      ],
+      "embedding-3": [
+        0.0,
+        0.0
+      ]
+    },
+    "thresholds": [
+      0.8,
+      0.82,
+      0.84,
+      0.86,
+      0.88,
+      0.9,
+      0.92,
+      0.94,
+      0.96,
+      0.98,
+      0.99
+    ]
+  },
+  "summary": {
+    "n_rows": 300,
+    "n_families": 50,
+    "n_queries": 250,
+    "actual_calls": 300,
+    "actual_cost_cny": 0.1567,
+    "query_roles": {
+      "paraphrase": 150,
+      "hard_neg": 50,
+      "unrelated": 50
+    },
+    "canonical_correct": 50,
+    "canonical_accuracy_pct": 100.0,
+    "no_cache_accuracy_pct": 100.0,
+    "no_cache_cost_cny": 0.1304,
+    "no_cache_avg_latency_ms": 5970,
+    "default_threshold": 0.92,
+    "default": {
+      "threshold": 0.92,
+      "hits": 70,
+      "hit_paraphrase": 70,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 46.67,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 70,
+      "saved_cost_cny": 0.0354,
+      "avg_latency_ms": 4386,
+      "avg_hit_latency_ms": 284,
+      "avg_miss_latency_ms": 5981,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    "best_zero_error_threshold": 0.9,
+    "best_zero_error_hit_rate_pct": 73.33,
+    "first_wrong_threshold": 0.8,
+    "exact": {
+      "threshold": null,
+      "hits": 0,
+      "hit_paraphrase": 0,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 0.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 0,
+      "saved_cost_cny": 0,
+      "avg_latency_ms": 5970,
+      "avg_hit_latency_ms": 0,
+      "avg_miss_latency_ms": 5970,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    "oracle": {
+      "threshold": "oracle",
+      "hits": 150,
+      "hit_paraphrase": 150,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 100.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 150,
+      "saved_cost_cny": 0.0769,
+      "avg_latency_ms": 2693,
+      "avg_hit_latency_ms": 281,
+      "avg_miss_latency_ms": 6312,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    "paraphrase_similarity": {
+      "min": 0.8292,
+      "p10": 0.8774,
+      "median": 0.9179,
+      "max": 0.9712
+    },
+    "negative_similarity": {
+      "max": 0.8845,
+      "p90": 0.7986,
+      "median": 0.6363
+    },
+    "embedding_cost_note": "embedding-3 已购 5000 万专属包，application.yml 单价记 0，本轮向量费用按 0 计",
+    "model": "glm-5.3-flash",
+    "embedding_model": "embedding-3"
+  },
+  "threshold_sweep": [
+    {
+      "threshold": null,
+      "hits": 0,
+      "hit_paraphrase": 0,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 0.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 0,
+      "saved_cost_cny": 0,
+      "avg_latency_ms": 5970,
+      "avg_hit_latency_ms": 0,
+      "avg_miss_latency_ms": 5970,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    {
+      "threshold": 0.8,
+      "hits": 160,
+      "hit_paraphrase": 150,
+      "hit_negative": 10,
+      "hit_rate_paraphrase_pct": 100.0,
+      "false_hit_rate_negative_pct": 10.0,
+      "accuracy_pct": 96.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 4.0,
+      "saved_calls": 160,
+      "saved_cost_cny": 0.0821,
+      "avg_latency_ms": 2406,
+      "avg_hit_latency_ms": 280,
+      "avg_miss_latency_ms": 6186,
+      "wrong_hit_count": 10,
+      "wrong_hit_negative": 10
+    },
+    {
+      "threshold": 0.82,
+      "hits": 155,
+      "hit_paraphrase": 150,
+      "hit_negative": 5,
+      "hit_rate_paraphrase_pct": 100.0,
+      "false_hit_rate_negative_pct": 5.0,
+      "accuracy_pct": 98.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 2.0,
+      "saved_calls": 155,
+      "saved_cost_cny": 0.0795,
+      "avg_latency_ms": 2488,
+      "avg_hit_latency_ms": 280,
+      "avg_miss_latency_ms": 6090,
+      "wrong_hit_count": 5,
+      "wrong_hit_negative": 5
+    },
+    {
+      "threshold": 0.84,
+      "hits": 152,
+      "hit_paraphrase": 149,
+      "hit_negative": 3,
+      "hit_rate_paraphrase_pct": 99.33,
+      "false_hit_rate_negative_pct": 3.0,
+      "accuracy_pct": 98.8,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 1.2,
+      "saved_calls": 152,
+      "saved_cost_cny": 0.0778,
+      "avg_latency_ms": 2559,
+      "avg_hit_latency_ms": 281,
+      "avg_miss_latency_ms": 6092,
+      "wrong_hit_count": 3,
+      "wrong_hit_negative": 3
+    },
+    {
+      "threshold": 0.86,
+      "hits": 146,
+      "hit_paraphrase": 144,
+      "hit_negative": 2,
+      "hit_rate_paraphrase_pct": 96.0,
+      "false_hit_rate_negative_pct": 2.0,
+      "accuracy_pct": 99.2,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.8,
+      "saved_calls": 146,
+      "saved_cost_cny": 0.0748,
+      "avg_latency_ms": 2679,
+      "avg_hit_latency_ms": 281,
+      "avg_miss_latency_ms": 6045,
+      "wrong_hit_count": 2,
+      "wrong_hit_negative": 2
+    },
+    {
+      "threshold": 0.88,
+      "hits": 133,
+      "hit_paraphrase": 132,
+      "hit_negative": 1,
+      "hit_rate_paraphrase_pct": 88.0,
+      "false_hit_rate_negative_pct": 1.0,
+      "accuracy_pct": 99.6,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.4,
+      "saved_calls": 133,
+      "saved_cost_cny": 0.0682,
+      "avg_latency_ms": 2934,
+      "avg_hit_latency_ms": 281,
+      "avg_miss_latency_ms": 5949,
+      "wrong_hit_count": 1,
+      "wrong_hit_negative": 1
+    },
+    {
+      "threshold": 0.9,
+      "hits": 110,
+      "hit_paraphrase": 110,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 73.33,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 110,
+      "saved_cost_cny": 0.0562,
+      "avg_latency_ms": 3558,
+      "avg_hit_latency_ms": 284,
+      "avg_miss_latency_ms": 6131,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    {
+      "threshold": 0.92,
+      "hits": 70,
+      "hit_paraphrase": 70,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 46.67,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 70,
+      "saved_cost_cny": 0.0354,
+      "avg_latency_ms": 4386,
+      "avg_hit_latency_ms": 284,
+      "avg_miss_latency_ms": 5981,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    {
+      "threshold": 0.94,
+      "hits": 36,
+      "hit_paraphrase": 36,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 24.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 36,
+      "saved_cost_cny": 0.0176,
+      "avg_latency_ms": 5096,
+      "avg_hit_latency_ms": 283,
+      "avg_miss_latency_ms": 5906,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    {
+      "threshold": 0.96,
+      "hits": 9,
+      "hit_paraphrase": 9,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 6.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 9,
+      "saved_cost_cny": 0.0042,
+      "avg_latency_ms": 5785,
+      "avg_hit_latency_ms": 290,
+      "avg_miss_latency_ms": 5990,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    {
+      "threshold": 0.98,
+      "hits": 0,
+      "hit_paraphrase": 0,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 0.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 0,
+      "saved_cost_cny": 0,
+      "avg_latency_ms": 5970,
+      "avg_hit_latency_ms": 0,
+      "avg_miss_latency_ms": 5970,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    {
+      "threshold": 0.99,
+      "hits": 0,
+      "hit_paraphrase": 0,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 0.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 0,
+      "saved_cost_cny": 0,
+      "avg_latency_ms": 5970,
+      "avg_hit_latency_ms": 0,
+      "avg_miss_latency_ms": 5970,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    },
+    {
+      "threshold": "oracle",
+      "hits": 150,
+      "hit_paraphrase": 150,
+      "hit_negative": 0,
+      "hit_rate_paraphrase_pct": 100.0,
+      "false_hit_rate_negative_pct": 0.0,
+      "accuracy_pct": 100.0,
+      "no_cache_accuracy_pct": 100.0,
+      "quality_loss_pp": 0.0,
+      "saved_calls": 150,
+      "saved_cost_cny": 0.0769,
+      "avg_latency_ms": 2693,
+      "avg_hit_latency_ms": 281,
+      "avg_miss_latency_ms": 6312,
+      "wrong_hit_count": 0,
+      "wrong_hit_negative": 0
+    }
+  ],
+  "wrong_hits": [],
+  "wrong_hit_index": [
+    {
+      "id": "F12-N",
+      "role": "hard_neg",
+      "family": "F12",
+      "device": "贴合机",
+      "question": "「贴合机」的贴合辊表面辊面粗糙度规格要求是多少？",
+      "matched_question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+      "similarity": 0.8845,
+      "gold": "0.4",
+      "missing": [
+        "0.4"
+      ],
+      "cached_answer": "**结论：** 贴合辊与背辊的辊间平行度规格要求为 **≤0.02 mm/m**。\n\n**依据：** 资料明确标注于贴合机档案 LA-N06，指标为辊间平行度，规格上限 0.02 mm/m。超出该值需按规程调整或报修。",
+      "thresholds": [
+        0.8,
+        0.82,
+        0.84,
+        0.86,
+        0.88
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F01-N",
+      "role": "hard_neg",
+      "family": "F01",
+      "device": "蚀刻机",
+      "question": "请问蚀刻机的排液管路与阀门，排液流量标准是多少？",
+      "matched_question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+      "similarity": 0.8736,
+      "gold": "85",
+      "missing": [
+        "85"
+      ],
+      "cached_answer": "结论：废液液位须低于高液位的 80%。\n\n依据：蚀刻机（ET-S08）资料中“废液液位与排液管路”部件规定，指标为废液液位，规格要求为低于高液位 80%。建议日常巡检时按此标准监控，防止废液溢出。",
+      "thresholds": [
+        0.8,
+        0.82,
+        0.84,
+        0.86
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F25-N",
+      "role": "hard_neg",
+      "family": "F25",
+      "device": "AOI检测机",
+      "question": "请问AOI检测机的相机镜头与对焦机构，对焦偏差标准是多少？",
+      "matched_question": "请问AOI检测机的相机与光源，漏检率标准是多少？",
+      "similarity": 0.8436,
+      "gold": "0.02",
+      "missing": [
+        "0.02"
+      ],
+      "cached_answer": "结论：AOI检测机的相机与光源，漏检率规格要求为 **≤0.1%**。\n\n依据：来源资料“AOI检测机 / AO-S02”，指标为漏检率，部件为相机与光源。",
+      "thresholds": [
+        0.8,
+        0.82,
+        0.84
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F36-N",
+      "role": "hard_neg",
+      "family": "F36",
+      "device": "贴片机",
+      "question": "「贴片机」的元件相机与标定板标定偏差规格要求是多少？",
+      "matched_question": "「贴片机」的元件相机与同轴光源图像灰度对比度规格要求是多少？",
+      "similarity": 0.8296,
+      "gold": "0.02",
+      "missing": [
+        "0.02"
+      ],
+      "cached_answer": "**结论：** 贴片机元件相机与同轴光源的图像灰度对比度要求为**灰度差 ≥35**。\n\n**依据：** 资料来源「贴片机 / PM-S05」，指标为图像灰度对比度，规格明确灰度差须不低于 35。",
+      "thresholds": [
+        0.8,
+        0.82
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F42-N",
+      "role": "hard_neg",
+      "family": "F42",
+      "device": "贴合机",
+      "question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+      "matched_question": "「贴合机」的送料轮与压紧轮送料长度偏差规格要求是多少？",
+      "similarity": 0.8257,
+      "gold": "0.02",
+      "missing": [
+        "0.02"
+      ],
+      "cached_answer": "**结论：送料长度偏差规格要求为 ≤0.2 mm。**\n\n依据：参考资料标明贴合机（LA-N14）中送料轮与压紧轮部件的送料长度偏差指标，规格要求为 ≤0.2 mm。",
+      "thresholds": [
+        0.8,
+        0.82
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F37-N",
+      "role": "hard_neg",
+      "family": "F37",
+      "device": "波峰焊",
+      "question": "请问波峰焊的预热区温控，板面预热温度标准是多少？",
+      "matched_question": "请问波峰焊的预热风道与过滤网，出风口风速标准是多少？",
+      "similarity": 0.8193,
+      "gold": "90|120",
+      "missing": [
+        "90",
+        "120"
+      ],
+      "cached_answer": "结论：预热风道与过滤网的出风口风速标准为偏差 ≤10%（以基准值为参照）。\n\n依据：参考资料（来源：波峰焊 / WF-N23）仅给出偏差 ≤10% 的要求，未注明基准风速的具体数值，故无法提供绝对风速值；如需判定合格，需先确认设备规定的基准风速。",
+      "thresholds": [
+        0.8
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F06-N",
+      "role": "hard_neg",
+      "family": "F06",
+      "device": "贴片机",
+      "question": "「贴片机」的XY 轴导轨与同步带重复定位精度规格要求是多少？",
+      "matched_question": "「贴片机」的轨道宽度调节机构与皮带轨道平行度规格要求是多少？",
+      "similarity": 0.8184,
+      "gold": "0.03",
+      "missing": [
+        "0.03"
+      ],
+      "cached_answer": "**结论**：轨道平行度规格要求为 **≤0.10 mm**。\n\n**依据**：来源「贴片机 / PM-S07」，部件为轨道宽度调节机构与皮带，指标为轨道平行度，规格要求 ≤0.10 mm。",
+      "thresholds": [
+        0.8
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F46-N",
+      "role": "hard_neg",
+      "family": "F46",
+      "device": "贴片机",
+      "question": "「贴片机」的吸嘴与反吹回路真空流量规格要求是多少？",
+      "matched_question": "请问贴片机的真空破坏阀与吸嘴，破真空时间标准是多少？",
+      "similarity": 0.8045,
+      "gold": "20",
+      "missing": [
+        "20"
+      ],
+      "cached_answer": "**结论：** 破真空时间规格要求为 **≤0.10 秒**。\n\n**依据：** 来源“贴片机 / PM-N09”中，真空破坏阀与吸嘴部件的破真空时间指标明确规定为 ≤0.10 s。建议按此标准进行点检或校验。",
+      "thresholds": [
+        0.8
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F15-N",
+      "role": "hard_neg",
+      "family": "F15",
+      "device": "AOI检测机",
+      "question": "请问AOI检测机的模型库与程序配置，模型版本一致性标准是多少？",
+      "matched_question": "「AOI检测机」的程序位号与元件库模板匹配率规格要求是多少？",
+      "similarity": 0.8039,
+      "gold": "100",
+      "missing": [
+        "100"
+      ],
+      "cached_answer": "模板匹配率规格要求为 **≥99%**。\n\n依据：AOI检测机（AO-N02）规格资料中，“程序位号与元件库”部件的“模板匹配率”指标明确要求不低于99%。",
+      "thresholds": [
+        0.8
+      ],
+      "lowest_hit_threshold": 0.8
+    },
+    {
+      "id": "F41-N",
+      "role": "hard_neg",
+      "family": "F41",
+      "device": "蚀刻机",
+      "question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+      "matched_question": "帮我查一下蚀刻机排液管路与阀门的排液流量指标要求。",
+      "similarity": 0.8029,
+      "gold": "80",
+      "missing": [
+        "80"
+      ],
+      "cached_answer": "**结论**：蚀刻机排液管路与阀门的排液流量规格要求为 **≥标称 85%**。\n\n**依据**：来自蚀刻机资料 ET-N08（部件：排液管路与阀门；指标：排液流量）。\n\n如需该指标的具体测试方法或标称流量值，当前资料未提供，请补充相关文档。",
+      "thresholds": [
+        0.8
+      ],
+      "lowest_hit_threshold": 0.8
+    }
+  ],
+  "wrong_hits_by_threshold": {
+    "0.8": [
+      {
+        "id": "F01-N",
+        "role": "hard_neg",
+        "family": "F01",
+        "device": "蚀刻机",
+        "question": "请问蚀刻机的排液管路与阀门，排液流量标准是多少？",
+        "matched_question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+        "similarity": 0.8736,
+        "gold": "85",
+        "missing": [
+          "85"
+        ],
+        "cached_answer": "结论：废液液位须低于高液位的 80%。\n\n依据：蚀刻机（ET-S08）资料中“废液液位与排液管路”部件规定，指标为废液液位，规格要求为低于高液位 80%。建议日常巡检时按此标准监控，防止废液溢出。"
+      },
+      {
+        "id": "F06-N",
+        "role": "hard_neg",
+        "family": "F06",
+        "device": "贴片机",
+        "question": "「贴片机」的XY 轴导轨与同步带重复定位精度规格要求是多少？",
+        "matched_question": "「贴片机」的轨道宽度调节机构与皮带轨道平行度规格要求是多少？",
+        "similarity": 0.8184,
+        "gold": "0.03",
+        "missing": [
+          "0.03"
+        ],
+        "cached_answer": "**结论**：轨道平行度规格要求为 **≤0.10 mm**。\n\n**依据**：来源「贴片机 / PM-S07」，部件为轨道宽度调节机构与皮带，指标为轨道平行度，规格要求 ≤0.10 mm。"
+      },
+      {
+        "id": "F12-N",
+        "role": "hard_neg",
+        "family": "F12",
+        "device": "贴合机",
+        "question": "「贴合机」的贴合辊表面辊面粗糙度规格要求是多少？",
+        "matched_question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+        "similarity": 0.8845,
+        "gold": "0.4",
+        "missing": [
+          "0.4"
+        ],
+        "cached_answer": "**结论：** 贴合辊与背辊的辊间平行度规格要求为 **≤0.02 mm/m**。\n\n**依据：** 资料明确标注于贴合机档案 LA-N06，指标为辊间平行度，规格上限 0.02 mm/m。超出该值需按规程调整或报修。"
+      },
+      {
+        "id": "F15-N",
+        "role": "hard_neg",
+        "family": "F15",
+        "device": "AOI检测机",
+        "question": "请问AOI检测机的模型库与程序配置，模型版本一致性标准是多少？",
+        "matched_question": "「AOI检测机」的程序位号与元件库模板匹配率规格要求是多少？",
+        "similarity": 0.8039,
+        "gold": "100",
+        "missing": [
+          "100"
+        ],
+        "cached_answer": "模板匹配率规格要求为 **≥99%**。\n\n依据：AOI检测机（AO-N02）规格资料中，“程序位号与元件库”部件的“模板匹配率”指标明确要求不低于99%。"
+      },
+      {
+        "id": "F25-N",
+        "role": "hard_neg",
+        "family": "F25",
+        "device": "AOI检测机",
+        "question": "请问AOI检测机的相机镜头与对焦机构，对焦偏差标准是多少？",
+        "matched_question": "请问AOI检测机的相机与光源，漏检率标准是多少？",
+        "similarity": 0.8436,
+        "gold": "0.02",
+        "missing": [
+          "0.02"
+        ],
+        "cached_answer": "结论：AOI检测机的相机与光源，漏检率规格要求为 **≤0.1%**。\n\n依据：来源资料“AOI检测机 / AO-S02”，指标为漏检率，部件为相机与光源。"
+      },
+      {
+        "id": "F36-N",
+        "role": "hard_neg",
+        "family": "F36",
+        "device": "贴片机",
+        "question": "「贴片机」的元件相机与标定板标定偏差规格要求是多少？",
+        "matched_question": "「贴片机」的元件相机与同轴光源图像灰度对比度规格要求是多少？",
+        "similarity": 0.8296,
+        "gold": "0.02",
+        "missing": [
+          "0.02"
+        ],
+        "cached_answer": "**结论：** 贴片机元件相机与同轴光源的图像灰度对比度要求为**灰度差 ≥35**。\n\n**依据：** 资料来源「贴片机 / PM-S05」，指标为图像灰度对比度，规格明确灰度差须不低于 35。"
+      },
+      {
+        "id": "F37-N",
+        "role": "hard_neg",
+        "family": "F37",
+        "device": "波峰焊",
+        "question": "请问波峰焊的预热区温控，板面预热温度标准是多少？",
+        "matched_question": "请问波峰焊的预热风道与过滤网，出风口风速标准是多少？",
+        "similarity": 0.8193,
+        "gold": "90|120",
+        "missing": [
+          "90",
+          "120"
+        ],
+        "cached_answer": "结论：预热风道与过滤网的出风口风速标准为偏差 ≤10%（以基准值为参照）。\n\n依据：参考资料（来源：波峰焊 / WF-N23）仅给出偏差 ≤10% 的要求，未注明基准风速的具体数值，故无法提供绝对风速值；如需判定合格，需先确认设备规定的基准风速。"
+      },
+      {
+        "id": "F41-N",
+        "role": "hard_neg",
+        "family": "F41",
+        "device": "蚀刻机",
+        "question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+        "matched_question": "帮我查一下蚀刻机排液管路与阀门的排液流量指标要求。",
+        "similarity": 0.8029,
+        "gold": "80",
+        "missing": [
+          "80"
+        ],
+        "cached_answer": "**结论**：蚀刻机排液管路与阀门的排液流量规格要求为 **≥标称 85%**。\n\n**依据**：来自蚀刻机资料 ET-N08（部件：排液管路与阀门；指标：排液流量）。\n\n如需该指标的具体测试方法或标称流量值，当前资料未提供，请补充相关文档。"
+      },
+      {
+        "id": "F42-N",
+        "role": "hard_neg",
+        "family": "F42",
+        "device": "贴合机",
+        "question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+        "matched_question": "「贴合机」的送料轮与压紧轮送料长度偏差规格要求是多少？",
+        "similarity": 0.8257,
+        "gold": "0.02",
+        "missing": [
+          "0.02"
+        ],
+        "cached_answer": "**结论：送料长度偏差规格要求为 ≤0.2 mm。**\n\n依据：参考资料标明贴合机（LA-N14）中送料轮与压紧轮部件的送料长度偏差指标，规格要求为 ≤0.2 mm。"
+      },
+      {
+        "id": "F46-N",
+        "role": "hard_neg",
+        "family": "F46",
+        "device": "贴片机",
+        "question": "「贴片机」的吸嘴与反吹回路真空流量规格要求是多少？",
+        "matched_question": "请问贴片机的真空破坏阀与吸嘴，破真空时间标准是多少？",
+        "similarity": 0.8045,
+        "gold": "20",
+        "missing": [
+          "20"
+        ],
+        "cached_answer": "**结论：** 破真空时间规格要求为 **≤0.10 秒**。\n\n**依据：** 来源“贴片机 / PM-N09”中，真空破坏阀与吸嘴部件的破真空时间指标明确规定为 ≤0.10 s。建议按此标准进行点检或校验。"
+      }
+    ],
+    "0.82": [
+      {
+        "id": "F01-N",
+        "role": "hard_neg",
+        "family": "F01",
+        "device": "蚀刻机",
+        "question": "请问蚀刻机的排液管路与阀门，排液流量标准是多少？",
+        "matched_question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+        "similarity": 0.8736,
+        "gold": "85",
+        "missing": [
+          "85"
+        ],
+        "cached_answer": "结论：废液液位须低于高液位的 80%。\n\n依据：蚀刻机（ET-S08）资料中“废液液位与排液管路”部件规定，指标为废液液位，规格要求为低于高液位 80%。建议日常巡检时按此标准监控，防止废液溢出。"
+      },
+      {
+        "id": "F12-N",
+        "role": "hard_neg",
+        "family": "F12",
+        "device": "贴合机",
+        "question": "「贴合机」的贴合辊表面辊面粗糙度规格要求是多少？",
+        "matched_question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+        "similarity": 0.8845,
+        "gold": "0.4",
+        "missing": [
+          "0.4"
+        ],
+        "cached_answer": "**结论：** 贴合辊与背辊的辊间平行度规格要求为 **≤0.02 mm/m**。\n\n**依据：** 资料明确标注于贴合机档案 LA-N06，指标为辊间平行度，规格上限 0.02 mm/m。超出该值需按规程调整或报修。"
+      },
+      {
+        "id": "F25-N",
+        "role": "hard_neg",
+        "family": "F25",
+        "device": "AOI检测机",
+        "question": "请问AOI检测机的相机镜头与对焦机构，对焦偏差标准是多少？",
+        "matched_question": "请问AOI检测机的相机与光源，漏检率标准是多少？",
+        "similarity": 0.8436,
+        "gold": "0.02",
+        "missing": [
+          "0.02"
+        ],
+        "cached_answer": "结论：AOI检测机的相机与光源，漏检率规格要求为 **≤0.1%**。\n\n依据：来源资料“AOI检测机 / AO-S02”，指标为漏检率，部件为相机与光源。"
+      },
+      {
+        "id": "F36-N",
+        "role": "hard_neg",
+        "family": "F36",
+        "device": "贴片机",
+        "question": "「贴片机」的元件相机与标定板标定偏差规格要求是多少？",
+        "matched_question": "「贴片机」的元件相机与同轴光源图像灰度对比度规格要求是多少？",
+        "similarity": 0.8296,
+        "gold": "0.02",
+        "missing": [
+          "0.02"
+        ],
+        "cached_answer": "**结论：** 贴片机元件相机与同轴光源的图像灰度对比度要求为**灰度差 ≥35**。\n\n**依据：** 资料来源「贴片机 / PM-S05」，指标为图像灰度对比度，规格明确灰度差须不低于 35。"
+      },
+      {
+        "id": "F42-N",
+        "role": "hard_neg",
+        "family": "F42",
+        "device": "贴合机",
+        "question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+        "matched_question": "「贴合机」的送料轮与压紧轮送料长度偏差规格要求是多少？",
+        "similarity": 0.8257,
+        "gold": "0.02",
+        "missing": [
+          "0.02"
+        ],
+        "cached_answer": "**结论：送料长度偏差规格要求为 ≤0.2 mm。**\n\n依据：参考资料标明贴合机（LA-N14）中送料轮与压紧轮部件的送料长度偏差指标，规格要求为 ≤0.2 mm。"
+      }
+    ],
+    "0.84": [
+      {
+        "id": "F01-N",
+        "role": "hard_neg",
+        "family": "F01",
+        "device": "蚀刻机",
+        "question": "请问蚀刻机的排液管路与阀门，排液流量标准是多少？",
+        "matched_question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+        "similarity": 0.8736,
+        "gold": "85",
+        "missing": [
+          "85"
+        ],
+        "cached_answer": "结论：废液液位须低于高液位的 80%。\n\n依据：蚀刻机（ET-S08）资料中“废液液位与排液管路”部件规定，指标为废液液位，规格要求为低于高液位 80%。建议日常巡检时按此标准监控，防止废液溢出。"
+      },
+      {
+        "id": "F12-N",
+        "role": "hard_neg",
+        "family": "F12",
+        "device": "贴合机",
+        "question": "「贴合机」的贴合辊表面辊面粗糙度规格要求是多少？",
+        "matched_question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+        "similarity": 0.8845,
+        "gold": "0.4",
+        "missing": [
+          "0.4"
+        ],
+        "cached_answer": "**结论：** 贴合辊与背辊的辊间平行度规格要求为 **≤0.02 mm/m**。\n\n**依据：** 资料明确标注于贴合机档案 LA-N06，指标为辊间平行度，规格上限 0.02 mm/m。超出该值需按规程调整或报修。"
+      },
+      {
+        "id": "F25-N",
+        "role": "hard_neg",
+        "family": "F25",
+        "device": "AOI检测机",
+        "question": "请问AOI检测机的相机镜头与对焦机构，对焦偏差标准是多少？",
+        "matched_question": "请问AOI检测机的相机与光源，漏检率标准是多少？",
+        "similarity": 0.8436,
+        "gold": "0.02",
+        "missing": [
+          "0.02"
+        ],
+        "cached_answer": "结论：AOI检测机的相机与光源，漏检率规格要求为 **≤0.1%**。\n\n依据：来源资料“AOI检测机 / AO-S02”，指标为漏检率，部件为相机与光源。"
+      }
+    ],
+    "0.86": [
+      {
+        "id": "F01-N",
+        "role": "hard_neg",
+        "family": "F01",
+        "device": "蚀刻机",
+        "question": "请问蚀刻机的排液管路与阀门，排液流量标准是多少？",
+        "matched_question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+        "similarity": 0.8736,
+        "gold": "85",
+        "missing": [
+          "85"
+        ],
+        "cached_answer": "结论：废液液位须低于高液位的 80%。\n\n依据：蚀刻机（ET-S08）资料中“废液液位与排液管路”部件规定，指标为废液液位，规格要求为低于高液位 80%。建议日常巡检时按此标准监控，防止废液溢出。"
+      },
+      {
+        "id": "F12-N",
+        "role": "hard_neg",
+        "family": "F12",
+        "device": "贴合机",
+        "question": "「贴合机」的贴合辊表面辊面粗糙度规格要求是多少？",
+        "matched_question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+        "similarity": 0.8845,
+        "gold": "0.4",
+        "missing": [
+          "0.4"
+        ],
+        "cached_answer": "**结论：** 贴合辊与背辊的辊间平行度规格要求为 **≤0.02 mm/m**。\n\n**依据：** 资料明确标注于贴合机档案 LA-N06，指标为辊间平行度，规格上限 0.02 mm/m。超出该值需按规程调整或报修。"
+      }
+    ],
+    "0.88": [
+      {
+        "id": "F12-N",
+        "role": "hard_neg",
+        "family": "F12",
+        "device": "贴合机",
+        "question": "「贴合机」的贴合辊表面辊面粗糙度规格要求是多少？",
+        "matched_question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+        "similarity": 0.8845,
+        "gold": "0.4",
+        "missing": [
+          "0.4"
+        ],
+        "cached_answer": "**结论：** 贴合辊与背辊的辊间平行度规格要求为 **≤0.02 mm/m**。\n\n**依据：** 资料明确标注于贴合机档案 LA-N06，指标为辊间平行度，规格上限 0.02 mm/m。超出该值需按规程调整或报修。"
+      }
+    ],
+    "0.9": [],
+    "0.92": [],
+    "0.94": [],
+    "0.96": [],
+    "0.98": [],
+    "0.99": []
+  },
+  "false_hit_candidates": [
+    {
+      "id": "F12-N",
+      "role": "hard_neg",
+      "device": "贴合机",
+      "question": "「贴合机」的贴合辊表面辊面粗糙度规格要求是多少？",
+      "similarity": 0.8845,
+      "would_hit": [
+        0.8,
+        0.82,
+        0.84,
+        0.86,
+        0.88
+      ]
+    },
+    {
+      "id": "F01-N",
+      "role": "hard_neg",
+      "device": "蚀刻机",
+      "question": "请问蚀刻机的排液管路与阀门，排液流量标准是多少？",
+      "similarity": 0.8736,
+      "would_hit": [
+        0.8,
+        0.82,
+        0.84,
+        0.86
+      ]
+    },
+    {
+      "id": "F25-N",
+      "role": "hard_neg",
+      "device": "AOI检测机",
+      "question": "请问AOI检测机的相机镜头与对焦机构，对焦偏差标准是多少？",
+      "similarity": 0.8436,
+      "would_hit": [
+        0.8,
+        0.82,
+        0.84
+      ]
+    },
+    {
+      "id": "F36-N",
+      "role": "hard_neg",
+      "device": "贴片机",
+      "question": "「贴片机」的元件相机与标定板标定偏差规格要求是多少？",
+      "similarity": 0.8296,
+      "would_hit": [
+        0.8,
+        0.82
+      ]
+    },
+    {
+      "id": "F42-N",
+      "role": "hard_neg",
+      "device": "贴合机",
+      "question": "「贴合机」的贴合辊与背辊辊间平行度规格要求是多少？",
+      "similarity": 0.8257,
+      "would_hit": [
+        0.8,
+        0.82
+      ]
+    },
+    {
+      "id": "F37-N",
+      "role": "hard_neg",
+      "device": "波峰焊",
+      "question": "请问波峰焊的预热区温控，板面预热温度标准是多少？",
+      "similarity": 0.8193,
+      "would_hit": [
+        0.8
+      ]
+    },
+    {
+      "id": "F06-N",
+      "role": "hard_neg",
+      "device": "贴片机",
+      "question": "「贴片机」的XY 轴导轨与同步带重复定位精度规格要求是多少？",
+      "similarity": 0.8184,
+      "would_hit": [
+        0.8
+      ]
+    },
+    {
+      "id": "F46-N",
+      "role": "hard_neg",
+      "device": "贴片机",
+      "question": "「贴片机」的吸嘴与反吹回路真空流量规格要求是多少？",
+      "similarity": 0.8045,
+      "would_hit": [
+        0.8
+      ]
+    },
+    {
+      "id": "F15-N",
+      "role": "hard_neg",
+      "device": "AOI检测机",
+      "question": "请问AOI检测机的模型库与程序配置，模型版本一致性标准是多少？",
+      "similarity": 0.8039,
+      "would_hit": [
+        0.8
+      ]
+    },
+    {
+      "id": "F41-N",
+      "role": "hard_neg",
+      "device": "蚀刻机",
+      "question": "请问蚀刻机的废液液位与排液管路，废液液位标准是多少？",
+      "similarity": 0.8029,
+      "would_hit": [
+        0.8
+      ]
+    },
+    {
+      "id": "F45-N",
+      "role": "hard_neg",
+      "device": "AOI检测机",
+      "question": "请问AOI检测机的轨道传动与减振结构，振动加速度标准是多少？",
+      "similarity": 0.7986,
+      "would_hit": []
+    },
+    {
+      "id": "F18-N",
+      "role": "hard_neg",
+      "device": "SPI锡膏检测机",
+      "question": "「SPI锡膏检测机」的检测程序与工控机单板检测耗时规格要求是多少？",
+      "similarity": 0.7946,
+      "would_hit": []
+    },
+    {
+      "id": "F35-N",
+      "role": "hard_neg",
+      "device": "AOI检测机",
+      "question": "请问AOI检测机的相机与光源，漏检率标准是多少？",
+      "similarity": 0.7826,
+      "would_hit": []
+    },
+    {
+      "id": "F04-N",
+      "role": "hard_neg",
+      "device": "涂布机",
+      "question": "「涂布机」的纠偏电机与丝杠纠偏响应时间规格要求是多少？",
+      "similarity": 0.7762,
+      "would_hit": []
+    },
+    {
+      "id": "F22-N",
+      "role": "hard_neg",
+      "device": "贴合机",
+      "question": "「贴合机」的送料轮与压紧轮送料长度偏差规格要求是多少？",
+      "similarity": 0.7751,
+      "would_hit": []
+    },
+    {
+      "id": "F23-N",
+      "role": "hard_neg",
+      "device": "回流焊",
+      "question": "请问回流焊的链条与张紧机构，链条垂度标准是多少？",
+      "similarity": 0.7705,
+      "would_hit": []
+    },
+    {
+      "id": "F27-N",
+      "role": "hard_neg",
+      "device": "波峰焊",
+      "question": "请问波峰焊的助焊剂喷涂与流量，助焊剂涂布量标准是多少？",
+      "similarity": 0.7619,
+      "would_hit": []
+    },
+    {
+      "id": "F26-N",
+      "role": "hard_neg",
+      "device": "贴片机",
+      "question": "「贴片机」的元件相机与标定板标定偏差规格要求是多少？",
+      "similarity": 0.7565,
+      "would_hit": []
+    },
+    {
+      "id": "F08-N",
+      "role": "hard_neg",
+      "device": "SPI锡膏检测机",
+      "question": "「SPI锡膏检测机」的投影光源模组光源亮度规格要求是多少？",
+      "similarity": 0.7548,
+      "would_hit": []
+    },
+    {
+      "id": "F11-N",
+      "role": "hard_neg",
+      "device": "蚀刻机",
+      "question": "请问蚀刻机的前处理槽与烘干段，板面水膜连续性标准是多少？",
+      "similarity": 0.7485,
+      "would_hit": []
+    },
+    {
+      "id": "F48-N",
+      "role": "hard_neg",
+      "device": "SPI锡膏检测机",
+      "question": "「SPI锡膏检测机」的检测阈值与判定模型漏检率规格要求是多少？",
+      "similarity": 0.7477,
+      "would_hit": []
+    },
+    {
+      "id": "F44-N",
+      "role": "hard_neg",
+      "device": "涂布机",
+      "question": "「涂布机」的纠偏电机与丝杠纠偏响应时间规格要求是多少？",
+      "similarity": 0.7465,
+      "would_hit": []
+    },
+    {
+      "id": "F16-N",
+      "role": "hard_neg",
+      "device": "贴片机",
+      "question": "「贴片机」的贴装压力与炉温曲线贴装压力规格要求是多少？",
+      "similarity": 0.7394,
+      "would_hit": []
+    },
+    {
+      "id": "F03-N",
+      "role": "hard_neg",
+      "device": "回流焊",
+      "question": "请问回流焊的炉膛保温层与门封，炉体表面温度标准是多少？",
+      "similarity": 0.7383,
+      "would_hit": []
+    },
+    {
+      "id": "F17-N",
+      "role": "hard_neg",
+      "device": "波峰焊",
+      "question": "请问波峰焊的预热区风道与加热管，板面横向温差标准是多少？",
+      "similarity": 0.7308,
+      "would_hit": []
+    },
+    {
+      "id": "F24-N",
+      "role": "hard_neg",
+      "device": "涂布机",
+      "question": "「涂布机」的背辊与导辊平行度辊间平行度规格要求是多少？",
+      "similarity": 0.7269,
+      "would_hit": []
+    },
+    {
+      "id": "F28-N",
+      "role": "hard_neg",
+      "device": "SPI锡膏检测机",
+      "question": "「SPI锡膏检测机」的钢网对位与印刷平台印刷偏移量规格要求是多少？",
+      "similarity": 0.7261,
+      "would_hit": []
+    },
+    {
+      "id": "F21-N",
+      "role": "hard_neg",
+      "device": "蚀刻机",
+      "question": "请问蚀刻机的前处理槽与烘干段，板面水膜连续性标准是多少？",
+      "similarity": 0.7254,
+      "would_hit": []
+    },
+    {
+      "id": "F33-N",
+      "role": "hard_neg",
+      "device": "回流焊",
+      "question": "请问回流焊的排风管路与集烟罩，排风量标准是多少？",
+      "similarity": 0.7207,
+      "would_hit": []
+    },
+    {
+      "id": "F46-U",
+      "role": "unrelated",
+      "device": "涂布机",
+      "question": "关于涂布机，供液软管与快接接头的管路真空度有什么要求？",
+      "similarity": 0.7087,
+      "would_hit": []
+    }
+  ],
+  "thresholds": [
+    0.8,
+    0.82,
+    0.84,
+    0.86,
+    0.88,
+    0.9,
+    0.92,
+    0.94,
+    0.96,
+    0.98,
+    0.99
+  ]
+}

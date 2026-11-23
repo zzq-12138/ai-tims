@@ -1,0 +1,1266 @@
+{
+ "buckets": {
+  "hit_top1": 85,
+  "near_duplicate": 0,
+  "same_device_other_topic": 7,
+  "other": 8
+ },
+ "distribution": {
+  "54": {
+   "P_median": 0.7831,
+   "N_median": 0.7368,
+   "P_ge_075": 77,
+   "N_ge_075": 34
+  },
+  "310": {
+   "P_median": 0.771,
+   "N_median": 0.7514,
+   "P_ge_075": 74,
+   "N_ge_075": 51
+  }
+ },
+ "rows": [
+  {
+   "key": "P-001",
+   "top1": "2117984477438107650",
+   "top1_title": "MES终端报工接口超时处理",
+   "gold_titles": [
+    "MES终端报工接口超时处理",
+    ""
+   ],
+   "title_sim": 1.0,
+   "top1_device": "MES终端",
+   "device": "MES终端",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-002",
+   "top1": "2117918536058552322",
+   "top1_title": "SPI锡膏检测机3D光源亮度漂移修复",
+   "gold_titles": [
+    "SPI锡膏检测机3D光源亮度漂移修复"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "SPI锡膏检测机",
+   "device": "SPI锡膏检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-003",
+   "top1": "2117518330221625345",
+   "top1_title": "回流焊炉温失控处理",
+   "gold_titles": [
+    "",
+    "回流焊炉温失控处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "回流焊",
+   "device": "回流焊",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-004",
+   "top1": "2117518106325483522",
+   "top1_title": "AOI程序调用错误",
+   "gold_titles": [
+    "AOI程序调用错误"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-005",
+   "top1": "2117518059655462913",
+   "top1_title": "贴片机传送轨道卡板故障",
+   "gold_titles": [
+    "贴片机传送轨道卡板故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-006",
+   "top1": "2117517694373527554",
+   "top1_title": "蚀刻机废液排放报警处理",
+   "gold_titles": [
+    "蚀刻机废液排放报警处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-007",
+   "top1": "2117517026359312385",
+   "top1_title": "贴合机压力不均故障",
+   "gold_titles": [
+    "贴合机压力不均故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-008",
+   "top1": "2117517065026600961",
+   "top1_title": "贴合机辊筒磨损维修",
+   "gold_titles": [
+    "贴合机辊筒磨损维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-009",
+   "top1": "2117517116998221825",
+   "top1_title": "贴合机定位标记识别故障",
+   "gold_titles": [
+    "贴合机定位标记识别故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-010",
+   "top1": "2117517162896490498",
+   "top1_title": "贴合机温控异常处理",
+   "gold_titles": [
+    "贴合机温控异常处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-011",
+   "top1": "2117517209474236417",
+   "top1_title": "贴合机送料偏斜维修",
+   "gold_titles": [
+    "贴合机送料偏斜维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-012",
+   "top1": "2117517255108263938",
+   "top1_title": "贴合机静电吸附不良",
+   "gold_titles": [
+    "贴合机静电吸附不良"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-013",
+   "top1": "2117517328441475074",
+   "top1_title": "蚀刻机蚀刻速率偏差",
+   "gold_titles": [
+    "蚀刻机蚀刻速率偏差"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-014",
+   "top1": "2117517382925484033",
+   "top1_title": "蚀刻机药水浓度异常处理",
+   "gold_titles": [
+    "蚀刻机药水浓度异常处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-015",
+   "top1": "2117517426785320962",
+   "top1_title": "蚀刻机喷嘴堵塞处理",
+   "gold_titles": [
+    "蚀刻机喷嘴堵塞处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-016",
+   "top1": "2117517479423836162",
+   "top1_title": "蚀刻机过蚀刻处理",
+   "gold_titles": [
+    "蚀刻机过蚀刻处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-017",
+   "top1": "2117517525028503553",
+   "top1_title": "蚀刻机蚀刻不均",
+   "gold_titles": [
+    "蚀刻机蚀刻不均"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-018",
+   "top1": "2117517579063721986",
+   "top1_title": "蚀刻机传送轮污染处理",
+   "gold_titles": [
+    "蚀刻机传送轮污染处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-019",
+   "top1": "2117517633325432834",
+   "top1_title": "蚀刻机腔体温度漂移处理",
+   "gold_titles": [
+    "蚀刻机腔体温度漂移处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-020",
+   "top1": "2117517732441030657",
+   "top1_title": "蚀刻机水洗残留处理",
+   "gold_titles": [
+    "蚀刻机水洗残留处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-021",
+   "top1": "2117517802213277698",
+   "top1_title": "蚀刻机腔体压力异常处理",
+   "gold_titles": [
+    "蚀刻机腔体压力异常处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-022",
+   "top1": "2117516907186552833",
+   "top1_title": "贴合机贴合偏移故障",
+   "gold_titles": [
+    "贴合机贴合偏移故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-023",
+   "top1": "3100000000000000070",
+   "top1_title": "贴合机压合时间不足导致脱胶",
+   "gold_titles": [
+    "贴合机脱胶维修"
+   ],
+   "title_sim": 0.2,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "same_device_other_topic"
+  },
+  {
+   "key": "P-024",
+   "top1": "2117516944725573634",
+   "top1_title": "贴合机材料褶皱处理",
+   "gold_titles": [
+    "贴合机材料褶皱处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-025",
+   "top1": "3100000000000000065",
+   "top1_title": "贴合机胶层含气导致气泡",
+   "gold_titles": [
+    "贴合机气泡故障"
+   ],
+   "title_sim": 0.231,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "same_device_other_topic"
+  },
+  {
+   "key": "P-026",
+   "top1": "2117516259762176002",
+   "top1_title": "AOI检测机算法阈值漂移处理",
+   "gold_titles": [
+    "AOI检测机算法阈值漂移处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-027",
+   "top1": "2117516311318560770",
+   "top1_title": "AOI检测机通讯中断",
+   "gold_titles": [
+    "AOI检测机通讯中断"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-028",
+   "top1": "2117516387331932161",
+   "top1_title": "涂布机涂布厚度不均",
+   "gold_titles": [
+    "涂布机涂布厚度不均"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-029",
+   "top1": "2117516440587010050",
+   "top1_title": "涂布机涂层气泡处理",
+   "gold_titles": [
+    "涂布机涂层气泡处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-030",
+   "top1": "2117516487131201538",
+   "top1_title": "涂布机边缘漏涂处理",
+   "gold_titles": [
+    "涂布机边缘漏涂处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-031",
+   "top1": "2117516544408616962",
+   "top1_title": "涂布机张力波动故障",
+   "gold_titles": [
+    "涂布机张力波动故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-032",
+   "top1": "2117516579632381953",
+   "top1_title": "涂布机烘干温度异常",
+   "gold_titles": [
+    "涂布机烘干温度异常"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-033",
+   "top1": "2117516635693449217",
+   "top1_title": "涂布机涂布头堵塞维修",
+   "gold_titles": [
+    "涂布机涂布头堵塞维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-034",
+   "top1": "2117516679981105154",
+   "top1_title": "涂布机纠偏失灵维修",
+   "gold_titles": [
+    "涂布机纠偏失灵维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-035",
+   "top1": "2117516729268371458",
+   "top1_title": "涂布机背辊粘胶处理",
+   "gold_titles": [
+    "涂布机背辊粘胶处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-036",
+   "top1": "2117516776215216130",
+   "top1_title": "涂布机速度同步异常维修",
+   "gold_titles": [
+    "涂布机速度同步异常维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-037",
+   "top1": "2117516805319491586",
+   "top1_title": "涂布机料卷接头断带故障",
+   "gold_titles": [
+    "涂布机料卷接头断带故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-038",
+   "top1": "2117506824742400001",
+   "top1_title": "贴片机抛料处理SOP",
+   "gold_titles": [
+    "贴片机抛料处理SOP"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-039",
+   "top1": "2117515370884300801",
+   "top1_title": "贴片机吸嘴堵塞处理",
+   "gold_titles": [
+    "贴片机吸嘴堵塞处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-040",
+   "top1": "2117515408167469058",
+   "top1_title": "贴片机贴装偏移处理",
+   "gold_titles": [
+    "贴片机贴装偏移处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-041",
+   "top1": "2117515457186299905",
+   "top1_title": "贴片机供料器卡料维修",
+   "gold_titles": [
+    "贴片机供料器卡料维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-042",
+   "top1": "2117515530037166081",
+   "top1_title": "贴片机元件视觉识别失败",
+   "gold_titles": [
+    "贴片机元件视觉识别失败"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-043",
+   "top1": "2117515586672852993",
+   "top1_title": "贴片机贴装头撞击故障",
+   "gold_titles": [
+    "贴片机贴装头撞击故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-044",
+   "top1": "2117515706692861953",
+   "top1_title": "贴片机锡膏印刷偏移处理",
+   "gold_titles": [
+    "贴片机锡膏印刷偏移处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-045",
+   "top1": "2117515759645949954",
+   "top1_title": "贴片机元器件立碑故障",
+   "gold_titles": [
+    "贴片机元器件立碑故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-046",
+   "top1": "2117515805296754690",
+   "top1_title": "贴片机气路压力异常处理",
+   "gold_titles": [
+    "贴片机气路压力异常处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-047",
+   "top1": "2117515855309635585",
+   "top1_title": "AOI误报率过高处理",
+   "gold_titles": [
+    "AOI误报率过高处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-048",
+   "top1": "2117515896283791362",
+   "top1_title": "AOI漏检故障处理",
+   "gold_titles": [
+    "AOI漏检故障处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-049",
+   "top1": "2117515942408552450",
+   "top1_title": "AOI图像模糊故障处理",
+   "gold_titles": [
+    "AOI图像模糊故障处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-050",
+   "top1": "2117515997479763969",
+   "top1_title": "AOI光源亮度衰减维修",
+   "gold_titles": [
+    "AOI光源亮度衰减维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-051",
+   "top1": "2117516118477045762",
+   "top1_title": "AOI条码识别失败",
+   "gold_titles": [
+    "AOI条码识别失败"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-052",
+   "top1": "2117516165792989185",
+   "top1_title": "AOI过板卡板故障",
+   "gold_titles": [
+    "AOI过板卡板故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-053",
+   "top1": "2117516207383707650",
+   "top1_title": "AOI相机对焦异常",
+   "gold_titles": [
+    "AOI相机对焦异常"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-054",
+   "top1": "2117506824742400001",
+   "top1_title": "贴片机抛料处理SOP",
+   "gold_titles": [
+    "贴片机抛料处理SOP"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-055",
+   "top1": "3100000000000000138",
+   "top1_title": "MES 重复提交导致数据重复",
+   "gold_titles": [
+    "MES终端报工接口超时处理",
+    ""
+   ],
+   "title_sim": 0.095,
+   "top1_device": "MES终端",
+   "device": "MES终端",
+   "bucket": "same_device_other_topic"
+  },
+  {
+   "key": "P-056",
+   "top1": "2117918536058552322",
+   "top1_title": "SPI锡膏检测机3D光源亮度漂移修复",
+   "gold_titles": [
+    "SPI锡膏检测机3D光源亮度漂移修复"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "SPI锡膏检测机",
+   "device": "SPI锡膏检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-057",
+   "top1": "2117518330221625345",
+   "top1_title": "回流焊炉温失控处理",
+   "gold_titles": [
+    "",
+    "回流焊炉温失控处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "回流焊",
+   "device": "",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-058",
+   "top1": "2117518106325483522",
+   "top1_title": "AOI程序调用错误",
+   "gold_titles": [
+    "AOI程序调用错误"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-059",
+   "top1": "2117518059655462913",
+   "top1_title": "贴片机传送轨道卡板故障",
+   "gold_titles": [
+    "贴片机传送轨道卡板故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-060",
+   "top1": "2117517694373527554",
+   "top1_title": "蚀刻机废液排放报警处理",
+   "gold_titles": [
+    "蚀刻机废液排放报警处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-061",
+   "top1": "2117517026359312385",
+   "top1_title": "贴合机压力不均故障",
+   "gold_titles": [
+    "贴合机压力不均故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-062",
+   "top1": "2117516387331932161",
+   "top1_title": "涂布机涂布厚度不均",
+   "gold_titles": [
+    "涂布机涂布厚度不均"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-063",
+   "top1": "3100000000000000084",
+   "top1_title": "贴合机点检漏项导致慢性不良",
+   "gold_titles": [
+    "AOI检测机算法阈值漂移处理"
+   ],
+   "title_sim": 0.0,
+   "top1_device": "贴合机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-064",
+   "top1": "2117506824742400001",
+   "top1_title": "贴片机抛料处理SOP",
+   "gold_titles": [
+    "贴片机抛料处理SOP"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-065",
+   "top1": "3100000000000000089",
+   "top1_title": "蚀刻机蚀刻时间过长导致过蚀刻",
+   "gold_titles": [
+    "蚀刻机蚀刻速率偏差"
+   ],
+   "title_sim": 0.2,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "same_device_other_topic"
+  },
+  {
+   "key": "P-066",
+   "top1": "3100000000000000072",
+   "top1_title": "贴合机辊面划伤导致压痕",
+   "gold_titles": [
+    "贴合机辊筒磨损维修"
+   ],
+   "title_sim": 0.2,
+   "top1_device": "贴合机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-067",
+   "top1": "3100000000000000046",
+   "top1_title": "涂布机浆料脱泡不足导致针孔",
+   "gold_titles": [
+    "涂布机涂层气泡处理"
+   ],
+   "title_sim": 0.111,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "same_device_other_topic"
+  },
+  {
+   "key": "P-068",
+   "top1": "2117516311318560770",
+   "top1_title": "AOI检测机通讯中断",
+   "gold_titles": [
+    "AOI检测机通讯中断"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-069",
+   "top1": "2117515370884300801",
+   "top1_title": "贴片机吸嘴堵塞处理",
+   "gold_titles": [
+    "贴片机吸嘴堵塞处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-070",
+   "top1": "2117517382925484033",
+   "top1_title": "蚀刻机药水浓度异常处理",
+   "gold_titles": [
+    "蚀刻机药水浓度异常处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-071",
+   "top1": "2117517116998221825",
+   "top1_title": "贴合机定位标记识别故障",
+   "gold_titles": [
+    "贴合机定位标记识别故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-072",
+   "top1": "2117516487131201538",
+   "top1_title": "涂布机边缘漏涂处理",
+   "gold_titles": [
+    "涂布机边缘漏涂处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-073",
+   "top1": "2117515855309635585",
+   "top1_title": "AOI误报率过高处理",
+   "gold_titles": [
+    "AOI误报率过高处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-074",
+   "top1": "2117515408167469058",
+   "top1_title": "贴片机贴装偏移处理",
+   "gold_titles": [
+    "贴片机贴装偏移处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-075",
+   "top1": "3100000000000000086",
+   "top1_title": "蚀刻机喷淋压力不足导致速率偏差",
+   "gold_titles": [
+    "蚀刻机喷嘴堵塞处理"
+   ],
+   "title_sim": 0.158,
+   "top1_device": "蚀刻机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-076",
+   "top1": "2117517162896490498",
+   "top1_title": "贴合机温控异常处理",
+   "gold_titles": [
+    "贴合机温控异常处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-077",
+   "top1": "2117516544408616962",
+   "top1_title": "涂布机张力波动故障",
+   "gold_titles": [
+    "涂布机张力波动故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-078",
+   "top1": "3100000000000000027",
+   "top1_title": "AOI 曝光时间不足导致漏检",
+   "gold_titles": [
+    "AOI漏检故障处理"
+   ],
+   "title_sim": 0.176,
+   "top1_device": "AOI检测机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-079",
+   "top1": "2117515457186299905",
+   "top1_title": "贴片机供料器卡料维修",
+   "gold_titles": [
+    "贴片机供料器卡料维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-080",
+   "top1": "3100000000000000089",
+   "top1_title": "蚀刻机蚀刻时间过长导致过蚀刻",
+   "gold_titles": [
+    "蚀刻机过蚀刻处理"
+   ],
+   "title_sim": 0.214,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "same_device_other_topic"
+  },
+  {
+   "key": "P-081",
+   "top1": "3100000000000000005",
+   "top1_title": "贴片机供料器送料不到位",
+   "gold_titles": [
+    "贴合机送料偏斜维修"
+   ],
+   "title_sim": 0.059,
+   "top1_device": "贴片机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-082",
+   "top1": "2117516579632381953",
+   "top1_title": "涂布机烘干温度异常",
+   "gold_titles": [
+    "涂布机烘干温度异常"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-083",
+   "top1": "2117515942408552450",
+   "top1_title": "AOI图像模糊故障处理",
+   "gold_titles": [
+    "AOI图像模糊故障处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-084",
+   "top1": "2117515530037166081",
+   "top1_title": "贴片机元件视觉识别失败",
+   "gold_titles": [
+    "贴片机元件视觉识别失败"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-085",
+   "top1": "2117517525028503553",
+   "top1_title": "蚀刻机蚀刻不均",
+   "gold_titles": [
+    "蚀刻机蚀刻不均"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-086",
+   "top1": "2117517255108263938",
+   "top1_title": "贴合机静电吸附不良",
+   "gold_titles": [
+    "贴合机静电吸附不良"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-087",
+   "top1": "2117516635693449217",
+   "top1_title": "涂布机涂布头堵塞维修",
+   "gold_titles": [
+    "涂布机涂布头堵塞维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-088",
+   "top1": "2117515997479763969",
+   "top1_title": "AOI光源亮度衰减维修",
+   "gold_titles": [
+    "AOI光源亮度衰减维修"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-089",
+   "top1": "2117515586672852993",
+   "top1_title": "贴片机贴装头撞击故障",
+   "gold_titles": [
+    "贴片机贴装头撞击故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-090",
+   "top1": "3100000000000000097",
+   "top1_title": "蚀刻机传送轮面结垢导致板面污染",
+   "gold_titles": [
+    "蚀刻机传送轮污染处理"
+   ],
+   "title_sim": 0.353,
+   "top1_device": "蚀刻机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-091",
+   "top1": "2117516907186552833",
+   "top1_title": "贴合机贴合偏移故障",
+   "gold_titles": [
+    "贴合机贴合偏移故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴合机",
+   "device": "贴合机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-092",
+   "top1": "3100000000000000055",
+   "top1_title": "涂布机纠偏传感器污染导致跑偏",
+   "gold_titles": [
+    "涂布机纠偏失灵维修"
+   ],
+   "title_sim": 0.235,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "same_device_other_topic"
+  },
+  {
+   "key": "P-093",
+   "top1": "2117516118477045762",
+   "top1_title": "AOI条码识别失败",
+   "gold_titles": [
+    "AOI条码识别失败"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-094",
+   "top1": "2117515706692861953",
+   "top1_title": "贴片机锡膏印刷偏移处理",
+   "gold_titles": [
+    "贴片机锡膏印刷偏移处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "贴片机",
+   "device": "贴片机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-095",
+   "top1": "2117517633325432834",
+   "top1_title": "蚀刻机腔体温度漂移处理",
+   "gold_titles": [
+    "蚀刻机腔体温度漂移处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-096",
+   "top1": "3100000000000000070",
+   "top1_title": "贴合机压合时间不足导致脱胶",
+   "gold_titles": [
+    "贴合机脱胶维修"
+   ],
+   "title_sim": 0.2,
+   "top1_device": "贴合机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-097",
+   "top1": "2117516729268371458",
+   "top1_title": "涂布机背辊粘胶处理",
+   "gold_titles": [
+    "涂布机背辊粘胶处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "涂布机",
+   "device": "涂布机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-098",
+   "top1": "2117516165792989185",
+   "top1_title": "AOI过板卡板故障",
+   "gold_titles": [
+    "AOI过板卡板故障"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "AOI检测机",
+   "device": "AOI检测机",
+   "bucket": "hit_top1"
+  },
+  {
+   "key": "P-099",
+   "top1": "3100000000000000009",
+   "top1_title": "贴片机破真空延迟导致元件带起",
+   "gold_titles": [
+    "贴片机元器件立碑故障"
+   ],
+   "title_sim": 0.1,
+   "top1_device": "贴片机",
+   "device": "",
+   "bucket": "other"
+  },
+  {
+   "key": "P-100",
+   "top1": "2117517732441030657",
+   "top1_title": "蚀刻机水洗残留处理",
+   "gold_titles": [
+    "蚀刻机水洗残留处理"
+   ],
+   "title_sim": 1.0,
+   "top1_device": "蚀刻机",
+   "device": "蚀刻机",
+   "bucket": "hit_top1"
+  }
+ ],
+ "miss_top3": [
+  {
+   "key": "P-055",
+   "top1_title": "MES 重复提交导致数据重复",
+   "gold_titles": [
+    "MES终端报工接口超时处理",
+    ""
+   ]
+  },
+  {
+   "key": "P-063",
+   "top1_title": "贴合机点检漏项导致慢性不良",
+   "gold_titles": [
+    "AOI检测机算法阈值漂移处理"
+   ]
+  },
+  {
+   "key": "P-075",
+   "top1_title": "蚀刻机喷淋压力不足导致速率偏差",
+   "gold_titles": [
+    "蚀刻机喷嘴堵塞处理"
+   ]
+  },
+  {
+   "key": "P-078",
+   "top1_title": "AOI 曝光时间不足导致漏检",
+   "gold_titles": [
+    "AOI漏检故障处理"
+   ]
+  },
+  {
+   "key": "P-081",
+   "top1_title": "贴片机供料器送料不到位",
+   "gold_titles": [
+    "贴合机送料偏斜维修"
+   ]
+  }
+ ]
+}

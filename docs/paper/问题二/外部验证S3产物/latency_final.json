@@ -1,0 +1,79 @@
+{
+ "env": {
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "gpu_mem_gb": 23.5,
+  "dtype": "bfloat16",
+  "framework": "transformers.generate",
+  "torch": "2.8.0+cu128",
+  "transformers": "4.46.3",
+  "peft": "0.21.2",
+  "max_new_tokens": 384,
+  "batch": 1,
+  "do_sample": false,
+  "timing": "perf_counter: before generate -> after decode (same as gen_s)"
+ },
+ "table": {
+  "S1": {
+   "n": 197,
+   "mean": 5.65243654822335,
+   "p50": 5.55,
+   "p95": 7.28,
+   "min": 4.25,
+   "max": 8.34,
+   "tok_mean": 237.67005076142132,
+   "tok_s_agg": 42.04736289098632,
+   "tok_s_med": 42.1602787456446,
+   "peak_alloc_gb": 14.31,
+   "peak_reserved_gb": 14.47,
+   "probe_n": 6
+  },
+  "S2": {
+   "n": 197,
+   "mean": 5.490812182741117,
+   "p50": 5.42,
+   "p95": 7.17,
+   "min": 3.61,
+   "max": 8.71,
+   "tok_mean": 227.63451776649745,
+   "tok_s_agg": 41.457349148092334,
+   "tok_s_med": 42.15686274509804,
+   "peak_alloc_gb": 14.31,
+   "peak_reserved_gb": 14.47,
+   "probe_n": 6
+  },
+  "S3u": {
+   "n": 197,
+   "mean": 11.54472081218274,
+   "p50": 11.22,
+   "p95": 15.63,
+   "min": 7.9,
+   "max": 19.91,
+   "tok_mean": 229.86294416243655,
+   "tok_s_agg": 19.910654220400914,
+   "tok_s_med": 20.481049562682216,
+   "peak_alloc_gb": 14.53,
+   "peak_reserved_gb": 14.64,
+   "probe_n": 6
+  },
+  "S3m": {
+   "n": 197,
+   "mean": 6.386786240585583,
+   "p50": 6.273440873948857,
+   "p95": 8.19149883906357,
+   "min": 4.619847886962816,
+   "max": 9.618505188962445,
+   "tok_mean": 230.93401015228426,
+   "tok_s_agg": 36.15809288947029,
+   "tok_s_med": 36.354497952127225,
+   "peak_alloc_gb": 14.32,
+   "peak_reserved_gb": 14.53,
+   "probe_n": 197
+  }
+ },
+ "merge_equivalence": {
+  "compared": 197,
+  "raw_exact_same": 192,
+  "rate": 0.9746192893401016
+ },
+ "markdown": "| 方案 | n | 均值 (s) | P50 (s) | P95 (s) | 输出 tokens/s（聚合） | tokens/s（P50） | 峰值显存 allocated | 峰值显存 reserved |\n|---|---|---|---|---|---|---|---|---|\n| S1 基座 | 197 | 5.65 | 5.55 | 7.28 | 42.0 | 42.2 | 14.31 GB | 14.47 GB |\n| S2 规则 | 197 | 5.49 | 5.42 | 7.17 | 41.5 | 42.2 | 14.31 GB | 14.47 GB |\n| S3 LoRA（未合并） | 197 | 11.54 | 11.22 | 15.63 | 19.9 | 20.5 | 14.53 GB | 14.64 GB |\n| S3 LoRA（已合并） | 197 | 6.39 | 6.27 | 8.19 | 36.2 | 36.4 | 14.32 GB | 14.53 GB |"
+}

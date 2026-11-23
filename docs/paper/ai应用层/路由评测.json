@@ -1,0 +1,641 @@
+{
+  "meta": {
+    "generated_at": "2026-11-07 08:47:58",
+    "dataset": "scripts/ai_layer/data/route_set.tsv",
+    "n": 300,
+    "simple_model": "glm-4-flash",
+    "complex_model": "glm-5.3-flash",
+    "judge_model": "glm-4-flash（复杂题语义判分）",
+    "threshold": 0.5,
+    "prices": {
+      "glm-4-flash": [
+        0.0001,
+        0.0001
+      ],
+      "glm-4.7-flash": [
+        0.0001,
+        0.0001
+      ],
+      "glm-5.3-flash": [
+        0.0008,
+        0.0028
+      ],
+      "glm-5.3-flashx": [
+        0.0008,
+        0.0028
+      ],
+      "embedding-3": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "summary": {
+    "n": 300,
+    "baseline": {
+      "model": "glm-5.3-flash",
+      "acc": 100.0,
+      "correct": 300,
+      "acc_kw": 66.33,
+      "cost_cny": 0.3085
+    },
+    "routed": {
+      "acc": 93.67,
+      "correct": 281,
+      "acc_kw": 60.0,
+      "cost_cny": 0.2112,
+      "saving_pct": 31.54
+    },
+    "all_small": {
+      "model": "glm-4-flash",
+      "acc": 93.67,
+      "correct": 281,
+      "acc_kw": 59.0,
+      "cost_cny": 0.0071,
+      "acc_large_complex": 87.33
+    },
+    "quality_loss_pp": 6.33,
+    "quality_loss_pp_kw": 6.33,
+    "judged_rows": 120,
+    "routed_simple": 180,
+    "routed_complex": 120,
+    "misroute_complex_as_simple": 30,
+    "misroute_complex_as_simple_failed": 19,
+    "misroute_simple_as_complex": 0,
+    "by_subkind": {
+      "templated": {
+        "n": 120,
+        "misrouted_to_small": 0,
+        "misrouted_failed": 0,
+        "baseline_acc": 100.0,
+        "routed_acc": 100.0,
+        "all_small_acc": 100.0
+      },
+      "calc": {
+        "n": 30,
+        "misrouted_to_small": 30,
+        "misrouted_failed": 19,
+        "baseline_acc": 100.0,
+        "routed_acc": 36.67,
+        "all_small_acc": 36.67
+      }
+    },
+    "hard_complex": {
+      "n": 30,
+      "misrouted_to_small": 30,
+      "misrouted_failed": 19,
+      "baseline_acc": 100.0,
+      "routed_acc": 36.67,
+      "all_small_acc": 36.67
+    },
+    "avg_large_latency_s": 10.3,
+    "tokens": {
+      "baseline": {
+        "prompt": 57416,
+        "completion": 93777,
+        "reasoning": 61894,
+        "total": 151193
+      },
+      "routed": {
+        "prompt": 56336,
+        "completion": 73151,
+        "reasoning": 48300,
+        "total": 129487
+      },
+      "all_small": {
+        "prompt": 55616,
+        "completion": 15792,
+        "reasoning": 0,
+        "total": 71408
+      },
+      "judge": {
+        "prompt": 133885,
+        "completion": 2160,
+        "reasoning": 0,
+        "total": 136045
+      }
+    },
+    "threshold": 0.5,
+    "prices_source": "application.yml tims.ai.model-prices"
+  },
+  "by_kind": {
+    "simple": {
+      "n": 150,
+      "baseline_acc": 100.0,
+      "routed_acc": 100.0,
+      "all_small_acc": 100.0,
+      "baseline_acc_kw": 100.0,
+      "routed_acc_kw": 100.0,
+      "routed_to_small": 150
+    },
+    "complex": {
+      "n": 150,
+      "baseline_acc": 100.0,
+      "routed_acc": 87.33,
+      "all_small_acc": 87.33,
+      "baseline_acc_kw": 32.67,
+      "routed_acc_kw": 20.0,
+      "routed_to_small": 30
+    }
+  },
+  "misroute_failures": [
+    {
+      "id": "R271",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "SPI锡膏检测机",
+      "question": "SPI锡膏检测机投影光源模组初始亮度1180，现测942，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "20.2|79.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：亮度下降了21.9个百分点，现测值是初始值的80.1%。\n\n关键依据：初始亮度1180，现测942，计算公式为（1180-942）/1180*100%≈21.9%，现测值/初始值*100%=942/1180*100%≈80.1%。"
+    },
+    {
+      "id": "R272",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "回流焊",
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，这批9次测量（℃）：3.118、3.001、3.316、2.576、3.411、2.705、3.282、3.007、3.302。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "7|77.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：温差大于3℃即判为热风循环问题。9次测量中，3.316℃、3.411℃、3.282℃三次超标。"
+    },
+    {
+      "id": "R278",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "回流焊",
+      "question": "回流焊氮气流量计初始氮气流量640，现测576，氮气流量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "10.0|90.0",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：氮气流量下降了10.9个百分点，现测值是初始值的90.6%。\n\n关键依据：初始氮气流量640，现测576，计算公式为（640-576）/640*100% = 10.9%，576/640*100% = 90.6%。"
+    },
+    {
+      "id": "R280",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "AOI光学检测机",
+      "question": "AOI光学检测机环形光源初始亮度2400，现测2016，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "16.0|84.0",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：亮度下降了15.2个百分点，现测值是初始值的83.3%。\n\n关键依据：初始亮度2400，现测2016，计算公式为（2400-2016）/2400*100% = 15.2%。现测值/初始值*100% = 2016/2400*100% = 83.3%。"
+    },
+    {
+      "id": "R281",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "AOI光学检测机",
+      "question": "AOI光学检测机相机曝光时间要求8-12ms，这批9次测量（ms）：8.702、7.136、11.191、7.586、9.045、11.915、6.933、12.795、10.604。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：曝光时间在8-12ms范围内的有8.702、9.045、11.191、11.915、10.604、12.795，共6次。"
+    },
+    {
+      "id": "R282",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "涂覆机",
+      "question": "涂覆机喷雾阀初始胶量1200，现测1008，胶量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "16.0|84.0",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：胶量下降了16.7个百分点，现测值是初始值的83.3%。\n\n关键依据：初始胶量1200，现测1008，计算公式为（1200-1008）/1200*100% = 16.7%，1008/1200*100% = 83.3%。"
+    },
+    {
+      "id": "R283",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "贴片机",
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，这批9次测量（s）：0.272、0.237、0.231、0.274、0.221、0.248、0.254、0.258、0.223。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "4|44.4",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：单次动作时间大于0.25s判为超标。9次测量中，0.272、0.274、0.254、0.258四次超过0.25s，占比为33.3%。"
+    },
+    {
+      "id": "R284",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "回流焊",
+      "question": "回流焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：0.961、1.229、1.104、1.161、1.195、0.986、1.253、1.061、1.086。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：传送带合格标准为1.0-1.2m/min，9次测量中0.961、1.104、1.161、1.195、0.986、1.061、1.086在合格范围内。"
+    },
+    {
+      "id": "R285",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "SPI锡膏检测机",
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，这批9次测量（μm）：5.09、4.906、5.306、4.364、5.509、5.723、5.36、5.365、5.525。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "7|77.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：这批SPI锡膏检测机高度标定块高度偏差超标3次，超标占比33.3%。\n\n关键依据：偏差大于5μm即为标定问题。9次测量中，5.306、5.509、5.723、5.365、5.525均超过5μm，共5个数据点超标。"
+    },
+    {
+      "id": "R286",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "X-Ray检测机",
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，这批9次测量（μm）：4.392、4.942、4.369、5.422、5.057、4.41、4.917、5.415、5.078。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "4|44.4",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：位移大于5μm即为夹持问题。9次测量中，5.422、5.057、5.415、5.078四次超过5μm，但根据题目要求，只计算超过5μm的次数，故超标3次。超标占比为3/9=33.3%。"
+    },
+    {
+      "id": "R287",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "AOI光学检测机",
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，这批9次测量（%）：8.864、11.311、8.669、11.029、11.422、10.753、11.338、10.093、9.157。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "6|66.7",
+      "score": 0.23,
+      "signals": "long_query:0.18|multi_question:0.12|history:0.15|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：这批测量中，照度偏差超标2次，超标占比22.2%。\n\n关键依据：照度偏差大于10%即为光源问题。9次测量中，11.311%、11.422%、11.338%超过10%，共3次，但只计算超过10%的次数，故超标2次。超标占比为2/9≈0.222，保留一位小数，占比为22.2%。"
+    },
+    {
+      "id": "R288",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "X-Ray检测机",
+      "question": "X-Ray检测机射线管放大倍率要求3.5-5倍，这批9次测量（倍）：4.561、3.727、3.679、4.132、3.457、4.484、3.155、3.023、3.335。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.23,
+      "signals": "long_query:0.18|multi_question:0.12|history:0.15|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据放大倍率3.5-5.0倍为合格，9次测量中，4.561、3.727、3.679、4.132、4.484、3.335、3.155均在此范围内，共7次合格。"
+    },
+    {
+      "id": "R289",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "刻蚀机",
+      "question": "刻蚀机射频电源反射功率要求0-5W，这批9次测量（W）：1.086、6.54、0.408、3.481、4.212、6.447、0.585、4.741、0.532。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "7|77.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：根据指标，反射功率0-5W为合格。9次测量中，1.086、0.408、3.481、4.212、0.585、4.741、0.532均在0-5W范围内，因此合格6次。合格占比为6/9=0.6667，保留一位小数为66.7%。"
+    },
+    {
+      "id": "R290",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "层压机",
+      "question": "层压机加热棒初始加热功率900，现测810，加热功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "10.0|90.0",
+      "score": 0.23,
+      "signals": "long_query:0.18|multi_question:0.12|history:0.15|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：加热功率下降了10.1个百分点，现测值是初始值的90.0%。\n\n关键依据：初始加热功率900，现测810，下降百分比=(900-810)/900*100%=10.1%，现测值百分比=810/900*100%=90.0%。"
+    },
+    {
+      "id": "R291",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "层压机",
+      "question": "层压机液压系统压合压力要求1.5-2MPa，这批9次测量（MPa）：1.711、1.852、2.047、1.365、1.961、1.452、1.669、2.159、2.048。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "4|44.4",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据资料，压合压力1.5-2.0 MPa为合格。9次测量中，1.711、1.852、2.047、1.961、1.669、2.159、2.048均在合格范围内。"
+    },
+    {
+      "id": "R292",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "贴片机",
+      "question": "贴片机供料器供料间距要求3.9-4.1mm，这批9次测量（mm）：3.996、4.066、4.091、3.896、4.112、3.976、3.915、4.124、4.126。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据供料间距合格标准3.9-4.1mm，9次测量中，3.996、4.066、3.896、3.976、3.915、4.124、4.126均在合格范围内。"
+    },
+    {
+      "id": "R294",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "MES终端",
+      "question": "MES终端工位终端上报延迟要求5-15s，这批9次测量（s）：2.804、1.578、2.035、14.775、2.152、14.844、15.226、15.399、17.423。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "2|22.2",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格5次，合格占比55.6%。\n\n关键依据：根据MES终端工位终端上报延迟要求5-15s，测量值在5-15s范围内的为合格。具体分析如下：\n\n- 2.804s、1.578s、2.035s、2.152s在5-15s范围内，合格。\n- 14.775s、14.844s、15.226s、15.399s、17.423s不在5-15s范围内，不合格。\n\n因此，合格5次，共9次测量，合格占比为5/9≈0.5556，保留一位小数为55.6%。"
+    },
+    {
+      "id": "R298",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "刻蚀机",
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，这批9次测量（Pa）：5.734、4.427、5.728、5.608、5.282、4.334、4.957、5.288、4.393。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：根据指标，真空度劣于5 Pa即判泵效下降。9次测量中，5.734、5.728、5.608、5.282、4.957、5.288、4.393均超过5 Pa，共7次。超标次数为9-7=3次，占比为3/9=33.3%。"
+    },
+    {
+      "id": "R299",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "SPI锡膏检测机",
+      "question": "SPI锡膏检测机锡膏厚度印刷厚度要求0.1-0.15mm，这批9次测量（mm）：0.155、0.11、0.16、0.148、0.165、0.147、0.167、0.123、0.146。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：印刷厚度合格范围为0.10-0.15mm，9次测量中，0.11、0.148、0.147、0.123、0.146、0.146符合要求。"
+    }
+  ],
+  "small_tier_failures": [],
+  "misroute_to_complex": [],
+  "all_small_failures": [
+    {
+      "id": "R271",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "SPI锡膏检测机",
+      "question": "SPI锡膏检测机投影光源模组初始亮度1180，现测942，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "20.2|79.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：亮度下降了21.9个百分点，现测值是初始值的80.1%。\n\n关键依据：初始亮度1180，现测942，计算公式为（1180-942）/1180*100%≈21.9%，现测值/初始值*100%=942/1180*100%≈80.1%。"
+    },
+    {
+      "id": "R272",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "回流焊",
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，这批9次测量（℃）：3.118、3.001、3.316、2.576、3.411、2.705、3.282、3.007、3.302。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "7|77.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：温差大于3℃即判为热风循环问题。9次测量中，3.316℃、3.411℃、3.282℃三次超标。"
+    },
+    {
+      "id": "R278",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "回流焊",
+      "question": "回流焊氮气流量计初始氮气流量640，现测576，氮气流量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "10.0|90.0",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：氮气流量下降了10.9个百分点，现测值是初始值的90.6%。\n\n关键依据：初始氮气流量640，现测576，计算公式为（640-576）/640*100% = 10.9%，576/640*100% = 90.6%。"
+    },
+    {
+      "id": "R280",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "AOI光学检测机",
+      "question": "AOI光学检测机环形光源初始亮度2400，现测2016，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "16.0|84.0",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：亮度下降了15.2个百分点，现测值是初始值的83.3%。\n\n关键依据：初始亮度2400，现测2016，计算公式为（2400-2016）/2400*100% = 15.2%。现测值/初始值*100% = 2016/2400*100% = 83.3%。"
+    },
+    {
+      "id": "R281",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "AOI光学检测机",
+      "question": "AOI光学检测机相机曝光时间要求8-12ms，这批9次测量（ms）：8.702、7.136、11.191、7.586、9.045、11.915、6.933、12.795、10.604。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：曝光时间在8-12ms范围内的有8.702、9.045、11.191、11.915、10.604、12.795，共6次。"
+    },
+    {
+      "id": "R282",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "涂覆机",
+      "question": "涂覆机喷雾阀初始胶量1200，现测1008，胶量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "16.0|84.0",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：胶量下降了16.7个百分点，现测值是初始值的83.3%。\n\n关键依据：初始胶量1200，现测1008，计算公式为（1200-1008）/1200*100% = 16.7%，1008/1200*100% = 83.3%。"
+    },
+    {
+      "id": "R283",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "贴片机",
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，这批9次测量（s）：0.272、0.237、0.231、0.274、0.221、0.248、0.254、0.258、0.223。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "4|44.4",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：单次动作时间大于0.25s判为超标。9次测量中，0.272、0.274、0.254、0.258四次超过0.25s，占比为33.3%。"
+    },
+    {
+      "id": "R284",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "回流焊",
+      "question": "回流焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：0.961、1.229、1.104、1.161、1.195、0.986、1.253、1.061、1.086。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：传送带合格标准为1.0-1.2m/min，9次测量中0.961、1.104、1.161、1.195、0.986、1.061、1.086在合格范围内。"
+    },
+    {
+      "id": "R285",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "SPI锡膏检测机",
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，这批9次测量（μm）：5.09、4.906、5.306、4.364、5.509、5.723、5.36、5.365、5.525。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "7|77.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：这批SPI锡膏检测机高度标定块高度偏差超标3次，超标占比33.3%。\n\n关键依据：偏差大于5μm即为标定问题。9次测量中，5.306、5.509、5.723、5.365、5.525均超过5μm，共5个数据点超标。"
+    },
+    {
+      "id": "R286",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "X-Ray检测机",
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，这批9次测量（μm）：4.392、4.942、4.369、5.422、5.057、4.41、4.917、5.415、5.078。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "4|44.4",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：位移大于5μm即为夹持问题。9次测量中，5.422、5.057、5.415、5.078四次超过5μm，但根据题目要求，只计算超过5μm的次数，故超标3次。超标占比为3/9=33.3%。"
+    },
+    {
+      "id": "R287",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "AOI光学检测机",
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，这批9次测量（%）：8.864、11.311、8.669、11.029、11.422、10.753、11.338、10.093、9.157。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "6|66.7",
+      "score": 0.23,
+      "signals": "long_query:0.18|multi_question:0.12|history:0.15|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：这批测量中，照度偏差超标2次，超标占比22.2%。\n\n关键依据：照度偏差大于10%即为光源问题。9次测量中，11.311%、11.422%、11.338%超过10%，共3次，但只计算超过10%的次数，故超标2次。超标占比为2/9≈0.222，保留一位小数，占比为22.2%。"
+    },
+    {
+      "id": "R288",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "X-Ray检测机",
+      "question": "X-Ray检测机射线管放大倍率要求3.5-5倍，这批9次测量（倍）：4.561、3.727、3.679、4.132、3.457、4.484、3.155、3.023、3.335。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.23,
+      "signals": "long_query:0.18|multi_question:0.12|history:0.15|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据放大倍率3.5-5.0倍为合格，9次测量中，4.561、3.727、3.679、4.132、4.484、3.335、3.155均在此范围内，共7次合格。"
+    },
+    {
+      "id": "R289",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "刻蚀机",
+      "question": "刻蚀机射频电源反射功率要求0-5W，这批9次测量（W）：1.086、6.54、0.408、3.481、4.212、6.447、0.585、4.741、0.532。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "7|77.8",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：根据指标，反射功率0-5W为合格。9次测量中，1.086、0.408、3.481、4.212、0.585、4.741、0.532均在0-5W范围内，因此合格6次。合格占比为6/9=0.6667，保留一位小数为66.7%。"
+    },
+    {
+      "id": "R290",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "层压机",
+      "question": "层压机加热棒初始加热功率900，现测810，加热功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？",
+      "gold": "10.0|90.0",
+      "score": 0.23,
+      "signals": "long_query:0.18|multi_question:0.12|history:0.15|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：加热功率下降了10.1个百分点，现测值是初始值的90.0%。\n\n关键依据：初始加热功率900，现测810，下降百分比=(900-810)/900*100%=10.1%，现测值百分比=810/900*100%=90.0%。"
+    },
+    {
+      "id": "R291",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "层压机",
+      "question": "层压机液压系统压合压力要求1.5-2MPa，这批9次测量（MPa）：1.711、1.852、2.047、1.365、1.961、1.452、1.669、2.159、2.048。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "4|44.4",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据资料，压合压力1.5-2.0 MPa为合格。9次测量中，1.711、1.852、2.047、1.961、1.669、2.159、2.048均在合格范围内。"
+    },
+    {
+      "id": "R292",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "贴片机",
+      "question": "贴片机供料器供料间距要求3.9-4.1mm，这批9次测量（mm）：3.996、4.066、4.091、3.896、4.112、3.976、3.915、4.124、4.126。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据供料间距合格标准3.9-4.1mm，9次测量中，3.996、4.066、3.896、3.976、3.915、4.124、4.126均在合格范围内。"
+    },
+    {
+      "id": "R294",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "MES终端",
+      "question": "MES终端工位终端上报延迟要求5-15s，这批9次测量（s）：2.804、1.578、2.035、14.775、2.152、14.844、15.226、15.399、17.423。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "2|22.2",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格5次，合格占比55.6%。\n\n关键依据：根据MES终端工位终端上报延迟要求5-15s，测量值在5-15s范围内的为合格。具体分析如下：\n\n- 2.804s、1.578s、2.035s、2.152s在5-15s范围内，合格。\n- 14.775s、14.844s、15.226s、15.399s、17.423s不在5-15s范围内，不合格。\n\n因此，合格5次，共9次测量，合格占比为5/9≈0.5556，保留一位小数为55.6%。"
+    },
+    {
+      "id": "R298",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "刻蚀机",
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，这批9次测量（Pa）：5.734、4.427、5.728、5.608、5.282、4.334、4.957、5.288、4.393。超标几次？超标占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：根据指标，真空度劣于5 Pa即判泵效下降。9次测量中，5.734、5.728、5.608、5.282、4.957、5.288、4.393均超过5 Pa，共7次。超标次数为9-7=3次，占比为3/9=33.3%。"
+    },
+    {
+      "id": "R299",
+      "kind": "complex",
+      "subkind": "calc",
+      "device": "SPI锡膏检测机",
+      "question": "SPI锡膏检测机锡膏厚度印刷厚度要求0.1-0.15mm，这批9次测量（mm）：0.155、0.11、0.16、0.148、0.165、0.147、0.167、0.123、0.146。合格几次？合格占比多少（保留一位小数，%）？",
+      "gold": "5|55.6",
+      "score": 0.08,
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22",
+      "answered_by": "glm-4-flash",
+      "correct": false,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：印刷厚度合格范围为0.10-0.15mm，9次测量中，0.11、0.148、0.147、0.123、0.146、0.146符合要求。"
+    }
+  ]
+}

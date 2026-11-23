@@ -1,0 +1,27 @@
+{
+  "total": 300,
+  "simple": 150,
+  "complex": 150,
+  "complex_calc": 30,
+  "complex_templated": 120,
+  "devices": [
+    "AOI光学检测机",
+    "AOI检测机",
+    "MES终端",
+    "SPI锡膏检测机",
+    "X-Ray检测机",
+    "刻蚀机",
+    "回流焊",
+    "层压机",
+    "波峰焊",
+    "涂布机",
+    "涂覆机",
+    "蚀刻机",
+    "贴合机",
+    "贴片机"
+  ],
+  "with_history": 16,
+  "with_tool": 6,
+  "source": "scripts/kb/data/*.py（知识库 310 条真实条目）",
+  "out": "scripts/ai_layer/data/route_set.tsv"
+}

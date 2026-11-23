@@ -1,0 +1,81 @@
+{
+  "version": "tool-calc-v1",
+  "frozen_at": "2026-11-07T17:58:18+08:00",
+  "frozen_scope": "system_prompt + tool_schema + tool_calc.py + 采样参数",
+  "model": "glm-4-flash",
+  "temperature": 0.0,
+  "max_tokens": 1024,
+  "max_rounds": 6,
+  "system_prompt": "你是 AI-TIMS 工业设备运维助手。只依据给定参考资料回答。只要题目涉及任何数值计算（差值、百分比变化、计数、占比、均值、区间判断），你必须调用 run_calculation 工具，把题面里的数字与关系作为参数传入；禁止自己心算或估算，也不能用文字描述计算过程来代替实际调用。一次只算一个结果；多个互不依赖的结果可以在同一轮里同时发起多个调用。参数缺失时先补齐再调用，不要用默认值猜。最终回答先给结论，再给关键依据，控制在 150 字以内。",
+  "prompt_sha256": "84be9c79e17f43b2ca084f4ba2e53fc71f255e7ad188be4b04ce201df91f212a",
+  "tool_schema": {
+    "type": "function",
+    "function": {
+      "name": "run_calculation",
+      "description": "执行确定性算术。只传题面中真实出现的数字，不要自己补数、不要心算。一次只做一个运算；需要多个结果时分多次调用。各运算必填参数：difference=initial,current；delta_percent=initial,current；pct_of=initial,current；count_over=values,upper；count_in_range=values,lower,upper；ratio=numerator,denominator；average=values。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "difference",
+              "delta_percent",
+              "pct_of",
+              "count_over",
+              "count_in_range",
+              "ratio",
+              "average"
+            ],
+            "description": "difference=差; delta_percent=相对初始值的变化百分比; pct_of=占初始值的百分比; count_over=超过上限的条数(阈值放 upper); count_in_range=落在区间内的条数; ratio=占比; average=均值"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "测量值列表，按题面顺序；count_over/average 必填"
+          },
+          "initial": {
+            "type": "number",
+            "description": "初始值 / 基数"
+          },
+          "current": {
+            "type": "number",
+            "description": "现值 / 实测值（不是阈值，阈值放 upper）"
+          },
+          "lower": {
+            "type": "number",
+            "description": "区间下限（含）"
+          },
+          "upper": {
+            "type": "number",
+            "description": "上限阈值；count_over 用它判断超标"
+          },
+          "numerator": {
+            "type": "number",
+            "description": "占比的分子"
+          },
+          "denominator": {
+            "type": "number",
+            "description": "占比的分母"
+          },
+          "inclusive": {
+            "type": "boolean",
+            "description": "count_over 是否包含等于，默认 false"
+          },
+          "scale": {
+            "type": "number",
+            "description": "单位换算系数，默认 1；如把百分数换算成「成」传 0.1"
+          }
+        },
+        "required": [
+          "op"
+        ]
+      }
+    }
+  },
+  "schema_sha256": "de04e8b3b7c3a47488977ff5c1f695be41f6b00cc8b412ab46d9294987b6f849",
+  "tool_calc_sha256": "a0cab12307411d2658e3b448df4490484afe951a4e5761af2204ec242665a82d",
+  "note": "冻结后不得修改 prompt / schema / 工具语义；Holdout-2 只跑一次，结果不回灌调参。"
+}

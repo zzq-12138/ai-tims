@@ -1,0 +1,602 @@
+[
+ {
+  "id": "INC001",
+  "root": "excessive product supply from the previous process and reduced conveying capacity due to a slipping conveyor belt",
+  "score": 0.6099290780141844,
+  "ok": true
+ },
+ {
+  "id": "INC002",
+  "root": "metal fatigue caused by excessive force applied during a previous product jam",
+  "score": 0.42857142857142855,
+  "ok": true
+ },
+ {
+  "id": "INC003",
+  "root": "chain aging and wear due to insufficient lubrication",
+  "score": 0.5866666666666667,
+  "ok": true
+ },
+ {
+  "id": "INC004",
+  "root": "malfunction of the conveyor's speed control inverter",
+  "score": 0.4,
+  "ok": true
+ },
+ {
+  "id": "INC005",
+  "root": "foreign matter was caught inside the chute",
+  "score": 0.4935064935064935,
+  "ok": true
+ },
+ {
+  "id": "INC006",
+  "root": "conveyor unexpectedly operating without power being shut off during cleaning",
+  "score": 0.390625,
+  "ok": true
+ },
+ {
+  "id": "INC007",
+  "root": "insufficient bearing lubrication and overlooking the regular replacement timing",
+  "score": 0.6415094339622641,
+  "ok": true
+ },
+ {
+  "id": "INC008",
+  "root": "the conveyor belt surface was worn, reducing friction with the products. This caused products to slide down without being able to climb the incline, colliding with subsequent products and jamming",
+  "score": 0.3238095238095238,
+  "ok": true
+ },
+ {
+  "id": "INC009",
+  "root": "Conveyor frame fixing bolts were loose, making the entire structure unstable",
+  "score": 0.4842105263157895,
+  "ok": true
+ },
+ {
+  "id": "INC010",
+  "root": "insulation failure due to moisture ingress into the control panel",
+  "score": 0.6896551724137931,
+  "ok": true
+ },
+ {
+  "id": "INC011",
+  "root": "Minute crack at the tip of the die (upper die) caused pressure leakage and material overflow during molding",
+  "score": 0.49635036496350365,
+  "ok": true
+ },
+ {
+  "id": "INC012",
+  "root": "die (upper die) air clamp was not fixed with sufficient pressure",
+  "score": 0.37362637362637363,
+  "ok": true
+ },
+ {
+  "id": "INC013",
+  "root": "crack in conveyor belt caused by previous foreign matter ingress, not detected during daily inspection",
+  "score": 0.49635036496350365,
+  "ok": true
+ },
+ {
+  "id": "INC014",
+  "root": "motor's internal bearing had overheated and seized",
+  "score": 0.34146341463414637,
+  "ok": true
+ },
+ {
+  "id": "INC015",
+  "root": "dust adhering to the sensor lens",
+  "score": 0.3728813559322034,
+  "ok": true
+ },
+ {
+  "id": "INC016",
+  "root": "molding part of the die (upper die) was worn. This caused uneven pressure during molding, leading to a decrease in dimensional accuracy",
+  "score": 0.3660130718954248,
+  "ok": true
+ },
+ {
+  "id": "INC017",
+  "root": "Cooling water leakage from die (upper die) causing insufficient die cooling",
+  "score": 0.5405405405405406,
+  "ok": true
+ },
+ {
+  "id": "INC018",
+  "root": "Part of a component that fell during a previous die change",
+  "score": 0.575,
+  "ok": true
+ },
+ {
+  "id": "INC019",
+  "root": "Neglecting to insert the safety pin during adjustment work, leaving the die unfixed",
+  "score": 0.35036496350364965,
+  "ok": true
+ },
+ {
+  "id": "INC020",
+  "root": "a part of the heater built into the die (upper die) was malfunctioning, and the die was not heated to the specified temperature. This caused poor material fluidity and molding defects",
+  "score": 0.2843601895734597,
+  "ok": true
+ },
+ {
+  "id": "INC021",
+  "root": "Contaminants in the torch nozzle affecting gas flow and arc stability",
+  "score": 0.37037037037037035,
+  "ok": true
+ },
+ {
+  "id": "INC022",
+  "root": "An incorrect offset value had been entered during a program modification the previous day, preventing the robot from accurately tracing the specified weld path",
+  "score": 0.3010752688172043,
+  "ok": true
+ },
+ {
+  "id": "INC023",
+  "root": "Crack in the cooling water hose inside the torch, and cooling water was leaking",
+  "score": 0.47863247863247865,
+  "ok": true
+ },
+ {
+  "id": "INC024",
+  "root": "worn welding torch electrode tip",
+  "score": 0.42424242424242425,
+  "ok": true
+ },
+ {
+  "id": "INC025",
+  "root": "Combination of repetitive stress from robot arm movement and insufficient cable protection",
+  "score": 0.49056603773584906,
+  "ok": true
+ },
+ {
+  "id": "INC026",
+  "root": "Insufficient nozzle cleaning frequency",
+  "score": 1.0,
+  "ok": true
+ },
+ {
+  "id": "INC027",
+  "root": "Not checking that the torch was sufficiently cooled before replacement work",
+  "score": 0.432,
+  "ok": true
+ },
+ {
+  "id": "INC028",
+  "root": "damage to the gas lens due to impact",
+  "score": 0.8771929824561403,
+  "ok": true
+ },
+ {
+  "id": "INC029",
+  "root": "Insufficient contact tip cleaning",
+  "score": 1.0,
+  "ok": true
+ },
+ {
+  "id": "INC030",
+  "root": "aging deterioration of the sensor",
+  "score": 0.525,
+  "ok": true
+ },
+ {
+  "id": "INC031",
+  "root": "input error in the offline teaching data after the latest workpiece shape change",
+  "score": 0.48739495798319327,
+  "ok": true
+ },
+ {
+  "id": "INC032",
+  "root": "Insufficient motor cooling and load due to long continuous operation",
+  "score": 1.0,
+  "ok": true
+ },
+ {
+  "id": "INC033",
+  "root": "Non-compliance with safety procedures was pointed out. Specifically, not completely shutting off the robot's power before work and not installing a safety fence",
+  "score": 0.5585585585585585,
+  "ok": true
+ },
+ {
+  "id": "INC034",
+  "root": "Cable aging and fatigue from repetitive robot arm movement",
+  "score": 0.4383561643835616,
+  "ok": true
+ },
+ {
+  "id": "INC035",
+  "root": "Insufficient regular inspection of the gripper",
+  "score": 0.7045454545454546,
+  "ok": true
+ },
+ {
+  "id": "INC036",
+  "root": "Software bug in the control system",
+  "score": 0.6666666666666666,
+  "ok": true
+ },
+ {
+  "id": "INC037",
+  "root": "Insufficient regular maintenance of the reducer",
+  "score": 0.6458333333333334,
+  "ok": true
+ },
+ {
+  "id": "INC038",
+  "root": "Arm unexpectedly operating without power being shut off during cleaning",
+  "score": 0.3252032520325203,
+  "ok": true
+ },
+ {
+  "id": "INC039",
+  "root": "Inadequate cable wiring method and deterioration of the cable guide",
+  "score": 1.0,
+  "ok": true
+ },
+ {
+  "id": "INC040",
+  "root": "aging deterioration of the encoder",
+  "score": 0.5294117647058824,
+  "ok": true
+ },
+ {
+  "id": "INC041",
+  "root": "metal powder generated by friction between the wire and guide tube had accumulated inside the welding wire feeder, clogging the wire feed",
+  "score": 0.45962732919254656,
+  "ok": true
+ },
+ {
+  "id": "INC042",
+  "root": "Overlooking the regular roller replacement timing",
+  "score": 0.8333333333333334,
+  "ok": true
+ },
+ {
+  "id": "INC043",
+  "root": "Combination of motor aging and seizure due to overload",
+  "score": 0.5757575757575758,
+  "ok": true
+ },
+ {
+  "id": "INC044",
+  "root": "",
+  "score": 0.0,
+  "ok": false
+ },
+ {
+  "id": "INC045",
+  "root": "The roller unexpectedly operating without power being shut off during wire replacement",
+  "score": 0.4077669902912621,
+  "ok": true
+ },
+ {
+  "id": "INC046",
+  "root": "combination of control board aging and the influence of electrical noise",
+  "score": 0.5681818181818182,
+  "ok": true
+ },
+ {
+  "id": "INC047",
+  "root": "Insufficient regular inspection of tension adjustment",
+  "score": 0.6105263157894737,
+  "ok": true
+ },
+ {
+  "id": "INC048",
+  "root": "combination of improper wire reel setup and poor wire quality",
+  "score": 0.547945205479452,
+  "ok": true
+ },
+ {
+  "id": "INC049",
+  "root": "Performing live work without shutting off power during maintenance",
+  "score": 0.34146341463414637,
+  "ok": true
+ },
+ {
+  "id": "INC050",
+  "root": "aging deterioration of the cooling fan",
+  "score": 0.5365853658536586,
+  "ok": true
+ },
+ {
+  "id": "INC051",
+  "root": "dust adhering to the sensor lens",
+  "score": 0.3728813559322034,
+  "ok": true
+ },
+ {
+  "id": "INC052",
+  "root": "aging deterioration of the sensor",
+  "score": 0.5,
+  "ok": true
+ },
+ {
+  "id": "INC053",
+  "root": "Carelessly reaching out during work. Insufficient safety awareness and non-compliance with work procedures",
+  "score": 0.49206349206349204,
+  "ok": true
+ },
+ {
+  "id": "INC054",
+  "root": "aging deterioration of the sensor",
+  "score": 0.5,
+  "ok": true
+ },
+ {
+  "id": "INC055",
+  "root": "sensor contamination",
+  "score": 0.35294117647058826,
+  "ok": true
+ },
+ {
+  "id": "INC056",
+  "root": "aging deterioration of the sensor",
+  "score": 0.4772727272727273,
+  "ok": true
+ },
+ {
+  "id": "INC057",
+  "root": "aging deterioration of the sensor",
+  "score": 0.4675324675324675,
+  "ok": true
+ },
+ {
+  "id": "INC058",
+  "root": "Carelessly touching the button during work. Insufficient safety awareness and non-compliance with work procedures",
+  "score": 0.4696969696969697,
+  "ok": true
+ },
+ {
+  "id": "INC059",
+  "root": "Sensor contamination",
+  "score": 0.34285714285714286,
+  "ok": true
+ },
+ {
+  "id": "INC060",
+  "root": "aging deterioration of the sensor",
+  "score": 0.4782608695652174,
+  "ok": true
+ },
+ {
+  "id": "INC061",
+  "root": "motor's internal bearing had overheated and seized",
+  "score": 0.34146341463414637,
+  "ok": true
+ },
+ {
+  "id": "INC062",
+  "root": "excessive product supply from the previous process and reduced conveying capacity due to a slipping conveyor belt",
+  "score": 0.6099290780141844,
+  "ok": true
+ },
+ {
+  "id": "INC063",
+  "root": "insufficient bearing lubrication and overlooking the regular replacement timing",
+  "score": 0.6415094339622641,
+  "ok": true
+ },
+ {
+  "id": "INC064",
+  "root": "insulation failure due to moisture ingress into the control panel",
+  "score": 0.6896551724137931,
+  "ok": true
+ },
+ {
+  "id": "INC065",
+  "root": "Insufficient motor cooling and load due to long continuous operation",
+  "score": 1.0,
+  "ok": true
+ },
+ {
+  "id": "INC066",
+  "root": "Combination of motor aging and seizure due to overload",
+  "score": 0.5757575757575758,
+  "ok": true
+ },
+ {
+  "id": "INC067",
+  "root": "aging deterioration of the cooling fan",
+  "score": 0.5365853658536586,
+  "ok": true
+ },
+ {
+  "id": "INC068",
+  "root": "motor aging and load due to long continuous operation",
+  "score": 0.8148148148148148,
+  "ok": true
+ },
+ {
+  "id": "INC069",
+  "root": "Insufficient motor cooling and increased intake resistance due to filter clogging",
+  "score": 1.0,
+  "ok": true
+ },
+ {
+  "id": "INC070",
+  "root": "motor aging and insufficient regular maintenance",
+  "score": 0.5272727272727272,
+  "ok": true
+ },
+ {
+  "id": "INC071",
+  "root": "power supply unit aging and the influence of overvoltage",
+  "score": 0.6,
+  "ok": true
+ },
+ {
+  "id": "INC072",
+  "root": "CPU board aging and the influence of electrical noise",
+  "score": 0.704225352112676,
+  "ok": true
+ },
+ {
+  "id": "INC073",
+  "root": "communication module aging and the influence of network failure",
+  "score": 0.6,
+  "ok": true
+ },
+ {
+  "id": "INC074",
+  "root": "combination of I/O board aging and the influence of external surge voltage",
+  "score": 0.6595744680851063,
+  "ok": true
+ },
+ {
+  "id": "INC075",
+  "root": "power supply unit aging and the influence of overcurrent",
+  "score": 0.6,
+  "ok": true
+ },
+ {
+  "id": "INC076",
+  "root": "servo amplifier aging and the influence of motor overload",
+  "score": 0.6301369863013698,
+  "ok": true
+ },
+ {
+  "id": "INC077",
+  "root": "PLC aging and the influence of momentary power interruption",
+  "score": 0.8181818181818182,
+  "ok": true
+ },
+ {
+  "id": "INC078",
+  "root": "image processing board aging and the influence of heat",
+  "score": 0.5688073394495413,
+  "ok": true
+ },
+ {
+  "id": "INC079",
+  "root": "combination of control panel aging and the influence of vibration",
+  "score": 0.5294117647058824,
+  "ok": true
+ },
+ {
+  "id": "INC080",
+  "root": "inverter aging and the influence of overload",
+  "score": 0.631578947368421,
+  "ok": true
+ },
+ {
+  "id": "INC081",
+  "root": "hydraulic pump aging and wear due to hydraulic oil deterioration",
+  "score": 0.7415730337078652,
+  "ok": true
+ },
+ {
+  "id": "INC082",
+  "root": "aging deterioration of the seal",
+  "score": 0.4634146341463415,
+  "ok": true
+ },
+ {
+  "id": "INC083",
+  "root": "combination of hydraulic oil contamination and insufficient regular valve maintenance",
+  "score": 0.5471698113207547,
+  "ok": true
+ },
+ {
+  "id": "INC084",
+  "root": "hydraulic hose aging and fatigue due to high pressure",
+  "score": 0.6538461538461539,
+  "ok": true
+ },
+ {
+  "id": "INC085",
+  "root": "overlooking the filter replacement timing",
+  "score": 0.9295774647887324,
+  "ok": true
+ },
+ {
+  "id": "INC086",
+  "root": "weld aging and fatigue due to vibration",
+  "score": 0.7407407407407407,
+  "ok": true
+ },
+ {
+  "id": "INC087",
+  "root": "aging deterioration of the cooler",
+  "score": 0.48,
+  "ok": true
+ },
+ {
+  "id": "INC088",
+  "root": "sludge was clogged inside the hydraulic piping, impeding hydraulic oil flow. This caused hydraulic pressure to drop, making press operation unstable",
+  "score": 0.3125,
+  "ok": true
+ },
+ {
+  "id": "INC089",
+  "root": "aging deterioration of the hydraulic gauge",
+  "score": 0.5777777777777777,
+  "ok": true
+ },
+ {
+  "id": "INC090",
+  "root": "aging deterioration of the relief valve",
+  "score": 0.5416666666666666,
+  "ok": true
+ },
+ {
+  "id": "INC091",
+  "root": "compressor aging and insufficient regular maintenance",
+  "score": 0.7435897435897436,
+  "ok": true
+ },
+ {
+  "id": "INC092",
+  "root": "a combination of fan motor aging and insufficient regular maintenance",
+  "score": 0.6444444444444445,
+  "ok": true
+ },
+ {
+  "id": "INC093",
+  "root": "pump aging and insufficient regular maintenance",
+  "score": 0.8055555555555556,
+  "ok": true
+ },
+ {
+  "id": "INC094",
+  "root": "heat exchanger cleaning neglect and cooling water quality deterioration",
+  "score": 0.6526315789473685,
+  "ok": true
+ },
+ {
+  "id": "INC095",
+  "root": "piping aging and insufficient regular inspection",
+  "score": 0.7777777777777778,
+  "ok": true
+ },
+ {
+  "id": "INC096",
+  "root": "overlooking the filter replacement timing",
+  "score": 0.9295774647887324,
+  "ok": true
+ },
+ {
+  "id": "INC097",
+  "root": "radiator cleaning neglect",
+  "score": 0.46511627906976744,
+  "ok": true
+ },
+ {
+  "id": "INC098",
+  "root": "combination of fan aging and insufficient regular maintenance",
+  "score": 0.6904761904761905,
+  "ok": true
+ },
+ {
+  "id": "INC099",
+  "root": "refrigerant piping aging and insufficient regular inspection",
+  "score": 0.6746987951807228,
+  "ok": true
+ },
+ {
+  "id": "INC100",
+  "root": "combination of control panel aging and the influence of electrical noise",
+  "score": 0.5681818181818182,
+  "ok": true
+ }
+]

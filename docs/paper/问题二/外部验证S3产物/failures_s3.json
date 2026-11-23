@@ -1,0 +1,357 @@
+{
+ "MaintNet": [
+  {
+   "id": "MN189",
+   "symptom_soft": 0.051,
+   "measures_f1": 0.0,
+   "text": "START ASSIST.\nSTARTED A/C USING NORMAL PROCEDURES.",
+   "gold": {
+    "symptom": "START ASSIST.",
+    "measures": [
+     "STARTED A/C USING NORMAL PROCEDURES."
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "A/C not cooling after 15 minutes",
+    "root_cause": "",
+    "measures": [
+     "Check refrigerant level",
+     "Inspect expansion valve for blockage"
+    ]
+   }
+  },
+  {
+   "id": "MN116",
+   "symptom_soft": 0.091,
+   "measures_f1": 0.0,
+   "text": "REMOVE ENGINE TO FACILITATE FIREWALL REPAIR.\nREMOVED ENGINE TO FACILITATE REPAIR BY ODEGAARD WINGS.",
+   "gold": {
+    "symptom": "REMOVE ENGINE TO FACILITATE FIREWALL REPAIR.",
+    "measures": [
+     "REMOVED ENGINE TO FACILITATE REPAIR BY ODEGAARD WINGS."
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "Engine vibration detected during pre-flight check",
+    "root_cause": "",
+    "measures": [
+     "Inspect engine mountings",
+     "Balance propeller"
+    ]
+   }
+  },
+  {
+   "id": "MN293",
+   "symptom_soft": 0.3,
+   "measures_f1": 0.0,
+   "text": "CREW REQUESTED START ASSIST.\nSTARTED ENGINE FOR CREW.",
+   "gold": {
+    "symptom": "CREW REQUESTED START ASSIST.",
+    "measures": [
+     "STARTED ENGINE FOR CREW."
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "STARTED ENGINE FOR CREW",
+    "root_cause": "",
+    "measures": [
+     "Check fuel level",
+     "Inspect spark plugs"
+    ]
+   }
+  },
+  {
+   "id": "MN014",
+   "symptom_soft": 0.381,
+   "measures_f1": 0.0,
+   "text": "DURING PREFLIGHT, WHEN ENGINE COVER WAS REMOVED, OIL OBSERVE\nINSPECTED, FOUND EVIDENCE OF ROCKER COVER GASKETS LEAKI",
+   "gold": {
+    "symptom": "DURING PREFLIGHT, WHEN ENGINE COVER WAS REMOVED, OIL OBSERVE",
+    "measures": [
+     "INSPECTED, FOUND EVIDENCE OF ROCKER COVER GASKETS LEAKI"
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "OIL INSPECTED, FOUND EVIDENCE OF ROCKER COVER GASKETS LEAKING",
+    "root_cause": "",
+    "measures": [
+     "REPLACE GASKETS",
+     "INSPECT AND REPAIR SEAL SURFACES"
+    ]
+   }
+  },
+  {
+   "id": "MN249",
+   "symptom_soft": 0.421,
+   "measures_f1": 0.0,
+   "text": "IDLE MIXTURE NEEDS ADJUSTMENT.\nA/C WAS GROUND RAN BY PILOT, IDLE MIXTURE & SPEED NOW C",
+   "gold": {
+    "symptom": "IDLE MIXTURE NEEDS ADJUSTMENT.",
+    "measures": [
+     "A/C WAS GROUND RAN BY PILOT, IDLE MIXTURE & SPEED NOW C"
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "A/C WAS GROUND RAN BY PILOT, IDLE MIXTURE & SPEED NOW COARSE",
+    "root_cause": "",
+    "measures": [
+     "ADJUST IDLE MIXTURE VALVE",
+     "INSPECT AND CLEAN THROTTLE BODY"
+    ]
+   }
+  }
+ ],
+ "Fujitsu": [
+  {
+   "id": "INC028",
+   "symptom_soft": 0.274,
+   "measures_f1": 0.0,
+   "text": "Welding torch gas lens damaged, shielding gas leaked.\nDuring welding of product B on welding robot system #1, Operator HH noticed that the weld bead quality had decreased and stopped the machine. Upon checking, it was found that the welding torch gas lens was damaged, and shielding gas was leaking i",
+   "gold": {
+    "symptom": "Welding torch gas lens damaged, shielding gas leaked.",
+    "measures": [
+     "Emergency stop the robot system.",
+     "Identify the damaged gas lens and begin replacement work.",
+     "Check shielding gas ejection condition.",
+     "Report to relevant personnel and superiors.",
+     "After replacement, confirm quality with test welding and resume operation.",
+     "Add \\\"presence of damage\\\" and \\\"mounting condition\\\" to the gas lens's regular inspection items.",
+     "Consider installing a protective cover for the welding torch to strengthen protection against impact.",
+     "Consider introducing a sensor to monitor shielding gas flow rate in real-time.",
+     "Secure spare gas lens stock to enable quick replacement."
+    ],
+    "root_cause": "'- Damage to gas lens (due to impact); - Insufficient gas lens check during regular inspection; - Insufficient welding torch protection"
+   },
+   "pred": {
+    "symptom": "weld bead quality had decreased",
+    "root_cause": "",
+    "measures": [
+     "Replace damaged gas lens",
+     "Check torch alignment"
+    ]
+   }
+  },
+  {
+   "id": "INC036",
+   "symptom_soft": 0.282,
+   "measures_f1": 0.0,
+   "text": "Welding quality decreased due to welding robot arm posture control error.\nDuring welding of product B on welding robot system #1, Inspector OO noticed that the weld bead shape was uneven and stopped the machine. Upon checking, it was found that an error occurred in the robot arm's posture control, p",
+   "gold": {
+    "symptom": "Welding quality decreased due to welding robot arm posture control error.",
+    "measures": [
+     "Emergency stop the robot system and isolate the defective lot.",
+     "Modify the control system software and restart.",
+     "Perform test welding with the modified program and confirm quality.",
+     "Share status with relevant departments (Production Control, Quality Assurance, Engineering Department).",
+     "Strictly enforce control system software change management procedures and mandate double-checking and test welding after changes.",
+     "Record software change history in detail and clarify change content and approvers.",
+     "Consider introducing a sensor to monitor robot posture in real-time.",
+     "Thoroughly implement regular backup and version management of the control system."
+    ],
+    "root_cause": "'- Control system software bug; - Insufficient operation check after program modification; - Inadequate software change management process"
+   },
+   "pred": {
+    "symptom": "Weld bead shape was uneven",
+    "root_cause": "",
+    "measures": [
+     "Update robot control software to fixed version",
+     "Calibrate robot arm posture sensors"
+    ]
+   }
+  },
+  {
+   "id": "INC094",
+   "symptom_soft": 0.29,
+   "measures_f1": 0.0,
+   "text": "Processing D line cooling device malfunction, equipment overheated.\nDuring operation of the cooling device for heat treatment furnace #4 in processing D line, cooling capacity suddenly decreased, and furnace internal temperature abnormally rose. Operator LLLL confirmed that the cooling device's heat",
+   "gold": {
+    "symptom": "Processing D line cooling device malfunction, equipment overheated.",
+    "measures": [
+     "Emergency stop processing D line and shut off power.",
+     "Identify the clogged heat exchanger and begin cleaning work.",
+     "Cool the furnace internal temperature to the specified value.",
+     "Report to relevant personnel and superiors.",
+     "After cleaning, confirm cooling function with a test run and resume operation.",
+     "Clarify regular cooling device cleaning cycle and state it in SOPs.",
+     "Thoroughly implement cooling water quality control to suppress clogging.",
+     "Consider introducing a system to monitor furnace internal temperature in real-time and alert in case of abnormality.",
+     "Secure spare heat exchanger stock to enable quick replacement."
+    ],
+    "root_cause": "'- Cooling device heat exchanger clogging; - Insufficient cleaning; - Cooling water quality deterioration"
+   },
+   "pred": {
+    "symptom": "cooling device's heat exchanger was clogged, and cooling efficiency had decreased",
+    "root_cause": "",
+    "measures": [
+     "Clean the heat exchanger thoroughly",
+     "Replace cooling water with deionized water"
+    ]
+   }
+  },
+  {
+   "id": "INC099",
+   "symptom_soft": 0.293,
+   "measures_f1": 0.0,
+   "text": "Processing I line cooling device malfunction, equipment overheated.\nDuring operation of the cooling device for washing machine #9 in processing I line, cooling capacity suddenly decreased, and washing fluid temperature rose. Operator QQQQ confirmed that refrigerant leakage occurred from the cooling ",
+   "gold": {
+    "symptom": "Processing I line cooling device malfunction, equipment overheated.",
+    "measures": [
+     "Emergency stop processing I line and shut off power.",
+     "Identify the refrigerant leakage point and begin repair work.",
+     "Replenish refrigerant and cool the washing fluid temperature to the specified value.",
+     "Report to relevant personnel and superiors.",
+     "After repair, confirm cooling function with a test run and resume operation.",
+     "Add \\\"presence of refrigerant leakage\\\" and \\\"deterioration condition of piping\\\" to the cooling device's regular inspection items and clarify replacement criteria.",
+     "Consider introducing a system to monitor washing fluid temperature in real-time and alert in case of abnormality.",
+     "Secure spare refrigerant piping stock to enable quick replacement.",
+     "Consider introducing a refrigerant leakage detection system."
+    ],
+    "root_cause": "'- Cooling device refrigerant leakage; - Refrigerant piping deterioration (aging deterioration); - Insufficient regular inspection"
+   },
+   "pred": {
+    "symptom": "cooling capacity suddenly decreased, and washing fluid temperature rose",
+    "root_cause": "",
+    "measures": [
+     "refill refrigerant to normal level",
+     "replace aged refrigerant piping"
+    ]
+   }
+  },
+  {
+   "id": "INC091",
+   "symptom_soft": 0.333,
+   "measures_f1": 0.0,
+   "text": "Processing A line cooling device malfunction, equipment overheated.\nDuring operation of the cooling device for hydraulic press #3 in processing A line, cooling capacity suddenly decreased, and hydraulic oil temperature rose. Operator IIII confirmed that the cooling device's compressor was malfunctio",
+   "gold": {
+    "symptom": "Processing A line cooling device malfunction, equipment overheated.",
+    "measures": [
+     "Emergency stop processing A line and shut off power.",
+     "Identify the malfunctioning compressor and begin replacement work.",
+     "Cool the oil temperature to the specified value.",
+     "Report to relevant personnel and superiors.",
+     "After replacement, confirm cooling function with a test run and resume operation.",
+     "Clarify regular cooling device maintenance cycle and state it in SOPs.",
+     "Consider introducing a system to monitor oil temperature in real-time and alert in case of abnormality.",
+     "Secure spare compressor stock to enable quick replacement.",
+     "Increase cleaning frequency of the cooling device."
+    ],
+    "root_cause": "'- Cooling device compressor malfunction (aging deterioration); - Insufficient regular maintenance; - Absence of oil temperature monitoring system"
+   },
+   "pred": {
+    "symptom": "cooling device's cooling capacity suddenly decreased, and hydraulic oil temperature rose",
+    "root_cause": "",
+    "measures": [
+     "replace compressor",
+     "refill refrigerant"
+    ]
+   }
+  }
+ ],
+ "Elevator": [
+  {
+   "id": "43b4d2f29be1",
+   "symptom_soft": 0.0,
+   "measures_f1": null,
+   "text": "得去看了吗？是坏还是线路短路",
+   "gold": {
+    "symptom": "得去看了吗？是坏还是线路短路",
+    "measures": [],
+    "root_cause": "线路老化/电气"
+   },
+   "pred": {
+    "symptom": "设备启动后立即跳闸",
+    "root_cause": "",
+    "measures": [
+     "检查电源线接头",
+     "更换熔断器"
+    ]
+   }
+  },
+  {
+   "id": "67b714c7ac35",
+   "symptom_soft": 0.0,
+   "measures_f1": 0.0,
+   "text": "麻烦检修",
+   "gold": {
+    "symptom": "麻烦检修",
+    "measures": [
+     "auto"
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "设备运行 3 小时后压力表读数异常，实测 0.2MPa（正常 0.45±0.05MPa）",
+    "root_cause": "",
+    "measures": [
+     "检查管路连接处有无泄漏",
+     "更换压力表"
+    ]
+   }
+  },
+  {
+   "id": "8a5d311c0212",
+   "symptom_soft": 0.0,
+   "measures_f1": 0.0,
+   "text": "7栋2单元货梯空调漏水，麻烦您检查。",
+   "gold": {
+    "symptom": "7栋2单元货梯空调漏水，麻烦您检查。",
+    "measures": [
+     "[回复] 哪来的空调，估计是哪里漏水了 [回复] 检查了一轮，恢复运行。"
+    ],
+    "root_cause": "进水受潮"
+   },
+   "pred": {
+    "symptom": "",
+    "root_cause": "",
+    "measures": []
+   }
+  },
+  {
+   "id": "cb2b024614a0",
+   "symptom_soft": 0.0,
+   "measures_f1": 0.0,
+   "text": "> 这个得空过来换了吗？ 好了",
+   "gold": {
+    "symptom": "> 这个得空过来换了吗？ 好了",
+    "measures": [
+     "[回复] 好了"
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "吸盘吸力不足，无法正常吸取物料",
+    "root_cause": "",
+    "measures": [
+     "检查吸盘及气路是否通畅",
+     "更换吸盘后仍不足则更换真空泵"
+    ]
+   }
+  },
+  {
+   "id": "55ddd251c9a4",
+   "symptom_soft": 0.033,
+   "measures_f1": 0.0,
+   "text": "> 5:0 刚说完你接着发个外呼板亮灿灿的视频，我刚想说加鸡腿给你，接着你补的是28楼的弄好了，我的心啊………",
+   "gold": {
+    "symptom": "> 5:0 刚说完你接着发个外呼板亮灿灿的视频，我刚想说加鸡腿给你，接着你补的是28楼的弄好了，我的心啊………",
+    "measures": [
+     "刚说完你接着发个外呼板亮灿灿的视频，我刚想说加鸡腿给你，接着你补的是28楼的弄好了，我的心啊………"
+    ],
+    "root_cause": ""
+   },
+   "pred": {
+    "symptom": "板面有明显裂纹",
+    "root_cause": "",
+    "measures": [
+     "更换新基材",
+     "重新压制"
+    ]
+   }
+  }
+ ]
+}

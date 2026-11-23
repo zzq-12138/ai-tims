@@ -1,0 +1,28 @@
+{
+  "added_calc_multi": 70,
+  "added_calc_single": 30,
+  "calc_total_after_expand": 100,
+  "by_template": {
+    "T1": 20,
+    "T2": 20,
+    "T3": 20,
+    "T4": 6,
+    "T5": 4,
+    "T6": 30
+  },
+  "devices": [
+    "AOI光学检测机",
+    "MES终端",
+    "SPI锡膏检测机",
+    "X-Ray检测机",
+    "刻蚀机",
+    "回流焊",
+    "层压机",
+    "波峰焊",
+    "涂覆机",
+    "贴片机"
+  ],
+  "gold_rule": "全部由代码计算，数值口径 ±0.06 绝对容差；不调用任何模型",
+  "source": "参数池沿用 scripts/kb/data/*.py 的设备/部件/指标口径；数值为合成测量值",
+  "out": "scripts/ai_layer/data/route_fix_set.tsv"
+}

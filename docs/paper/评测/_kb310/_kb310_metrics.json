@@ -1,0 +1,49 @@
+{
+ "kb": "310",
+ "retrieval": {
+  "vec5": {
+   "hit@1": 85.0,
+   "hit@3": 95.0,
+   "recall@5": 96.5,
+   "mrr": 0.902,
+   "avg_ms": 230.2,
+   "p95_ms": 292.9
+  },
+  "vec10": {
+   "hit@1": 85.0,
+   "hit@3": 95.0,
+   "recall@5": 96.5,
+   "mrr": 0.902,
+   "avg_ms": 227.3,
+   "p95_ms": 279.3
+  }
+ },
+ "gate_b0": {
+  "T": 0.75,
+  "P_push": 74,
+  "P_push_rate": 0.74,
+  "P_correct": 70,
+  "P_err": 4,
+  "push_acc": 0.9459,
+  "N_push": 51,
+  "N_push_rate": 0.51,
+  "N_err": 36,
+  "N_err_rate": 0.7059,
+  "LG_n": 100,
+  "LG_push": 40,
+  "C_rate": 0.45,
+  "mix_push": 165,
+  "mix_err": 80,
+  "mix_err_rate": 0.4848
+ },
+ "gate_b0_valid_neg": {
+  "excluded_neg": 13,
+  "N_valid": 87,
+  "N_push": 43,
+  "N_err": 28,
+  "N_err_rate": 0.6512,
+  "mix_push": 157,
+  "mix_err": 72,
+  "mix_err_rate": 0.4586
+ }
+}

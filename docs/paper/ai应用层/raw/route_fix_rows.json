@@ -1,0 +1,2602 @@
+[
+  {
+    "id": "C034",
+    "qh": "10b08d337454",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.42,
+      "prompt_tokens": 123,
+      "completion_tokens": 187,
+      "reasoning_tokens": 86,
+      "answer": "**结论：胶量下降 16.4 个百分点，现测值为初始值的 83.6%；已低于 85% 更换阈值，需更换喷雾阀。**\n\n依据：下降 = (1520−1270)/1520 ×100% = 16.447% ≈ 16.4%；现测占比 = 1270/1520 ×100% = 83.553% ≈ 83.6% < 85%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.35,
+      "prompt_tokens": 117,
+      "completion_tokens": 72,
+      "reasoning_tokens": 0,
+      "answer": "结论：胶量下降了17.1个百分点，现测值是初始值的83.9%。\n\n关键依据：初始胶量1520，现测1270，计算公式为（1520-1270）/1520*100% = 17.1%，1270/1520*100% = 83.9%。"
+    }
+  },
+  {
+    "id": "C031",
+    "qh": "a6f9dffcddca",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.73,
+      "prompt_tokens": 127,
+      "completion_tokens": 224,
+      "reasoning_tokens": 142,
+      "answer": "**结论：需更换。**\n\n- 亮度下降：300 ÷ 1760 ≈ **17.0 个百分点**\n- 现测/初始：1460 ÷ 1760 ≈ **83.0%**\n\n依据：该模组低于初始值 85% 即需更换，现 83.0% < 85%，已触发更换条件。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.89,
+      "prompt_tokens": 121,
+      "completion_tokens": 81,
+      "reasoning_tokens": 0,
+      "answer": "结论：亮度下降了17.6个百分点，现测值是初始值的82.2%。\n\n关键依据：初始亮度1760，现测1460，计算公式为（1760-1460）/1760*100% = 17.6%。现测值/初始值*100% = 1460/1760*100% = 82.2%。"
+    }
+  },
+  {
+    "id": "C033",
+    "qh": "c4a3d639c3f7",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.54,
+      "prompt_tokens": 122,
+      "completion_tokens": 332,
+      "reasoning_tokens": 233,
+      "answer": "**结论：下降18.9个百分点；现测值为初始值的81.1%，低于90%，判定为衰减。**\n\n- 下降幅度：(950−770)÷950×100%≈18.9个百分点\n- 现测占比：770÷950×100%≈81.1%\n- 依据：低于额定值90%即判衰减，81.1%<90%，故射频电源已衰减。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.48,
+      "prompt_tokens": 116,
+      "completion_tokens": 72,
+      "reasoning_tokens": 0,
+      "answer": "结论：输出功率下降了18.4个百分点，现测值是初始值的81.1%。\n\n关键依据：初始输出功率950，现测770，下降百分比=(950-770)/950*100%=18.4%，现测值百分比=770/950*100%=81.1%。"
+    }
+  },
+  {
+    "id": "C035",
+    "qh": "e1fa8f906ea9",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.29,
+      "prompt_tokens": 130,
+      "completion_tokens": 238,
+      "reasoning_tokens": 126,
+      "answer": "**结论**：氮气流量下降 22.5 个百分点；现测值为初始值的 77.5%。\n\n**计算**：\n- 下降：(890−690)÷890×100% ≈ 22.5%\n- 现测占比：690÷890×100% ≈ 77.5%\n\n**依据**：低于标称值 90% 判供气不足，77.5% < 90%，**判定为供气不足**。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.9,
+      "prompt_tokens": 124,
+      "completion_tokens": 85,
+      "reasoning_tokens": 0,
+      "answer": "结论：氮气流量下降了21.9个百分点，现测值是初始值的77.6%。\n\n关键依据：初始氮气流量890，现测690，计算公式为（890-690）/890*100% = 21.9%。现测值/初始值*100% = 690/890*100% = 77.6%。"
+    }
+  },
+  {
+    "id": "C036",
+    "qh": "b7f307ba9823",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.34,
+      "prompt_tokens": 129,
+      "completion_tokens": 309,
+      "reasoning_tokens": 186,
+      "answer": "**结论：下降15.5%，现测值为初始值的84.5%；低于85%阈值，判为泵衰减。**\n\n依据：\n- 下降幅度 =（2190−1850）÷2190 = 340÷2190 ≈ 15.5%\n- 现测占比 = 1850÷2190 ≈ 84.5%\n- 按指标：低于标称值85%即判泵衰减，84.5% < 85%，故判定泵已衰减，建议检修或更换。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.45,
+      "prompt_tokens": 123,
+      "completion_tokens": 52,
+      "reasoning_tokens": 0,
+      "answer": "结论：喷涂量下降了15.8个百分点，现测值是初始值的84.5%。\n\n关键依据：初始喷涂量2190，现测值1850，计算得出下降百分比和现测值占初始值的百分比。"
+    }
+  },
+  {
+    "id": "C032",
+    "qh": "1aacd7b596a6",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 10.04,
+      "prompt_tokens": 125,
+      "completion_tokens": 326,
+      "reasoning_tokens": 222,
+      "answer": "**结论**：亮度下降 14.0 个百分点；现测值为初始值的 86.0%，尚未低于 85% 阈值，暂不需更换。\n\n**依据**：\n- 下降幅度：(2290−1970)÷2290×100% ≈ 14.0%\n- 现测占比：1970÷2290×100% ≈ 86.0%（＞85%，未达更换标准）"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.14,
+      "prompt_tokens": 119,
+      "completion_tokens": 74,
+      "reasoning_tokens": 0,
+      "answer": "结论：亮度下降了13.3个百分点，现测值是初始值的86.1%。\n\n关键依据：初始亮度2290，现测1970，计算公式为（2290-1970）/2290*100%≈13.3%，1970/2290≈86.1%。"
+    }
+  },
+  {
+    "id": "C037",
+    "qh": "ab8f5be7cb59",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.12,
+      "prompt_tokens": 124,
+      "completion_tokens": 236,
+      "reasoning_tokens": 146,
+      "answer": "**结论：管电流下降 23.6 个百分点，现测值为初始值的 76.4%，低于额定值 90%，已判射线管老化。**\n\n依据：下降幅度 =（2030−1550）÷2030 ≈ 23.6%；现测占比 = 1550÷2030 ≈ 76.4%，低于 90% 老化判定阈值。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.77,
+      "prompt_tokens": 118,
+      "completion_tokens": 76,
+      "reasoning_tokens": 0,
+      "answer": "结论：管电流下降了21.9个百分点，现测值是初始值的76.9%。\n\n关键依据：管电流下降百分比 = ((2030 - 1550) / 2030) * 100% = 21.9%，现测值百分比 = 1550 / 2030 * 100% = 76.9%。"
+    }
+  },
+  {
+    "id": "C039",
+    "qh": "deee833f8b3a",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.07,
+      "prompt_tokens": 127,
+      "completion_tokens": 171,
+      "reasoning_tokens": 83,
+      "answer": "**结论：亮度下降21.6个百分点，现测值为初始值的78.4%，低于85%阈值，需更换光源模组。**\n\n依据：下降 =（1250−980）/1250 = 21.6%；现测占比 = 980/1250 = 78.4%。资料规定低于初始值85%即需更换，78.4%已触发更换条件。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.94,
+      "prompt_tokens": 121,
+      "completion_tokens": 75,
+      "reasoning_tokens": 0,
+      "answer": "结论：亮度下降了21.6个百分点，现测值是初始值的79.2%。\n\n关键依据：初始亮度1250，现测980，计算公式为（1250-980）/1250*100%=21.6%，现测值/初始值*100%=980/1250*100%=79.2%。"
+    }
+  },
+  {
+    "id": "C041",
+    "qh": "8b7cdcd97e68",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.54,
+      "prompt_tokens": 122,
+      "completion_tokens": 179,
+      "reasoning_tokens": 82,
+      "answer": "**结论：下降12.5个百分点；现测值为初始值的87.5%，已低于90%判定线，判为衰减。**\n\n依据：下降幅度 =（960−840）÷960×100% = 12.5%；比值 = 840÷960×100% = 87.5%。指标规定低于额定值90%即判衰减，87.5%＜90%，触发衰减判定。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.5,
+      "prompt_tokens": 116,
+      "completion_tokens": 68,
+      "reasoning_tokens": 0,
+      "answer": "结论：输出功率下降了12.5个百分点，现测值是初始值的87.5%。\n\n关键依据：初始输出功率960，现测840，下降百分比=(960-840)/960=12.5%。现测值百分比=840/960=87.5%。"
+    }
+  },
+  {
+    "id": "C040",
+    "qh": "5e794d6e4abb",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.94,
+      "prompt_tokens": 125,
+      "completion_tokens": 222,
+      "reasoning_tokens": 130,
+      "answer": "**结论：已需更换。** 亮度下降了16.6个百分点，现测值为初始值的83.4%，低于85%更换阈值。\n\n依据：下降率 = (3440−2870)÷3440 ≈ 16.6%；比率 = 2870÷3440 ≈ 83.4%。资料规定低于初始值85%即需更换，故判定更换。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.88,
+      "prompt_tokens": 119,
+      "completion_tokens": 88,
+      "reasoning_tokens": 0,
+      "answer": "结论：亮度下降了17.2个百分点，现测值是初始值的83.8%。\n\n关键依据：初始亮度3440，现测2870，计算公式为（3440-2870）/3440*100% = 17.2%。现测值/初始值*100% = 2870/3440*100% = 83.8%。"
+    }
+  },
+  {
+    "id": "C042",
+    "qh": "036261139724",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.63,
+      "prompt_tokens": 123,
+      "completion_tokens": 322,
+      "reasoning_tokens": 222,
+      "answer": "**结论：**\n- 胶量下降 **20.9 个百分点**\n- 现测值为初始值的 **79.1%**\n\n**计算：** (1290−1020)÷1290×100%=20.9%；1020÷1290×100%=79.1%。\n\n**提示：** 现测值 79.1% 已低于标称值 85% 的更换阈值，建议更换喷雾阀。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.87,
+      "prompt_tokens": 117,
+      "completion_tokens": 73,
+      "reasoning_tokens": 0,
+      "answer": "结论：胶量下降了21.4个百分点，现测值是初始值的79.1%。\n\n关键依据：初始胶量1290，现测1020，计算公式为（1290-1020）/1290*100%≈21.4%。现测值/初始值*100%≈79.1%。"
+    }
+  },
+  {
+    "id": "C043",
+    "qh": "7765e3490cbe",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.18,
+      "prompt_tokens": 130,
+      "completion_tokens": 217,
+      "reasoning_tokens": 124,
+      "answer": "结论：下降 11.7 个百分点；现测值为初始值的 88.3%，低于 90%，判定为供气不足。\n\n依据：下降幅度 =(940−830)÷940×100%≈11.7%；现测占比 =830÷940×100%≈88.3%＜90%，触发“低于标称值 90% 即判供气不足”的标准。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.42,
+      "prompt_tokens": 124,
+      "completion_tokens": 70,
+      "reasoning_tokens": 0,
+      "answer": "结论：氮气流量下降了10.6个百分点，现测值是初始值的88.7%。\n\n关键依据：初始氮气流量940，现测830，计算公式为（940-830）/940*100%=10.6%，830/940*100%=88.7%。"
+    }
+  },
+  {
+    "id": "C038",
+    "qh": "f546b692bd3f",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.01,
+      "prompt_tokens": 122,
+      "completion_tokens": 206,
+      "reasoning_tokens": 126,
+      "answer": "**结论：** 下降了 13.3 个百分点；现测值为初始值的 86.7%，低于 90% 判定阈值，加热棒已老化。\n\n**计算：**\n- 下降：(1280−1110)÷1280 = 13.3%\n- 占比：1110÷1280 ≈ 86.7%"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 16.18,
+      "prompt_tokens": 116,
+      "completion_tokens": 72,
+      "reasoning_tokens": 0,
+      "answer": "结论：加热功率下降了12.5个百分点，现测值是初始值的86.8%。\n\n关键依据：初始加热功率1280，现测1110，下降百分比=(1280-1110)/1280*100%=12.5%，现测值百分比=1110/1280*100%=86.8%。"
+    }
+  },
+  {
+    "id": "C044",
+    "qh": "944d929e900b",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.87,
+      "prompt_tokens": 130,
+      "completion_tokens": 244,
+      "reasoning_tokens": 125,
+      "answer": "**结论：喷涂量下降16.1%，现测值为初始值的83.9%，低于85%判定线，泵已衰减。**\n\n依据：\n- 下降幅度：(3350−2810)÷3350 = 540÷3350 ≈ 16.1%\n- 现值占比：2810÷3350 ≈ 83.9%\n- 判定标准：低于标称值85%即判泵衰减，83.9% < 85%，触发衰减判定。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 7.17,
+      "prompt_tokens": 124,
+      "completion_tokens": 79,
+      "reasoning_tokens": 0,
+      "answer": "结论：喷涂量下降了16.5个百分点，现测值是初始值的83.8%。\n\n关键依据：初始喷涂量3350，现测2810，下降百分比=(3350-2810)/3350*100%=16.5%，现测值百分比=2810/3350*100%=83.8%。"
+    }
+  },
+  {
+    "id": "C046",
+    "qh": "4dab060266df",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.09,
+      "prompt_tokens": 122,
+      "completion_tokens": 193,
+      "reasoning_tokens": 109,
+      "answer": "**结论：下降约 24.3 个百分点；现测值为初始值的 75.7%，低于 90% 判定阈值，已判老化。**\n\n依据：下降幅度 =（1150−870）÷1150 = 280÷1150 ≈ 24.3%；占比 = 870÷1150 ≈ 75.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.85,
+      "prompt_tokens": 116,
+      "completion_tokens": 83,
+      "reasoning_tokens": 0,
+      "answer": "结论：加热功率下降了23.9个百分点，现测值是初始值的75.6%。\n\n关键依据：初始加热功率1150，现测870，计算公式为（1150-870）/1150*100% = 23.9%。现测值/初始值*100% = 870/1150*100% = 75.6%。"
+    }
+  },
+  {
+    "id": "C045",
+    "qh": "4bf42d5f11c9",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.85,
+      "prompt_tokens": 124,
+      "completion_tokens": 216,
+      "reasoning_tokens": 115,
+      "answer": "**结论**：管电流下降 **18.0%**，现测值为初始值的 **82.0%**。\n\n**计算**：\n- 下降：(2050−1680)÷2050 = 370÷2050 ≈ 18.0%\n- 占比：1680÷2050 ≈ 82.0%\n\n82.0% 低于额定值 90%，按判定标准该射线管已判为**老化**。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.54,
+      "prompt_tokens": 118,
+      "completion_tokens": 83,
+      "reasoning_tokens": 0,
+      "answer": "结论：管电流下降了18.5个百分点，现测值是初始值的81.9%。\n\n关键依据：初始管电流2050，现测1680，计算公式为（2050-1680）/2050*100% = 18.5%。现测值/初始值*100% = 1680/2050*100% = 81.9%。"
+    }
+  },
+  {
+    "id": "C047",
+    "qh": "335d67cb16ec",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.09,
+      "prompt_tokens": 127,
+      "completion_tokens": 211,
+      "reasoning_tokens": 107,
+      "answer": "结论：亮度下降约22.0个百分点，现测值为初始值的78.0%，已低于85%阈值，需更换。\n\n依据：\n- 下降幅度：(1320−1030)÷1320×100% ≈ 22.0%\n- 现占比例：1030÷1320×100% ≈ 78.0%\n- 指标要求：低于初始值85%即需更换（78.0% < 85%）"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.82,
+      "prompt_tokens": 121,
+      "completion_tokens": 77,
+      "reasoning_tokens": 0,
+      "answer": "结论：亮度下降了21.9个百分点，现测值是初始值的77.8%。\n\n关键依据：初始亮度1320，现测1030，计算公式为（1320-1030）/1320*100% = 21.9%。现测值占初始值的比例为1030/1320*100% = 77.8%。"
+    }
+  },
+  {
+    "id": "C048",
+    "qh": "20dd6366fd32",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.95,
+      "prompt_tokens": 123,
+      "completion_tokens": 237,
+      "reasoning_tokens": 132,
+      "answer": "**结论**：亮度下降19.0个百分点，现测值为初始值的81.0%，已低于85%更换阈值，需更换环形光源。\n\n**依据**：\n- 下降幅度：(2050−1660)÷2050×100%≈19.0%\n- 现测占比：1660÷2050×100%≈81.0%\n- 指标要求：低于初始值85%即需更换，81.0%<85%"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.59,
+      "prompt_tokens": 117,
+      "completion_tokens": 74,
+      "reasoning_tokens": 0,
+      "answer": "结论：亮度下降了18.8个百分点，现测值是初始值的80.5%。\n\n关键依据：亮度下降百分比 = [(2050 - 1660) / 2050] * 100% = 18.8%，现测值百分比 = 1660 / 2050 * 100% = 80.5%。"
+    }
+  },
+  {
+    "id": "C050",
+    "qh": "7742cf0b41eb",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.99,
+      "prompt_tokens": 123,
+      "completion_tokens": 221,
+      "reasoning_tokens": 126,
+      "answer": "结论：胶量下降 20.7 个百分点，现测值为初始值的 79.3%，已低于标称值 85%，需更换喷雾阀。\n\n依据：下降百分点 =（1640−1300）/1640×100% ≈ 20.7%；现测占比 = 1300/1640×100% ≈ 79.3%。因 79.3% < 85%，触发更换条件。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.14,
+      "prompt_tokens": 117,
+      "completion_tokens": 72,
+      "reasoning_tokens": 0,
+      "answer": "结论：胶量下降了21.2个百分点，现测值是初始值的79.0%。\n\n关键依据：初始胶量1640，现测1300，计算公式为（1640-1300）/1640*100% = 21.2%，1300/1640*100% = 79.0%。"
+    }
+  },
+  {
+    "id": "C051",
+    "qh": "bc97e405e5c5",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.1,
+      "prompt_tokens": 175,
+      "completion_tokens": 254,
+      "reasoning_tokens": 158,
+      "answer": "**结论：超标 3 次，占比 33.3%。**\n\n依据（判定标准：>0.25 s 判气路或气缸问题）：\n- 超标值：0.272、0.281、0.285\n- 计算：3 ÷ 9 × 100% ≈ 33.3%\n\n建议按标准排查该 3 次对应的气路或气缸状态。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.62,
+      "prompt_tokens": 169,
+      "completion_tokens": 82,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，超标占比22.2%。\n\n关键依据：单次动作时间大于0.25s判为超标。9次测量中，0.272s、0.281s、0.285s三次超过0.25s，故超标2次。超标占比为(2/9)×100%≈22.2%。"
+    }
+  },
+  {
+    "id": "C052",
+    "qh": "17140a7cf3c2",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.48,
+      "prompt_tokens": 161,
+      "completion_tokens": 260,
+      "reasoning_tokens": 156,
+      "answer": "**结论：超标 7 次，占比 77.8%。**\n\n依据：判定标准为温差＞3℃ 即热风循环问题。9 次测量中，3.258、3.125、3.216、3.045、3.273、3.381、3.307 共 7 次＞3℃，属超标；2.588、2.554 未超标。计算：7÷9≈77.8%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.61,
+      "prompt_tokens": 155,
+      "completion_tokens": 110,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标5次，超标占比55.6%。\n\n关键依据：温差大于3℃即判热风循环问题。9次测量中，3.258、3.125、2.588、2.554、3.216、3.045、3.273、3.381、3.307均超过3℃，共9次，超标5次。超标占比为5/9≈0.5556，保留一位小数为55.6%。"
+    }
+  },
+  {
+    "id": "C049",
+    "qh": "228286067415",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.01,
+      "prompt_tokens": 121,
+      "completion_tokens": 340,
+      "reasoning_tokens": 267,
+      "answer": "**结论：**\n- 下降：(860−700)÷860 ≈ **18.6 个百分点**\n- 现测占初始：700÷860 ≈ **81.4%**\n\n**判定：** 81.4% 低于额定值 90%，依据资料判为输出功率衰减。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 7.73,
+      "prompt_tokens": 115,
+      "completion_tokens": 77,
+      "reasoning_tokens": 0,
+      "answer": "结论：输出功率下降了18.9个百分点，现测值是初始值的81.1%。\n\n关键依据：初始输出功率860，现测700，计算公式为（860-700）/860*100% = 18.9%。现测值/初始值 = 700/860*100% = 81.1%。"
+    }
+  },
+  {
+    "id": "C053",
+    "qh": "d49812527b0d",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.07,
+      "prompt_tokens": 175,
+      "completion_tokens": 290,
+      "reasoning_tokens": 174,
+      "answer": "**结论：超标 6 次，占比 66.7%。**\n\n**判定依据**：超过 0.70 倍板厚即判波峰过高。\n- 超标：0.799、0.706、0.783、0.717、0.71、0.802（共 6 次）\n- 未超标：0.698、0.672、0.692（共 3 次）\n\n计算：6 ÷ 9 ≈ 66.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.87,
+      "prompt_tokens": 169,
+      "completion_tokens": 84,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标3次，超标占比33.3%。\n\n关键依据：根据指标，超过0.70倍板厚即判波峰过高。在9次测量中，0.799、0.783、0.802三次超过0.70倍板厚，因此超标3次。超标占比为3/9=0.333，即33.3%。"
+    }
+  },
+  {
+    "id": "C054",
+    "qh": "a8643b564fc4",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.99,
+      "prompt_tokens": 168,
+      "completion_tokens": 144,
+      "reasoning_tokens": 49,
+      "answer": "**结论：超标 3 次，占比 33.3%。**\n\n依据：偏差大于 5 μm 判定为标定问题（资料标准）。9 次测量中，5.265、5.488、5.672 三次超过 5 μm，其余 6 次（4.354~4.946）均在限值内。3 ÷ 9 = 33.3%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.82,
+      "prompt_tokens": 162,
+      "completion_tokens": 55,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：偏差大于5μm即为标定问题。9次测量中，5.265、5.488、5.672三次超过5μm，其余均未超过。"
+    }
+  },
+  {
+    "id": "C056",
+    "qh": "336f3a2b0a58",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 2.73,
+      "prompt_tokens": 160,
+      "completion_tokens": 203,
+      "reasoning_tokens": 102,
+      "answer": "结论：超标 3 次，占比 33.3%。\n\n依据：偏差大于 10% 即为超标。逐项对照：10.641、10.337、10.685 三次大于 10%，其余（8.721、8.568、9.215、9.48、9.115、9.863）均在 10% 以内。超标占比 = 3/9 ≈ 33.3%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.62,
+      "prompt_tokens": 154,
+      "completion_tokens": 76,
+      "reasoning_tokens": 0,
+      "answer": "结论：这批测量中，有4次超标，占比44.4%。\n\n关键依据：照度偏差要求不超过10%，9次测量中有10.641、10.337、10.685三次偏差超过10%，8.721、8.568、9.48三次偏差超过10%，共4次超标。"
+    }
+  },
+  {
+    "id": "C055",
+    "qh": "e98d01d4dc76",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.11,
+      "prompt_tokens": 168,
+      "completion_tokens": 220,
+      "reasoning_tokens": 121,
+      "answer": "**结论：超标 5 次，占比 55.6%。**\n\n依据：位移大于 5 μm 即为夹持问题。9 次测量中超过 5 μm 的有：5.437、5.223、5.317、5.367、5.241，共 5 次；5 ÷ 9 ≈ 55.6%。夹具存在夹持问题，建议检修校准。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.69,
+      "prompt_tokens": 162,
+      "completion_tokens": 90,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标3次，占比33.3%。\n\n关键依据：位移大于5μm即为夹持问题。测量值中5.437、5.223、5.317、5.367、5.241超过5μm，共5个值超标。9次测量中，5个值超标，占比为5/9≈0.555，即33.3%。"
+    }
+  },
+  {
+    "id": "C057",
+    "qh": "5d5d89c97254",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.08,
+      "prompt_tokens": 160,
+      "completion_tokens": 200,
+      "reasoning_tokens": 117,
+      "answer": "**结论：超标 4 次，占比 44.4%。**\n\n**依据：** 偏差 >10% 即为胶阀问题。9 次测量中超标值：11.472、10.471、10.681、10.324，共 4 次。4÷9≈44.4%。建议排查胶阀状态。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.09,
+      "prompt_tokens": 154,
+      "completion_tokens": 64,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，超标占比22.2%。\n\n关键依据：偏差大于10%即为胶阀问题。9次测量中，11.472%和10.681%超过10%，共2次超标。超标占比为2/9×100%=22.2%。"
+    }
+  },
+  {
+    "id": "C059",
+    "qh": "d5373f13d673",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.19,
+      "prompt_tokens": 158,
+      "completion_tokens": 177,
+      "reasoning_tokens": 89,
+      "answer": "**结论：超标 4 次，超标占比 44.4%。**\n\n**依据：** 依据温控模块指标，偏差大于 2℃ 即为温控问题。9 次测量中大于 2℃ 的有：2.27、2.288、2.014、2.063，共 4 次。4÷9 ≈ 44.4%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.44,
+      "prompt_tokens": 152,
+      "completion_tokens": 78,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：温度偏差要求不超过2℃，9次测量中偏差大于2℃的有2.27、2.288、2.063，共3次。超标次数为3次，占比为3/9=0.3333，保留一位小数，占比为22.2%。"
+    }
+  },
+  {
+    "id": "C063",
+    "qh": "b905a529f3ee",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 2.95,
+      "prompt_tokens": 162,
+      "completion_tokens": 184,
+      "reasoning_tokens": 92,
+      "answer": "**结论：超标 3 次，占比 33.3%。**\n\n依据判定标准（温差 > 3℃ 判热风循环问题），9 次测量中超过 3℃ 的为：3.424、3.076、3.443，共 3 次；3 ÷ 9 ≈ 33.3%。提示存在热风循环异常风险，建议排查热风马达。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.13,
+      "prompt_tokens": 156,
+      "completion_tokens": 69,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：温差大于3℃即超标。9次测量中，3.424℃和3.443℃超标，共2次。超标占比为2/9≈0.222，保留一位小数，占比为22.2%。"
+    }
+  },
+  {
+    "id": "C060",
+    "qh": "e4c209dbb43e",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.21,
+      "prompt_tokens": 162,
+      "completion_tokens": 278,
+      "reasoning_tokens": 169,
+      "answer": "**超标5次，占比55.6%。**\n\n依据：偏差＞10%即超标。9次测量中，10.654、11.103、10.81、10.552、10.331共5次＞10%，超标；其余4次（9.399、9.862、8.641、9.394）未超。5÷9≈55.6%。按此指标，该喷嘴存在问题的可能性较大，建议进一步检查。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.93,
+      "prompt_tokens": 156,
+      "completion_tokens": 68,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：喷涂量偏差大于10%为喷嘴问题。9次测量中，10.654%和11.103%超过10%，共2次超标。超标占比为2/9≈0.222，即22.2%。"
+    }
+  },
+  {
+    "id": "C062",
+    "qh": "7b666d3b97a3",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 10.03,
+      "prompt_tokens": 174,
+      "completion_tokens": 269,
+      "reasoning_tokens": 147,
+      "answer": "**结论：超标 2 次，占比 22.2%。**\n\n依据：判据为单次动作时间 >0.25 s 即超标。9 次测量中 0.261 s 和 0.27 s 超过阈值，其余 7 次（0.245、0.238、0.239、0.228、0.247、0.247、0.242）均合格。2/9 ≈ 22.2%，提示可能存在气路或气缸问题，建议排查。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.34,
+      "prompt_tokens": 168,
+      "completion_tokens": 56,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：单次动作时间大于0.25s判为超标。9次测量中，0.261s和0.27s超过0.25s，共2次超标。"
+    }
+  },
+  {
+    "id": "C061",
+    "qh": "f8e62bc53636",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 9.05,
+      "prompt_tokens": 154,
+      "completion_tokens": 238,
+      "reasoning_tokens": 151,
+      "answer": "**结论：超标 6 次，超标占比 66.7%。**\n\n**依据：** 失败率 >2% 即为扫码问题。9 次测量中超过 2% 的有：2.122、2.124、2.051、2.108、2.09、2.258，共 6 次；6÷9≈66.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.96,
+      "prompt_tokens": 148,
+      "completion_tokens": 88,
+      "reasoning_tokens": 0,
+      "answer": "结论：这批9次测量中，扫码失败率超标3次，超标占比33.3%。\n\n关键依据：根据资料，扫码失败率大于2%即为扫码问题。在这9次测量中，有3次（2.122、2.124、2.258）超过了2%，因此超标3次。超标占比为3/9=0.333，即33.3%。"
+    }
+  },
+  {
+    "id": "C064",
+    "qh": "f645bd19dff0",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.14,
+      "prompt_tokens": 176,
+      "completion_tokens": 288,
+      "reasoning_tokens": 179,
+      "answer": "**结论：超标 5 次，占比 55.6%。**\n\n依据：指标要求锡波接触深度比不超过 0.70 倍板厚，超过即判波峰过高。\n\n超标值：0.737、0.749、0.706、0.703、0.791，共 5 次。\n占比：5 ÷ 9 × 100% ≈ 55.6%。\n\n建议排查波峰高度设定并调整，避免持续过高。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.38,
+      "prompt_tokens": 170,
+      "completion_tokens": 59,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标3次，超标占比33.3%。\n\n关键依据：锡波接触深度比超过0.70倍板厚即判波峰过高。在9次测量中，0.737、0.749、0.791三次超标。"
+    }
+  },
+  {
+    "id": "C066",
+    "qh": "4d75c9fec4fe",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 9.57,
+      "prompt_tokens": 168,
+      "completion_tokens": 190,
+      "reasoning_tokens": 109,
+      "answer": "**结论：超标 3 次，占比 33.3%。**\n\n**关键依据：** 位移大于 5 μm 即为夹持问题。9 次测量中超过 5 μm 的有：5.041、5.706、5.377，共 3 次；3 ÷ 9 ≈ 33.3%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 2.42,
+      "prompt_tokens": 162,
+      "completion_tokens": 50,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标3次，超标占比33.3%。\n\n关键依据：位移大于5μm即为夹持问题。测量值中，5.706、5.377、4.507三次超过5μm。"
+    }
+  },
+  {
+    "id": "C065",
+    "qh": "16fc8afc64b7",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.94,
+      "prompt_tokens": 167,
+      "completion_tokens": 255,
+      "reasoning_tokens": 162,
+      "answer": "结论：超标 5 次，占比 55.6%。\n\n依据：偏差 >5 μm 即超标。超标值为 5.712、5.239、5.530、5.596、5.369，共 5 次；其余 4.426、4.831、4.338、4.873 未超。5/9 ≈ 55.6%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.27,
+      "prompt_tokens": 161,
+      "completion_tokens": 104,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：偏差大于5μm即超标。9次测量中，5.712、5.53、5.596、5.369四次偏差大于5μm，但根据题目要求，只计算5.712、5.53、5.596三次超标。超标次数为3次，占比为3/9=33.3%，四舍五入保留一位小数为22.2%。"
+    }
+  },
+  {
+    "id": "C067",
+    "qh": "666c7ed1e40e",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.58,
+      "prompt_tokens": 158,
+      "completion_tokens": 267,
+      "reasoning_tokens": 182,
+      "answer": "**结论：超标 4 次，占比 44.4%。**\n\n**依据：** 照度偏差大于 10% 判为光源问题（超标）。9 次测量中大于 10% 的有：10.398、10.927、11、10.102，共 4 次。\n\n计算：4 ÷ 9 ≈ 44.4%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.28,
+      "prompt_tokens": 152,
+      "completion_tokens": 63,
+      "reasoning_tokens": 0,
+      "answer": "结论：这批9次测量中，照度偏差超标的次数为3次，超标占比为33.3%。\n\n关键依据：照度偏差大于10%即为光源问题。9次测量中，10.398、10.927、11三次偏差超过10%。"
+    }
+  },
+  {
+    "id": "C068",
+    "qh": "e551e16ffc8e",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.27,
+      "prompt_tokens": 158,
+      "completion_tokens": 191,
+      "reasoning_tokens": 91,
+      "answer": "结论：超标 4 次，占比 44.4%。\n\n依据：偏差大于 10% 即为胶阀问题。逐项比对：11.19、10.125、11.264、10.094 共 4 次大于 10%；其余 5 次（9.654、9.387、8.552、9.706、9.204）未超标。4÷9≈44.4%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.85,
+      "prompt_tokens": 152,
+      "completion_tokens": 67,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，超标占比22.2%。\n\n关键依据：根据指标，偏差大于10%即为胶阀问题。9次测量中，11.19%和11.264%的偏差超过10%，因此超标2次。超标占比为2/9×100%=22.2%。"
+    }
+  },
+  {
+    "id": "C069",
+    "qh": "d4b4f567183d",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.54,
+      "prompt_tokens": 164,
+      "completion_tokens": 242,
+      "reasoning_tokens": 129,
+      "answer": "**结论：超标 5 次，占比 55.6%。**\n\n**依据**：真空度劣于 5 Pa（即 >5 Pa）判为超标。9 次测量中 >5 Pa 的有：5.455、5.321、5.053、5.421、5.23，共 5 次。计算：5 ÷ 9 × 100% ≈ 55.6%。\n\n按判据，该泵效已呈下降趋势，建议检修。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.29,
+      "prompt_tokens": 158,
+      "completion_tokens": 57,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：5次测量值大于5Pa，分别为5.455、5.321、5.053、5.421、5.23，其余4次小于5Pa。"
+    }
+  },
+  {
+    "id": "C070",
+    "qh": "0330b840d932",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.72,
+      "prompt_tokens": 157,
+      "completion_tokens": 285,
+      "reasoning_tokens": 195,
+      "answer": "**超标5次，占比55.6%。**\n\n依据：偏差大于2℃即超标的9次测量中，2.005、2.162、2.296、2.176、2.054共5次大于2℃，其余4次（1.959、1.98、1.725、1.988）未超标。5÷9≈55.6%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.29,
+      "prompt_tokens": 151,
+      "completion_tokens": 48,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标3次，超标占比33.3%。\n\n关键依据：温度偏差大于2℃即为温控问题。9次测量中，2.162、2.296、2.176三次超标。"
+    }
+  },
+  {
+    "id": "C071",
+    "qh": "a67d839bfb62",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.96,
+      "prompt_tokens": 161,
+      "completion_tokens": 233,
+      "reasoning_tokens": 128,
+      "answer": "**结论：合格5次，合格占比55.6%。**\n\n依据（合格区间1.0–1.2 m/min）：\n- 合格：1.026、1.107、1.073、1.088、1.113（共5次）\n- 不合格：0.993、0.95（低于1.0），1.216、1.248（高于1.2）\n\n计算：5÷9≈55.6%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.14,
+      "prompt_tokens": 155,
+      "completion_tokens": 75,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：传送带传送速度合格标准为1.0-1.2 m/min。9次测量中，0.993、1.026、1.107、1.073、1.088、1.113、0.95在合格范围内。"
+    }
+  },
+  {
+    "id": "C072",
+    "qh": "02a3539c79e9",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.22,
+      "prompt_tokens": 166,
+      "completion_tokens": 230,
+      "reasoning_tokens": 107,
+      "answer": "**结论：合格 7 次，占比 77.8%。**\n\n依据：放大倍率合格范围 3.5–5.0 倍。\n- 不合格：3.118（<3.5）、3.297（<3.5），共 2 次；\n- 合格：4.198、3.541、3.895、4.951、3.664、4.983、4.392，共 7 次。\n\n计算：7÷9×100% ≈ 77.8%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.01,
+      "prompt_tokens": 160,
+      "completion_tokens": 76,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：放大倍率在3.5-5.0倍之间为合格。9次测量中，3.541、3.895、4.951、3.664、4.983、4.392符合要求，共7次合格。"
+    }
+  },
+  {
+    "id": "C075",
+    "qh": "de07ae6e3a43",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.49,
+      "prompt_tokens": 164,
+      "completion_tokens": 297,
+      "reasoning_tokens": 190,
+      "answer": "**合格 5 次，占比 55.6%。**\n\n依据：标准为 0.10–0.15 mm 合格。\n合格：0.136、0.144、0.101、0.135、0.139（共5次）；\n不合格：0.092、0.083、0.091（偏薄），0.167（偏厚）。\n计算：5÷9≈55.6%。偏薄偏多，建议检查印刷参数。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 2.9,
+      "prompt_tokens": 158,
+      "completion_tokens": 40,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：印刷厚度合格范围为0.10-0.15mm，9次测量中有6次在此范围内。"
+    }
+  },
+  {
+    "id": "C077",
+    "qh": "83585bd65e4a",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.45,
+      "prompt_tokens": 161,
+      "completion_tokens": 276,
+      "reasoning_tokens": 160,
+      "answer": "**结论：合格 3 次，合格占比 33.3%。**\n\n**判定依据**（合格范围 0.2–0.3 MPa）：\n- 合格：0.289、0.266、0.236\n- 不合格：0.325、0.328、0.330、0.312（超上限）；0.181、0.187（低于下限）\n\n3/9 ≈ 33.3%。该批次超压偏多，建议排查压力调节装置。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.1,
+      "prompt_tokens": 155,
+      "completion_tokens": 64,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格5次，合格占比55.6%。\n\n关键依据：喷涂压力合格标准为0.2-0.3MPa，9次测量中，0.325、0.289、0.266、0.236、0.312符合标准。"
+    }
+  },
+  {
+    "id": "C076",
+    "qh": "91b00890e066",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.58,
+      "prompt_tokens": 157,
+      "completion_tokens": 233,
+      "reasoning_tokens": 101,
+      "answer": "**结论：合格 4 次，合格占比 44.4%。**\n\n依据：合格范围为 8–12 ms。\n- 合格（4 个）：11.973、11.526、9.395、8.422\n- 不合格（5 个）：7.768、7.579、11.216、7.221、7.055（7.768、7.579、7.221、7.055 低于 8；11.216 高于 12）\n\n计算：4 ÷ 9 ≈ 44.4%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.67,
+      "prompt_tokens": 151,
+      "completion_tokens": 101,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：曝光时间在8-12ms范围内的测量值有7.768、11.216、11.526、9.395、8.422，共5个。加上边界值8ms和12ms，共7个合格。总测量次数为9次，因此合格占比为7/9≈0.7778，保留一位小数为77.8%。"
+    }
+  },
+  {
+    "id": "C074",
+    "qh": "961e5bb3198c",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 9.19,
+      "prompt_tokens": 167,
+      "completion_tokens": 276,
+      "reasoning_tokens": 158,
+      "answer": "**结论：合格 6 次，合格率 66.7%。**\n\n依据（标准 3.9–4.1mm）：\n- 合格：3.913、4.057、4.075、4.097、4.057、3.91 → 共 6 次\n- 不合格：3.873、3.893、3.881（均低于下限 3.9）→ 共 3 次\n\n计算：6 ÷ 9 ≈ 66.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.03,
+      "prompt_tokens": 161,
+      "completion_tokens": 69,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格5次，合格占比55.6%。\n\n关键依据：供料间距合格标准为3.9-4.1mm，9次测量中，3.873、3.893、3.913、3.881、3.91满足标准，共5次合格。"
+    }
+  },
+  {
+    "id": "C073",
+    "qh": "18a11fbd64fb",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 12.79,
+      "prompt_tokens": 157,
+      "completion_tokens": 224,
+      "reasoning_tokens": 105,
+      "answer": "**结论：合格4次，合格占比44.4%。**\n\n依据合格区间1.0–1.2 m/min逐项判定：\n- 合格4次：1.054、1.171、1.148、1.028\n- 不合格5次：0.978、0.936（低于1.0）；1.215、1.245、1.208（高于1.2）\n\n计算：4÷9≈44.4%。当前传送速度稳定性不足，建议校准传送系统后复测。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 7.22,
+      "prompt_tokens": 151,
+      "completion_tokens": 101,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格8次，合格占比88.9%。\n\n关键依据：传送带传送速度合格标准为1.0-1.2 m/min，9次测量中，速度在1.0-1.2 m/min的有1.054、1.171、0.978、1.215、1.148、1.028、1.208共7次，但0.978和0.936两次测量未在合格范围内。"
+    }
+  },
+  {
+    "id": "C079",
+    "qh": "6dae10d83484",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.21,
+      "prompt_tokens": 164,
+      "completion_tokens": 270,
+      "reasoning_tokens": 138,
+      "answer": "**结论：合格 5 次，占比 55.6%。**\n\n**判定（范围 1.5–2.0 MPa）：**\n- 合格：1.954、1.634、1.769、1.953、1.868（5 次）\n- 不合格：1.346、2.016、1.388、1.371（4 次，其中 2.016 超上限，其余低于下限）\n\n占比 = 5 ÷ 9 ≈ 55.6%。建议关注低压侧测量值偏多的趋势。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.74,
+      "prompt_tokens": 158,
+      "completion_tokens": 85,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据层压机液压系统压合压力要求1.5-2MPa，测量值在范围内的为合格。9次测量中，1.954、1.634、1.769、1.953、2.016、1.868、1.388均在合格范围内。"
+    }
+  },
+  {
+    "id": "C081",
+    "qh": "078faa6a19a9",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.94,
+      "prompt_tokens": 157,
+      "completion_tokens": 249,
+      "reasoning_tokens": 142,
+      "answer": "**结论：合格 6 次，占比 66.7%。**\n\n依据（合格区间 2-4 ℃/s）：\n- 合格：2.335、2.004、3.104、2.88、3.348、3.256（共 6 个）\n- 不合格：1.884、1.992（低于 2），4.398（高于 4）\n\n占比 = 6÷9 ≈ 66.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.5,
+      "prompt_tokens": 151,
+      "completion_tokens": 72,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：根据资料，冷却速率2-4℃/s为合格。9次测量中，2.335、1.992、2.004、3.104、2.88、3.348、3.256均在合格范围内。"
+    }
+  },
+  {
+    "id": "C078",
+    "qh": "5ffdb7135d25",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.2,
+      "prompt_tokens": 155,
+      "completion_tokens": 299,
+      "reasoning_tokens": 188,
+      "answer": "**结论：合格 4 次，合格占比 44.4%。**\n\n关键依据：\n- 合格（0≤值≤5）：1.204、0.17、3.572、2.886，共 4 次；\n- 不合格：-1.38、-1.207、-0.265、-1.146（均为负值），5.079（超出上限），共 5 次；\n- 占比 = 4/9 ≈ 44.4%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.34,
+      "prompt_tokens": 149,
+      "completion_tokens": 98,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格5次，合格占比55.6%。\n\n关键依据：根据给定资料，反射功率在0-5W范围内为合格。在9次测量中，1.204、0.17、3.572、2.886、5.079五次测量值在0-5W范围内，因此合格5次。合格占比为5/9≈0.555，保留一位小数为55.6%。"
+    }
+  },
+  {
+    "id": "C080",
+    "qh": "0f87cda9d572",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.95,
+      "prompt_tokens": 154,
+      "completion_tokens": 262,
+      "reasoning_tokens": 156,
+      "answer": "**结论：合格 7 次，占比 77.8%。**\n\n**依据（5–15 s 为合格）：**\n- 合格：13.163、6.016、7.723、13.683、6.437、10.544、6.591（共 7 个）\n- 不合格：17.914、18.215（均超 15 s 上限）\n\n计算：7 ÷ 9 ≈ 77.8%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.64,
+      "prompt_tokens": 148,
+      "completion_tokens": 109,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：根据MES终端工位终端上报延迟要求5-15s，13.163、17.914、6.016、7.723、13.683、6.437、10.544、6.591均在5-15s范围内，共9次测量，合格6次。合格占比为6/9=0.6667，保留一位小数，为66.7%。"
+    }
+  },
+  {
+    "id": "C082",
+    "qh": "5f75f54a9ea5",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.05,
+      "prompt_tokens": 159,
+      "completion_tokens": 227,
+      "reasoning_tokens": 122,
+      "answer": "**结论：合格 6 次，占比 66.7%。**\n\n判定（合格范围 1.0–1.2 m/min）：\n- 合格（6）：1.112、1.017、1.191、1.176、1.178、1.18\n- 不合格（3）：0.964（偏低）、1.264、1.21（超出上限）\n\n计算：6÷9×100% ≈ 66.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.03,
+      "prompt_tokens": 153,
+      "completion_tokens": 86,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格8次，合格占比88.9%。\n\n关键依据：传送带传送速度合格标准为1.0-1.2 m/min。9次测量中，有8次（1.112、0.964、1.017、1.191、1.176、1.264、1.178、1.21、1.18）在此范围内。"
+    }
+  },
+  {
+    "id": "C084",
+    "qh": "abf2e6c21df4",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.09,
+      "prompt_tokens": 157,
+      "completion_tokens": 204,
+      "reasoning_tokens": 102,
+      "answer": "**结论：合格7次，占比77.8%。**\n\n依据（合格范围1.0–1.2 m/min）：\n- 合格7次：1.121、1.102、1.106、1.148、1.149、1.084、1.038\n- 不合格2次：0.987（低于1.0）、1.24（高于1.2）\n\n占比：7÷9≈77.8%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.09,
+      "prompt_tokens": 151,
+      "completion_tokens": 85,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：传送带传送速度合格标准为1.0-1.2 m/min。9次测量中，速度在1.0-1.2 m/min的有1.121、1.102、1.106、1.148、1.149、1.084、1.038共7次。"
+    }
+  },
+  {
+    "id": "C086",
+    "qh": "00f514511098",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.97,
+      "prompt_tokens": 165,
+      "completion_tokens": 271,
+      "reasoning_tokens": 152,
+      "answer": "**结论：合格3次，合格占比33.3%。**\n\n**判定依据**（合格范围0.10–0.15mm）：\n- 合格：0.11、0.147、0.113（3次）\n- 不合格：0.157、0.167（超上限）；0.091、0.097、0.087、0.088（低于下限）\n\n计算：3÷9×100% ≈ 33.3%。该批次整体偏低偏散，建议排查印刷参数。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.41,
+      "prompt_tokens": 159,
+      "completion_tokens": 60,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格5次，合格占比55.6%。\n\n关键依据：印刷厚度合格范围为0.10-0.15mm。9次测量中，0.11、0.147、0.097、0.113、0.088符合要求。"
+    }
+  },
+  {
+    "id": "C083",
+    "qh": "73adc544bca1",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.41,
+      "prompt_tokens": 167,
+      "completion_tokens": 362,
+      "reasoning_tokens": 228,
+      "answer": "**结论：合格 4 次，合格率 44.4%。**\n\n**判定（3.5–5.0 倍为合格）：**\n- 合格：3.639、3.93、3.682、3.527（共4次）\n- 不合格：5.311、5.495、5.432（超出上限5.0）；3.473、3.368（低于下限3.5）\n\n计算：4÷9×100% ≈ 44.4%。该批次放大倍率稳定性不足，建议排查射线管状态。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 7.01,
+      "prompt_tokens": 161,
+      "completion_tokens": 98,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：放大倍率在3.5-5.0倍之间为合格。9次测量中，5.311、3.473、3.639、3.93、5.495、5.432、3.368、3.682、3.527中，有7次在3.5-5.0倍之间。"
+    }
+  },
+  {
+    "id": "C085",
+    "qh": "97d2aaf8bdbd",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.53,
+      "prompt_tokens": 167,
+      "completion_tokens": 284,
+      "reasoning_tokens": 172,
+      "answer": "**结论：合格 4 次，合格占比 44.4%。**\n\n判定（标准 3.9–4.1mm）：\n- 合格 4 次：4.027、4.053、3.982、3.944\n- 不合格 5 次：3.894、3.836、4.138（超上限）、3.849、3.841（均低于下限）\n\n计算：4 ÷ 9 ≈ 44.4%"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 7.51,
+      "prompt_tokens": 161,
+      "completion_tokens": 85,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：供料间距合格标准为3.9-4.1mm，9次测量中，4.027、3.894、3.836、4.138、4.053、3.849、3.982、3.944、3.841均在合格范围内。"
+    }
+  },
+  {
+    "id": "C087",
+    "qh": "960189f2c07b",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.58,
+      "prompt_tokens": 155,
+      "completion_tokens": 241,
+      "reasoning_tokens": 131,
+      "answer": "**结论：合格4次，合格占比44.4%。**\n\n依据：合格范围为8–12 ms。9次测量中：\n- 合格（8–12ms）：8.46、9.554、8.926、9.134，共4次；\n- 不合格：7.305、7.283（低于8），12.463、12.319、13.363（高于12）。\n\n占比 = 4÷9 ≈ 44.4%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 8.23,
+      "prompt_tokens": 149,
+      "completion_tokens": 73,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：曝光时间在8-12ms范围内的测量值有8.46、9.554、8.926、9.134、7.283、12.319、13.363，共7次。总测量次数为9次。"
+    }
+  },
+  {
+    "id": "C088",
+    "qh": "467ce89ed1c3",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.41,
+      "prompt_tokens": 159,
+      "completion_tokens": 293,
+      "reasoning_tokens": 184,
+      "answer": "**结论：合格 6 次，合格占比 66.7%。**\n\n依据：合格范围 0.2–0.3 MPa。逐次判定：0.236、0.26、0.264、0.228、0.226、0.283 共 6 次合格；0.17 低于下限，0.315、0.316 超上限，共 3 次不合格。6/9 ≈ 66.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.06,
+      "prompt_tokens": 153,
+      "completion_tokens": 71,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格6次，合格占比66.7%。\n\n关键依据：喷涂压力在0.2-0.3MPa范围内的为合格，9次测量中0.236、0.26、0.264、0.228、0.283、0.226均在范围内，故合格6次。"
+    }
+  },
+  {
+    "id": "C089",
+    "qh": "8c2bfb2b7bb6",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.93,
+      "prompt_tokens": 155,
+      "completion_tokens": 289,
+      "reasoning_tokens": 170,
+      "answer": "**结论：合格 7 次，合格占比 77.8%。**\n\n关键依据：\n- 合格标准：反射功率 0–5 W。\n- 合格值（7 个）：0.641、0.626、1.459、4.108、0.694、3.048、0.845\n- 不合格（2 个）：5.947（超出上限）、-1.3（低于下限）\n- 计算：7 ÷ 9 × 100% ≈ 77.8%"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.1,
+      "prompt_tokens": 149,
+      "completion_tokens": 81,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据射频电源反射功率0-5W的合格标准，这批9次测量中有7次在0-5W范围内，分别为0.641、0.626、1.459、4.108、0.694、3.048、0.845。"
+    }
+  },
+  {
+    "id": "C090",
+    "qh": "28f9ae90c210",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.33,
+      "prompt_tokens": 163,
+      "completion_tokens": 221,
+      "reasoning_tokens": 107,
+      "answer": "结论：合格 6 次，占比 66.7%。\n\n判定依据（1.5–2.0 MPa 为合格）：\n- 合格：1.983、1.516、1.541、1.641、1.798、1.752（6 次）\n- 不合格：2.003、2.001（超上限 2.0），1.444（低于下限 1.5）\n\n计算：6 ÷ 9 = 66.7%。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 10.57,
+      "prompt_tokens": 157,
+      "completion_tokens": 111,
+      "reasoning_tokens": 0,
+      "answer": "结论：合格7次，合格占比77.8%。\n\n关键依据：根据层压机液压系统压合压力合格指标1.5-2.0 MPa，测量值在范围内的有2.003、1.983、1.516、1.541、2.001、1.641、1.798，共7次。总测量次数为9次，计算合格占比为7/9≈0.7778，保留一位小数为77.8%。"
+    }
+  },
+  {
+    "id": "C092",
+    "qh": "7b48e90b0d15",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 10.63,
+      "prompt_tokens": 160,
+      "completion_tokens": 417,
+      "reasoning_tokens": 287,
+      "answer": "**结论：平均值约 3.1℃；超过 3℃ 上限的有 6 次。**\n\n**依据：**\n- 平均值 = 27.796 ÷ 9 ≈ 3.088 → 保留一位小数为 3.1℃\n- 超上限（>3℃）：3.426、3.08、3.041、3.241、3.372、3.178，共 6 次\n- 按标准温差>3℃判热风循环问题，本批多数超标，建议排查热风马达。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 7.23,
+      "prompt_tokens": 154,
+      "completion_tokens": 88,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均值是3.0℃，超过上限的有5次。\n\n关键依据：计算平均值（2.842+3.426+3.08+2.96+3.041+3.241+3.372+3.178+2.656）/9=3.0；比较各测量值与3.0，超过3.0℃的有5次。"
+    }
+  },
+  {
+    "id": "C093",
+    "qh": "1868ce899414",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.82,
+      "prompt_tokens": 176,
+      "completion_tokens": 297,
+      "reasoning_tokens": 159,
+      "answer": "**结论：平均值约0.7倍板厚；超上限5次。**\n\n**依据：**\n- 9次之和 = 6.362，平均值 = 6.362÷9 ≈ 0.7069 → 保留一位小数为 **0.7**\n- 超过0.70的测量值：0.709、0.779、0.716、0.744、0.744，共 **5次**\n\n按标准，超0.70倍板厚即判波峰过高，本批超限占比过半，建议调低锡波高度。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 8.56,
+      "prompt_tokens": 170,
+      "completion_tokens": 109,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均值是0.714倍板厚，超过上限的有4次。\n\n关键依据：计算平均值（0.665+0.709+0.615+0.779+0.716+0.695+0.744+0.695+0.744）/9=0.714，超过0.7倍板厚的有0.779、0.779、0.744、0.744共4次。"
+    }
+  },
+  {
+    "id": "C091",
+    "qh": "fbabb3ac8b9d",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 13.17,
+      "prompt_tokens": 172,
+      "completion_tokens": 528,
+      "reasoning_tokens": 409,
+      "answer": "**结论：** 平均值 0.242 s（保留一位小数为 0.2 s）；超过 0.25 s 的有 **3 次**（0.262、0.258、0.273）。\n\n**依据：** 9 次测量总和 2.178 s，÷9 = 0.242 s；指标规定大于 0.25 s 判为气路或气缸问题，0.25 s 本身不计超标。建议对超标动作排查气路与气缸。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.5,
+      "prompt_tokens": 166,
+      "completion_tokens": 100,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均值是0.247s，超过上限的有3次。\n\n关键依据：计算平均值（0.25+0.232+0.232+0.228+0.262+0.258+0.221+0.273+0.222）/9=0.247s；超过0.25s的有0.262s、0.258s、0.273s，共3次。"
+    }
+  },
+  {
+    "id": "C094",
+    "qh": "b23ca0c3b273",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 9.26,
+      "prompt_tokens": 167,
+      "completion_tokens": 480,
+      "reasoning_tokens": 331,
+      "answer": "**结论：平均值约 5.0 μm；超过 5 μm 的有 5 次，判定为标定问题。**\n\n**依据：**\n- 9 次测量总和 = 45.385，平均值 = 45.385 ÷ 9 ≈ 5.0 μm（保留一位小数）。\n- 超过 5 μm 的数据：5.251、5.547、5.693、5.102、5.331，共 5 次。\n- 按指标要求，偏差大于 5 μm 即为标定问题，本批多数测量值超标，建议重新标定。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 7.72,
+      "prompt_tokens": 161,
+      "completion_tokens": 112,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均值是5.1μm，超过上限的有5次。\n\n关键依据：计算平均值（5.251+4.424+5.547+5.693+4.751+4.472+5.102+5.331+4.814）/9=46.8/9=5.1；偏差大于5μm的有5.251、5.547、5.693、5.102、5.331，共5次。"
+    }
+  },
+  {
+    "id": "C095",
+    "qh": "237f8d99a2cf",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.38,
+      "prompt_tokens": 167,
+      "completion_tokens": 428,
+      "reasoning_tokens": 292,
+      "answer": "**结论**：平均值约 5.1 μm；超过 5 μm 上限的有 **5 次**。\n\n**依据**：\n- 9 次测量总和 46.044，均值 46.044÷9≈5.116 → 保留一位小数为 5.1 μm。\n- 超过 5 μm 的数据：5.087、5.531、5.74、5.317、5.505，共 5 次。\n\n提示：均值已超 5 μm 上限，存在夹持不良风险，建议检查夹具。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 6.84,
+      "prompt_tokens": 161,
+      "completion_tokens": 125,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均值是5.1μm，超过上限的有5次。\n\n关键依据：计算平均值（5.087+5.531+4.619+5.74+5.317+4.865+4.469+4.911+5.505）/9=45.972/9=5.1。超过5μm的有5.531、5.74、5.317、5.505，共4次，但根据题目要求，5.087也超过上限，所以共5次。"
+    }
+  },
+  {
+    "id": "C096",
+    "qh": "ef5f3c2e2b02",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.55,
+      "prompt_tokens": 163,
+      "completion_tokens": 403,
+      "reasoning_tokens": 272,
+      "answer": "**结论**：平均值为 **9.9%**；超过 10% 上限的有 **4 次**。\n\n**依据**：\n- 9 次测量总和 = 89.132，平均值 = 89.132 ÷ 9 ≈ 9.9%。\n- 大于 10% 的数据：11.293、10.279、10.547、10.501，共 4 次。\n- 虽整体均值未超标，但已有 4 次偏差大于 10%，按判定标准属于光源问题风险，建议排查光源状态。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.47,
+      "prompt_tokens": 157,
+      "completion_tokens": 93,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均值是10.0%，超过上限的有3次。\n\n关键依据：计算平均值（11.293+9.856+9.841+10.279+10.547+8.608+9.642+10.501+8.565）/9=10.0%。超过10%的有11.293、10.547、10.501三次。"
+    }
+  },
+  {
+    "id": "C098",
+    "qh": "07d5ee147f10",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.8,
+      "prompt_tokens": 156,
+      "completion_tokens": 401,
+      "reasoning_tokens": 281,
+      "answer": "**结论**：平均曝光时间约 **10.7 ms**；超过 10 ms 上限的有 **4 次**（12、11、13、13 ms）。\n\n**依据**：换算为 ms 后求和 9+12+10+9+10+11+9+13+13=96，均值 96÷9≈10.7。资料合格区间为 8–12 ms，但按题目 ≤10 ms 要求判定，超出 4 次；按资料 8–12 ms 判则全部合格。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.51,
+      "prompt_tokens": 150,
+      "completion_tokens": 72,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均曝光时间为0.0109 ms，超出上限1次。\n\n关键依据：9次测量值相加得0.093，除以9得0.010333...，保留一位小数为0.0109 ms。其中0.013 ms和0.013 ms超出上限8-12 ms。"
+    }
+  },
+  {
+    "id": "C097",
+    "qh": "717d3a633f2d",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.87,
+      "prompt_tokens": 175,
+      "completion_tokens": 350,
+      "reasoning_tokens": 200,
+      "answer": "**结论：** 平均约 **259.3 ms**，超出 0.25 s 上限 **6 次**。\n\n**计算依据：** 9 次测量总和 2.334 s ÷ 9 ≈ 0.2593 s。超过 0.250 s 的数值：0.272、0.261、0.287、0.259、0.274、0.277（6 次）；0.226、0.245、0.233 合格。\n\n**提示：** 平均值已大于 0.25 s 判定阈值，按指标判气路或气缸存在问题，建议排查。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 9.15,
+      "prompt_tokens": 169,
+      "completion_tokens": 104,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均动作时间为0.263秒，超出上限2次。\n\n关键依据：计算平均值为(0.272+0.226+0.261+0.287+0.259+0.245+0.274+0.277+0.233)/9=0.263秒。根据指标，大于0.25秒判为问题，有0.287秒和0.277秒超出上限。"
+    }
+  },
+  {
+    "id": "N001",
+    "qh": "d97263cc0ee7",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.28,
+      "prompt_tokens": 130,
+      "completion_tokens": 136,
+      "reasoning_tokens": 50,
+      "answer": "结论：超出上限 0.01 s，已超标。\n\n依据：标准要求单次动作时间不超过 0.25 s，本次实测 0.26 s，0.26 − 0.25 = 0.01 s。按指标判断，气缸动作时间大于 0.25 s 即判为气路或气缸问题，建议排查气路及气缸状态。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.27,
+      "prompt_tokens": 124,
+      "completion_tokens": 41,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.01s。\n\n关键依据：单次动作时间大于0.25s即判气路或气缸问题，本次测得0.26s。"
+    }
+  },
+  {
+    "id": "C100",
+    "qh": "fa06fa95072f",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.16,
+      "prompt_tokens": 172,
+      "completion_tokens": 247,
+      "reasoning_tokens": 144,
+      "answer": "**结论**：平均约 **242.4 ms**；超出 0.25 s 上限 **2 次**（0.272 s、0.267 s）。\n\n**依据**：9 次测量总和 2.182 s，2.182÷9≈0.2424 s。按指标，大于 0.25 s 判气路或气缸问题，建议排查这 2 次超差对应的动作。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.85,
+      "prompt_tokens": 166,
+      "completion_tokens": 98,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均动作时间为0.239秒，超出上限1次。\n\n关键依据：计算9次测量的平均值（0.233+0.272+0.228+0.245+0.231+0.228+0.267+0.238+0.240）/9=0.239秒。其中，0.272秒和0.267秒超过0.25秒的上限。"
+    }
+  },
+  {
+    "id": "N002",
+    "qh": "d329cfb88dd5",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 9.31,
+      "prompt_tokens": 115,
+      "completion_tokens": 115,
+      "reasoning_tokens": 47,
+      "answer": "**结论：超出上限 0.68℃。**\n\n依据：热风马达指标要求温区横向温差 ≤3℃（大于 3℃ 判热风循环问题），本次实测 3.68℃，3.68 − 3 = 0.68℃，已超标，判定为热风循环问题。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 2.29,
+      "prompt_tokens": 109,
+      "completion_tokens": 47,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.68℃。\n\n关键依据：温差大于3℃即判热风循环问题，本次测得3.68℃，3.68℃ - 3℃ = 0.68℃。"
+    }
+  },
+  {
+    "id": "N003",
+    "qh": "521c4208a51f",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.28,
+      "prompt_tokens": 131,
+      "completion_tokens": 159,
+      "reasoning_tokens": 63,
+      "answer": "**结论：与上限相差 0.15 倍板厚。**\n\n**依据：**\n- 上限：0.70 倍板厚（超过即判波峰过高）\n- 实测：0.55 倍板厚\n- 计算：0.70 − 0.55 = 0.15（保留两位小数）\n\n本次实测值在限值以内，未超上限，属于合格范围。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.51,
+      "prompt_tokens": 125,
+      "completion_tokens": 64,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.15倍板厚。\n\n关键依据：锡波接触深度比要求不超过0.7倍板厚，本次测得0.55倍板厚。计算公式为（0.7 - 0.55）/ 0.7 = 0.15。"
+    }
+  },
+  {
+    "id": "C099",
+    "qh": "018cd4b5cd1a",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 17.6,
+      "prompt_tokens": 155,
+      "completion_tokens": 848,
+      "reasoning_tokens": 718,
+      "answer": "**结论**：资料规定合格范围为 5–15 s（即 5000–15000 ms），“不超过 5200 ms”的上限缺乏资料依据，不予采用。\n\n**计算**：9 次平均 = 46.716 s ÷ 9 = 5.1907 s ≈ **5190.7 ms**。\n\n**超出情况**：按资料上限 15 s 计，超出 **0 次**（均远低于 15000 ms）；但注意 4.935 s、4.876 s 两次低于下限 5 s。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.7,
+      "prompt_tokens": 149,
+      "completion_tokens": 107,
+      "reasoning_tokens": 0,
+      "answer": "结论：平均上报延迟为5.1秒，超出上限1次。\n\n关键依据：计算9次测量的平均值（5.375+5.266+5.49+4.935+5.018+5.413+5.05+5.293+4.876）/9 = 46.4/9 ≈ 5.1秒。其中5.49秒超过5-15秒的合格范围，因此超出上限1次。"
+    }
+  },
+  {
+    "id": "N004",
+    "qh": "28a29539eaee",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.14,
+      "prompt_tokens": 121,
+      "completion_tokens": 177,
+      "reasoning_tokens": 95,
+      "answer": "**结论：超出上限 1.19 μm**（6.19 − 5.00 = 1.19）。\n\n**依据**：标定块高度偏差上限为 5 μm，本次实测 6.19 μm > 5 μm，超出限值 1.19 μm，属于标定问题，需重新进行高度标定。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.64,
+      "prompt_tokens": 115,
+      "completion_tokens": 64,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得的高度偏差与上限相差0.19μm。\n\n关键依据：高度偏差要求不超过5μm，本次测得6.19μm，计算差值为6.19μm - 5μm = 1.19μm，保留两位小数后为0.19μm。"
+    }
+  },
+  {
+    "id": "N006",
+    "qh": "cdb5a1f8f76e",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.45,
+      "prompt_tokens": 115,
+      "completion_tokens": 163,
+      "reasoning_tokens": 100,
+      "answer": "**结论：相差 2.72 个百分点，未超上限，光源正常。**\n\n依据：照度偏差上限为 10%，实测 7.28%，10.00% − 7.28% = 2.72 个百分点，低于阈值，不构成光源问题。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.02,
+      "prompt_tokens": 109,
+      "completion_tokens": 52,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得照度偏差与上限相差2.72个百分点。\n\n关键依据：照度偏差要求不超过10%，本次测得7.28%，计算公式为10% - 7.28% = 2.72%。"
+    }
+  },
+  {
+    "id": "N007",
+    "qh": "3e62a8292833",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.39,
+      "prompt_tokens": 114,
+      "completion_tokens": 135,
+      "reasoning_tokens": 57,
+      "answer": "结论：本次出胶量偏差 9.4% 低于 10% 上限，相差 0.60 个百分点，未超限，不判定为胶阀问题。\n\n关键依据：偏差大于 10% 才判定为胶阀问题；10% − 9.4% = 0.60 个百分点（保留两位小数）。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.79,
+      "prompt_tokens": 108,
+      "completion_tokens": 61,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得9.4%，与上限相差0.6个百分点。\n\n关键依据：偏差大于10%即为胶阀问题，本次测得偏差为9.4%，未超过10%。计算方法为10% - 9.4% = 0.6%。"
+    }
+  },
+  {
+    "id": "N005",
+    "qh": "14fc413ad97c",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 10.31,
+      "prompt_tokens": 121,
+      "completion_tokens": 389,
+      "reasoning_tokens": 309,
+      "answer": "**结论：超出上限 0.87 μm**（非低于上限）。\n\n**依据：** 夹具要求样品位移不超过 5 μm，大于 5 μm 即判为夹持问题。计算：5.87 − 5.00 = 0.87 μm，本次测得值已超限，属夹持问题。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.2,
+      "prompt_tokens": 115,
+      "completion_tokens": 47,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.87μm。\n\n关键依据：样品位移要求不超过5μm，测得5.87μm，计算差值为5.87μm - 5μm = 0.87μm。"
+    }
+  },
+  {
+    "id": "N008",
+    "qh": "6be992835108",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.49,
+      "prompt_tokens": 118,
+      "completion_tokens": 147,
+      "reasoning_tokens": 72,
+      "answer": "**相差 1.27 Pa。**\n\n计算：6.27 − 5.00 = 1.27 Pa。\n\n依据：资料规定真空度劣于 5 Pa 即判泵效下降，本次实测 6.27 Pa 超出上限 1.27 Pa，已判定为泵效下降，建议检查真空泵。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.21,
+      "prompt_tokens": 112,
+      "completion_tokens": 48,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差1.27Pa。\n\n关键依据：真空度要求不超过5Pa，本次测得6.27Pa，计算差值6.27Pa - 5Pa = 1.27Pa。"
+    }
+  },
+  {
+    "id": "N009",
+    "qh": "f82b158fd339",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.15,
+      "prompt_tokens": 112,
+      "completion_tokens": 172,
+      "reasoning_tokens": 81,
+      "answer": "**结论：相差 0.21℃**（2 − 1.79 = 0.21），本次偏差 1.79℃ 未超过 2℃ 上限，不属于温控问题。\n\n**依据**：参考资料规定层压机温控模块温度偏差大于 2℃ 才判定为温控问题；本次测得 1.79℃，距上限余量 0.21℃，判定合格。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 2.11,
+      "prompt_tokens": 106,
+      "completion_tokens": 40,
+      "reasoning_tokens": 0,
+      "answer": "1.21℃\n\n关键依据：温度偏差要求不超过2℃，本次测得1.79℃，计算偏差：2℃ - 1.79℃ = 0.21℃。"
+    }
+  },
+  {
+    "id": "N010",
+    "qh": "27da9a8c7029",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.03,
+      "prompt_tokens": 116,
+      "completion_tokens": 138,
+      "reasoning_tokens": 65,
+      "answer": "**结论：相差 0.33 个百分点，已超出上限。**\n\n**依据：** 资料规定喷涂量偏差大于 10% 即为喷嘴问题。本次实测 10.33% − 10% = 0.33 个百分点，超过允许上限，判定该喷嘴存在问题，需检修处理。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.4,
+      "prompt_tokens": 110,
+      "completion_tokens": 46,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.33个百分点。\n\n关键依据：喷涂量偏差要求不超过10%，本次测得10.33%，计算差值10.33% - 10% = 0.33%。"
+    }
+  },
+  {
+    "id": "N013",
+    "qh": "14e2fe3ba098",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.34,
+      "prompt_tokens": 115,
+      "completion_tokens": 126,
+      "reasoning_tokens": 62,
+      "answer": "结论：超出上限 0.54℃。\n\n计算：3.54℃ − 3℃ = 0.54℃。依据资料判定标准，温差大于 3℃ 即判热风循环问题，本次 3.54℃ 已超标，判定为热风马达热风循环问题。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.09,
+      "prompt_tokens": 109,
+      "completion_tokens": 45,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.54℃。\n\n关键依据：温差大于3℃即判热风循环问题，本次测得3.54℃，3.54℃-3℃=0.54℃。"
+    }
+  },
+  {
+    "id": "N011",
+    "qh": "53708eb3f642",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.24,
+      "prompt_tokens": 110,
+      "completion_tokens": 136,
+      "reasoning_tokens": 66,
+      "answer": "**结论：相差 0.34 个百分点。**\n\n**依据：** 上限为 2%，本次实测 1.66%，2% − 1.66% = 0.34 个百分点。当前失败率低于 2% 阈值，未触发扫码问题判定，扫码枪运行正常。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.29,
+      "prompt_tokens": 104,
+      "completion_tokens": 57,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得扫码失败率与上限相差0.34个百分点。\n\n关键依据：本次测得扫码失败率为1.66%，上限为2%，计算公式为（2% - 1.66%）* 100% = 0.34%。"
+    }
+  },
+  {
+    "id": "N014",
+    "qh": "f0c0bdb8a05e",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.07,
+      "prompt_tokens": 131,
+      "completion_tokens": 146,
+      "reasoning_tokens": 65,
+      "answer": "结论：相差 **0.10 倍板厚**（保留两位小数）。\n\n关键依据：判定上限为 0.70 倍板厚，本次实测 0.6 倍板厚，差值 = 0.70 − 0.6 = 0.10。实测值未超过上限，未判波峰过高。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.01,
+      "prompt_tokens": 125,
+      "completion_tokens": 88,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.1倍板厚。\n\n关键依据：锡波接触深度比要求不超过0.7倍板厚，本次测得0.6倍板厚，计算公式为(0.7 - 0.6) / 0.7 = 0.1 / 0.7 ≈ 0.14，保留两位小数得0.1倍板厚。"
+    }
+  },
+  {
+    "id": "N015",
+    "qh": "fee69fc5958b",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.34,
+      "prompt_tokens": 121,
+      "completion_tokens": 80,
+      "reasoning_tokens": 18,
+      "answer": "**结论：相差 1.29 μm。**\n\n**依据：** 标定块高度偏差上限为 5 μm，本次实测 3.71 μm，5 − 3.71 = 1.29 μm，未超限，属正常范围。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.87,
+      "prompt_tokens": 115,
+      "completion_tokens": 45,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差1.29μm。\n\n关键依据：高度偏差要求不超过5μm，测得3.71μm，计算5μm - 3.71μm = 1.29μm。"
+    }
+  },
+  {
+    "id": "N012",
+    "qh": "67e315ce4c53",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 9.68,
+      "prompt_tokens": 130,
+      "completion_tokens": 98,
+      "reasoning_tokens": 31,
+      "answer": "结论：相差 0.01 s，动作时间 0.24 s 未超过 0.25 s 上限，判定合格。\n\n依据：单次动作时间 >0.25 s 才判气路或气缸问题；0.25 − 0.24 = 0.01 s。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.45,
+      "prompt_tokens": 124,
+      "completion_tokens": 65,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.01s。\n\n关键依据：资料中提到单次动作时间大于0.25s即判气路或气缸问题，本次测得0.24s，所以与上限相差0.25s - 0.24s = 0.01s。"
+    }
+  },
+  {
+    "id": "N016",
+    "qh": "cb3eee26bc82",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.33,
+      "prompt_tokens": 121,
+      "completion_tokens": 100,
+      "reasoning_tokens": 31,
+      "answer": "**结论：相差 0.25 μm**（未超上限，夹持正常）。\n\n**依据**：资料规定样品位移大于 5 μm 即为夹持问题；本次实测 4.75 μm，5 − 4.75 = 0.25 μm，在允许范围内。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.72,
+      "prompt_tokens": 115,
+      "completion_tokens": 48,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.25μm。\n\n关键依据：样品位移要求不超过5μm，测得4.75μm，两者之差为5μm - 4.75μm = 0.25μm。"
+    }
+  },
+  {
+    "id": "N017",
+    "qh": "317d67ff9f78",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 1.62,
+      "prompt_tokens": 115,
+      "completion_tokens": 76,
+      "reasoning_tokens": 20,
+      "answer": "结论：与上限相差 **1.03 个百分点**。\n\n依据：资料规定照度偏差上限为 10%，本次实测 8.97%，10% − 8.97% = 1.03%，未超限，判定光源正常。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.84,
+      "prompt_tokens": 109,
+      "completion_tokens": 45,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差1.03个百分点。\n\n关键依据：照度偏差要求不超过10%，测得8.97%，计算差值为10% - 8.97% = 1.03%。"
+    }
+  },
+  {
+    "id": "N021",
+    "qh": "241c1830b48f",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.73,
+      "prompt_tokens": 116,
+      "completion_tokens": 122,
+      "reasoning_tokens": 64,
+      "answer": "结论：相差 0.99 个百分点，未超限。\n\n依据：上限为 10%，实测偏差 9.01%，10% − 9.01% = 0.99 个百分点。因偏差小于 10%，判定喷嘴无问题。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 1.83,
+      "prompt_tokens": 110,
+      "completion_tokens": 26,
+      "reasoning_tokens": 0,
+      "answer": "9.01%，与上限相差0.99个百分点。关键依据：偏差大于10%即为喷嘴问题。"
+    }
+  },
+  {
+    "id": "N019",
+    "qh": "4d21908ee958",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.66,
+      "prompt_tokens": 118,
+      "completion_tokens": 133,
+      "reasoning_tokens": 61,
+      "answer": "结论：超出上限 1.15 Pa，已劣于 5 Pa，判泵效下降。\n\n依据：判据要求腔体真空度不劣于 5 Pa；本次实测 6.15 Pa，6.15 − 5.00 = 1.15 Pa，超出限值，建议排查真空泵。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.57,
+      "prompt_tokens": 112,
+      "completion_tokens": 52,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差1.15Pa。\n\n关键依据：真空泵腔体真空度要求不超过5Pa，本次测得6.15Pa。相差值=6.15Pa - 5Pa = 1.15Pa。"
+    }
+  },
+  {
+    "id": "N018",
+    "qh": "e34b677c40d4",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.31,
+      "prompt_tokens": 114,
+      "completion_tokens": 124,
+      "reasoning_tokens": 56,
+      "answer": "**结论：超出上限 1.83 个百分点，已超标，属于胶阀问题。**\n\n依据：参考资料规定出胶量偏差大于 10% 即判定为胶阀问题；本次测得 11.83%，计算 11.83% − 10% = 1.83 个百分点。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.65,
+      "prompt_tokens": 108,
+      "completion_tokens": 63,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得胶阀出胶量偏差与上限相差0.83个百分点。\n\n关键依据：偏差要求不超过10%，本次测得11.83%，计算差值：11.83% - 10% = 1.83%，保留两位小数得0.83%。"
+    }
+  },
+  {
+    "id": "N022",
+    "qh": "625b66891bb4",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.92,
+      "prompt_tokens": 110,
+      "completion_tokens": 146,
+      "reasoning_tokens": 62,
+      "answer": "**结论：相差 0.31 个百分点，扫码失败率未超标，扫码枪判定正常。**\n\n**依据：** 失败率上限为 2%，本次实测 1.69%；计算 2% − 1.69% = 0.31 个百分点（保留两位小数）。实测值低于 2% 阈值，不构成扫码问题。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 2.51,
+      "prompt_tokens": 104,
+      "completion_tokens": 46,
+      "reasoning_tokens": 0,
+      "answer": "1.31个百分点。\n\n关键依据：失败率要求不超过2%，本次测得1.69%，计算差值：2% - 1.69% = 0.31%，保留两位小数。"
+    }
+  },
+  {
+    "id": "N020",
+    "qh": "726c6df8b50e",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 6.65,
+      "prompt_tokens": 112,
+      "completion_tokens": 149,
+      "reasoning_tokens": 68,
+      "answer": "**结论：超出上限 0.11℃**（2.11 − 2.00 = 0.11），已超过 2℃ 标准，判定为温控问题。\n\n依据：【层压机·温控模块】规定偏差大于 2℃ 即为温控问题，本次实测 2.11℃ 超限，需排查温控模块。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 2.21,
+      "prompt_tokens": 106,
+      "completion_tokens": 45,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.11℃。\n\n关键依据：温度偏差要求不超过2℃，本次测得2.11℃，计算差值2.11℃ - 2℃ = 0.11℃。"
+    }
+  },
+  {
+    "id": "N024",
+    "qh": "6c868be0536a",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.01,
+      "prompt_tokens": 115,
+      "completion_tokens": 109,
+      "reasoning_tokens": 35,
+      "answer": "**结论：相差 0.12℃（未超上限，判为合格）。**\n\n依据：回流焊热风马达以温区横向温差为指标，上限 3℃；本次实测 2.88℃，3 − 2.88 = 0.12℃，低于判定阈值 3℃，未触发热风循环问题判定。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.13,
+      "prompt_tokens": 109,
+      "completion_tokens": 45,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.12℃。\n\n关键依据：温区横向温差要求不超过3℃，本次测得2.88℃，计算差值3 - 2.88 = 0.12℃。"
+    }
+  },
+  {
+    "id": "N023",
+    "qh": "65b86031b0a0",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.34,
+      "prompt_tokens": 130,
+      "completion_tokens": 91,
+      "reasoning_tokens": 19,
+      "answer": "**结论：相差 0.06 s，指标合格。**\n\n依据：贴装头升降气缸单次动作时间上限为 0.25 s（超过即判气路或气缸问题），本次实测 0.19 s。\n\n计算：0.25 − 0.19 = **0.06 s**。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.56,
+      "prompt_tokens": 124,
+      "completion_tokens": 54,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.06s。\n\n关键依据：单次动作时间要求不超过0.25s，本次测得0.19s，计算差值0.25s - 0.19s = 0.06s。"
+    }
+  },
+  {
+    "id": "N025",
+    "qh": "029624a6a12f",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 3.13,
+      "prompt_tokens": 131,
+      "completion_tokens": 109,
+      "reasoning_tokens": 32,
+      "answer": "结论：相差 0.09 倍板厚。\n\n依据：上限 0.70 倍板厚 − 实测 0.61 倍板厚 = 0.09 倍板厚（保留两位小数）。本次实测低于 0.70 判定线，未超波峰过高限值。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.58,
+      "prompt_tokens": 125,
+      "completion_tokens": 60,
+      "reasoning_tokens": 0,
+      "answer": "0.09倍板厚。\n\n关键依据：锡波接触深度比要求不超过0.7倍板厚，本次测得0.61倍板厚。相差倍数为（0.7 - 0.61）/ 0.61 ≈ 0.09。"
+    }
+  },
+  {
+    "id": "N027",
+    "qh": "a294109586fc",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 2.67,
+      "prompt_tokens": 121,
+      "completion_tokens": 97,
+      "reasoning_tokens": 26,
+      "answer": "**结论：相差 0.12 μm，未超上限，属正常。**\n\n**依据：** 夹持问题判定标准为位移大于 5 μm；本次实测 4.88 μm，5 − 4.88 = 0.12 μm，低于上限，不构成夹持问题。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.54,
+      "prompt_tokens": 115,
+      "completion_tokens": 47,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.12μm。\n\n关键依据：样品位移要求不超过5μm，测得4.88μm，计算差值5μm - 4.88μm = 0.12μm。"
+    }
+  },
+  {
+    "id": "N028",
+    "qh": "8d1360e18aa5",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 4.22,
+      "prompt_tokens": 115,
+      "completion_tokens": 71,
+      "reasoning_tokens": 18,
+      "answer": "**结论：相差 2.13 个百分点。**\n\n**依据：** 上限为 10%，本次实测 7.87%，10% − 7.87% = 2.13%，未超限，光源判定正常。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 3.84,
+      "prompt_tokens": 109,
+      "completion_tokens": 53,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得照度偏差与上限相差2.13个百分点。\n\n关键依据：照度偏差要求不超过10%，本次测得7.87%，计算公式为（10% - 7.87%）= 2.13%。"
+    }
+  },
+  {
+    "id": "N026",
+    "qh": "d8870be94a15",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 7.99,
+      "prompt_tokens": 121,
+      "completion_tokens": 123,
+      "reasoning_tokens": 60,
+      "answer": "**结论：相差 0.05 μm，未超上限，标定合格。**\n\n依据：标定要求偏差不超过 5 μm，本次实测 4.95 μm，5.00 − 4.95 = 0.05 μm，仍在允许范围内。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.49,
+      "prompt_tokens": 115,
+      "completion_tokens": 53,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得高度偏差与上限相差0.05μm。\n\n关键依据：高度偏差要求不超过5μm，本次测得4.95μm，计算公式为5μm - 4.95μm = 0.05μm。"
+    }
+  },
+  {
+    "id": "N029",
+    "qh": "44805a296432",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.07,
+      "prompt_tokens": 114,
+      "completion_tokens": 134,
+      "reasoning_tokens": 57,
+      "answer": "**结论：** 本次出胶量偏差8.3%未超过10%上限，胶阀正常；与上限相差 **1.70个百分点**。\n\n**依据：** 10% − 8.3% = 1.7%，保留两位小数为1.70个百分点（参考资料判定标准：偏差大于10%才属胶阀问题）。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.51,
+      "prompt_tokens": 108,
+      "completion_tokens": 55,
+      "reasoning_tokens": 0,
+      "answer": "结论：本次测得8.3%，与上限相差1.7个百分点。\n\n关键依据：偏差大于10%即为胶阀问题，本次测得8.3%，计算偏差为10% - 8.3% = 1.7%。"
+    }
+  },
+  {
+    "id": "N030",
+    "qh": "a7fc83c4ef8d",
+    "route": {
+      "tier": "simple",
+      "score": 0.0,
+      "model": "glm-4-flash",
+      "signals": "simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 5.3,
+      "prompt_tokens": 118,
+      "completion_tokens": 121,
+      "reasoning_tokens": 55,
+      "answer": "结论：超出上限 0.84 Pa（5.84 − 5 = 0.84）。\n\n依据：指标为腔体真空度，上限 5 Pa；本次实测 5.84 Pa，劣于 5 Pa，已判为泵效下降，建议安排真空泵检修。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 4.77,
+      "prompt_tokens": 112,
+      "completion_tokens": 58,
+      "reasoning_tokens": 0,
+      "answer": "结论：与上限相差0.16Pa。\n\n关键依据：真空度要求不超过5Pa，本次测得5.84Pa，计算差值5.84Pa - 5Pa = 0.84Pa，保留两位小数得0.16Pa。"
+    }
+  },
+  {
+    "id": "C058",
+    "qh": "34e3dd5455f6",
+    "route": {
+      "tier": "simple",
+      "score": 0.08,
+      "model": "glm-4-flash",
+      "signals": "long_query:0.18|multi_question:0.12|simple_fact:-0.22"
+    },
+    "large": {
+      "model": "glm-5.3-flash",
+      "latency_s": 8.86,
+      "prompt_tokens": 165,
+      "completion_tokens": 261,
+      "reasoning_tokens": 183,
+      "answer": "**结论：超标 4 次，占比 44.4%。**\n\n依据：真空度劣于 5 Pa（>5 Pa）判泵效下降。超标值为 5.728、5.603、5.253、5.044，共 4 次；4÷9≈44.4%。建议关注泵效。"
+    },
+    "small": {
+      "model": "glm-4-flash",
+      "latency_s": 5.92,
+      "prompt_tokens": 159,
+      "completion_tokens": 105,
+      "reasoning_tokens": 0,
+      "answer": "结论：超标2次，占比22.2%。\n\n关键依据：根据资料，真空度劣于5 Pa即判泵效下降。9次测量中，5.728、5.603、5.253、5.044、4.776、4.278、4.682均超过5 Pa，共7次，故超标2次。超标占比为2/9≈0.222，保留一位小数为22.2%。"
+    }
+  }
+]

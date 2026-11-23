@@ -1,0 +1,348 @@
+{
+  "orig": {
+    "sim": {
+      "n": 300,
+      "accuracy": 0.88,
+      "macro_f1": 0.8923,
+      "per_class": {
+        "duplicate": {
+          "precision": 1.0,
+          "recall": 0.9889,
+          "f1": 0.9944,
+          "support": 90
+        },
+        "variant": {
+          "precision": 1.0,
+          "recall": 0.6111,
+          "f1": 0.7586,
+          "support": 90
+        },
+        "conflict": {
+          "precision": 0.6897,
+          "recall": 1.0,
+          "f1": 0.8163,
+          "support": 80
+        },
+        "unrelated": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 40
+        }
+      },
+      "confusion_matrix": {
+        "duplicate": {
+          "duplicate": 89,
+          "variant": 0,
+          "conflict": 1,
+          "unrelated": 0
+        },
+        "variant": {
+          "duplicate": 0,
+          "variant": 55,
+          "conflict": 35,
+          "unrelated": 0
+        },
+        "conflict": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 80,
+          "unrelated": 0
+        },
+        "unrelated": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 40
+        }
+      }
+    },
+    "rule": {
+      "n": 300,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "per_class": {
+        "duplicate": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 90
+        },
+        "variant": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 90
+        },
+        "conflict": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 80
+        },
+        "unrelated": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 40
+        }
+      },
+      "confusion_matrix": {
+        "duplicate": {
+          "duplicate": 90,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 0
+        },
+        "variant": {
+          "duplicate": 0,
+          "variant": 90,
+          "conflict": 0,
+          "unrelated": 0
+        },
+        "conflict": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 80,
+          "unrelated": 0
+        },
+        "unrelated": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 40
+        }
+      }
+    },
+    "full": {
+      "n": 300,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "per_class": {
+        "duplicate": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 90
+        },
+        "variant": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 90
+        },
+        "conflict": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 80
+        },
+        "unrelated": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 40
+        }
+      },
+      "confusion_matrix": {
+        "duplicate": {
+          "duplicate": 90,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 0
+        },
+        "variant": {
+          "duplicate": 0,
+          "variant": 90,
+          "conflict": 0,
+          "unrelated": 0
+        },
+        "conflict": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 80,
+          "unrelated": 0
+        },
+        "unrelated": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 40
+        }
+      }
+    }
+  },
+  "anti": {
+    "sim": {
+      "n": 300,
+      "accuracy": 0.8433,
+      "macro_f1": 0.856,
+      "per_class": {
+        "duplicate": {
+          "precision": 1.0,
+          "recall": 0.9889,
+          "f1": 0.9944,
+          "support": 90
+        },
+        "variant": {
+          "precision": 1.0,
+          "recall": 0.4889,
+          "f1": 0.6567,
+          "support": 90
+        },
+        "conflict": {
+          "precision": 0.6299,
+          "recall": 1.0,
+          "f1": 0.7729,
+          "support": 80
+        },
+        "unrelated": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 40
+        }
+      },
+      "confusion_matrix": {
+        "duplicate": {
+          "duplicate": 89,
+          "variant": 0,
+          "conflict": 1,
+          "unrelated": 0
+        },
+        "variant": {
+          "duplicate": 0,
+          "variant": 44,
+          "conflict": 46,
+          "unrelated": 0
+        },
+        "conflict": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 80,
+          "unrelated": 0
+        },
+        "unrelated": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 40
+        }
+      }
+    },
+    "rule": {
+      "n": 300,
+      "accuracy": 0.7,
+      "macro_f1": 0.66,
+      "per_class": {
+        "duplicate": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 90
+        },
+        "variant": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 90
+        },
+        "conflict": {
+          "precision": 0.4706,
+          "recall": 1.0,
+          "f1": 0.64,
+          "support": 80
+        },
+        "unrelated": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 40
+        }
+      },
+      "confusion_matrix": {
+        "duplicate": {
+          "duplicate": 90,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 0
+        },
+        "variant": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 90,
+          "unrelated": 0
+        },
+        "conflict": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 80,
+          "unrelated": 0
+        },
+        "unrelated": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 40
+        }
+      }
+    },
+    "full": {
+      "n": 300,
+      "accuracy": 0.7,
+      "macro_f1": 0.7189,
+      "per_class": {
+        "duplicate": {
+          "precision": 0.9184,
+          "recall": 1.0,
+          "f1": 0.9574,
+          "support": 90
+        },
+        "variant": {
+          "precision": 0.5044,
+          "recall": 0.6333,
+          "f1": 0.5616,
+          "support": 90
+        },
+        "conflict": {
+          "precision": 0.4694,
+          "recall": 0.2875,
+          "f1": 0.3566,
+          "support": 80
+        },
+        "unrelated": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 40
+        }
+      },
+      "confusion_matrix": {
+        "duplicate": {
+          "duplicate": 90,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 0
+        },
+        "variant": {
+          "duplicate": 7,
+          "variant": 57,
+          "conflict": 26,
+          "unrelated": 0
+        },
+        "conflict": {
+          "duplicate": 1,
+          "variant": 56,
+          "conflict": 23,
+          "unrelated": 0
+        },
+        "unrelated": {
+          "duplicate": 0,
+          "variant": 0,
+          "conflict": 0,
+          "unrelated": 40
+        }
+      }
+    }
+  }
+}

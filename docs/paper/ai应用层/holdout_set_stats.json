@@ -1,0 +1,38 @@
+{
+  "n": 120,
+  "slice": {
+    "calc": 85,
+    "simple": 35
+  },
+  "trap": {
+    "N1": 25,
+    "N2": 25,
+    "T1": 25,
+    "T2": 25,
+    "T3": 20
+  },
+  "templates": {
+    "n1_t1": 5,
+    "n1_t2": 8,
+    "n1_t3": 7,
+    "n1_t4": 5,
+    "n2_t1": 6,
+    "n2_t2": 7,
+    "n2_t3": 6,
+    "n2_t4": 6,
+    "trap_colloquial_avg": 5,
+    "trap_colloquial_count": 5,
+    "trap_colloquial_single": 10,
+    "trap_implicit_avg": 6,
+    "trap_implicit_share": 6,
+    "trap_implicit_tenths": 7,
+    "trap_implicit_tenths2": 6,
+    "trap_num_sn": 6,
+    "trap_num_spec": 6,
+    "trap_num_station": 6,
+    "trap_num_wo": 7
+  },
+  "gold_rule": "全部由 gen_holdout_set.py 按参数计算，数值 ±0.06 绝对容差；不调用模型",
+  "frozen_rule": "A1-v1 (ModelRouter.calcVerifiable)",
+  "out": "scripts/ai_layer/data/holdout_set.tsv"
+}

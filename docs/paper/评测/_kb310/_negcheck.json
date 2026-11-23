@@ -1,0 +1,724 @@
+{
+ "total": 100,
+ "covered": 13,
+ "by_class": {
+  "same_symptom_diff_cause": {
+   "n": 25,
+   "covered": 10
+  },
+  "out_of_domain": {
+   "n": 25,
+   "covered": 3
+  },
+  "same_cause_diff_symptom": {
+   "n": 25,
+   "covered": 0
+  },
+  "missing_noise": {
+   "n": 25,
+   "covered": 0
+  }
+ },
+ "rows": [
+  {
+   "id": "N1-01",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机吸嘴无法吸取元件，我怀疑是真空泵膜片老化导致的，怎么处理",
+   "keyword": "真空泵",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-02",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机贴装后元器件位置偏离目标位置，我怀疑是伺服驱动器编码器零位丢失导致的，怎么处理",
+   "keyword": "编码器",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-03",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机供料器出现卡料，我怀疑是压带轮轴承磨损导致的，怎么处理",
+   "keyword": "轴承",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-04",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机传送轨道上卡板，我怀疑是轨道宽度伺服电机丢步导致的，怎么处理",
+   "keyword": "伺服电机",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-05",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机视觉系统无法正确识别元件位置，我怀疑是千兆网卡丢包导致的，怎么处理",
+   "keyword": "网卡",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-06",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机贴装头在运行过程中突然撞击工作台面，我怀疑是Z轴刹车片磨损导致的，怎么处理",
+   "keyword": "刹车片",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-07",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机元器件出现立碑现象，我怀疑是贴片针加热棒可控硅击穿导致的，怎么处理",
+   "keyword": "可控硅",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-08",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴片机气路压力异常，表现为喷嘴无力，我怀疑是车间储气罐泄漏导致的，怎么处理",
+   "keyword": "储气罐",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-09",
+   "cls": "same_symptom_diff_cause",
+   "query": "AOI检测机拍摄出的图像模糊不清，我怀疑是相机CMOS靶面结露导致的，怎么处理",
+   "keyword": "CMOS",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-10",
+   "cls": "same_symptom_diff_cause",
+   "query": "AOI检测机条码识别失败，我怀疑是读码器偏振滤光片老化导致的，怎么处理",
+   "keyword": "偏振",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-11",
+   "cls": "same_symptom_diff_cause",
+   "query": "AOI检测机误报率过高，我怀疑是GPU显存ECC报错导致的，怎么处理",
+   "keyword": "GPU",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-12",
+   "cls": "same_symptom_diff_cause",
+   "query": "AOI检测机无法与其他设备或系统进行通讯，我怀疑是交换机VLAN配置漂移导致的，怎么处理",
+   "keyword": "VLAN",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-13",
+   "cls": "same_symptom_diff_cause",
+   "query": "AOI检测机光源亮度衰减，我怀疑是恒流源采样电阻温漂导致的，怎么处理",
+   "keyword": "恒流源",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-14",
+   "cls": "same_symptom_diff_cause",
+   "query": "AOI检测机过板过程中出现卡板现象，我怀疑是传送皮带张紧轮碎裂导致的，怎么处理",
+   "keyword": "张紧轮",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-15",
+   "cls": "same_symptom_diff_cause",
+   "query": "蚀刻机蚀刻机喷嘴堵塞，我怀疑是供液泵单向阀卡死导致的，怎么处理",
+   "keyword": "单向阀",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-16",
+   "cls": "same_symptom_diff_cause",
+   "query": "蚀刻机蚀刻速率与设定值存在较大偏差，我怀疑是整流器输出纹波过大导致的，怎么处理",
+   "keyword": "纹波",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-17",
+   "cls": "same_symptom_diff_cause",
+   "query": "蚀刻机腔体压力异常波动，我怀疑是真空规管灯丝老化导致的，怎么处理",
+   "keyword": "真空规",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-18",
+   "cls": "same_symptom_diff_cause",
+   "query": "蚀刻机废液排放过程中出现报警，我怀疑是液位浮球开关失效导致的，怎么处理",
+   "keyword": "浮球",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-19",
+   "cls": "same_symptom_diff_cause",
+   "query": "蚀刻机蚀刻后的表面出现不均匀的蚀刻痕迹，我怀疑是喷淋摆臂同步带打滑导致的，怎么处理",
+   "keyword": "同步带",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-20",
+   "cls": "same_symptom_diff_cause",
+   "query": "涂布机涂布厚度不均匀，我怀疑是模头唇口微调螺栓松动导致的，怎么处理",
+   "keyword": "模头",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-21",
+   "cls": "same_symptom_diff_cause",
+   "query": "涂布机纠偏系统无法正常工作，我怀疑是光电边缘传感器镜片污染导致的，怎么处理",
+   "keyword": "光电边缘",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-22",
+   "cls": "same_symptom_diff_cause",
+   "query": "涂布机涂层出现不规则气泡，我怀疑是供料过滤器堵塞析气导致的，怎么处理",
+   "keyword": "过滤器",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-23",
+   "cls": "same_symptom_diff_cause",
+   "query": "涂布机出现张力波动，我怀疑是磁粉制动器线圈老化导致的，怎么处理",
+   "keyword": "磁粉",
+   "covered_in_310": false
+  },
+  {
+   "id": "N1-24",
+   "cls": "same_symptom_diff_cause",
+   "query": "涂布机烘干段温度异常波动，我怀疑是热风风机变频器过流导致的，怎么处理",
+   "keyword": "变频器",
+   "covered_in_310": true
+  },
+  {
+   "id": "N1-25",
+   "cls": "same_symptom_diff_cause",
+   "query": "贴合机贴合过程中出现气泡，我怀疑是真空腔体密封圈老化导致的，怎么处理",
+   "keyword": "密封圈",
+   "covered_in_310": true
+  },
+  {
+   "id": "N2-01",
+   "cls": "out_of_domain",
+   "query": "空压机排气温度过高频繁跳机，怎么排查",
+   "keyword": "空压机",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-02",
+   "cls": "out_of_domain",
+   "query": "真空泵油品乳化、极限真空度下降，怎么排查",
+   "keyword": "真空泵",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-03",
+   "cls": "out_of_domain",
+   "query": "冷却塔风机振动超标、轴承温度偏高，怎么排查",
+   "keyword": "冷却塔",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-04",
+   "cls": "out_of_domain",
+   "query": "注塑机料筒加热圈烧毁，怎么排查",
+   "keyword": "注塑机",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-05",
+   "cls": "out_of_domain",
+   "query": "CNC加工中心主轴高速运转异响，怎么排查",
+   "keyword": "CNC",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-06",
+   "cls": "out_of_domain",
+   "query": "激光打标机打标深度忽深忽浅，怎么排查",
+   "keyword": "激光打标",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-07",
+   "cls": "out_of_domain",
+   "query": "超声波清洗机换能器失效、清洗无力，怎么排查",
+   "keyword": "超声波",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-08",
+   "cls": "out_of_domain",
+   "query": "点胶机胶点直径不稳定，怎么排查",
+   "keyword": "点胶",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-09",
+   "cls": "out_of_domain",
+   "query": "X-Ray检测机球管老化、成像对比度下降，怎么排查",
+   "keyword": "X-Ray",
+   "covered_in_310": true
+  },
+  {
+   "id": "N2-10",
+   "cls": "out_of_domain",
+   "query": "ICT测试机探针接触不良、测试误判，怎么排查",
+   "keyword": "ICT",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-11",
+   "cls": "out_of_domain",
+   "query": "老化房温湿度失控，怎么排查",
+   "keyword": "老化房",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-12",
+   "cls": "out_of_domain",
+   "query": "立体仓库堆垛机行走机构异响，怎么排查",
+   "keyword": "堆垛机",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-13",
+   "cls": "out_of_domain",
+   "query": "AGV小车导航丢失、原地打转，怎么排查",
+   "keyword": "AGV",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-14",
+   "cls": "out_of_domain",
+   "query": "车间电梯困人、门机不闭合，怎么排查",
+   "keyword": "电梯",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-15",
+   "cls": "out_of_domain",
+   "query": "锅炉水位低报警，怎么排查",
+   "keyword": "锅炉",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-16",
+   "cls": "out_of_domain",
+   "query": "中央空调冷媒泄漏、制冷量下降，怎么排查",
+   "keyword": "冷媒",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-17",
+   "cls": "out_of_domain",
+   "query": "消防喷淋无火情误动作，怎么排查",
+   "keyword": "喷淋",
+   "covered_in_310": true
+  },
+  {
+   "id": "N2-18",
+   "cls": "out_of_domain",
+   "query": "机房UPS电池鼓包、后备时间骤降，怎么排查",
+   "keyword": "UPS",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-19",
+   "cls": "out_of_domain",
+   "query": "除尘器布袋破损、出口含尘超标，怎么排查",
+   "keyword": "除尘",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-20",
+   "cls": "out_of_domain",
+   "query": "污水泵叶轮缠绕、流量下降，怎么排查",
+   "keyword": "污水",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-21",
+   "cls": "out_of_domain",
+   "query": "行车大车行走啃轨，怎么排查",
+   "keyword": "行车",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-22",
+   "cls": "out_of_domain",
+   "query": "皮带输送线输送带跑偏，怎么排查",
+   "keyword": "皮带",
+   "covered_in_310": true
+  },
+  {
+   "id": "N2-23",
+   "cls": "out_of_domain",
+   "query": "自动锁螺丝机扭力不足、滑牙，怎么排查",
+   "keyword": "锁螺丝",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-24",
+   "cls": "out_of_domain",
+   "query": "灌胶机出胶量不稳，怎么排查",
+   "keyword": "灌胶",
+   "covered_in_310": false
+  },
+  {
+   "id": "N2-25",
+   "cls": "out_of_domain",
+   "query": "锡膏搅拌机搅拌温升异常，怎么排查",
+   "keyword": "锡膏搅拌",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-01",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴片机出现取料时料带轻微抖动，贴装后元件极性反贴，我们怀疑根因是供料器胶带老化，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-02",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴片机出现元件吸附后偶发掉落，吸嘴外观无明显异常，我们怀疑根因是吸嘴内部污垢，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-03",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴片机出现焊点高度偏低、偶发虚焊，我们怀疑根因是贴片针压力不足，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-04",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴片机出现板间距忽大忽小，出板节拍抖动，我们怀疑根因是传送带速度不稳定，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-05",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴片机出现同一程序反复贴装，偏移量随机变化，我们怀疑根因是视觉系统误差，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-06",
+   "cls": "same_cause_diff_symptom",
+   "query": "AOI检测机出现检测图像局部过曝，边缘元件判定不稳，我们怀疑根因是照明系统损坏，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-07",
+   "cls": "same_cause_diff_symptom",
+   "query": "AOI检测机出现元件中心定位漂移，重复检测结果不一致，我们怀疑根因是镜头脏污，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-08",
+   "cls": "same_cause_diff_symptom",
+   "query": "AOI检测机出现图像时清晰时模糊，随温度变化，我们怀疑根因是对焦马达故障，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-09",
+   "cls": "same_cause_diff_symptom",
+   "query": "AOI检测机出现同一批板前后判定结果不一致，我们怀疑根因是算法阈值设置不合理，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-10",
+   "cls": "same_cause_diff_symptom",
+   "query": "AOI检测机出现检测数据偶发丢包，重连后恢复，我们怀疑根因是接口卡故障，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-11",
+   "cls": "same_cause_diff_symptom",
+   "query": "蚀刻机出现板面发白，线路边缘出现锯齿，我们怀疑根因是蚀刻液浓度过高，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-12",
+   "cls": "same_cause_diff_symptom",
+   "query": "蚀刻机出现抽真空时间明显变长，我们怀疑根因是腔体密封不良，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-13",
+   "cls": "same_cause_diff_symptom",
+   "query": "蚀刻机出现蚀刻深度随批次缓慢变浅，我们怀疑根因是温控系统异常，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-14",
+   "cls": "same_cause_diff_symptom",
+   "query": "蚀刻机出现板面出现细颗粒残留，我们怀疑根因是水洗系统过滤网堵塞，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-15",
+   "cls": "same_cause_diff_symptom",
+   "query": "蚀刻机出现板底出现规律性油印，我们怀疑根因是传送轮表面油脂，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-16",
+   "cls": "same_cause_diff_symptom",
+   "query": "涂布机出现收卷时料带跑偏，我们怀疑根因是涂布辊压力不均，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-17",
+   "cls": "same_cause_diff_symptom",
+   "query": "涂布机出现涂布面出现周期性条纹，我们怀疑根因是背辊表面润滑不良，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-18",
+   "cls": "same_cause_diff_symptom",
+   "query": "涂布机出现断带报警偶发误触发，我们怀疑根因是张力传感器故障，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-19",
+   "cls": "same_cause_diff_symptom",
+   "query": "涂布机出现涂层出现云状色差，我们怀疑根因是涂料搅拌不均匀，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-20",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴合机出现贴合后产品边缘翘曲，我们怀疑根因是气缸压力不足，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-21",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴合机出现贴合胶固化时间变长，我们怀疑根因是温控传感器损坏，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-22",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴合机出现薄料吸附后位置漂移，我们怀疑根因是静电发生器损坏，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-23",
+   "cls": "same_cause_diff_symptom",
+   "query": "贴合机出现贴合面出现细碎压痕，我们怀疑根因是导轨清洁度不够，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-24",
+   "cls": "same_cause_diff_symptom",
+   "query": "MES终端出现客户端按钮点不动，界面卡死，我们怀疑根因是本地缓存队列，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N3-25",
+   "cls": "same_cause_diff_symptom",
+   "query": "回流焊出现各温区实测温度与设定偏差不一致，我们怀疑根因是校准热电偶，该怎么验证",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-01",
+   "cls": "missing_noise",
+   "query": "报工接口超时怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-02",
+   "cls": "missing_noise",
+   "query": "SPI锡膏检测机出现3D光源亮度漂移应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-03",
+   "cls": "missing_noise",
+   "query": "回流焊炉温失控",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-04",
+   "cls": "missing_noise",
+   "query": "程序调用错误怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-05",
+   "cls": "missing_noise",
+   "query": "贴片机出现传送轨道卡板应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-06",
+   "cls": "missing_noise",
+   "query": "蚀刻机废液排放报警",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-07",
+   "cls": "missing_noise",
+   "query": "压力不均怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-08",
+   "cls": "missing_noise",
+   "query": "贴合机出现辊筒磨损应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-09",
+   "cls": "missing_noise",
+   "query": "贴合机定位标记识别",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-10",
+   "cls": "missing_noise",
+   "query": "温控异常怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-11",
+   "cls": "missing_noise",
+   "query": "贴合机出现送料偏斜应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-12",
+   "cls": "missing_noise",
+   "query": "贴合机静电吸附不良",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-13",
+   "cls": "missing_noise",
+   "query": "蚀刻速率偏差怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-14",
+   "cls": "missing_noise",
+   "query": "蚀刻机出现药水浓度异长应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-15",
+   "cls": "missing_noise",
+   "query": "蚀刻机喷嘴堵塞",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-16",
+   "cls": "missing_noise",
+   "query": "过蚀刻怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-17",
+   "cls": "missing_noise",
+   "query": "蚀刻机出现蚀刻不均应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-18",
+   "cls": "missing_noise",
+   "query": "蚀刻机传送轮污染",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-19",
+   "cls": "missing_noise",
+   "query": "腔体温度漂移怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-20",
+   "cls": "missing_noise",
+   "query": "蚀刻机出现水洗残留应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-21",
+   "cls": "missing_noise",
+   "query": "蚀刻机腔体压力异常",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-22",
+   "cls": "missing_noise",
+   "query": "贴合偏移怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-23",
+   "cls": "missing_noise",
+   "query": "贴合机出现脱胶应该如何排查？？急",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-24",
+   "cls": "missing_noise",
+   "query": "贴合机材料褶皱",
+   "keyword": "",
+   "covered_in_310": false
+  },
+  {
+   "id": "N4-25",
+   "cls": "missing_noise",
+   "query": "气泡怎么处理",
+   "keyword": "",
+   "covered_in_310": false
+  }
+ ]
+}

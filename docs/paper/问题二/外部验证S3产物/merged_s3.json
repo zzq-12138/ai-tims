@@ -1,0 +1,45 @@
+{
+ "env": {
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "gpu_mem_gb": 23.5,
+  "dtype": "bfloat16",
+  "framework": "transformers.generate",
+  "torch": "2.8.0+cu128",
+  "transformers": "4.46.3",
+  "peft": "0.21.2",
+  "max_new_tokens": 384,
+  "batch": 1,
+  "do_sample": false,
+  "timing": "perf_counter: before generate -> after decode (same as gen_s)"
+ },
+ "S1_base_peak": {
+  "peak_alloc_gb": 14.31,
+  "peak_reserved_gb": 14.47,
+  "probe_n": 6
+ },
+ "S3_unmerged_peak": {
+  "peak_alloc_gb": 14.53,
+  "peak_reserved_gb": 14.64,
+  "probe_n": 6
+ },
+ "merge_peak_alloc_gb": 14.91,
+ "S3_merged": {
+  "n": 197,
+  "mean_s": 6.386786240585583,
+  "p50_s": 6.273440873948857,
+  "p95_s": 8.19149883906357,
+  "min_s": 4.619847886962816,
+  "max_s": 9.618505188962445,
+  "out_tokens_mean": 230.93401015228426,
+  "tok_per_s_aggregate": 36.15809288947029,
+  "tok_per_s_median": 36.354497952127225,
+  "json_ok_rate": 1.0,
+  "peak_alloc_gb": 14.32,
+  "peak_reserved_gb": 14.53
+ },
+ "merge_equivalence": {
+  "compared": 197,
+  "raw_exact_same": 192,
+  "rate": 0.9746192893401016
+ }
+}

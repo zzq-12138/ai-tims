@@ -1,0 +1,1808 @@
+{
+  "summary": {
+    "n": 120,
+    "passed": 120,
+    "failed": 0,
+    "by_trap": {
+      "N1": {
+        "n": 25,
+        "failed": 0
+      },
+      "N2": {
+        "n": 25,
+        "failed": 0
+      },
+      "T1": {
+        "n": 25,
+        "failed": 0
+      },
+      "T2": {
+        "n": 25,
+        "failed": 0
+      },
+      "T3": {
+        "n": 20,
+        "failed": 0
+      }
+    },
+    "tolerance_abs": 0.06,
+    "method": "只读题面/参考资料重新解析并重算；另做区间、占比、均值自洽检查"
+  },
+  "items": [
+    {
+      "id": "H001",
+      "trap": "N1",
+      "template": "n1_t1",
+      "gold": "17.8|82.2",
+      "recomputed": [
+        "17.8",
+        "82.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "先看这个：SPI锡膏检测机投影光源模组初始亮度1070，现测880，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H002",
+      "trap": "N1",
+      "template": "n1_t1",
+      "gold": "16.4|83.6",
+      "recomputed": [
+        "16.4",
+        "83.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "先看这个：AOI光学检测机环形光源初始亮度2810，现测2350，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H003",
+      "trap": "N1",
+      "template": "n1_t1",
+      "gold": "23.3|76.7",
+      "recomputed": [
+        "23.3",
+        "76.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "先看这个：刻蚀机射频电源初始输出功率730，现测560，输出功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H004",
+      "trap": "N1",
+      "template": "n1_t1",
+      "gold": "25.2|74.8",
+      "recomputed": [
+        "25.2",
+        "74.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "先看这个：涂覆机喷雾阀初始胶量1590，现测1190，胶量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H005",
+      "trap": "N1",
+      "template": "n1_t1",
+      "gold": "13.6|86.4",
+      "recomputed": [
+        "13.6",
+        "86.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "先看这个：回流焊氮气流量计初始氮气流量590，现测510，氮气流量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H006",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "4|50.0",
+      "recomputed": [
+        "4",
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，贴片机贴装头升降气缸单次动作时间要求不超过0.25s。这批8次测量（s）：0.283、0.226、0.261、0.274、0.236、0.279、0.241、0.243。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H007",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "5|62.5",
+      "recomputed": [
+        "5",
+        "62.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，回流焊热风马达温区横向温差要求不超过3℃。这批8次测量（℃）：3.066、2.932、3.168、3.396、2.738、3.166、2.714、3.29。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H008",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "4|50.0",
+      "recomputed": [
+        "4",
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚。这批8次测量（倍板厚）：0.628、0.664、0.726、0.752、0.692、0.71、0.639、0.789。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H009",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "4|50.0",
+      "recomputed": [
+        "4",
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，SPI锡膏检测机高度标定块高度偏差要求不超过5μm。这批8次测量（μm）：4.412、4.503、5.157、5.261、4.383、4.661、5.449、5.522。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H010",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "7|87.5",
+      "recomputed": [
+        "7",
+        "87.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，X-Ray检测机载物台夹具样品位移要求不超过5μm。这批8次测量（μm）：5.636、5.162、5.218、5.257、5.269、5.326、5.361、4.988。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H011",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "3|37.5",
+      "recomputed": [
+        "3",
+        "37.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，AOI光学检测机相机光源照度偏差要求不超过10%。这批8次测量（%）：11.144、9.859、9.116、9.295、10.948、8.727、11.289、8.927。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H012",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "1|12.5",
+      "recomputed": [
+        "1",
+        "12.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，涂覆机胶阀出胶量偏差要求不超过10%。这批8次测量（%）：9.728、8.79、8.909、9.144、9.434、10.8、9.949、9.607。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H013",
+      "trap": "N1",
+      "template": "n1_t2",
+      "gold": "6|75.0",
+      "recomputed": [
+        "6",
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "麻烦看下，刻蚀机真空泵腔体真空度要求不超过5Pa。这批8次测量（Pa）：5.142、5.219、5.368、5.516、4.653、4.674、5.002、5.149。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H014",
+      "trap": "N1",
+      "template": "n1_t3",
+      "gold": "3|37.5",
+      "recomputed": [
+        "3",
+        "37.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "帮我核对下：波峰焊传送带传送速度要求1-1.2m/min，这批8次测量（m/min）：1.255、0.985、1.219、1.043、0.942、1.163、1.183、1.204。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H015",
+      "trap": "N1",
+      "template": "n1_t3",
+      "gold": "6|75.0",
+      "recomputed": [
+        "6",
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "帮我核对下：X-Ray检测机射线管放大倍率要求3.5-5倍，这批8次测量（倍）：3.711、3.916、4.628、3.927、4.829、5.133、3.187、3.882。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H016",
+      "trap": "N1",
+      "template": "n1_t3",
+      "gold": "1|12.5",
+      "recomputed": [
+        "1",
+        "12.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "帮我核对下：回流焊传送带传送速度要求1-1.2m/min，这批8次测量（m/min）：1.23、1.235、0.999、0.948、1.091、1.258、0.936、1.221。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H017",
+      "trap": "N1",
+      "template": "n1_t3",
+      "gold": "3|37.5",
+      "recomputed": [
+        "3",
+        "37.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "帮我核对下：贴片机供料器供料间距要求3.9-4.1mm，这批8次测量（mm）：3.854、4.018、4.149、4.098、4.151、4.024、3.886、4.149。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H018",
+      "trap": "N1",
+      "template": "n1_t3",
+      "gold": "6|75.0",
+      "recomputed": [
+        "6",
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "帮我核对下：SPI锡膏检测机锡膏厚度印刷厚度要求0.1-0.15mm，这批8次测量（mm）：0.115、0.164、0.112、0.114、0.141、0.167、0.103、0.102。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H019",
+      "trap": "N1",
+      "template": "n1_t3",
+      "gold": "7|87.5",
+      "recomputed": [
+        "7",
+        "87.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "帮我核对下：AOI光学检测机相机曝光时间要求8-12ms，这批8次测量（ms）：10.342、8.247、10.884、8.3、9.95、11.723、13.308、10.058。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H020",
+      "trap": "N1",
+      "template": "n1_t3",
+      "gold": "7|87.5",
+      "recomputed": [
+        "7",
+        "87.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "帮我核对下：涂覆机喷头喷涂压力要求0.2-0.3MPa，这批8次测量（MPa）：0.259、0.241、0.269、0.219、0.258、0.27、0.3、0.31。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H021",
+      "trap": "N1",
+      "template": "n1_t4",
+      "gold": "0.3|5",
+      "recomputed": [
+        "0.3",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "顺便算下，贴片机贴装头升降气缸单次动作时间要求不超过0.25s，这批8次测量（s）：0.259、0.264、0.276、0.222、0.26、0.262、0.237、0.23。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "H022",
+      "trap": "N1",
+      "template": "n1_t4",
+      "gold": "3.1|5",
+      "recomputed": [
+        "3.1",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "顺便算下，回流焊热风马达温区横向温差要求不超过3℃，这批8次测量（℃）：3.356、2.687、3.306、3.064、2.915、3.153、3.085、2.874。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "H023",
+      "trap": "N1",
+      "template": "n1_t4",
+      "gold": "0.7|3",
+      "recomputed": [
+        "0.7",
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "顺便算下，波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚，这批8次测量（倍板厚）：0.66、0.769、0.765、0.688、0.686、0.669、0.697、0.764。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "H024",
+      "trap": "N1",
+      "template": "n1_t4",
+      "gold": "5.2|5",
+      "recomputed": [
+        "5.2",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "顺便算下，SPI锡膏检测机高度标定块高度偏差要求不超过5μm，这批8次测量（μm）：5.558、5.434、4.514、5.337、4.984、5.044、5.699、4.785。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "H025",
+      "trap": "N1",
+      "template": "n1_t4",
+      "gold": "4.9|3",
+      "recomputed": [
+        "4.9",
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "顺便算下，X-Ray检测机载物台夹具样品位移要求不超过5μm，这批8次测量（μm）：4.763、5.676、5.319、4.922、5.032、4.516、4.32、4.467。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "H026",
+      "trap": "N2",
+      "template": "n2_t1",
+      "gold": "22.2|77.8",
+      "recomputed": [
+        "22.2",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "从1580掉到1230，亮度跌了几个百分点（保留一位小数）？还剩原来的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H027",
+      "trap": "N2",
+      "template": "n2_t1",
+      "gold": "13.5|86.5",
+      "recomputed": [
+        "13.5",
+        "86.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "从2080掉到1800，亮度跌了几个百分点（保留一位小数）？还剩原来的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H028",
+      "trap": "N2",
+      "template": "n2_t1",
+      "gold": "23.5|76.5",
+      "recomputed": [
+        "23.5",
+        "76.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "从680掉到520，输出功率跌了几个百分点（保留一位小数）？还剩原来的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H029",
+      "trap": "N2",
+      "template": "n2_t1",
+      "gold": "17.9|82.1",
+      "recomputed": [
+        "17.9",
+        "82.1"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "从1060掉到870，胶量跌了几个百分点（保留一位小数）？还剩原来的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H030",
+      "trap": "N2",
+      "template": "n2_t1",
+      "gold": "21.4|78.6",
+      "recomputed": [
+        "21.4",
+        "78.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "从700掉到550，氮气流量跌了几个百分点（保留一位小数）？还剩原来的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H031",
+      "trap": "N2",
+      "template": "n2_t1",
+      "gold": "24.8|75.2",
+      "recomputed": [
+        "24.8",
+        "75.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "从2220掉到1670，喷涂量跌了几个百分点（保留一位小数）？还剩原来的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H032",
+      "trap": "N2",
+      "template": "n2_t2",
+      "gold": "4|50.0",
+      "recomputed": [
+        "4",
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "这8个读数里，越过0.25s的有几回？占多大比例（保留一位小数，%）？读数：0.264、0.242、0.246、0.28、0.284、0.279、0.233、0.217。"
+    },
+    {
+      "id": "H033",
+      "trap": "N2",
+      "template": "n2_t2",
+      "gold": "1|12.5",
+      "recomputed": [
+        "1",
+        "12.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "这8个读数里，越过3℃的有几回？占多大比例（保留一位小数，%）？读数：2.731、3.002、2.762、2.669、2.723、2.99、2.598、2.918。"
+    },
+    {
+      "id": "H034",
+      "trap": "N2",
+      "template": "n2_t2",
+      "gold": "7|87.5",
+      "recomputed": [
+        "7",
+        "87.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "这8个读数里，越过0.7倍板厚的有几回？占多大比例（保留一位小数，%）？读数：0.772、0.712、0.646、0.763、0.793、0.778、0.788、0.724。"
+    },
+    {
+      "id": "H035",
+      "trap": "N2",
+      "template": "n2_t2",
+      "gold": "3|37.5",
+      "recomputed": [
+        "3",
+        "37.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "这8个读数里，越过5μm的有几回？占多大比例（保留一位小数，%）？读数：4.835、4.888、5.165、5.047、4.883、4.308、5.173、4.745。"
+    },
+    {
+      "id": "H036",
+      "trap": "N2",
+      "template": "n2_t2",
+      "gold": "5|62.5",
+      "recomputed": [
+        "5",
+        "62.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "这8个读数里，越过5μm的有几回？占多大比例（保留一位小数，%）？读数：5.336、5.206、5.532、4.925、4.559、5.427、4.865、5.246。"
+    },
+    {
+      "id": "H037",
+      "trap": "N2",
+      "template": "n2_t2",
+      "gold": "4|50.0",
+      "recomputed": [
+        "4",
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "这8个读数里，越过10%的有几回？占多大比例（保留一位小数，%）？读数：9.228、11.064、9.144、8.993、10.36、11.32、8.952、10.593。"
+    },
+    {
+      "id": "H038",
+      "trap": "N2",
+      "template": "n2_t2",
+      "gold": "7|87.5",
+      "recomputed": [
+        "7",
+        "87.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "这8个读数里，越过10%的有几回？占多大比例（保留一位小数，%）？读数：8.608、10.539、10.647、11.229、10.033、11.016、10.255、10.959。"
+    },
+    {
+      "id": "H039",
+      "trap": "N2",
+      "template": "n2_t3",
+      "gold": "5|62.5",
+      "recomputed": [
+        "5",
+        "62.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "传送速度要落在1-1.2m/min，这批读数：1.057、1.257、1.213、1.113、0.937、1.042、1.052、1.055。合格的有几项？合格比例多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H040",
+      "trap": "N2",
+      "template": "n2_t3",
+      "gold": "4|50.0",
+      "recomputed": [
+        "4",
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "放大倍率要落在3.5-5倍，这批读数：3.309、3.856、3.016、3.794、3.53、3.485、5.181、3.567。合格的有几项？合格比例多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H041",
+      "trap": "N2",
+      "template": "n2_t3",
+      "gold": "5|62.5",
+      "recomputed": [
+        "5",
+        "62.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "传送速度要落在1-1.2m/min，这批读数：0.95、1.051、1.13、1.055、1.081、0.974、1.008、0.942。合格的有几项？合格比例多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H042",
+      "trap": "N2",
+      "template": "n2_t3",
+      "gold": "6|75.0",
+      "recomputed": [
+        "6",
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "供料间距要落在3.9-4.1mm，这批读数：3.961、3.838、3.904、4.089、3.979、3.936、4.121、3.946。合格的有几项？合格比例多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H043",
+      "trap": "N2",
+      "template": "n2_t3",
+      "gold": "6|75.0",
+      "recomputed": [
+        "6",
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "印刷厚度要落在0.1-0.15mm，这批读数：0.12、0.137、0.15、0.093、0.128、0.11、0.149、0.16。合格的有几项？合格比例多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H044",
+      "trap": "N2",
+      "template": "n2_t3",
+      "gold": "5|62.5",
+      "recomputed": [
+        "5",
+        "62.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "曝光时间要落在8-12ms，这批读数：6.96、7.869、9.289、10.335、10.587、11.294、7.963、11.706。合格的有几项？合格比例多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H045",
+      "trap": "N2",
+      "template": "n2_t4",
+      "gold": "0.3|6",
+      "recomputed": [
+        "0.3",
+        "6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "单次动作时间均值是多少（保留一位小数）？有几回超过0.25s？读数：0.269、0.266、0.246、0.275、0.282、0.233、0.275、0.268。"
+    },
+    {
+      "id": "H046",
+      "trap": "N2",
+      "template": "n2_t4",
+      "gold": "3.0|3",
+      "recomputed": [
+        "3",
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "温区横向温差均值是多少（保留一位小数）？有几回超过3℃？读数：2.761、3.317、2.921、3.338、2.763、3.007、2.907、2.665。"
+    },
+    {
+      "id": "H047",
+      "trap": "N2",
+      "template": "n2_t4",
+      "gold": "0.7|4",
+      "recomputed": [
+        "0.7",
+        "4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "锡波接触深度比均值是多少（保留一位小数）？有几回超过0.7倍板厚？读数：0.774、0.695、0.757、0.649、0.723、0.739、0.651、0.641。"
+    },
+    {
+      "id": "H048",
+      "trap": "N2",
+      "template": "n2_t4",
+      "gold": "5.1|4",
+      "recomputed": [
+        "5.1",
+        "4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "高度偏差均值是多少（保留一位小数）？有几回超过5μm？读数：5.311、4.998、5.138、4.507、5.597、4.901、4.425、5.61。"
+    },
+    {
+      "id": "H049",
+      "trap": "N2",
+      "template": "n2_t4",
+      "gold": "4.9|4",
+      "recomputed": [
+        "4.9",
+        "4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "样品位移均值是多少（保留一位小数）？有几回超过5μm？读数：5.143、5.595、4.435、4.489、4.326、4.768、5.357、5.227。"
+    },
+    {
+      "id": "H050",
+      "trap": "N2",
+      "template": "n2_t4",
+      "gold": "10.0|3",
+      "recomputed": [
+        "10",
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true,
+        true
+      ],
+      "question": "照度偏差均值是多少（保留一位小数）？有几回超过10%？读数：10.547、9.365、9.963、10.92、8.677、10.634、9.866、9.844。"
+    },
+    {
+      "id": "H051",
+      "trap": "T1",
+      "template": "trap_num_wo",
+      "gold": "5",
+      "recomputed": [
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "工单 WO-2026110-03 记录了几次报警？"
+    },
+    {
+      "id": "H052",
+      "trap": "T1",
+      "template": "trap_num_wo",
+      "gold": "5",
+      "recomputed": [
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "工单 WO-2026110-04 记录了几次报警？"
+    },
+    {
+      "id": "H053",
+      "trap": "T1",
+      "template": "trap_num_wo",
+      "gold": "4",
+      "recomputed": [
+        "4"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "工单 WO-2026110-05 记录了几次报警？"
+    },
+    {
+      "id": "H054",
+      "trap": "T1",
+      "template": "trap_num_wo",
+      "gold": "2",
+      "recomputed": [
+        "2"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "工单 WO-2026110-06 记录了几次报警？"
+    },
+    {
+      "id": "H055",
+      "trap": "T1",
+      "template": "trap_num_wo",
+      "gold": "2",
+      "recomputed": [
+        "2"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "工单 WO-2026110-07 记录了几次报警？"
+    },
+    {
+      "id": "H056",
+      "trap": "T1",
+      "template": "trap_num_wo",
+      "gold": "4",
+      "recomputed": [
+        "4"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "工单 WO-2026110-08 记录了几次报警？"
+    },
+    {
+      "id": "H057",
+      "trap": "T1",
+      "template": "trap_num_wo",
+      "gold": "2",
+      "recomputed": [
+        "2"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "工单 WO-2026110-09 记录了几次报警？"
+    },
+    {
+      "id": "H058",
+      "trap": "T1",
+      "template": "trap_num_spec",
+      "gold": "1",
+      "recomputed": [
+        "1"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "规格书第 2 版里，波峰焊传送速度的下限是多少m/min？"
+    },
+    {
+      "id": "H059",
+      "trap": "T1",
+      "template": "trap_num_spec",
+      "gold": "3.5",
+      "recomputed": [
+        "3.5"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "规格书第 3 版里，X-Ray检测机放大倍率的下限是多少倍？"
+    },
+    {
+      "id": "H060",
+      "trap": "T1",
+      "template": "trap_num_spec",
+      "gold": "1",
+      "recomputed": [
+        "1"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "规格书第 4 版里，回流焊传送速度的下限是多少m/min？"
+    },
+    {
+      "id": "H061",
+      "trap": "T1",
+      "template": "trap_num_spec",
+      "gold": "3.9",
+      "recomputed": [
+        "3.9"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "规格书第 5 版里，贴片机供料间距的下限是多少mm？"
+    },
+    {
+      "id": "H062",
+      "trap": "T1",
+      "template": "trap_num_spec",
+      "gold": "0.1",
+      "recomputed": [
+        "0.1"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "规格书第 2 版里，SPI锡膏检测机印刷厚度的下限是多少mm？"
+    },
+    {
+      "id": "H063",
+      "trap": "T1",
+      "template": "trap_num_spec",
+      "gold": "8",
+      "recomputed": [
+        "8"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "规格书第 3 版里，AOI光学检测机曝光时间的下限是多少ms？"
+    },
+    {
+      "id": "H064",
+      "trap": "T1",
+      "template": "trap_num_station",
+      "gold": "1",
+      "recomputed": [
+        "1"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "B1 线 1 号工位上配了几个贴装头？"
+    },
+    {
+      "id": "H065",
+      "trap": "T1",
+      "template": "trap_num_station",
+      "gold": "2",
+      "recomputed": [
+        "2"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "B2 线 2 号工位上配了几个贴装头？"
+    },
+    {
+      "id": "H066",
+      "trap": "T1",
+      "template": "trap_num_station",
+      "gold": "3",
+      "recomputed": [
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "B3 线 3 号工位上配了几个贴装头？"
+    },
+    {
+      "id": "H067",
+      "trap": "T1",
+      "template": "trap_num_station",
+      "gold": "1",
+      "recomputed": [
+        "1"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "B1 线 4 号工位上配了几个贴装头？"
+    },
+    {
+      "id": "H068",
+      "trap": "T1",
+      "template": "trap_num_station",
+      "gold": "2",
+      "recomputed": [
+        "2"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "B2 线 5 号工位上配了几个贴装头？"
+    },
+    {
+      "id": "H069",
+      "trap": "T1",
+      "template": "trap_num_station",
+      "gold": "3",
+      "recomputed": [
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "B3 线 1 号工位上配了几个贴装头？"
+    },
+    {
+      "id": "H070",
+      "trap": "T1",
+      "template": "trap_num_sn",
+      "gold": "40",
+      "recomputed": [
+        "40"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "这批 6 件的起始序列号后三位是多少？"
+    },
+    {
+      "id": "H071",
+      "trap": "T1",
+      "template": "trap_num_sn",
+      "gold": "41",
+      "recomputed": [
+        "41"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "这批 7 件的起始序列号后三位是多少？"
+    },
+    {
+      "id": "H072",
+      "trap": "T1",
+      "template": "trap_num_sn",
+      "gold": "42",
+      "recomputed": [
+        "42"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "这批 8 件的起始序列号后三位是多少？"
+    },
+    {
+      "id": "H073",
+      "trap": "T1",
+      "template": "trap_num_sn",
+      "gold": "43",
+      "recomputed": [
+        "43"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "这批 9 件的起始序列号后三位是多少？"
+    },
+    {
+      "id": "H074",
+      "trap": "T1",
+      "template": "trap_num_sn",
+      "gold": "44",
+      "recomputed": [
+        "44"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "这批 10 件的起始序列号后三位是多少？"
+    },
+    {
+      "id": "H075",
+      "trap": "T1",
+      "template": "trap_num_sn",
+      "gold": "45",
+      "recomputed": [
+        "45"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "这批 11 件的起始序列号后三位是多少？"
+    },
+    {
+      "id": "H076",
+      "trap": "T2",
+      "template": "trap_implicit_tenths",
+      "gold": "6.4",
+      "recomputed": [
+        "6.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机这条线本月停机时间比上月多几成？"
+    },
+    {
+      "id": "H077",
+      "trap": "T2",
+      "template": "trap_implicit_tenths",
+      "gold": "2.9",
+      "recomputed": [
+        "2.9"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机这条线本月停机时间比上月多几成？"
+    },
+    {
+      "id": "H078",
+      "trap": "T2",
+      "template": "trap_implicit_tenths",
+      "gold": "3.8",
+      "recomputed": [
+        "3.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机这条线本月停机时间比上月多几成？"
+    },
+    {
+      "id": "H079",
+      "trap": "T2",
+      "template": "trap_implicit_tenths",
+      "gold": "4.2",
+      "recomputed": [
+        "4.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机这条线本月停机时间比上月多几成？"
+    },
+    {
+      "id": "H080",
+      "trap": "T2",
+      "template": "trap_implicit_tenths",
+      "gold": "4.2",
+      "recomputed": [
+        "4.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊这条线本月停机时间比上月多几成？"
+    },
+    {
+      "id": "H081",
+      "trap": "T2",
+      "template": "trap_implicit_tenths",
+      "gold": "1.8",
+      "recomputed": [
+        "1.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊这条线本月停机时间比上月多几成？"
+    },
+    {
+      "id": "H082",
+      "trap": "T2",
+      "template": "trap_implicit_tenths",
+      "gold": "5.5",
+      "recomputed": [
+        "5.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机这条线本月停机时间比上月多几成？"
+    },
+    {
+      "id": "H083",
+      "trap": "T2",
+      "template": "trap_implicit_avg",
+      "gold": "0.03",
+      "recomputed": [
+        "0.03"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机这批单次动作时间的均值比规定上限高多少s（保留两位小数）？"
+    },
+    {
+      "id": "H084",
+      "trap": "T2",
+      "template": "trap_implicit_avg",
+      "gold": "0.32",
+      "recomputed": [
+        "0.32"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊这批温区横向温差的均值比规定上限高多少℃（保留两位小数）？"
+    },
+    {
+      "id": "H085",
+      "trap": "T2",
+      "template": "trap_implicit_avg",
+      "gold": "0.08",
+      "recomputed": [
+        "0.08"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "波峰焊这批锡波接触深度比的均值比规定上限高多少倍板厚（保留两位小数）？"
+    },
+    {
+      "id": "H086",
+      "trap": "T2",
+      "template": "trap_implicit_avg",
+      "gold": "0.47",
+      "recomputed": [
+        "0.47"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "SPI锡膏检测机这批高度偏差的均值比规定上限高多少μm（保留两位小数）？"
+    },
+    {
+      "id": "H087",
+      "trap": "T2",
+      "template": "trap_implicit_avg",
+      "gold": "0.48",
+      "recomputed": [
+        "0.48"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "X-Ray检测机这批样品位移的均值比规定上限高多少μm（保留两位小数）？"
+    },
+    {
+      "id": "H088",
+      "trap": "T2",
+      "template": "trap_implicit_avg",
+      "gold": "1.16",
+      "recomputed": [
+        "1.16"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "AOI光学检测机这批照度偏差的均值比规定上限高多少%（保留两位小数）？"
+    },
+    {
+      "id": "H089",
+      "trap": "T2",
+      "template": "trap_implicit_share",
+      "gold": "50.0",
+      "recomputed": [
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "波峰焊这批传送速度不合格的占百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H090",
+      "trap": "T2",
+      "template": "trap_implicit_share",
+      "gold": "50.0",
+      "recomputed": [
+        "50"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "X-Ray检测机这批放大倍率不合格的占百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H091",
+      "trap": "T2",
+      "template": "trap_implicit_share",
+      "gold": "75.0",
+      "recomputed": [
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊这批传送速度不合格的占百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H092",
+      "trap": "T2",
+      "template": "trap_implicit_share",
+      "gold": "12.5",
+      "recomputed": [
+        "12.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机这批供料间距不合格的占百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H093",
+      "trap": "T2",
+      "template": "trap_implicit_share",
+      "gold": "12.5",
+      "recomputed": [
+        "12.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "SPI锡膏检测机这批印刷厚度不合格的占百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H094",
+      "trap": "T2",
+      "template": "trap_implicit_share",
+      "gold": "25.0",
+      "recomputed": [
+        "25"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "AOI光学检测机这批曝光时间不合格的占百分之几（保留一位小数）？"
+    },
+    {
+      "id": "H095",
+      "trap": "T2",
+      "template": "trap_implicit_tenths2",
+      "gold": "3.3",
+      "recomputed": [
+        "3.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "这次贴片机1号线换型比上次多用了几成？"
+    },
+    {
+      "id": "H096",
+      "trap": "T2",
+      "template": "trap_implicit_tenths2",
+      "gold": "3.6",
+      "recomputed": [
+        "3.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "这次贴片机2号线换型比上次多用了几成？"
+    },
+    {
+      "id": "H097",
+      "trap": "T2",
+      "template": "trap_implicit_tenths2",
+      "gold": "3.8",
+      "recomputed": [
+        "3.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "这次贴片机3号线换型比上次多用了几成？"
+    },
+    {
+      "id": "H098",
+      "trap": "T2",
+      "template": "trap_implicit_tenths2",
+      "gold": "1.2",
+      "recomputed": [
+        "1.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "这次贴片机4号线换型比上次多用了几成？"
+    },
+    {
+      "id": "H099",
+      "trap": "T2",
+      "template": "trap_implicit_tenths2",
+      "gold": "3.3",
+      "recomputed": [
+        "3.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "这次贴片机5号线换型比上次多用了几成？"
+    },
+    {
+      "id": "H100",
+      "trap": "T2",
+      "template": "trap_implicit_tenths2",
+      "gold": "2.8",
+      "recomputed": [
+        "2.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "这次贴片机6号线换型比上次多用了几成？"
+    },
+    {
+      "id": "H101",
+      "trap": "T3",
+      "template": "trap_colloquial_count",
+      "gold": "2|25.0",
+      "recomputed": [
+        "2",
+        "25"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "帮我数一下贴片机这批单次动作时间超了几回，占多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H102",
+      "trap": "T3",
+      "template": "trap_colloquial_count",
+      "gold": "5|62.5",
+      "recomputed": [
+        "5",
+        "62.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "帮我数一下回流焊这批温区横向温差超了几回，占多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H103",
+      "trap": "T3",
+      "template": "trap_colloquial_count",
+      "gold": "6|75.0",
+      "recomputed": [
+        "6",
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "帮我数一下波峰焊这批锡波接触深度比超了几回，占多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H104",
+      "trap": "T3",
+      "template": "trap_colloquial_count",
+      "gold": "7|87.5",
+      "recomputed": [
+        "7",
+        "87.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "帮我数一下SPI锡膏检测机这批高度偏差超了几回，占多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H105",
+      "trap": "T3",
+      "template": "trap_colloquial_count",
+      "gold": "6|75.0",
+      "recomputed": [
+        "6",
+        "75"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "帮我数一下X-Ray检测机这批样品位移超了几回，占多少（保留一位小数，%）？"
+    },
+    {
+      "id": "H106",
+      "trap": "T3",
+      "template": "trap_colloquial_avg",
+      "gold": "256.8|5",
+      "recomputed": [
+        "256.8",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "你帮我看看，贴片机1号线这批单次动作时间平均下来多少毫秒？有几回越线？"
+    },
+    {
+      "id": "H107",
+      "trap": "T3",
+      "template": "trap_colloquial_avg",
+      "gold": "9.9|3",
+      "recomputed": [
+        "9.9",
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "你帮我看看，AOI光学检测机2号线这批曝光时间平均下来多少毫秒？有几回越线？"
+    },
+    {
+      "id": "H108",
+      "trap": "T3",
+      "template": "trap_colloquial_avg",
+      "gold": "5255.5|5",
+      "recomputed": [
+        "5255.5",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "你帮我看看，MES终端3号线这批上报延迟平均下来多少毫秒？有几回越线？"
+    },
+    {
+      "id": "H109",
+      "trap": "T3",
+      "template": "trap_colloquial_avg",
+      "gold": "239.2|1",
+      "recomputed": [
+        "239.2",
+        "1"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "你帮我看看，贴片机4号线这批单次动作时间平均下来多少毫秒？有几回越线？"
+    },
+    {
+      "id": "H110",
+      "trap": "T3",
+      "template": "trap_colloquial_avg",
+      "gold": "10.1|2",
+      "recomputed": [
+        "10.1",
+        "2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "你帮我看看，AOI光学检测机5号线这批曝光时间平均下来多少毫秒？有几回越线？"
+    },
+    {
+      "id": "H111",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.01",
+      "recomputed": [
+        "0.01"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "贴片机单次动作时间跟上限还差多少s（保留两位小数）？"
+    },
+    {
+      "id": "H112",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.21",
+      "recomputed": [
+        "0.21"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊温区横向温差跟上限还差多少℃（保留两位小数）？"
+    },
+    {
+      "id": "H113",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.05",
+      "recomputed": [
+        "0.05"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊锡波接触深度比跟上限还差多少倍板厚（保留两位小数）？"
+    },
+    {
+      "id": "H114",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "1.17",
+      "recomputed": [
+        "1.17"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机高度偏差跟上限还差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "H115",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "1.39",
+      "recomputed": [
+        "1.39"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机样品位移跟上限还差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "H116",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.81",
+      "recomputed": [
+        "0.81"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机照度偏差跟上限还差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "H117",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.71",
+      "recomputed": [
+        "0.71"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机出胶量偏差跟上限还差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "H118",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.33",
+      "recomputed": [
+        "0.33"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机腔体真空度跟上限还差多少Pa（保留两位小数）？"
+    },
+    {
+      "id": "H119",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.35",
+      "recomputed": [
+        "0.35"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "层压机温度偏差跟上限还差多少℃（保留两位小数）？"
+    },
+    {
+      "id": "H120",
+      "trap": "T3",
+      "template": "trap_colloquial_single",
+      "gold": "0.73",
+      "recomputed": [
+        "0.73"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊喷涂量偏差跟上限还差多少个百分点（保留两位小数）？"
+    }
+  ]
+}

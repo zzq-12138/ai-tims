@@ -1,0 +1,152 @@
+{
+  "summary": {
+    "model": "glm-4-flash",
+    "n": 2,
+    "acc": 100.0,
+    "by_slice": {
+      "calc": {
+        "n": 2,
+        "acc": 100.0
+      },
+      "simple": {
+        "n": 0,
+        "acc": 0.0
+      }
+    },
+    "by_trap": {
+      "G1_达成率": {
+        "n": 2,
+        "acc": 100.0,
+        "call_rate": 100.0,
+        "extract_ok": 2
+      }
+    },
+    "tool_call_rate": 100.0,
+    "missed_calc": {
+      "n": 0,
+      "rate": 0.0
+    },
+    "false_call_simple": {
+      "n": 0,
+      "rate": 0.0,
+      "pure_fact": {
+        "n": 0,
+        "rate": 0.0
+      },
+      "single_step": {
+        "n": 0,
+        "rate": 0.0
+      }
+    },
+    "extract": {
+      "ok": 2,
+      "num_wrong": 0,
+      "rel_wrong": 0,
+      "both_wrong": 0,
+      "base": 2
+    },
+    "calc_error": 0,
+    "unfinished": {
+      "n": 0,
+      "rate": 0.0
+    },
+    "tool_error": {
+      "rows": 0,
+      "rows_rate": 0.0,
+      "calls": 0,
+      "calls_rate": 0.0
+    },
+    "avg_latency_s": 5.58,
+    "avg_calls": 2.0,
+    "avg_rounds": 3.0,
+    "cost_cny": 0.0005
+  },
+  "detail": [
+    {
+      "id": "H3-001",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "回流炉这周过板量，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "84.5|657",
+      "answer": "完成了计划的84.5%，离计划还差657片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 4250,
+            "current": 3593
+          },
+          "result": {
+            "ok": true,
+            "result": 84.5412,
+            "detail": "3593 / 4250 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4250,
+            "current": 3593
+          },
+          "result": {
+            "ok": true,
+            "result": 657.0,
+            "detail": "4250 - 3593"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.56,
+      "usage": {
+        "prompt": 2463,
+        "completion": 72
+      }
+    },
+    {
+      "id": "H3-002",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "波峰炉这周过板量，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "87.3|972",
+      "answer": "波峰炉这周过板量完成了计划的87.3%（保留一位小数），离计划还差972片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 7680,
+            "current": 6708
+          },
+          "result": {
+            "ok": true,
+            "result": 87.3438,
+            "detail": "6708 / 7680 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 7680,
+            "current": 6708
+          },
+          "result": {
+            "ok": true,
+            "result": 972.0,
+            "detail": "7680 - 6708"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.61,
+      "usage": {
+        "prompt": 2469,
+        "completion": 85
+      }
+    }
+  ]
+}

@@ -1,0 +1,2052 @@
+{
+  "summary": {
+    "n": 130,
+    "passed": 130,
+    "failed": 0,
+    "by_subkind": {
+      "calc": {
+        "n": 100,
+        "failed": 0
+      },
+      "calc_single": {
+        "n": 30,
+        "failed": 0
+      }
+    },
+    "tolerance_abs": 0.06,
+    "method": "只读题面文本重新解析并重算，与生成器参数无关；另做区间/占比/均值自洽检查"
+  },
+  "items": [
+    {
+      "id": "R271",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "20.2|79.8",
+      "recomputed": [
+        "20.2",
+        "79.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机投影光源模组初始亮度1180，现测942，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "R272",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，这批9次测量（℃）：3.118、3.001、3.316、2.576、3.411、2.705、3.282、3.007、3.302。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R273",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "涂覆机喷头喷涂压力要求0.2-0.3MPa，这批9次测量（MPa）：0.26、0.28、0.175、0.169、0.287、0.265、0.274、0.305、0.211。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R274",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "波峰焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：1.101、1.059、1.264、1.172、1.134、1.096、1.021、1.215、0.965。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R275",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "10.0|90.0",
+      "recomputed": [
+        "10",
+        "90"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机射频电源初始输出功率800，现测720，输出功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "R276",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "层压机温控模块温度偏差要求不超过2℃，这批9次测量（℃）：1.879、1.755、2.206、2.249、2.254、2.15、2.045、1.737、1.989。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R277",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊冷却区冷却速率要求2-4℃/s，这批9次测量（℃/s）：3.453、4.105、3.146、3.573、1.537、3.172、4.667、2.62、3.73。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R278",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "10.0|90.0",
+      "recomputed": [
+        "10",
+        "90"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊氮气流量计初始氮气流量640，现测576，氮气流量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "R279",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机胶阀出胶量偏差要求不超过10%，这批9次测量（%）：9.917、10.714、10.806、9.653、11.342、8.605、9.987、8.618、9.574。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R280",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "16.0|84.0",
+      "recomputed": [
+        "16",
+        "84"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机环形光源初始亮度2400，现测2016，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "R281",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "AOI光学检测机相机曝光时间要求8-12ms，这批9次测量（ms）：8.702、7.136、11.191、7.586、9.045、11.915、6.933、12.795、10.604。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R282",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "16.0|84.0",
+      "recomputed": [
+        "16",
+        "84"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机喷雾阀初始胶量1200，现测1008，胶量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "R283",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，这批9次测量（s）：0.272、0.237、0.231、0.274、0.221、0.248、0.254、0.258、0.223。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R284",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：0.961、1.229、1.104、1.161、1.195、0.986、1.253、1.061、1.086。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R285",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，这批9次测量（μm）：5.09、4.906、5.306、4.364、5.509、5.723、5.36、5.365、5.525。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R286",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，这批9次测量（μm）：4.392、4.942、4.369、5.422、5.057、4.41、4.917、5.415、5.078。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R287",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，这批9次测量（%）：8.864、11.311、8.669、11.029、11.422、10.753、11.338、10.093、9.157。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R288",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "X-Ray检测机射线管放大倍率要求3.5-5倍，这批9次测量（倍）：4.561、3.727、3.679、4.132、3.457、4.484、3.155、3.023、3.335。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R289",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "刻蚀机射频电源反射功率要求0-5W，这批9次测量（W）：1.086、6.54、0.408、3.481、4.212、6.447、0.585、4.741、0.532。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R290",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "10.0|90.0",
+      "recomputed": [
+        "10",
+        "90"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "层压机加热棒初始加热功率900，现测810，加热功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "R291",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "层压机液压系统压合压力要求1.5-2MPa，这批9次测量（MPa）：1.711、1.852、2.047、1.365、1.961、1.452、1.669、2.159、2.048。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R292",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机供料器供料间距要求3.9-4.1mm，这批9次测量（mm）：3.996、4.066、4.091、3.896、4.112、3.976、3.915、4.124、4.126。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R293",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "2|22.2",
+      "recomputed": [
+        "2",
+        "22.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊锡炉锡波接触深度比要求不超过0.67倍板厚，这批9次测量（倍板厚）：0.606、0.634、0.587、0.726、0.677、0.611、0.608、0.586、0.61。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R294",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "2|22.2",
+      "recomputed": [
+        "2",
+        "22.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "MES终端工位终端上报延迟要求5-15s，这批9次测量（s）：2.804、1.578、2.035、14.775、2.152、14.844、15.226、15.399、17.423。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R295",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "MES终端扫码枪扫码失败率要求不超过2%，这批9次测量（%）：2.23、1.781、1.857、2.163、1.752、1.799、1.715、2.275、1.84。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R296",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊助焊剂喷嘴喷涂量偏差要求不超过10%，这批9次测量（%）：10.782、10.768、8.58、8.525、8.764、11.273、8.84、9.671、9.928。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R297",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "15.0|85.0",
+      "recomputed": [
+        "15",
+        "85"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机射线管初始管电流1600，现测1360，管电流下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "R298",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，这批9次测量（Pa）：5.734、4.427、5.728、5.608、5.282、4.334、4.957、5.288、4.393。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R299",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "SPI锡膏检测机锡膏厚度印刷厚度要求0.1-0.15mm，这批9次测量（mm）：0.155、0.11、0.16、0.148、0.165、0.147、0.167、0.123、0.146。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "R300",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "15.0|85.0",
+      "recomputed": [
+        "15",
+        "85"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊助焊剂泵初始喷涂量2500，现测2125，喷涂量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C031",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "17.0|83.0",
+      "recomputed": [
+        "17",
+        "83"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机投影光源模组初始亮度1760，现测1460，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C032",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "14.0|86.0",
+      "recomputed": [
+        "14",
+        "86"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机环形光源初始亮度2290，现测1970，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C033",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "18.9|81.1",
+      "recomputed": [
+        "18.9",
+        "81.1"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机射频电源初始输出功率950，现测770，输出功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C034",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "16.4|83.6",
+      "recomputed": [
+        "16.4",
+        "83.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机喷雾阀初始胶量1520，现测1270，胶量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C035",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "22.5|77.5",
+      "recomputed": [
+        "22.5",
+        "77.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊氮气流量计初始氮气流量890，现测690，氮气流量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C036",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "15.5|84.5",
+      "recomputed": [
+        "15.5",
+        "84.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊助焊剂泵初始喷涂量2190，现测1850，喷涂量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C037",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "23.6|76.4",
+      "recomputed": [
+        "23.6",
+        "76.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机射线管初始管电流2030，现测1550，管电流下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C038",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "13.3|86.7",
+      "recomputed": [
+        "13.3",
+        "86.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "层压机加热棒初始加热功率1280，现测1110，加热功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C039",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "21.6|78.4",
+      "recomputed": [
+        "21.6",
+        "78.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机投影光源模组初始亮度1250，现测980，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C040",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "16.6|83.4",
+      "recomputed": [
+        "16.6",
+        "83.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机环形光源初始亮度3440，现测2870，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C041",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "12.5|87.5",
+      "recomputed": [
+        "12.5",
+        "87.5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机射频电源初始输出功率960，现测840，输出功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C042",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "20.9|79.1",
+      "recomputed": [
+        "20.9",
+        "79.1"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机喷雾阀初始胶量1290，现测1020，胶量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C043",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "11.7|88.3",
+      "recomputed": [
+        "11.7",
+        "88.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊氮气流量计初始氮气流量940，现测830，氮气流量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C044",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "16.1|83.9",
+      "recomputed": [
+        "16.1",
+        "83.9"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊助焊剂泵初始喷涂量3350，现测2810，喷涂量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C045",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "18.0|82.0",
+      "recomputed": [
+        "18",
+        "82"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机射线管初始管电流2050，现测1680，管电流下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C046",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "24.3|75.7",
+      "recomputed": [
+        "24.3",
+        "75.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "层压机加热棒初始加热功率1150，现测870，加热功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C047",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "22.0|78.0",
+      "recomputed": [
+        "22",
+        "78"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机投影光源模组初始亮度1320，现测1030，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C048",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "19.0|81.0",
+      "recomputed": [
+        "19",
+        "81"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机环形光源初始亮度2050，现测1660，亮度下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C049",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "18.6|81.4",
+      "recomputed": [
+        "18.6",
+        "81.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机射频电源初始输出功率860，现测700，输出功率下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C050",
+      "template": "T1",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "20.7|79.3",
+      "recomputed": [
+        "20.7",
+        "79.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机喷雾阀初始胶量1640，现测1300，胶量下降了多少个百分点（保留一位小数）？现测值是初始值的百分之几（保留一位小数）？"
+    },
+    {
+      "id": "C051",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，这批9次测量（s）：0.272、0.239、0.233、0.281、0.224、0.213、0.285、0.242、0.22。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C052",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，这批9次测量（℃）：3.258、3.125、2.588、2.554、3.216、3.045、3.273、3.381、3.307。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C053",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚，这批9次测量（倍板厚）：0.698、0.799、0.706、0.672、0.692、0.783、0.717、0.71、0.802。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C054",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，这批9次测量（μm）：5.265、5.488、5.672、4.947、4.354、4.535、4.654、4.738、4.946。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C055",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，这批9次测量（μm）：4.689、4.557、5.437、5.223、5.317、5.367、4.593、4.893、5.241。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C056",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，这批9次测量（%）：10.641、8.721、8.568、10.337、9.215、9.48、9.115、9.863、10.685。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C057",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机胶阀出胶量偏差要求不超过10%，这批9次测量（%）：11.472、9.208、9.104、10.471、8.796、10.681、9.316、8.701、10.324。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C058",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，这批9次测量（Pa）：5.728、4.606、4.727、5.603、5.253、5.044、4.776、4.278、4.682。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C059",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "层压机温控模块温度偏差要求不超过2℃，这批9次测量（℃）：2.27、2.288、1.855、1.983、1.758、2.014、1.91、2.063、1.966。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C060",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊助焊剂喷嘴喷涂量偏差要求不超过10%，这批9次测量（%）：10.654、11.103、10.81、10.552、9.399、9.862、8.641、9.394、10.331。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C061",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "MES终端扫码枪扫码失败率要求不超过2%，这批9次测量（%）：2.122、1.866、1.728、2.124、2.051、2.108、2.09、1.912、2.258。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C062",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "2|22.2",
+      "recomputed": [
+        "2",
+        "22.2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，这批9次测量（s）：0.245、0.261、0.238、0.239、0.228、0.247、0.247、0.242、0.27。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C063",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，这批9次测量（℃）：3.424、2.881、2.663、2.594、3.076、2.636、2.645、2.77、3.443。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C064",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚，这批9次测量（倍板厚）：0.737、0.695、0.621、0.611、0.749、0.706、0.703、0.674、0.791。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C065",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，这批9次测量（μm）：5.712、4.426、5.239、5.53、4.831、5.596、4.338、4.873、5.369。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C066",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，这批9次测量（μm）：4.968、5.041、4.847、5.706、4.507、4.481、4.344、4.472、5.377。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C067",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，这批9次测量（%）：10.398、9.734、10.927、9.604、8.85、9.566、11、10.102、8.568。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C068",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "涂覆机胶阀出胶量偏差要求不超过10%，这批9次测量（%）：9.654、11.19、10.125、9.387、11.264、8.552、10.094、9.706、9.204。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C069",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，这批9次测量（Pa）：5.455、4.414、4.435、5.321、5.053、5.421、4.899、4.762、5.23。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C070",
+      "template": "T2",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true
+      ],
+      "question": "层压机温控模块温度偏差要求不超过2℃，这批9次测量（℃）：2.005、2.162、1.959、1.98、1.725、2.296、2.176、2.054、1.988。超标几次？超标占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C071",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "波峰焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：0.993、1.216、1.026、1.248、1.107、1.073、1.088、1.113、0.95。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C072",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "X-Ray检测机射线管放大倍率要求3.5-5倍，这批9次测量（倍）：3.118、4.198、3.541、3.895、4.951、3.664、4.983、3.297、4.392。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C073",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：1.054、1.171、0.978、1.215、0.936、1.148、1.245、1.028、1.208。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C074",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机供料器供料间距要求3.9-4.1mm，这批9次测量（mm）：3.873、3.893、3.913、3.881、4.057、4.075、4.097、4.057、3.91。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C075",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "SPI锡膏检测机锡膏厚度印刷厚度要求0.1-0.15mm，这批9次测量（mm）：0.092、0.136、0.167、0.083、0.144、0.091、0.101、0.135、0.139。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C076",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "AOI光学检测机相机曝光时间要求8-12ms，这批9次测量（ms）：7.768、7.579、11.216、11.973、11.526、7.221、9.395、7.055、8.422。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C077",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "涂覆机喷头喷涂压力要求0.2-0.3MPa，这批9次测量（MPa）：0.325、0.181、0.328、0.289、0.187、0.266、0.236、0.33、0.312。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C078",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "刻蚀机射频电源反射功率要求0-5W，这批9次测量（W）：1.204、0.17、3.572、2.886、-1.38、-1.207、5.079、-0.265、-1.146。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C079",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5|55.6",
+      "recomputed": [
+        "5",
+        "55.6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "层压机液压系统压合压力要求1.5-2MPa，这批9次测量（MPa）：1.954、1.346、1.634、1.769、1.953、2.016、1.868、1.388、1.371。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C080",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "MES终端工位终端上报延迟要求5-15s，这批9次测量（s）：13.163、17.914、6.016、7.723、18.215、13.683、6.437、10.544、6.591。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C081",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊冷却区冷却速率要求2-4℃/s，这批9次测量（℃/s）：2.335、1.884、4.398、1.992、2.004、3.104、2.88、3.348、3.256。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C082",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "波峰焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：1.112、0.964、1.017、1.191、1.176、1.264、1.178、1.21、1.18。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C083",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "X-Ray检测机射线管放大倍率要求3.5-5倍，这批9次测量（倍）：5.311、3.473、3.639、3.93、5.495、5.432、3.368、3.682、3.527。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C084",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊传送带传送速度要求1-1.2m/min，这批9次测量（m/min）：1.121、1.102、0.987、1.106、1.148、1.149、1.084、1.038、1.24。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C085",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机供料器供料间距要求3.9-4.1mm，这批9次测量（mm）：4.027、3.894、3.836、4.138、4.053、3.849、3.982、3.944、3.841。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C086",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3|33.3",
+      "recomputed": [
+        "3",
+        "33.3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "SPI锡膏检测机锡膏厚度印刷厚度要求0.1-0.15mm，这批9次测量（mm）：0.157、0.091、0.11、0.147、0.097、0.167、0.087、0.088、0.113。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C087",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "4|44.4",
+      "recomputed": [
+        "4",
+        "44.4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "AOI光学检测机相机曝光时间要求8-12ms，这批9次测量（ms）：8.46、12.463、9.554、7.305、12.319、8.926、9.134、7.283、13.363。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C088",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "涂覆机喷头喷涂压力要求0.2-0.3MPa，这批9次测量（MPa）：0.236、0.17、0.26、0.264、0.315、0.228、0.316、0.226、0.283。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C089",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "7|77.8",
+      "recomputed": [
+        "7",
+        "77.8"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "刻蚀机射频电源反射功率要求0-5W，这批9次测量（W）：0.641、5.947、-1.3、0.626、1.459、4.108、0.694、3.048、0.845。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C090",
+      "template": "T3",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "6|66.7",
+      "recomputed": [
+        "6",
+        "66.7"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "层压机液压系统压合压力要求1.5-2MPa，这批9次测量（MPa）：2.003、1.983、1.444、1.516、1.541、2.001、1.641、1.798、1.752。合格几次？合格占比多少（保留一位小数，%）？"
+    },
+    {
+      "id": "C091",
+      "template": "T4",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "0.2|3",
+      "recomputed": [
+        "0.2",
+        "3"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，这批9次测量（s）：0.25、0.232、0.232、0.228、0.262、0.258、0.221、0.273、0.222。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "C092",
+      "template": "T4",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "3.1|6",
+      "recomputed": [
+        "3.1",
+        "6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，这批9次测量（℃）：2.842、3.426、3.08、2.96、3.041、3.241、3.372、3.178、2.656。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "C093",
+      "template": "T4",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "0.7|5",
+      "recomputed": [
+        "0.7",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚，这批9次测量（倍板厚）：0.665、0.709、0.615、0.779、0.716、0.695、0.744、0.695、0.744。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "C094",
+      "template": "T4",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5.0|5",
+      "recomputed": [
+        "5",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，这批9次测量（μm）：5.251、4.424、5.547、5.693、4.751、4.472、5.102、5.331、4.814。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "C095",
+      "template": "T4",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5.1|5",
+      "recomputed": [
+        "5.1",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，这批9次测量（μm）：5.087、5.531、4.619、5.74、5.317、4.865、4.469、4.911、5.505。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "C096",
+      "template": "T4",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "9.9|4",
+      "recomputed": [
+        "9.9",
+        "4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，这批9次测量（%）：11.293、9.856、9.841、10.279、10.547、8.608、9.642、10.501、8.565。平均值是多少（保留一位小数）？超过上限的有几次？"
+    },
+    {
+      "id": "C097",
+      "template": "T5",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "259.3|6",
+      "recomputed": [
+        "259.3",
+        "6"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过250 ms，这批9次测量（s）：0.272、0.226、0.261、0.287、0.259、0.245、0.274、0.277、0.233。平均是多少毫秒（保留一位小数）？超出上限几次？"
+    },
+    {
+      "id": "C098",
+      "template": "T5",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "10.7|4",
+      "recomputed": [
+        "10.7",
+        "4"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "AOI光学检测机相机曝光时间要求不超过10 ms，这批9次测量（s）：0.009、0.012、0.01、0.009、0.01、0.011、0.009、0.013、0.013。平均是多少毫秒（保留一位小数）？超出上限几次？"
+    },
+    {
+      "id": "C099",
+      "template": "T5",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "5190.7|5",
+      "recomputed": [
+        "5190.7",
+        "5"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "MES终端工位终端上报延迟要求不超过5200 ms，这批9次测量（s）：5.375、5.266、5.49、4.935、5.018、5.413、5.05、5.293、4.876。平均是多少毫秒（保留一位小数）？超出上限几次？"
+    },
+    {
+      "id": "C100",
+      "template": "T5",
+      "kind": "complex",
+      "subkind": "calc",
+      "gold": "242.4|2",
+      "recomputed": [
+        "242.4",
+        "2"
+      ],
+      "ok": true,
+      "self_checks": [
+        true,
+        true
+      ],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过250 ms，这批9次测量（s）：0.233、0.272、0.228、0.245、0.231、0.228、0.267、0.238、0.24。平均是多少毫秒（保留一位小数）？超出上限几次？"
+    },
+    {
+      "id": "N001",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.01",
+      "recomputed": [
+        "0.01"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，本次测得0.26s，与上限相差多少s（保留两位小数）？"
+    },
+    {
+      "id": "N002",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.68",
+      "recomputed": [
+        "0.68"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，本次测得3.68℃，与上限相差多少℃（保留两位小数）？"
+    },
+    {
+      "id": "N003",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.15",
+      "recomputed": [
+        "0.15"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚，本次测得0.55倍板厚，与上限相差多少倍板厚（保留两位小数）？"
+    },
+    {
+      "id": "N004",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "1.19",
+      "recomputed": [
+        "1.19"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，本次测得6.19μm，与上限相差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "N005",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.87",
+      "recomputed": [
+        "0.87"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，本次测得5.87μm，与上限相差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "N006",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "2.72",
+      "recomputed": [
+        "2.72"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，本次测得7.28%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N007",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.60",
+      "recomputed": [
+        "0.6"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "涂覆机胶阀出胶量偏差要求不超过10%，本次测得9.4%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N008",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "1.27",
+      "recomputed": [
+        "1.27"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，本次测得6.27Pa，与上限相差多少Pa（保留两位小数）？"
+    },
+    {
+      "id": "N009",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.21",
+      "recomputed": [
+        "0.21"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "层压机温控模块温度偏差要求不超过2℃，本次测得1.79℃，与上限相差多少℃（保留两位小数）？"
+    },
+    {
+      "id": "N010",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.33",
+      "recomputed": [
+        "0.33"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "回流焊助焊剂喷嘴喷涂量偏差要求不超过10%，本次测得10.33%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N011",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.34",
+      "recomputed": [
+        "0.34"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "MES终端扫码枪扫码失败率要求不超过2%，本次测得1.66%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N012",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.01",
+      "recomputed": [
+        "0.01"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，本次测得0.24s，与上限相差多少s（保留两位小数）？"
+    },
+    {
+      "id": "N013",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.54",
+      "recomputed": [
+        "0.54"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，本次测得3.54℃，与上限相差多少℃（保留两位小数）？"
+    },
+    {
+      "id": "N014",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.10",
+      "recomputed": [
+        "0.1"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚，本次测得0.6倍板厚，与上限相差多少倍板厚（保留两位小数）？"
+    },
+    {
+      "id": "N015",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "1.29",
+      "recomputed": [
+        "1.29"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，本次测得3.71μm，与上限相差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "N016",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.25",
+      "recomputed": [
+        "0.25"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，本次测得4.75μm，与上限相差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "N017",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "1.03",
+      "recomputed": [
+        "1.03"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，本次测得8.97%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N018",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "1.83",
+      "recomputed": [
+        "1.83"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "涂覆机胶阀出胶量偏差要求不超过10%，本次测得11.83%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N019",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "1.15",
+      "recomputed": [
+        "1.15"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，本次测得6.15Pa，与上限相差多少Pa（保留两位小数）？"
+    },
+    {
+      "id": "N020",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.11",
+      "recomputed": [
+        "0.11"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "层压机温控模块温度偏差要求不超过2℃，本次测得2.11℃，与上限相差多少℃（保留两位小数）？"
+    },
+    {
+      "id": "N021",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.99",
+      "recomputed": [
+        "0.99"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "回流焊助焊剂喷嘴喷涂量偏差要求不超过10%，本次测得9.01%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N022",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.31",
+      "recomputed": [
+        "0.31"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "MES终端扫码枪扫码失败率要求不超过2%，本次测得1.69%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N023",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.06",
+      "recomputed": [
+        "0.06"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "贴片机贴装头升降气缸单次动作时间要求不超过0.25s，本次测得0.19s，与上限相差多少s（保留两位小数）？"
+    },
+    {
+      "id": "N024",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.12",
+      "recomputed": [
+        "0.12"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "回流焊热风马达温区横向温差要求不超过3℃，本次测得2.88℃，与上限相差多少℃（保留两位小数）？"
+    },
+    {
+      "id": "N025",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.09",
+      "recomputed": [
+        "0.09"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "波峰焊锡炉锡波接触深度比要求不超过0.7倍板厚，本次测得0.61倍板厚，与上限相差多少倍板厚（保留两位小数）？"
+    },
+    {
+      "id": "N026",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.05",
+      "recomputed": [
+        "0.05"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "SPI锡膏检测机高度标定块高度偏差要求不超过5μm，本次测得4.95μm，与上限相差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "N027",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.12",
+      "recomputed": [
+        "0.12"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "X-Ray检测机载物台夹具样品位移要求不超过5μm，本次测得4.88μm，与上限相差多少μm（保留两位小数）？"
+    },
+    {
+      "id": "N028",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "2.13",
+      "recomputed": [
+        "2.13"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "AOI光学检测机相机光源照度偏差要求不超过10%，本次测得7.87%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N029",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "1.70",
+      "recomputed": [
+        "1.7"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "涂覆机胶阀出胶量偏差要求不超过10%，本次测得8.3%，与上限相差多少个百分点（保留两位小数）？"
+    },
+    {
+      "id": "N030",
+      "template": "T6",
+      "kind": "simple",
+      "subkind": "calc_single",
+      "gold": "0.84",
+      "recomputed": [
+        "0.84"
+      ],
+      "ok": true,
+      "self_checks": [],
+      "question": "刻蚀机真空泵腔体真空度要求不超过5Pa，本次测得5.84Pa，与上限相差多少Pa（保留两位小数）？"
+    }
+  ]
+}

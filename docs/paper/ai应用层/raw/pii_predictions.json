@@ -1,0 +1,422 @@
+[
+  {
+    "id": "P001",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "客户联系电话：[手机号]，请尽快回访。"
+  },
+  {
+    "id": "P002",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "报修人电话 [手机号]，设备在 3 号厂房。"
+  },
+  {
+    "id": "P003",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "请联系 [手机号] 确认上门时间。"
+  },
+  {
+    "id": "P004",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "手机号:[手机号]，联系人今天下午在岗。"
+  },
+  {
+    "id": "P005",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "[手机号] 是现场负责人号码。"
+  },
+  {
+    "id": "P006",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "备用联系方式：[手机号]。"
+  },
+  {
+    "id": "P007",
+    "type": "phone",
+    "expect": 0,
+    "detected": 0,
+    "masked": "用户手机 1351234567 只有 10 位，属于错误号码。"
+  },
+  {
+    "id": "P008",
+    "type": "phone",
+    "expect": 0,
+    "detected": 0,
+    "masked": "订单号 123456789012345 与手机号无关。"
+  },
+  {
+    "id": "P009",
+    "type": "phone",
+    "expect": 0,
+    "detected": 0,
+    "masked": "设备编号 138001380001 不是手机号。"
+  },
+  {
+    "id": "P010",
+    "type": "phone",
+    "expect": 0,
+    "detected": 0,
+    "masked": "工单编号 WO20261107-0012，请勿混淆。"
+  },
+  {
+    "id": "P011",
+    "type": "landline",
+    "expect": 1,
+    "detected": 1,
+    "masked": "座机 [固话]，工作日 9 点后联系。"
+  },
+  {
+    "id": "P012",
+    "type": "landline",
+    "expect": 1,
+    "detected": 1,
+    "masked": "请拨 [固话] 转 802。"
+  },
+  {
+    "id": "P013",
+    "type": "landline",
+    "expect": 0,
+    "detected": 0,
+    "masked": "温度设定 180-200 度，请确认。"
+  },
+  {
+    "id": "P014",
+    "type": "landline",
+    "expect": 0,
+    "detected": 0,
+    "masked": "温度 0100-1234 不是座机号码。"
+  },
+  {
+    "id": "P015",
+    "type": "idcard",
+    "expect": 1,
+    "detected": 1,
+    "masked": "客户身份证号 [身份证]，用于登记。"
+  },
+  {
+    "id": "P016",
+    "type": "idcard",
+    "expect": 1,
+    "detected": 1,
+    "masked": "身份证 [身份证] 已核验。"
+  },
+  {
+    "id": "P017",
+    "type": "idcard",
+    "expect": 1,
+    "detected": 1,
+    "masked": "身份证号：[身份证]。"
+  },
+  {
+    "id": "P018",
+    "type": "idcard",
+    "expect": 0,
+    "detected": 0,
+    "masked": "请核对 11010119900307123 这 17 位数字。"
+  },
+  {
+    "id": "P019",
+    "type": "idcard",
+    "expect": 0,
+    "detected": 0,
+    "masked": "设备序列号 440301198812123456 是 18 位编号。"
+  },
+  {
+    "id": "P020",
+    "type": "idcard",
+    "expect": 0,
+    "detected": 0,
+    "masked": "批次号 202611070001，不是身份证。"
+  },
+  {
+    "id": "P021",
+    "type": "email",
+    "expect": 1,
+    "detected": 1,
+    "masked": "客户邮箱 [邮箱]，请发送报告。"
+  },
+  {
+    "id": "P022",
+    "type": "email",
+    "expect": 1,
+    "detected": 1,
+    "masked": "联系邮箱：[邮箱]。"
+  },
+  {
+    "id": "P023",
+    "type": "email",
+    "expect": 1,
+    "detected": 1,
+    "masked": "抄送 [邮箱]。"
+  },
+  {
+    "id": "P024",
+    "type": "email",
+    "expect": 0,
+    "detected": 0,
+    "masked": "邮箱格式不对：zhangsan@@example.com。"
+  },
+  {
+    "id": "P025",
+    "type": "email",
+    "expect": 0,
+    "detected": 0,
+    "masked": "系统账号 admin 不是邮箱。"
+  },
+  {
+    "id": "P026",
+    "type": "email",
+    "expect": 0,
+    "detected": 0,
+    "masked": "文件路径 C:/data/ticket.csv 不是邮箱。"
+  },
+  {
+    "id": "P027",
+    "type": "name",
+    "expect": 1,
+    "detected": 1,
+    "masked": "客户姓名：[姓名]，反映设备异响。"
+  },
+  {
+    "id": "P028",
+    "type": "name",
+    "expect": 1,
+    "detected": 1,
+    "masked": "报修人：[姓名]，电话另行提供。"
+  },
+  {
+    "id": "P029",
+    "type": "name",
+    "expect": 1,
+    "detected": 1,
+    "masked": "联系人[姓名] 明天上午到厂。"
+  },
+  {
+    "id": "P030",
+    "type": "name",
+    "expect": 1,
+    "detected": 1,
+    "masked": "业主：[姓名]，要求尽快处理。"
+  },
+  {
+    "id": "P031",
+    "type": "name",
+    "expect": 1,
+    "detected": 1,
+    "masked": "姓名：[姓名]，工号 A1024。"
+  },
+  {
+    "id": "P032",
+    "type": "name",
+    "expect": 0,
+    "detected": 0,
+    "masked": "客户反馈设备温度偏高。"
+  },
+  {
+    "id": "P033",
+    "type": "name",
+    "expect": 0,
+    "detected": 0,
+    "masked": "客户表示需要延后处理。"
+  },
+  {
+    "id": "P034",
+    "type": "name",
+    "expect": 0,
+    "detected": 0,
+    "masked": "报修人要求更换备件。"
+  },
+  {
+    "id": "P035",
+    "type": "name",
+    "expect": 0,
+    "detected": 0,
+    "masked": "联系人方式见工单附件。"
+  },
+  {
+    "id": "P036",
+    "type": "name",
+    "expect": 0,
+    "detected": 0,
+    "masked": "处理人已到达现场。"
+  },
+  {
+    "id": "P037",
+    "type": "address",
+    "expect": 1,
+    "detected": 1,
+    "masked": "客户地址：[地址]，请导航前往。"
+  },
+  {
+    "id": "P038",
+    "type": "address",
+    "expect": 1,
+    "detected": 1,
+    "masked": "安装位置：[地址]。"
+  },
+  {
+    "id": "P039",
+    "type": "address",
+    "expect": 1,
+    "detected": 1,
+    "masked": "收货地址: [地址]。"
+  },
+  {
+    "id": "P040",
+    "type": "address",
+    "expect": 1,
+    "detected": 1,
+    "masked": "设备位于[地址]厂房。"
+  },
+  {
+    "id": "P041",
+    "type": "address",
+    "expect": 1,
+    "detected": 1,
+    "masked": "住址：[地址]。"
+  },
+  {
+    "id": "P042",
+    "type": "address",
+    "expect": 0,
+    "detected": 0,
+    "masked": "地址栏为空，请补充。"
+  },
+  {
+    "id": "P043",
+    "type": "address",
+    "expect": 0,
+    "detected": 0,
+    "masked": "安装位置在二号线，具体点位待确认。"
+  },
+  {
+    "id": "P044",
+    "type": "address",
+    "expect": 0,
+    "detected": 0,
+    "masked": "厂房地址尚未填写。"
+  },
+  {
+    "id": "P045",
+    "type": "address",
+    "expect": 0,
+    "detected": 0,
+    "masked": "收货地址和安装地址不一致，需核对。"
+  },
+  {
+    "id": "P046",
+    "type": "address",
+    "expect": 0,
+    "detected": 0,
+    "masked": "设备位于车间东侧，未提供门牌号。"
+  },
+  {
+    "id": "P047",
+    "type": "phone",
+    "expect": 0,
+    "detected": 0,
+    "masked": "设备报警代码 11010119，请查阅手册。"
+  },
+  {
+    "id": "P048",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "参数 [手机号] 是测试用的占位号码。"
+  },
+  {
+    "id": "P049",
+    "type": "email",
+    "expect": 1,
+    "detected": 1,
+    "masked": "请把结果发到 [邮箱]。"
+  },
+  {
+    "id": "P050",
+    "type": "email",
+    "expect": 0,
+    "detected": 0,
+    "masked": "URL https://example.com/ticket 不是邮箱。"
+  },
+  {
+    "id": "P051",
+    "type": "idcard",
+    "expect": 0,
+    "detected": 0,
+    "masked": "联系人身份证后四位 1234，完整号码未提供。"
+  },
+  {
+    "id": "P052",
+    "type": "name",
+    "expect": 0,
+    "detected": 0,
+    "masked": "客户姓名一栏留空。"
+  },
+  {
+    "id": "P053",
+    "type": "name",
+    "expect": 1,
+    "detected": 1,
+    "masked": "负责人：[姓名]，已确认到场。"
+  },
+  {
+    "id": "P054",
+    "type": "address",
+    "expect": 1,
+    "detected": 1,
+    "masked": "厂址：[地址]。"
+  },
+  {
+    "id": "P055",
+    "type": "phone",
+    "expect": 1,
+    "detected": 1,
+    "masked": "我的电话是 [手机号]，随时联系。"
+  },
+  {
+    "id": "P056",
+    "type": "landline",
+    "expect": 1,
+    "detected": 1,
+    "masked": "前台电话 [固话]。"
+  },
+  {
+    "id": "P057",
+    "type": "phone",
+    "expect": 0,
+    "detected": 0,
+    "masked": "模具编号 13912345678A 带字母，不是手机号。"
+  },
+  {
+    "id": "P058",
+    "type": "address",
+    "expect": 0,
+    "detected": 0,
+    "masked": "所在地：广州市黄埔区科学城，详细地址待补。"
+  },
+  {
+    "id": "P059",
+    "type": "name",
+    "expect": 1,
+    "detected": 1,
+    "masked": "员工姓名：[姓名]，工号 B2048。"
+  },
+  {
+    "id": "P060",
+    "type": "email",
+    "expect": 1,
+    "detected": 1,
+    "masked": "邮箱：[邮箱]。"
+  }
+]

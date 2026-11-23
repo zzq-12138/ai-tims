@@ -1,0 +1,3840 @@
+{
+  "summary": {
+    "model": "glm-4-flash",
+    "n": 100,
+    "acc": 78.0,
+    "by_slice": {
+      "calc": {
+        "n": 80,
+        "acc": 72.5
+      },
+      "simple": {
+        "n": 20,
+        "acc": 100.0
+      }
+    },
+    "by_trap": {
+      "G1_达成率": {
+        "n": 16,
+        "acc": 93.75,
+        "call_rate": 100.0,
+        "extract_ok": 16
+      },
+      "G2_成数": {
+        "n": 16,
+        "acc": 6.25,
+        "call_rate": 0.0,
+        "extract_ok": 0
+      },
+      "G3_区间": {
+        "n": 16,
+        "acc": 100.0,
+        "call_rate": 100.0,
+        "extract_ok": 16
+      },
+      "G4_均值差": {
+        "n": 16,
+        "acc": 100.0,
+        "call_rate": 100.0,
+        "extract_ok": 16
+      },
+      "G5_超限环比": {
+        "n": 16,
+        "acc": 62.5,
+        "call_rate": 100.0,
+        "extract_ok": 0
+      },
+      "G6_不必算": {
+        "n": 20,
+        "acc": 100.0,
+        "call_rate": 0.0,
+        "extract_ok": 0
+      }
+    },
+    "tool_call_rate": 64.0,
+    "missed_calc": {
+      "n": 16,
+      "rate": 20.0
+    },
+    "false_call_simple": {
+      "n": 0,
+      "rate": 0.0,
+      "pure_fact": {
+        "n": 0,
+        "rate": 0.0
+      },
+      "single_step": {
+        "n": 0,
+        "rate": 0.0
+      }
+    },
+    "extract": {
+      "ok": 48,
+      "num_wrong": 0,
+      "rel_wrong": 16,
+      "both_wrong": 0,
+      "base": 64
+    },
+    "calc_error": 1,
+    "unfinished": {
+      "n": 0,
+      "rate": 0.0
+    },
+    "tool_error": {
+      "rows": 0,
+      "rows_rate": 0.0,
+      "calls": 0,
+      "calls_rate": 0.0
+    },
+    "avg_latency_s": 4.74,
+    "avg_calls": 1.28,
+    "avg_rounds": 2.28,
+    "cost_cny": 0.02
+  },
+  "detail": [
+    {
+      "id": "H3-001",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "回流炉这周过板量，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "84.5|657",
+      "answer": "完成了计划的84.5%，离计划还差657片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 4250,
+            "current": 3593
+          },
+          "result": {
+            "ok": true,
+            "result": 84.5412,
+            "detail": "3593 / 4250 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4250,
+            "current": 3593
+          },
+          "result": {
+            "ok": true,
+            "result": 657.0,
+            "detail": "4250 - 3593"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.99,
+      "usage": {
+        "prompt": 2463,
+        "completion": 72
+      }
+    },
+    {
+      "id": "H3-002",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "波峰炉这周过板量，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "87.3|972",
+      "answer": "波峰炉这周过板量完成了计划的87.3%（保留一位小数），离计划还差972片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 7680,
+            "current": 6708
+          },
+          "result": {
+            "ok": true,
+            "result": 87.3438,
+            "detail": "6708 / 7680 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 7680,
+            "current": 6708
+          },
+          "result": {
+            "ok": true,
+            "result": 972.0,
+            "detail": "7680 - 6708"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.07,
+      "usage": {
+        "prompt": 2469,
+        "completion": 85
+      }
+    },
+    {
+      "id": "H3-003",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "贴片机这周贴装点数，完成了计划的百分之几（保留一位小数）？离计划还差多少点？",
+      "gold": "73.2|1303",
+      "answer": "完成了计划的73.2%，离计划还差1303点。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 4856,
+            "current": 3553
+          },
+          "result": {
+            "ok": true,
+            "result": 73.1672,
+            "detail": "3553 / 4856 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4856,
+            "current": 3553
+          },
+          "result": {
+            "ok": true,
+            "result": 1303.0,
+            "detail": "4856 - 3553"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 7.16,
+      "usage": {
+        "prompt": 2464,
+        "completion": 72
+      }
+    },
+    {
+      "id": "H3-004",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "AOI这周检出板数，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "70|2918",
+      "answer": "完成了计划的70.0%，离计划还差2918片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 9726,
+            "current": 6808
+          },
+          "result": {
+            "ok": true,
+            "result": 69.9979,
+            "detail": "6808 / 9726 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 9726,
+            "current": 6808
+          },
+          "result": {
+            "ok": true,
+            "result": 2918.0,
+            "detail": "9726 - 6808"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.25,
+      "usage": {
+        "prompt": 2464,
+        "completion": 73
+      }
+    },
+    {
+      "id": "H3-005",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "X-Ray这周检测批数，完成了计划的百分之几（保留一位小数）？离计划还差多少批？",
+      "gold": "76.1|1499",
+      "answer": "完成了计划的76.1%，离计划还差1499批。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 6267,
+            "current": 4768
+          },
+          "result": {
+            "ok": true,
+            "result": 76.0811,
+            "detail": "4768 / 6267 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 6267,
+            "current": 4768
+          },
+          "result": {
+            "ok": true,
+            "result": 1499.0,
+            "detail": "6267 - 4768"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.31,
+      "usage": {
+        "prompt": 2463,
+        "completion": 72
+      }
+    },
+    {
+      "id": "H3-006",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "分板机这周分板片数，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "74.3|2463",
+      "answer": "完成了计划的74.3%，离计划还差2463片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 9589,
+            "current": 7126
+          },
+          "result": {
+            "ok": true,
+            "result": 74.3143,
+            "detail": "7126 / 9589 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 9589,
+            "current": 7126
+          },
+          "result": {
+            "ok": true,
+            "result": 2463.0,
+            "detail": "9589 - 7126"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 3.77,
+      "usage": {
+        "prompt": 2476,
+        "completion": 73
+      }
+    },
+    {
+      "id": "H3-007",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "点胶机这周点胶点数，完成了计划的百分之几（保留一位小数）？离计划还差多少点？",
+      "gold": "76|1866",
+      "answer": "完成了计划的 76.0%，离计划还差 1866 点。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 7779,
+            "current": 5913
+          },
+          "result": {
+            "ok": true,
+            "result": 76.0123,
+            "detail": "5913 / 7779 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 7779,
+            "current": 5913
+          },
+          "result": {
+            "ok": true,
+            "result": 1866.0,
+            "detail": "7779 - 5913"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 3.46,
+      "usage": {
+        "prompt": 2466,
+        "completion": 74
+      }
+    },
+    {
+      "id": "H3-008",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "灌胶机这周灌胶件数，完成了计划的百分之几（保留一位小数）？离计划还差多少件？",
+      "gold": "81.8|589",
+      "answer": "灌胶机这周灌胶件数完成了计划的81.8%，离计划还差589件。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 3230,
+            "current": 2641
+          },
+          "result": {
+            "ok": true,
+            "result": 81.7647,
+            "detail": "2641 / 3230 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 3230,
+            "current": 2641
+          },
+          "result": {
+            "ok": true,
+            "result": 589.0,
+            "detail": "3230 - 2641"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.83,
+      "usage": {
+        "prompt": 2466,
+        "completion": 79
+      }
+    },
+    {
+      "id": "H3-009",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "老化柜这周老化板数，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "67.4|1137",
+      "answer": "完成了计划的 67.4%，离计划还差 1137 片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 3485,
+            "current": 2348
+          },
+          "result": {
+            "ok": true,
+            "result": 67.3745,
+            "detail": "2348 / 3485 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 3485,
+            "current": 2348
+          },
+          "result": {
+            "ok": true,
+            "result": 1137.0,
+            "detail": "3485 - 2348"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 3.98,
+      "usage": {
+        "prompt": 2460,
+        "completion": 75
+      }
+    },
+    {
+      "id": "H3-010",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "清洗机这周清洗篮数，完成了计划的百分之几（保留一位小数）？离计划还差多少篮？",
+      "gold": "88|478",
+      "answer": "清洗机这周清洗篮数完成了计划的 87.9%，离计划还差 478 篮。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 3967,
+            "current": 3489
+          },
+          "result": {
+            "ok": true,
+            "result": 87.9506,
+            "detail": "3489 / 3967 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 3967,
+            "current": 3489
+          },
+          "result": {
+            "ok": true,
+            "result": 478.0,
+            "detail": "3967 - 3489"
+          }
+        }
+      ],
+      "correct": false,
+      "extract": "ok",
+      "latency_s": 4.28,
+      "usage": {
+        "prompt": 2469,
+        "completion": 83
+      }
+    },
+    {
+      "id": "H3-011",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "镀膜机这周镀膜片数，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "94.7|229",
+      "answer": "完成了计划的94.7%，离计划还差229片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 4311,
+            "current": 4082
+          },
+          "result": {
+            "ok": true,
+            "result": 94.688,
+            "detail": "4082 / 4311 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4311,
+            "current": 4082
+          },
+          "result": {
+            "ok": true,
+            "result": 229.0,
+            "detail": "4311 - 4082"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.38,
+      "usage": {
+        "prompt": 2473,
+        "completion": 72
+      }
+    },
+    {
+      "id": "H3-012",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "划片机这周划片片数，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "87|430",
+      "answer": "完成了计划的 87.0%，离计划还差 430 片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 3316,
+            "current": 2886
+          },
+          "result": {
+            "ok": true,
+            "result": 87.0326,
+            "detail": "2886 / 3316 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 3316,
+            "current": 2886
+          },
+          "result": {
+            "ok": true,
+            "result": 430.0,
+            "detail": "3316 - 2886"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.37,
+      "usage": {
+        "prompt": 2474,
+        "completion": 74
+      }
+    },
+    {
+      "id": "H3-013",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "编带机这周编带盘数，完成了计划的百分之几（保留一位小数）？离计划还差多少盘？",
+      "gold": "84.8|755",
+      "answer": "完成了计划的 84.8%，离计划还差 755 盘。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 4974,
+            "current": 4219
+          },
+          "result": {
+            "ok": true,
+            "result": 84.8211,
+            "detail": "4219 / 4974 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4974,
+            "current": 4219
+          },
+          "result": {
+            "ok": true,
+            "result": 755.0,
+            "detail": "4974 - 4219"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 3.63,
+      "usage": {
+        "prompt": 2475,
+        "completion": 75
+      }
+    },
+    {
+      "id": "H3-014",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "烧录机这周烧录颗数，完成了计划的百分之几（保留一位小数）？离计划还差多少颗？",
+      "gold": "68.3|2907",
+      "answer": "完成了计划的 68.3%，离计划还差 2907 颗。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 9180,
+            "current": 6273
+          },
+          "result": {
+            "ok": true,
+            "result": 68.3333,
+            "detail": "6273 / 9180 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 9180,
+            "current": 6273
+          },
+          "result": {
+            "ok": true,
+            "result": 2907.0,
+            "detail": "9180 - 6273"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.53,
+      "usage": {
+        "prompt": 2482,
+        "completion": 76
+      }
+    },
+    {
+      "id": "H3-015",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "印刷机这周印刷板数，完成了计划的百分之几（保留一位小数）？离计划还差多少片？",
+      "gold": "78.4|1951",
+      "answer": "完成了计划的78.4%，离计划还差1951片。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 9027,
+            "current": 7076
+          },
+          "result": {
+            "ok": true,
+            "result": 78.3871,
+            "detail": "7076 / 9027 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 9027,
+            "current": 7076
+          },
+          "result": {
+            "ok": true,
+            "result": 1951.0,
+            "detail": "9027 - 7076"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.35,
+      "usage": {
+        "prompt": 2463,
+        "completion": 72
+      }
+    },
+    {
+      "id": "H3-016",
+      "slice": "calc",
+      "trap": "G1_达成率",
+      "question": "波峰焊这周焊接件数，完成了计划的百分之几（保留一位小数）？离计划还差多少件？",
+      "gold": "66.6|2726",
+      "answer": "波峰焊这周焊接件数完成了计划的66.6%，离计划还差2726件。",
+      "calls": [
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "initial": 8167,
+            "current": 5441
+          },
+          "result": {
+            "ok": true,
+            "result": 66.6218,
+            "detail": "5441 / 8167 * 100"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 8167,
+            "current": 5441
+          },
+          "result": {
+            "ok": true,
+            "result": 2726.0,
+            "detail": "8167 - 5441"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.38,
+      "usage": {
+        "prompt": 2470,
+        "completion": 81
+      }
+    },
+    {
+      "id": "H3-017",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "这个月空压站的电耗比上个月多几成（保留一位小数）？",
+      "gold": "2.6",
+      "answer": "1.2成\n根据参考资料，上月电耗为123 kWh，本月电耗为155 kWh。使用run_calculation工具计算本月电耗相对于上月的增长百分比：{\"op\": \"delta_percent\", \"initial\": 123, \"current\": 155}。结果为25.4%，即多2.5成，保留一位小数后为1.2成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 3.78,
+      "usage": {
+        "prompt": 745,
+        "completion": 83
+      }
+    },
+    {
+      "id": "H3-018",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "和上月比，本月水耗增加了几成（保留一位小数）？",
+      "gold": "5.7",
+      "answer": "0.6成\n\n关键依据：根据水耗台账，上月水耗为263 t，本月水耗为414 t。使用 run_calculation 工具计算本月水耗相对于上月水耗的增长百分比，得到结果为0.6成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 2.67,
+      "usage": {
+        "prompt": 745,
+        "completion": 57
+      }
+    },
+    {
+      "id": "H3-019",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "本月锅炉房蒸汽量较上月涨了几成（保留一位小数）？",
+      "gold": "1.2",
+      "answer": "1.0\n\n关键依据：使用 run_calculation 工具计算本月锅炉房蒸汽量较上月增长的比例，结果为 1.0，即增长了一成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 2.66,
+      "usage": {
+        "prompt": 741,
+        "completion": 40
+      }
+    },
+    {
+      "id": "H3-020",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "跟上月相比，这月氮气站的氮气量少了几成（保留一位小数）？",
+      "gold": "2.3",
+      "answer": "0.6成\n关键依据：使用工具计算差值，得到77 m³，然后除以上月氮气量332 m³，得到0.23，即23%，再转换为成，得到0.23成，保留一位小数后为0.6成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 2.38,
+      "usage": {
+        "prompt": 753,
+        "completion": 62
+      }
+    },
+    {
+      "id": "H3-021",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "这个月维修组的耗材成本比上个月多几成（保留一位小数）？",
+      "gold": "1",
+      "answer": "0.1\n根据【维修组·耗材成本台账】，上月耗材成本为361元，本月为396元。使用run_calculation工具计算本月相对于上月的增长百分比：{\"op\": \"delta_percent\", \"initial\": 361, \"current\": 396}，得到结果为0.1，即10%。因此，这个月维修组的耗材成本比上个月多10%，保留一位小数后为0.1成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 6.42,
+      "usage": {
+        "prompt": 746,
+        "completion": 99
+      }
+    },
+    {
+      "id": "H3-022",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "和上月比，本月加班工时增加了几成（保留一位小数）？",
+      "gold": "2.5",
+      "answer": "0.25成\n根据产线·加班工时台账，上月加班工时为809小时，本月为1008小时。使用run_calculation工具计算本月加班工时相对于上月的增加百分比，得到结果为25%，即增加了0.25成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 3.42,
+      "usage": {
+        "prompt": 746,
+        "completion": 59
+      }
+    },
+    {
+      "id": "H3-023",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "本月设备组维修次数较上月涨了几成（保留一位小数）？",
+      "gold": "6.6",
+      "answer": "0.7成\n关键依据：根据设备组·维修次数台账，上月维修次数为434次，本月为720次。使用run_calculation工具计算涨了(720-434)/434=0.657，即65.7%，保留一位小数为0.7成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 4.73,
+      "usage": {
+        "prompt": 743,
+        "completion": 67
+      }
+    },
+    {
+      "id": "H3-024",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "跟上月相比，这月模具组的换模次数少了几成（保留一位小数）？",
+      "gold": "3.8",
+      "answer": "0.4成\n关键依据：使用run_calculation工具计算delta_percent=321,517，得到结果为-40.0%。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 2.34,
+      "usage": {
+        "prompt": 749,
+        "completion": 33
+      }
+    },
+    {
+      "id": "H3-025",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "这个月质检组的检验批次比上个月多几成（保留一位小数）？",
+      "gold": "0.8",
+      "answer": "0.7成\n关键依据：上月323批，本月349批，使用run_calculation工具计算delta_percent=349,323。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 2.12,
+      "usage": {
+        "prompt": 749,
+        "completion": 35
+      }
+    },
+    {
+      "id": "H3-026",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "和上月比，本月包装材料增加了几成（保留一位小数）？",
+      "gold": "2",
+      "answer": "0.2成\n关键依据：根据【包装组·包装材料台账】，上月462kg，本月556kg，使用run_calculation工具计算增加的百分比，得到结果为0.2成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 2.08,
+      "usage": {
+        "prompt": 744,
+        "completion": 47
+      }
+    },
+    {
+      "id": "H3-027",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "本月清洗站清洗剂用量较上月涨了几成（保留一位小数）？",
+      "gold": "3.1",
+      "answer": "0.3成\n根据【清洗站·清洗剂用量台账】，上月清洗剂用量为696 L，本月为915 L。使用run_calculation工具计算涨幅，得到涨幅为0.3成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 3.11,
+      "usage": {
+        "prompt": 746,
+        "completion": 48
+      }
+    },
+    {
+      "id": "H3-028",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "跟上月相比，这月润滑组的润滑油用量少了几成（保留一位小数）？",
+      "gold": "2",
+      "answer": "0.4成\n根据【润滑组·润滑油用量台账】，上月润滑油用量为513 L，本月为410 L。使用run_calculation工具计算差值，得到差值为103 L。然后计算相对初始值的变化百分比，得到结果为20.1%。将百分比转换为“成”，即20.1% / 10 = 2.01成，保留一位小数，得到0.4成。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 3.21,
+      "usage": {
+        "prompt": 747,
+        "completion": 92
+      }
+    },
+    {
+      "id": "H3-029",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "这个月滤材组的滤芯消耗比上个月多几成（保留一位小数）？",
+      "gold": "3.5",
+      "answer": "1.2成\n根据滤材组·滤芯消耗台账，上月消耗127个，本月消耗172个。使用run_calculation工具计算本月消耗比上月多出的百分比，得到结果为0.36，即36%。将36%转换为“成”，即36% / 10% = 3.6成，保留一位小数后为1.2成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 5.31,
+      "usage": {
+        "prompt": 748,
+        "completion": 83
+      }
+    },
+    {
+      "id": "H3-030",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "和上月比，本月砂纸消耗增加了几成（保留一位小数）？",
+      "gold": "0.9",
+      "answer": "0.1\n根据【打磨组·砂纸消耗台账】，上月砂纸消耗量为718张，本月为784张。使用run_calculation工具计算本月相对于上月的消耗增加百分比：{\"op\": \"delta_percent\", \"initial\": 718, \"current\": 784}。结果为10.0%，即增加了1成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 4.03,
+      "usage": {
+        "prompt": 746,
+        "completion": 78
+      }
+    },
+    {
+      "id": "H3-031",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "本月焊接组焊锡丝用量较上月涨了几成（保留一位小数）？",
+      "gold": "4.7",
+      "answer": "0.5\n根据【焊接组·焊锡丝用量台账】，上月焊锡丝用量为575 kg，本月为845 kg。使用 run_calculation 工具计算涨幅，得到涨幅为0.5成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 3.65,
+      "usage": {
+        "prompt": 748,
+        "completion": 51
+      }
+    },
+    {
+      "id": "H3-032",
+      "slice": "calc",
+      "trap": "G2_成数",
+      "question": "跟上月相比，这月装配组的胶带用量少了几成（保留一位小数）？",
+      "gold": "1.9",
+      "answer": "0.2\n根据【装配组·胶带用量台账】，上月用量为455卷，本月用量为367卷。使用run_calculation工具计算差值，得到差值为88卷。然后计算相对初始值的变化百分比，得到结果为0.194，即19.4%，保留一位小数后为0.2，表示这月装配组的胶带用量少了两成。",
+      "calls": [],
+      "correct": false,
+      "extract": "none",
+      "latency_s": 3.43,
+      "usage": {
+        "prompt": 749,
+        "completion": 88
+      }
+    },
+    {
+      "id": "H3-033",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 9 个炉温读数：5.8、5.4、4.9、5.1、5.5、5.5、4.5、4.5、4.7。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "8|88.9",
+      "answer": "落在工艺窗口内的有8个，合格占比88.9%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              5.8,
+              5.4,
+              4.9,
+              5.1,
+              5.5,
+              5.5,
+              4.5,
+              4.5,
+              4.7
+            ],
+            "lower": 4.5,
+            "upper": 5.5
+          },
+          "result": {
+            "ok": true,
+            "result": 8.0,
+            "detail": "共 9 条，落在 [4.5, 5.5] 的 8 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 8,
+            "denominator": 9
+          },
+          "result": {
+            "ok": true,
+            "result": 88.8889,
+            "detail": "8 / 9 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.78,
+      "usage": {
+        "prompt": 2650,
+        "completion": 120
+      }
+    },
+    {
+      "id": "H3-034",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 6 个锡温读数：5.8、5.4、3.3、3.5、3.5、5.4。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "5|83.3",
+      "answer": "落在工艺窗口内的有5个，合格占比83.3%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              5.8,
+              5.4,
+              3.3,
+              3.5,
+              3.5,
+              5.4
+            ],
+            "lower": 3.3,
+            "upper": 5.5
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 6 条，落在 [3.3, 5.5] 的 5 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 5,
+            "denominator": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 83.3333,
+            "detail": "5 / 6 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 10.36,
+      "usage": {
+        "prompt": 2587,
+        "completion": 105
+      }
+    },
+    {
+      "id": "H3-035",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 6 个贴装压力读数：6.3、5、4.4、5.2、4.6、5.3。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "5|83.3",
+      "answer": "落在工艺窗口内的有5个，合格占比83.3%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              6.3,
+              5,
+              4.4,
+              5.2,
+              4.6,
+              5.3
+            ],
+            "lower": 4.4,
+            "upper": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 6 条，落在 [4.4, 6] 的 5 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 5,
+            "denominator": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 83.3333,
+            "detail": "5 / 6 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.76,
+      "usage": {
+        "prompt": 2569,
+        "completion": 101
+      }
+    },
+    {
+      "id": "H3-036",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 6 个曝光时间读数：5、3.8、3.8、3.7、4.4、4.1。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "5|83.3",
+      "answer": "落在工艺窗口内的有5个，合格占比83.3%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              5,
+              3.8,
+              3.8,
+              3.7,
+              4.4,
+              4.1
+            ],
+            "lower": 3.2,
+            "upper": 4.7
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 6 条，落在 [3.2, 4.7] 的 5 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 5,
+            "denominator": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 83.3333,
+            "detail": "5 / 6 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.77,
+      "usage": {
+        "prompt": 2574,
+        "completion": 103
+      }
+    },
+    {
+      "id": "H3-037",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 9 个管电流读数：3.3、3、2.9、2.9、2.4、2.3、2.5、2.7、2.6。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "8|88.9",
+      "answer": "落在工艺窗口内的有8个，合格占比88.9%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              3.3,
+              3,
+              2.9,
+              2.9,
+              2.4,
+              2.3,
+              2.5,
+              2.7,
+              2.6
+            ],
+            "lower": 2.3,
+            "upper": 3
+          },
+          "result": {
+            "ok": true,
+            "result": 8.0,
+            "detail": "共 9 条，落在 [2.3, 3] 的 8 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 8,
+            "denominator": 9
+          },
+          "result": {
+            "ok": true,
+            "result": 88.8889,
+            "detail": "8 / 9 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 9.14,
+      "usage": {
+        "prompt": 2626,
+        "completion": 116
+      }
+    },
+    {
+      "id": "H3-038",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 6 个主轴电流读数：5.2、4.8、4.7、4.8、4.8、3.9。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "5|83.3",
+      "answer": "落在工艺窗口内的有5个，合格占比83.3%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              5.2,
+              4.8,
+              4.7,
+              4.8,
+              4.8,
+              3.9
+            ],
+            "lower": 3.4,
+            "upper": 4.9
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 6 条，落在 [3.4, 4.9] 的 5 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 5,
+            "denominator": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 83.3333,
+            "detail": "5 / 6 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.98,
+      "usage": {
+        "prompt": 2593,
+        "completion": 105
+      }
+    },
+    {
+      "id": "H3-039",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 6 个胶点重量读数：8.2、5.8、7.2、6.7、6、6.6。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "5|83.3",
+      "answer": "落在工艺窗口内的有5个，合格占比83.3%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              8.2,
+              5.8,
+              7.2,
+              6.7,
+              6,
+              6.6
+            ],
+            "lower": 5.8,
+            "upper": 7.9
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 6 条，落在 [5.8, 7.9] 的 5 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 5,
+            "denominator": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 83.3333,
+            "detail": "5 / 6 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 7.8,
+      "usage": {
+        "prompt": 2583,
+        "completion": 103
+      }
+    },
+    {
+      "id": "H3-040",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 6 个出胶量读数：4.9、3.4、4.6、4.4、2.5、3.8。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "5|83.3",
+      "answer": "落在工艺窗口内的有5个，合格占比83.3%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              4.9,
+              3.4,
+              4.6,
+              4.4,
+              2.5,
+              3.8
+            ],
+            "lower": 2.5,
+            "upper": 4.6
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 6 条，落在 [2.5, 4.6] 的 5 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 5,
+            "denominator": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 83.3333,
+            "detail": "5 / 6 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.33,
+      "usage": {
+        "prompt": 2593,
+        "completion": 105
+      }
+    },
+    {
+      "id": "H3-041",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 7 个老化电压读数：5.4、4、3.7、4.3、4.6、3.7、4.7。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "6|85.7",
+      "answer": "落在工艺窗口内的有 6 个，合格占比 85.7%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              5.4,
+              4,
+              3.7,
+              4.3,
+              4.6,
+              3.7,
+              4.7
+            ],
+            "lower": 3.4,
+            "upper": 5.1
+          },
+          "result": {
+            "ok": true,
+            "result": 6.0,
+            "detail": "共 7 条，落在 [3.4, 5.1] 的 6 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 6,
+            "denominator": 7
+          },
+          "result": {
+            "ok": true,
+            "result": 85.7143,
+            "detail": "6 / 7 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 7.86,
+      "usage": {
+        "prompt": 2597,
+        "completion": 110
+      }
+    },
+    {
+      "id": "H3-042",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 9 个超声频率读数：7.1、6.3、6.2、6.7、6.7、6.3、5.9、6.4、5.7。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "8|88.9",
+      "answer": "落在工艺窗口内的有 8 个，合格占比 88.9%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              7.1,
+              6.3,
+              6.2,
+              6.7,
+              6.7,
+              6.3,
+              5.9,
+              6.4,
+              5.7
+            ],
+            "lower": 5.7,
+            "upper": 6.8
+          },
+          "result": {
+            "ok": true,
+            "result": 8.0,
+            "detail": "共 9 条，落在 [5.7, 6.8] 的 8 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 8,
+            "denominator": 9
+          },
+          "result": {
+            "ok": true,
+            "result": 88.8889,
+            "detail": "8 / 9 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.38,
+      "usage": {
+        "prompt": 2650,
+        "completion": 122
+      }
+    },
+    {
+      "id": "H3-043",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 9 个膜厚读数：7.1、6.1、6.3、5.8、5.2、6、6.6、6.1、5.1。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "8|88.9",
+      "answer": "落在工艺窗口内的有8个，合格占比88.9%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              7.1,
+              6.1,
+              6.3,
+              5.8,
+              5.2,
+              6,
+              6.6,
+              6.1,
+              5.1
+            ],
+            "lower": 5.1,
+            "upper": 6.8
+          },
+          "result": {
+            "ok": true,
+            "result": 8.0,
+            "detail": "共 9 条，落在 [5.1, 6.8] 的 8 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 8,
+            "denominator": 9
+          },
+          "result": {
+            "ok": true,
+            "result": 88.8889,
+            "detail": "8 / 9 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 7.66,
+      "usage": {
+        "prompt": 2646,
+        "completion": 118
+      }
+    },
+    {
+      "id": "H3-044",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 8 个进刀压力读数：7.1、5、6.6、5.6、6.4、4.9、6、6.8。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "7|87.5",
+      "answer": "落在工艺窗口内的有 7 个，合格占比 87.5%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              7.1,
+              5,
+              6.6,
+              5.6,
+              6.4,
+              4.9,
+              6,
+              6.8
+            ],
+            "lower": 4.8,
+            "upper": 6.8
+          },
+          "result": {
+            "ok": true,
+            "result": 7.0,
+            "detail": "共 8 条，落在 [4.8, 6.8] 的 7 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 7,
+            "denominator": 8
+          },
+          "result": {
+            "ok": true,
+            "result": 87.5,
+            "detail": "7 / 8 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 7.67,
+      "usage": {
+        "prompt": 2616,
+        "completion": 113
+      }
+    },
+    {
+      "id": "H3-045",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 8 个热封温度读数：4.2、3.6、3.1、3.4、3.4、3.9、2.9、3。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "7|87.5",
+      "answer": "落在工艺窗口内的有 7 个，合格占比 87.5%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              4.2,
+              3.6,
+              3.1,
+              3.4,
+              3.4,
+              3.9,
+              2.9,
+              3
+            ],
+            "lower": 2.7,
+            "upper": 3.9
+          },
+          "result": {
+            "ok": true,
+            "result": 7.0,
+            "detail": "共 8 条，落在 [2.7, 3.9] 的 7 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 7,
+            "denominator": 8
+          },
+          "result": {
+            "ok": true,
+            "result": 87.5,
+            "detail": "7 / 8 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.36,
+      "usage": {
+        "prompt": 2626,
+        "completion": 115
+      }
+    },
+    {
+      "id": "H3-046",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 9 个烧录电压读数：8.2、7.8、6.6、6.2、7.8、5.9、7、7.1、7.7。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "8|88.9",
+      "answer": "落在工艺窗口内的有8个，合格占比88.9%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              8.2,
+              7.8,
+              6.6,
+              6.2,
+              7.8,
+              5.9,
+              7,
+              7.1,
+              7.7
+            ],
+            "lower": 5.7,
+            "upper": 7.9
+          },
+          "result": {
+            "ok": true,
+            "result": 8.0,
+            "detail": "共 9 条，落在 [5.7, 7.9] 的 8 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 8,
+            "denominator": 9
+          },
+          "result": {
+            "ok": true,
+            "result": 88.8889,
+            "detail": "8 / 9 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.21,
+      "usage": {
+        "prompt": 2649,
+        "completion": 118
+      }
+    },
+    {
+      "id": "H3-047",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 9 个刮刀压力读数：8.6、8.2、7.3、6.4、6.7、7.8、8.1、7.6、6.4。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "8|88.9",
+      "answer": "落在工艺窗口内的有8个，合格占比88.9%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              8.6,
+              8.2,
+              7.3,
+              6.4,
+              6.7,
+              7.8,
+              8.1,
+              7.6,
+              6.4
+            ],
+            "lower": 6.4,
+            "upper": 8.3
+          },
+          "result": {
+            "ok": true,
+            "result": 8.0,
+            "detail": "共 9 条，落在 [6.4, 8.3] 的 8 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 8,
+            "denominator": 9
+          },
+          "result": {
+            "ok": true,
+            "result": 88.8889,
+            "detail": "8 / 9 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.57,
+      "usage": {
+        "prompt": 2656,
+        "completion": 120
+      }
+    },
+    {
+      "id": "H3-048",
+      "slice": "calc",
+      "trap": "G3_区间",
+      "question": "这 6 个预热温度读数：6、5.1、5.1、5.3、5.3、5.5。落在工艺窗口内的有几个？合格占比多少（保留一位小数，%）？",
+      "gold": "5|83.3",
+      "answer": "落在工艺窗口内的有5个，合格占比83.3%。",
+      "calls": [
+        {
+          "op": "count_in_range",
+          "args": {
+            "op": "count_in_range",
+            "values": [
+              6,
+              5.1,
+              5.1,
+              5.3,
+              5.3,
+              5.5
+            ],
+            "lower": 5,
+            "upper": 5.7
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 6 条，落在 [5, 5.7] 的 5 条"
+          }
+        },
+        {
+          "op": "pct_of",
+          "args": {
+            "op": "pct_of",
+            "numerator": 5,
+            "denominator": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 83.3333,
+            "detail": "5 / 6 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.52,
+      "usage": {
+        "prompt": 2563,
+        "completion": 101
+      }
+    },
+    {
+      "id": "H3-049",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261119-197，6 号线第 3 班，这批 7 片各区温度依次为 3.8、3.4、3.1、3.1、3.3、3.7、2.9 ℃。均值多少（保留两位小数）？比工艺下限 2.5 高多少（保留两位小数）？",
+      "gold": "3.33|0.83",
+      "answer": "均值3.33℃，比工艺下限高0.83℃。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              3.8,
+              3.4,
+              3.1,
+              3.1,
+              3.3,
+              3.7,
+              2.9
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 3.3286,
+            "detail": "sum(7 条) / 7"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 2.5,
+            "current": 3.3286
+          },
+          "result": {
+            "ok": true,
+            "result": -0.8286,
+            "detail": "2.5 - 3.3286"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 7.16,
+      "usage": {
+        "prompt": 2673,
+        "completion": 94
+      }
+    },
+    {
+      "id": "H3-050",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261125-138，1 号线第 2 班，这批 6 片吸嘴真空依次为 3.2、2.8、2.8、3.6、3.3、2.8 kPa。均值多少（保留两位小数）？比工艺下限 2.5 高多少（保留两位小数）？",
+      "gold": "3.08|0.58",
+      "answer": "均值 3.08 kPa，比工艺下限 2.5 kPa 高 0.58 kPa。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              3.2,
+              2.8,
+              2.8,
+              3.6,
+              3.3,
+              2.8
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 3.0833,
+            "detail": "sum(6 条) / 6"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 2.5,
+            "current": 3.0833
+          },
+          "result": {
+            "ok": true,
+            "result": -0.5833,
+            "detail": "2.5 - 3.0833"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.92,
+      "usage": {
+        "prompt": 2666,
+        "completion": 101
+      }
+    },
+    {
+      "id": "H3-051",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261122-039，2 号线第 3 班，这批 7 片光源亮度依次为 3、3、2.9、3.4、3.4、2.8、3.1 lx。均值多少（保留两位小数）？比工艺下限 2.7 高多少（保留两位小数）？",
+      "gold": "3.09|0.39",
+      "answer": "均值3.09 lx，比工艺下限2.7 lx高0.39 lx。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              3,
+              3,
+              2.9,
+              3.4,
+              3.4,
+              2.8,
+              3.1
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 3.0857,
+            "detail": "sum(7 条) / 7"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 2.7,
+            "current": 3.0857
+          },
+          "result": {
+            "ok": true,
+            "result": -0.3857,
+            "detail": "2.7 - 3.0857"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.36,
+      "usage": {
+        "prompt": 2647,
+        "completion": 96
+      }
+    },
+    {
+      "id": "H3-052",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261127-093，2 号线第 3 班，这批 7 片管电压依次为 5.2、4.6、4.9、4.8、4.5、4.6、4.9 kV。均值多少（保留两位小数）？比工艺下限 4.3 高多少（保留两位小数）？",
+      "gold": "4.79|0.49",
+      "answer": "均值 4.79 kV，比工艺下限 4.3 kV 高 0.49 kV。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              5.2,
+              4.6,
+              4.9,
+              4.8,
+              4.5,
+              4.6,
+              4.9
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 4.7857,
+            "detail": "sum(7 条) / 7"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4.3,
+            "current": 4.7857
+          },
+          "result": {
+            "ok": true,
+            "result": -0.4857,
+            "detail": "4.3 - 4.7857"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.82,
+      "usage": {
+        "prompt": 2682,
+        "completion": 106
+      }
+    },
+    {
+      "id": "H3-053",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261126-042，6 号线第 1 班，这批 8 片分板应力依次为 3.94、4.82、3.66、3.99、3.87、4.67、4.86、3.24 MPa。均值多少（保留两位小数）？比工艺下限 2.79 高多少（保留两位小数）？",
+      "gold": "4.13|1.34",
+      "answer": "均值4.13 MPa，比工艺下限高1.34 MPa。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              3.94,
+              4.82,
+              3.66,
+              3.99,
+              3.87,
+              4.67,
+              4.86,
+              3.24
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 4.1313,
+            "detail": "sum(8 条) / 8"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 2.79,
+            "current": 4.1313
+          },
+          "result": {
+            "ok": true,
+            "result": -1.3413,
+            "detail": "2.79 - 4.1313"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.9,
+      "usage": {
+        "prompt": 2700,
+        "completion": 100
+      }
+    },
+    {
+      "id": "H3-054",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261118-125，3 号线第 2 班，这批 6 片胶量依次为 6.39、6.98、6.96、6.99、5.66、5.62 mg。均值多少（保留两位小数）？比工艺下限 5.26 高多少（保留两位小数）？",
+      "gold": "6.43|1.17",
+      "answer": "均值 6.43 mg，比工艺下限高 1.17 mg。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              6.39,
+              6.98,
+              6.96,
+              6.99,
+              5.66,
+              5.62
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 6.4333,
+            "detail": "sum(6 条) / 6"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 5.26,
+            "current": 6.4333
+          },
+          "result": {
+            "ok": true,
+            "result": -1.1733,
+            "detail": "5.26 - 6.4333"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.67,
+      "usage": {
+        "prompt": 2650,
+        "completion": 93
+      }
+    },
+    {
+      "id": "H3-055",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261119-188，3 号线第 3 班，这批 6 片灌胶时间依次为 3.8、3.8、4.2、4.1、3.9、4 s。均值多少（保留两位小数）？比工艺下限 3.6 高多少（保留两位小数）？",
+      "gold": "3.97|0.37",
+      "answer": "均值 3.97 秒，比工艺下限高 0.37 秒。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              3.8,
+              3.8,
+              4.2,
+              4.1,
+              3.9,
+              4
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 3.9667,
+            "detail": "sum(6 条) / 6"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 3.6,
+            "current": 3.9667
+          },
+          "result": {
+            "ok": true,
+            "result": -0.3667,
+            "detail": "3.6 - 3.9667"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.87,
+      "usage": {
+        "prompt": 2647,
+        "completion": 93
+      }
+    },
+    {
+      "id": "H3-056",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261118-136，4 号线第 1 班，这批 6 片老化电流依次为 3.63、2.95、3.25、3.03、2.93、2.97 A。均值多少（保留两位小数）？比工艺下限 2.34 高多少（保留两位小数）？",
+      "gold": "3.13|0.79",
+      "answer": "均值3.13 A，比工艺下限高0.79 A。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              3.63,
+              2.95,
+              3.25,
+              3.03,
+              2.93,
+              2.97
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 3.1267,
+            "detail": "sum(6 条) / 6"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 2.34,
+            "current": 3.1267
+          },
+          "result": {
+            "ok": true,
+            "result": -0.7867,
+            "detail": "2.34 - 3.1267"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.02,
+      "usage": {
+        "prompt": 2644,
+        "completion": 90
+      }
+    },
+    {
+      "id": "H3-057",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261103-166，2 号线第 2 班，这批 8 片漂洗压力依次为 4.9、4.82、4.65、5.01、4.96、5.07、4.64、4.99 MPa。均值多少（保留两位小数）？比工艺下限 4.5 高多少（保留两位小数）？",
+      "gold": "4.88|0.38",
+      "answer": "均值 4.88 MPa，比工艺下限 4.5 高 0.38 MPa。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              4.9,
+              4.82,
+              4.65,
+              5.01,
+              4.96,
+              5.07,
+              4.64,
+              4.99
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 4.88,
+            "detail": "sum(8 条) / 8"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4.5,
+            "current": 4.88
+          },
+          "result": {
+            "ok": true,
+            "result": -0.38,
+            "detail": "4.5 - 4.88"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.13,
+      "usage": {
+        "prompt": 2688,
+        "completion": 105
+      }
+    },
+    {
+      "id": "H3-058",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261122-073，5 号线第 2 班，这批 7 片真空度依次为 2.5、2.5、2.6、2.5、2.4、2.5、2.9 Pa。均值多少（保留两位小数）？比工艺下限 2.1 高多少（保留两位小数）？",
+      "gold": "2.56|0.46",
+      "answer": "均值 2.56 Pa，比工艺下限 2.1 Pa 高 0.46 Pa。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              2.5,
+              2.5,
+              2.6,
+              2.5,
+              2.4,
+              2.5,
+              2.9
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 2.5571,
+            "detail": "sum(7 条) / 7"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 2.1,
+            "current": 2.5571
+          },
+          "result": {
+            "ok": true,
+            "result": -0.4571,
+            "detail": "2.1 - 2.5571"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.02,
+      "usage": {
+        "prompt": 2676,
+        "completion": 103
+      }
+    },
+    {
+      "id": "H3-059",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261108-122，5 号线第 2 班，这批 7 片主轴转速依次为 7、7、6、7、6、7、7 rpm。均值多少（保留两位小数）？比工艺下限 5 高多少（保留两位小数）？",
+      "gold": "6.71|1.71",
+      "answer": "均值 6.71 rpm，比工艺下限 5 高 1.71 rpm。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              7,
+              7,
+              6,
+              7,
+              6,
+              7,
+              7
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 6.7143,
+            "detail": "sum(7 条) / 7"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 5,
+            "current": 6.7143
+          },
+          "result": {
+            "ok": true,
+            "result": -1.7143,
+            "detail": "5 - 6.7143"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.49,
+      "usage": {
+        "prompt": 2587,
+        "completion": 84
+      }
+    },
+    {
+      "id": "H3-060",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261110-026，2 号线第 2 班，这批 6 片编带张力依次为 5.4、5.7、5.2、5.6、5.5、5.2 N。均值多少（保留两位小数）？比工艺下限 4.7 高多少（保留两位小数）？",
+      "gold": "5.43|0.73",
+      "answer": "均值 5.43 N，比工艺下限 4.7 N 高 0.73 N。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              5.4,
+              5.7,
+              5.2,
+              5.6,
+              5.5,
+              5.2
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 5.4333,
+            "detail": "sum(6 条) / 6"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4.7,
+            "current": 5.4333
+          },
+          "result": {
+            "ok": true,
+            "result": -0.7333,
+            "detail": "4.7 - 5.4333"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 6.29,
+      "usage": {
+        "prompt": 2660,
+        "completion": 98
+      }
+    },
+    {
+      "id": "H3-061",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261115-068，1 号线第 2 班，这批 8 片烧录电流依次为 5.9、4.9、5.1、4.9、5.4、6.5、5.8、5.9 mA。均值多少（保留两位小数）？比工艺下限 4.6 高多少（保留两位小数）？",
+      "gold": "5.55|0.95",
+      "answer": "均值 5.55 mA，比工艺下限 4.6 高 0.95 mA。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              5.9,
+              4.9,
+              5.1,
+              4.9,
+              5.4,
+              6.5,
+              5.8,
+              5.9
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 5.55,
+            "detail": "sum(8 条) / 8"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4.6,
+            "current": 5.55
+          },
+          "result": {
+            "ok": true,
+            "result": -0.95,
+            "detail": "4.6 - 5.55"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.79,
+      "usage": {
+        "prompt": 2694,
+        "completion": 105
+      }
+    },
+    {
+      "id": "H3-062",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261107-123，6 号线第 3 班，这批 8 片印刷压力依次为 3.1、3、2.7、2.8、3.3、3.2、3.1、2.6 kg。均值多少（保留两位小数）？比工艺下限 2.2 高多少（保留两位小数）？",
+      "gold": "2.98|0.78",
+      "answer": "均值 2.98 kg，比工艺下限 2.2 kg 高 0.78 kg。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              3.1,
+              3,
+              2.7,
+              2.8,
+              3.3,
+              3.2,
+              3.1,
+              2.6
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 2.975,
+            "detail": "sum(8 条) / 8"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 2.2,
+            "current": 2.975
+          },
+          "result": {
+            "ok": true,
+            "result": -0.775,
+            "detail": "2.2 - 2.975"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.1,
+      "usage": {
+        "prompt": 2677,
+        "completion": 105
+      }
+    },
+    {
+      "id": "H3-063",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261105-160，4 号线第 1 班，这批 7 片波峰高度依次为 2.3、2.4、2.4、2.4、2.5、2.1、2 mm。均值多少（保留两位小数）？比工艺下限 1.8 高多少（保留两位小数）？",
+      "gold": "2.3|0.5",
+      "answer": "均值2.30，比工艺下限1.8高0.50。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              2.3,
+              2.4,
+              2.4,
+              2.4,
+              2.5,
+              2.1,
+              2
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 2.3,
+            "detail": "sum(7 条) / 7"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 1.8,
+            "current": 2.3
+          },
+          "result": {
+            "ok": true,
+            "result": -0.5,
+            "detail": "1.8 - 2.3"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 4.54,
+      "usage": {
+        "prompt": 2653,
+        "completion": 93
+      }
+    },
+    {
+      "id": "H3-064",
+      "slice": "calc",
+      "trap": "G4_均值差",
+      "question": "制令 MO-20261116-046，5 号线第 2 班，这批 6 片回水温度依次为 5.7、4.7、5、4.6、4.4、5.5 ℃。均值多少（保留两位小数）？比工艺下限 4.1 高多少（保留两位小数）？",
+      "gold": "4.98|0.88",
+      "answer": "均值4.98℃，比工艺下限4.1℃高0.88℃。",
+      "calls": [
+        {
+          "op": "average",
+          "args": {
+            "op": "average",
+            "values": [
+              5.7,
+              4.7,
+              5,
+              4.6,
+              4.4,
+              5.5
+            ]
+          },
+          "result": {
+            "ok": true,
+            "result": 4.9833,
+            "detail": "sum(6 条) / 6"
+          }
+        },
+        {
+          "op": "difference",
+          "args": {
+            "op": "difference",
+            "initial": 4.1,
+            "current": 4.9833
+          },
+          "result": {
+            "ok": true,
+            "result": -0.8833,
+            "detail": "4.1 - 4.9833"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "ok",
+      "latency_s": 5.4,
+      "usage": {
+        "prompt": 2647,
+        "completion": 91
+      }
+    },
+    {
+      "id": "H3-065",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 9 个炉温实测：2.4、2.2、2、2.1、2.6、2.6、1.9、2.7、2。越过上限的有几个？比上一批的 1 个多了百分之几（保留一位小数）？",
+      "gold": "4|300",
+      "answer": "越过上限的有4个，比上一批的1个多了30.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              2.4,
+              2.2,
+              2,
+              2.1,
+              2.6,
+              2.6,
+              1.9,
+              2.7,
+              2
+            ],
+            "upper": 2.3
+          },
+          "result": {
+            "ok": true,
+            "result": 4.0,
+            "detail": "共 9 条，> 2.3 的 4 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 1,
+            "current": 4,
+            "scale": 0.1
+          },
+          "result": {
+            "ok": true,
+            "result": 30.0,
+            "detail": "|1 - 4| / 1 * 100 ; × 0.1"
+          }
+        }
+      ],
+      "correct": false,
+      "extract": "rel",
+      "latency_s": 7.88,
+      "usage": {
+        "prompt": 2623,
+        "completion": 115
+      }
+    },
+    {
+      "id": "H3-066",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个锡温实测：8.7、8.8、9、8.4、6.2、6.9、8.3、7.3。越过上限的有几个？比上一批的 3 个多了百分之几（保留一位小数）？",
+      "gold": "5|66.7",
+      "answer": "越过上限的有5个，比上一批的3个多了66.7%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              8.7,
+              8.8,
+              9,
+              8.4,
+              6.2,
+              6.9,
+              8.3,
+              7.3
+            ],
+            "upper": 7.5
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 8 条，> 7.5 的 5 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 3,
+            "current": 5
+          },
+          "result": {
+            "ok": true,
+            "result": 66.6667,
+            "detail": "|3 - 5| / 3 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 4.78,
+      "usage": {
+        "prompt": 2602,
+        "completion": 104
+      }
+    },
+    {
+      "id": "H3-067",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个贴装偏移实测：7、6.4、6.8、7.1、7.4、6、6.8、6.9。越过上限的有几个？比上一批的 1 个多了百分之几（保留一位小数）？",
+      "gold": "6|500",
+      "answer": "越过上限的有 6 个，比上一批的 1 个多了 50.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              7,
+              6.4,
+              6.8,
+              7.1,
+              7.4,
+              6,
+              6.8,
+              6.9
+            ],
+            "upper": 6.5
+          },
+          "result": {
+            "ok": true,
+            "result": 6.0,
+            "detail": "共 8 条，> 6.5 的 6 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 1,
+            "current": 6,
+            "scale": 0.1
+          },
+          "result": {
+            "ok": true,
+            "result": 50.0,
+            "detail": "|1 - 6| / 1 * 100 ; × 0.1"
+          }
+        }
+      ],
+      "correct": false,
+      "extract": "rel",
+      "latency_s": 4.27,
+      "usage": {
+        "prompt": 2616,
+        "completion": 113
+      }
+    },
+    {
+      "id": "H3-068",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个误判次数实测：3.6、4、3.4、4.9、4.8、4.9、4.1、4.3。越过上限的有几个？比上一批的 3 个多了百分之几（保留一位小数）？",
+      "gold": "4|33.3",
+      "answer": "越过上限的有 4 个，比上一批的 3 个多了 33.3%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              3.6,
+              4,
+              3.4,
+              4.9,
+              4.8,
+              4.9,
+              4.1,
+              4.3
+            ],
+            "upper": 4.2,
+            "inclusive": true
+          },
+          "result": {
+            "ok": true,
+            "result": 4.0,
+            "detail": "共 8 条，≥ 4.2 的 4 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 3,
+            "current": 4,
+            "scale": 0.1
+          },
+          "result": {
+            "ok": true,
+            "result": 3.3333,
+            "detail": "|3 - 4| / 3 * 100 ; × 0.1"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 6.2,
+      "usage": {
+        "prompt": 2628,
+        "completion": 120
+      }
+    },
+    {
+      "id": "H3-069",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 7 个管电压实测：2.7、2.2、2.1、2.6、2.6、2.1、2.1。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "3|50",
+      "answer": "越过上限的有 3 个，比上一批的 2 个多了 50.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              2.7,
+              2.2,
+              2.1,
+              2.6,
+              2.6,
+              2.1,
+              2.1
+            ],
+            "upper": 2.5
+          },
+          "result": {
+            "ok": true,
+            "result": 3.0,
+            "detail": "共 7 条，> 2.5 的 3 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 3
+          },
+          "result": {
+            "ok": true,
+            "result": 50.0,
+            "detail": "|2 - 3| / 2 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 5.06,
+      "usage": {
+        "prompt": 2588,
+        "completion": 104
+      }
+    },
+    {
+      "id": "H3-070",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个主轴振动实测：4.9、3.5、4.6、4、4.9、3.5、4.5、4.9。越过上限的有几个？比上一批的 4 个多了百分之几（保留一位小数）？",
+      "gold": "5|25",
+      "answer": "越过上限的有 5 个，比上一批的 4 个多了 2.5%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              4.9,
+              3.5,
+              4.6,
+              4,
+              4.9,
+              3.5,
+              4.5,
+              4.9
+            ],
+            "upper": 4.1
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 8 条，> 4.1 的 5 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 4,
+            "current": 5,
+            "scale": 0.1
+          },
+          "result": {
+            "ok": true,
+            "result": 2.5,
+            "detail": "|4 - 5| / 4 * 100 ; × 0.1"
+          }
+        }
+      ],
+      "correct": false,
+      "extract": "rel",
+      "latency_s": 6.18,
+      "usage": {
+        "prompt": 2623,
+        "completion": 115
+      }
+    },
+    {
+      "id": "H3-071",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 9 个胶量偏差实测：3、2.6、2.4、2.7、3、2.3、3.2、3、2.3。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "4|100",
+      "answer": "越过上限的有4个，比上一批的2个多了10.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              3,
+              2.6,
+              2.4,
+              2.7,
+              3,
+              2.3,
+              3.2,
+              3,
+              2.3
+            ],
+            "upper": 2.8,
+            "inclusive": true
+          },
+          "result": {
+            "ok": true,
+            "result": 4.0,
+            "detail": "共 9 条，≥ 2.8 的 4 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 4,
+            "scale": 0.1
+          },
+          "result": {
+            "ok": true,
+            "result": 10.0,
+            "detail": "|2 - 4| / 2 * 100 ; × 0.1"
+          }
+        }
+      ],
+      "correct": false,
+      "extract": "rel",
+      "latency_s": 7.8,
+      "usage": {
+        "prompt": 2632,
+        "completion": 118
+      }
+    },
+    {
+      "id": "H3-072",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 7 个出胶偏差实测：2.9、3、4.1、3.8、4.1、3.4、3.1。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "3|50",
+      "answer": "越过上限的有 3 个，比上一批的 2 个多了 5.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              2.9,
+              3,
+              4.1,
+              3.8,
+              4.1,
+              3.4,
+              3.1
+            ],
+            "upper": 3.5,
+            "inclusive": true
+          },
+          "result": {
+            "ok": true,
+            "result": 3.0,
+            "detail": "共 7 条，≥ 3.5 的 3 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 3,
+            "scale": 0.1
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "|2 - 3| / 2 * 100 ; × 0.1"
+          }
+        }
+      ],
+      "correct": false,
+      "extract": "rel",
+      "latency_s": 5.17,
+      "usage": {
+        "prompt": 2608,
+        "completion": 115
+      }
+    },
+    {
+      "id": "H3-073",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 7 个老化电流实测：8.9、9.2、7.1、6.1、6.2、6.1、8.2。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "3|50",
+      "answer": "越过上限的有 3 个，比上一批的 2 个多了 50.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              8.9,
+              9.2,
+              7.1,
+              6.1,
+              6.2,
+              6.1,
+              8.2
+            ],
+            "upper": 7.6,
+            "inclusive": true
+          },
+          "result": {
+            "ok": true,
+            "result": 3.0,
+            "detail": "共 7 条，≥ 7.6 的 3 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 3
+          },
+          "result": {
+            "ok": true,
+            "result": 50.0,
+            "detail": "|2 - 3| / 2 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 6.71,
+      "usage": {
+        "prompt": 2595,
+        "completion": 109
+      }
+    },
+    {
+      "id": "H3-074",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 7 个漂洗压力实测：3.3、2.9、2.5、3.2、2.8、3.3、3.6。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "4|100",
+      "answer": "越过上限的有4个，比上一批的2个多了100.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              3.3,
+              2.9,
+              2.5,
+              3.2,
+              2.8,
+              3.3,
+              3.6
+            ],
+            "upper": 3.1
+          },
+          "result": {
+            "ok": true,
+            "result": 4.0,
+            "detail": "共 7 条，> 3.1 的 4 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 4
+          },
+          "result": {
+            "ok": true,
+            "result": 100.0,
+            "detail": "|2 - 4| / 2 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 8.61,
+      "usage": {
+        "prompt": 2591,
+        "completion": 101
+      }
+    },
+    {
+      "id": "H3-075",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个膜厚偏差实测：8.1、7.1、6.8、6.7、8.1、6.8、8、8.3。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "5|150",
+      "answer": "越过上限的有 5 个，比上一批的 2 个多了 150.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              8.1,
+              7.1,
+              6.8,
+              6.7,
+              8.1,
+              6.8,
+              8,
+              8.3
+            ],
+            "upper": 6.9
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 8 条，> 6.9 的 5 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 5
+          },
+          "result": {
+            "ok": true,
+            "result": 150.0,
+            "detail": "|2 - 5| / 2 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 6.98,
+      "usage": {
+        "prompt": 2609,
+        "completion": 107
+      }
+    },
+    {
+      "id": "H3-076",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个进刀偏差实测：1.4、1.4、1.5、1.2、1.5、1.1、1.5、1.4。越过上限的有几个？比上一批的 4 个多了百分之几（保留一位小数）？",
+      "gold": "6|50",
+      "answer": "越过上限的有 6 个，比上一批的 4 个多了 50.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              1.4,
+              1.4,
+              1.5,
+              1.2,
+              1.5,
+              1.1,
+              1.5,
+              1.4
+            ],
+            "upper": 1.3
+          },
+          "result": {
+            "ok": true,
+            "result": 6.0,
+            "detail": "共 8 条，> 1.3 的 6 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 4,
+            "current": 6
+          },
+          "result": {
+            "ok": true,
+            "result": 50.0,
+            "detail": "|4 - 6| / 4 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 9.23,
+      "usage": {
+        "prompt": 2619,
+        "completion": 109
+      }
+    },
+    {
+      "id": "H3-077",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 9 个热封偏差实测：8.1、8.9、8.1、8.4、7、6.5、6.4、7、6.1。越过上限的有几个？比上一批的 1 个多了百分之几（保留一位小数）？",
+      "gold": "4|300",
+      "answer": "越过上限的有4个，比上一批的1个多了30.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              8.1,
+              8.9,
+              8.1,
+              8.4,
+              7,
+              6.5,
+              6.4,
+              7,
+              6.1
+            ],
+            "upper": 7.4,
+            "inclusive": false
+          },
+          "result": {
+            "ok": true,
+            "result": 4.0,
+            "detail": "共 9 条，> 7.4 的 4 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 1,
+            "current": 4,
+            "scale": 0.1
+          },
+          "result": {
+            "ok": true,
+            "result": 30.0,
+            "detail": "|1 - 4| / 1 * 100 ; × 0.1"
+          }
+        }
+      ],
+      "correct": false,
+      "extract": "rel",
+      "latency_s": 7.01,
+      "usage": {
+        "prompt": 2642,
+        "completion": 120
+      }
+    },
+    {
+      "id": "H3-078",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个烧录电流实测：4、4.8、4.9、3.7、4.7、3.8、3.8、3.7。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "3|50",
+      "answer": "越过上限的有 3 个，比上一批的 2 个多了 50.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              4,
+              4.8,
+              4.9,
+              3.7,
+              4.7,
+              3.8,
+              3.8,
+              3.7
+            ],
+            "upper": 4.1,
+            "inclusive": true
+          },
+          "result": {
+            "ok": true,
+            "result": 3.0,
+            "detail": "共 8 条，≥ 4.1 的 3 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 3
+          },
+          "result": {
+            "ok": true,
+            "result": 50.0,
+            "detail": "|2 - 3| / 2 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 8.83,
+      "usage": {
+        "prompt": 2616,
+        "completion": 112
+      }
+    },
+    {
+      "id": "H3-079",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 7 个刮刀压力实测：2.6、2.6、2.9、2.9、2.6、3.1、2.5。越过上限的有几个？比上一批的 2 个多了百分之几（保留一位小数）？",
+      "gold": "3|50",
+      "answer": "越过上限的有 3 个，比上一批的 2 个多了 50.0%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              2.6,
+              2.6,
+              2.9,
+              2.9,
+              2.6,
+              3.1,
+              2.5
+            ],
+            "upper": 2.7
+          },
+          "result": {
+            "ok": true,
+            "result": 3.0,
+            "detail": "共 7 条，> 2.7 的 3 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 2,
+            "current": 3
+          },
+          "result": {
+            "ok": true,
+            "result": 50.0,
+            "detail": "|2 - 3| / 2 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 6.11,
+      "usage": {
+        "prompt": 2591,
+        "completion": 104
+      }
+    },
+    {
+      "id": "H3-080",
+      "slice": "calc",
+      "trap": "G5_超限环比",
+      "question": "这批 8 个预热温度实测：8.6、7.9、8.4、6.6、8.5、9.6、8.3、6.8。越过上限的有几个？比上一批的 3 个多了百分之几（保留一位小数）？",
+      "gold": "5|66.7",
+      "answer": "越过上限的有 5 个，比上一批的 3 个多了 66.7%。",
+      "calls": [
+        {
+          "op": "count_over",
+          "args": {
+            "op": "count_over",
+            "values": [
+              8.6,
+              7.9,
+              8.4,
+              6.6,
+              8.5,
+              9.6,
+              8.3,
+              6.8
+            ],
+            "upper": 7.9
+          },
+          "result": {
+            "ok": true,
+            "result": 5.0,
+            "detail": "共 8 条，> 7.9 的 5 条"
+          }
+        },
+        {
+          "op": "delta_percent",
+          "args": {
+            "op": "delta_percent",
+            "initial": 3,
+            "current": 5
+          },
+          "result": {
+            "ok": true,
+            "result": 66.6667,
+            "detail": "|3 - 5| / 3 * 100"
+          }
+        }
+      ],
+      "correct": true,
+      "extract": "rel",
+      "latency_s": 6.96,
+      "usage": {
+        "prompt": 2612,
+        "completion": 109
+      }
+    },
+    {
+      "id": "H3-081",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "这台点胶机的点检周期是几天？",
+      "gold": "6",
+      "answer": "13天\n\n根据参考资料，点胶机每6天点检一次，本月已点检13次。因此，点检周期为13次点检所对应的天数，即13天。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 2.97,
+      "usage": {
+        "prompt": 735,
+        "completion": 44
+      }
+    },
+    {
+      "id": "H3-082",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "点胶机的额定功率是多少 kW？",
+      "gold": "5",
+      "answer": "5 kW。根据参考资料【点胶机·铭牌】，点胶机的额定功率为 5 kW。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.06,
+      "usage": {
+        "prompt": 729,
+        "completion": 25
+      }
+    },
+    {
+      "id": "H3-083",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "激光打标机的整机保修期是几个月？",
+      "gold": "8",
+      "answer": "8个月。根据参考资料，激光打标机的整机保修期为8个月。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.94,
+      "usage": {
+        "prompt": 732,
+        "completion": 18
+      }
+    },
+    {
+      "id": "H3-084",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "谁负责激光打标机的日常点检？",
+      "gold": "聂云舟",
+      "answer": "聂云舟负责激光打标机的日常点检。\n\n关键依据：参考资料【激光打标机·责任表】中明确指出负责人为聂云舟。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.93,
+      "usage": {
+        "prompt": 734,
+        "completion": 36
+      }
+    },
+    {
+      "id": "H3-085",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "分板机的额定功率是多少 kW？",
+      "gold": "5",
+      "answer": "5 kW。根据铭牌信息，分板机的额定功率为5 kW。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.41,
+      "usage": {
+        "prompt": 729,
+        "completion": 19
+      }
+    },
+    {
+      "id": "H3-086",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "分板机的备件放在哪个库位？",
+      "gold": "C5-05",
+      "answer": "分板机的备件放在库位C5-05。\n\n关键依据：参考资料中明确指出库位为C5-05。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 2.94,
+      "usage": {
+        "prompt": 732,
+        "completion": 30
+      }
+    },
+    {
+      "id": "H3-087",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "谁负责老化测试柜的日常点检？",
+      "gold": "聂云舟",
+      "answer": "聂云舟负责老化测试柜的日常点检。关键依据：参考资料中明确指出“负责人：聂云舟”。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 2.06,
+      "usage": {
+        "prompt": 733,
+        "completion": 28
+      }
+    },
+    {
+      "id": "H3-088",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "这台老化测试柜的点检周期是几天？",
+      "gold": "11",
+      "answer": "11天\n\n关键依据：参考资料中提到“每11天点检一次”，因此点检周期为11天。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.77,
+      "usage": {
+        "prompt": 735,
+        "completion": 27
+      }
+    },
+    {
+      "id": "H3-089",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "超声波清洗槽的备件放在哪个库位？",
+      "gold": "C1-24",
+      "answer": "库位 C1-24。\n\n关键依据：参考资料中明确指出“超声波清洗槽·备件”的库位为C1-24。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.85,
+      "usage": {
+        "prompt": 733,
+        "completion": 33
+      }
+    },
+    {
+      "id": "H3-090",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "超声波清洗槽的整机保修期是几个月？",
+      "gold": "13",
+      "answer": "13个月。根据参考资料，超声波清洗槽的整机保修期为13个月。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.11,
+      "usage": {
+        "prompt": 731,
+        "completion": 18
+      }
+    },
+    {
+      "id": "H3-091",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "这台贴片机的点检周期是几天？",
+      "gold": "11",
+      "answer": "11天\n\n根据参考资料，贴片机每11天点检一次，本月已点检19次，因此点检周期为11天。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.94,
+      "usage": {
+        "prompt": 735,
+        "completion": 33
+      }
+    },
+    {
+      "id": "H3-092",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "贴片机的额定功率是多少 kW？",
+      "gold": "3",
+      "answer": "3 kW。根据参考资料【贴片机·铭牌】，贴片机的额定功率为 3 kW。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.83,
+      "usage": {
+        "prompt": 729,
+        "completion": 25
+      }
+    },
+    {
+      "id": "H3-093",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "回流炉的整机保修期是几个月？",
+      "gold": "13",
+      "answer": "13个月。根据参考资料，回流炉的整机保修期为13个月。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.18,
+      "usage": {
+        "prompt": 729,
+        "completion": 17
+      }
+    },
+    {
+      "id": "H3-094",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "谁负责回流炉的日常点检？",
+      "gold": "聂云舟",
+      "answer": "聂云舟负责回流炉的日常点检。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.0,
+      "usage": {
+        "prompt": 731,
+        "completion": 13
+      }
+    },
+    {
+      "id": "H3-095",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "X-Ray检测机的额定功率是多少 kW？",
+      "gold": "3",
+      "answer": "3 kW。根据铭牌信息，X-Ray检测机的额定功率为3 kW。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.35,
+      "usage": {
+        "prompt": 731,
+        "completion": 20
+      }
+    },
+    {
+      "id": "H3-096",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "X-Ray检测机的备件放在哪个库位？",
+      "gold": "C5-15",
+      "answer": "X-Ray检测机的备件放在库位C5-15。\n\n关键依据：参考资料中明确指出库位为C5-15。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 2.08,
+      "usage": {
+        "prompt": 734,
+        "completion": 31
+      }
+    },
+    {
+      "id": "H3-097",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "谁负责灌胶机的日常点检？",
+      "gold": "聂云舟",
+      "answer": "聂云舟负责灌胶机的日常点检。\n\n关键依据：参考资料【灌胶机·责任表】中明确指出负责人为聂云舟。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.43,
+      "usage": {
+        "prompt": 732,
+        "completion": 34
+      }
+    },
+    {
+      "id": "H3-098",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "这台灌胶机的点检周期是几天？",
+      "gold": "16",
+      "answer": "16天\n\n关键依据：根据参考资料，灌胶机的点检周期是每16天点检一次。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.09,
+      "usage": {
+        "prompt": 735,
+        "completion": 25
+      }
+    },
+    {
+      "id": "H3-099",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "划片机的备件放在哪个库位？",
+      "gold": "C5-06",
+      "answer": "划片机的备件放在库位C5-06。\n\n关键依据：参考资料中明确指出划片机的备件库位为C5-06。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 1.54,
+      "usage": {
+        "prompt": 732,
+        "completion": 35
+      }
+    },
+    {
+      "id": "H3-100",
+      "slice": "simple",
+      "trap": "G6_不必算",
+      "question": "划片机的整机保修期是几个月？",
+      "gold": "6",
+      "answer": "6个月。根据参考资料，划片机的整机保修期为6个月。",
+      "calls": [],
+      "correct": true,
+      "extract": "none",
+      "latency_s": 3.75,
+      "usage": {
+        "prompt": 730,
+        "completion": 17
+      }
+    }
+  ]
+}

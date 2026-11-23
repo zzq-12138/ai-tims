@@ -1,0 +1,510 @@
+{
+  "meta": {
+    "dataset": "scripts/ai_layer/data/route_set.tsv",
+    "n": 300,
+    "paired": true,
+    "note": "离线反事实回放；路由与全小共用同一份 small 答案，只差「哪些行改用大模型」"
+  },
+  "all_large": {
+    "correct": 300,
+    "acc": 100.0,
+    "errors": 0,
+    "cost_cny": 0.3085
+  },
+  "routed_at_0.5": {
+    "correct": 281,
+    "acc": 93.67,
+    "errors": 19,
+    "cost_cny": 0.2112
+  },
+  "all_small_paired": {
+    "correct": 281,
+    "acc": 93.67,
+    "errors": 19,
+    "cost_cny": 0.0071
+  },
+  "threshold_scan": [
+    {
+      "threshold": 0.1,
+      "to_small": 174,
+      "to_large": 126,
+      "acc": 94.67,
+      "cost_cny": 0.2157,
+      "saving_pct": 30.08,
+      "loss_pp": 5.33,
+      "calc_to_small": 26,
+      "calc_to_small_failed": 16,
+      "templated_to_large": 120,
+      "yuan_per_pp": 0.0174
+    },
+    {
+      "threshold": 0.2,
+      "to_small": 174,
+      "to_large": 126,
+      "acc": 94.67,
+      "cost_cny": 0.2157,
+      "saving_pct": 30.08,
+      "loss_pp": 5.33,
+      "calc_to_small": 26,
+      "calc_to_small_failed": 16,
+      "templated_to_large": 120,
+      "yuan_per_pp": 0.0174
+    },
+    {
+      "threshold": 0.3,
+      "to_small": 179,
+      "to_large": 121,
+      "acc": 93.67,
+      "cost_cny": 0.2118,
+      "saving_pct": 31.35,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 120,
+      "yuan_per_pp": 0.0153
+    },
+    {
+      "threshold": 0.4,
+      "to_small": 179,
+      "to_large": 121,
+      "acc": 93.67,
+      "cost_cny": 0.2118,
+      "saving_pct": 31.35,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 120,
+      "yuan_per_pp": 0.0153
+    },
+    {
+      "threshold": 0.5,
+      "to_small": 180,
+      "to_large": 120,
+      "acc": 93.67,
+      "cost_cny": 0.2112,
+      "saving_pct": 31.54,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 120,
+      "yuan_per_pp": 0.0154
+    },
+    {
+      "threshold": 0.6,
+      "to_small": 215,
+      "to_large": 85,
+      "acc": 93.67,
+      "cost_cny": 0.1384,
+      "saving_pct": 55.14,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 85,
+      "yuan_per_pp": 0.0269
+    },
+    {
+      "threshold": 0.7,
+      "to_small": 215,
+      "to_large": 85,
+      "acc": 93.67,
+      "cost_cny": 0.1384,
+      "saving_pct": 55.14,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 85,
+      "yuan_per_pp": 0.0269
+    },
+    {
+      "threshold": 0.8,
+      "to_small": 221,
+      "to_large": 79,
+      "acc": 93.67,
+      "cost_cny": 0.1293,
+      "saving_pct": 58.09,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 79,
+      "yuan_per_pp": 0.0283
+    },
+    {
+      "threshold": 0.9,
+      "to_small": 253,
+      "to_large": 47,
+      "acc": 93.67,
+      "cost_cny": 0.0792,
+      "saving_pct": 74.33,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 47,
+      "yuan_per_pp": 0.0362
+    },
+    {
+      "threshold": 1.0,
+      "to_small": 291,
+      "to_large": 9,
+      "acc": 93.67,
+      "cost_cny": 0.0225,
+      "saving_pct": 92.71,
+      "loss_pp": 6.33,
+      "calc_to_small": 30,
+      "calc_to_small_failed": 19,
+      "templated_to_large": 9,
+      "yuan_per_pp": 0.0452
+    }
+  ],
+  "best_threshold": 1.0,
+  "routed_at_best": {
+    "correct": 281,
+    "acc": 93.67,
+    "errors": 19,
+    "cost_cny": 0.0225
+  },
+  "profiles": [
+    {
+      "hard_ratio": 0.1,
+      "n_easy": 270,
+      "n_mid": 24,
+      "n_calc": 6,
+      "large": {
+        "acc_mean": 100.0,
+        "acc_lo": 100.0,
+        "acc_hi": 100.0,
+        "cost_mean": 0.1847
+      },
+      "routed": {
+        "acc_mean": 98.74,
+        "acc_lo": 98.0,
+        "acc_hi": 99.67,
+        "cost_mean": 0.0465,
+        "saving_pct": 74.82
+      },
+      "small": {
+        "acc_mean": 98.74,
+        "acc_lo": 98.0,
+        "acc_hi": 99.67,
+        "cost_mean": 0.0055,
+        "saving_pct": 97.02
+      }
+    },
+    {
+      "hard_ratio": 0.3,
+      "n_easy": 210,
+      "n_mid": 72,
+      "n_calc": 18,
+      "large": {
+        "acc_mean": 100.0,
+        "acc_lo": 100.0,
+        "acc_hi": 100.0,
+        "cost_mean": 0.2467
+      },
+      "routed": {
+        "acc_mean": 96.19,
+        "acc_lo": 95.0,
+        "acc_hi": 97.67,
+        "cost_mean": 0.1289,
+        "saving_pct": 47.75
+      },
+      "small": {
+        "acc_mean": 96.19,
+        "acc_lo": 95.0,
+        "acc_hi": 97.67,
+        "cost_mean": 0.0063,
+        "saving_pct": 97.45
+      }
+    },
+    {
+      "hard_ratio": 0.5,
+      "n_easy": 150,
+      "n_mid": 120,
+      "n_calc": 30,
+      "large": {
+        "acc_mean": 100.0,
+        "acc_lo": 100.0,
+        "acc_hi": 100.0,
+        "cost_mean": 0.3088
+      },
+      "routed": {
+        "acc_mean": 93.69,
+        "acc_lo": 92.0,
+        "acc_hi": 95.33,
+        "cost_mean": 0.2115,
+        "saving_pct": 31.51
+      },
+      "small": {
+        "acc_mean": 93.69,
+        "acc_lo": 92.0,
+        "acc_hi": 95.33,
+        "cost_mean": 0.0071,
+        "saving_pct": 97.7
+      }
+    }
+  ],
+  "error_cost": {
+    "pp_to_errors": 3.0,
+    "breakeven_at_0.5": {
+      "routed_beats_large_below": 0.0051,
+      "routed_beats_small_above": null,
+      "note": "路由与全小错误数相同（19 vs 19）而成本更高，不存在让路由优于全小的错误成本 → 全小严格支配路由"
+    },
+    "breakeven_at_best": {
+      "threshold": 1.0,
+      "routed_beats_large_below": 0.0151,
+      "routed_beats_small_above": null
+    },
+    "large_vs_small_breakeven": 0.0159,
+    "assumptions": [
+      {
+        "minutes": 3,
+        "hourly": 60,
+        "share": 1.0,
+        "cost_per_error": 3.0,
+        "total_large": 0.31,
+        "total_routed": 57.21,
+        "total_small": 57.01
+      },
+      {
+        "minutes": 3,
+        "hourly": 60,
+        "share": 0.5,
+        "cost_per_error": 1.5,
+        "total_large": 0.31,
+        "total_routed": 28.71,
+        "total_small": 28.51
+      },
+      {
+        "minutes": 3,
+        "hourly": 60,
+        "share": 0.2,
+        "cost_per_error": 0.6,
+        "total_large": 0.31,
+        "total_routed": 11.61,
+        "total_small": 11.41
+      },
+      {
+        "minutes": 3,
+        "hourly": 90,
+        "share": 1.0,
+        "cost_per_error": 4.5,
+        "total_large": 0.31,
+        "total_routed": 85.71,
+        "total_small": 85.51
+      },
+      {
+        "minutes": 3,
+        "hourly": 90,
+        "share": 0.5,
+        "cost_per_error": 2.25,
+        "total_large": 0.31,
+        "total_routed": 42.96,
+        "total_small": 42.76
+      },
+      {
+        "minutes": 3,
+        "hourly": 90,
+        "share": 0.2,
+        "cost_per_error": 0.9,
+        "total_large": 0.31,
+        "total_routed": 17.31,
+        "total_small": 17.11
+      },
+      {
+        "minutes": 3,
+        "hourly": 120,
+        "share": 1.0,
+        "cost_per_error": 6.0,
+        "total_large": 0.31,
+        "total_routed": 114.21,
+        "total_small": 114.01
+      },
+      {
+        "minutes": 3,
+        "hourly": 120,
+        "share": 0.5,
+        "cost_per_error": 3.0,
+        "total_large": 0.31,
+        "total_routed": 57.21,
+        "total_small": 57.01
+      },
+      {
+        "minutes": 3,
+        "hourly": 120,
+        "share": 0.2,
+        "cost_per_error": 1.2,
+        "total_large": 0.31,
+        "total_routed": 23.01,
+        "total_small": 22.81
+      },
+      {
+        "minutes": 5,
+        "hourly": 60,
+        "share": 1.0,
+        "cost_per_error": 5.0,
+        "total_large": 0.31,
+        "total_routed": 95.21,
+        "total_small": 95.01
+      },
+      {
+        "minutes": 5,
+        "hourly": 60,
+        "share": 0.5,
+        "cost_per_error": 2.5,
+        "total_large": 0.31,
+        "total_routed": 47.71,
+        "total_small": 47.51
+      },
+      {
+        "minutes": 5,
+        "hourly": 60,
+        "share": 0.2,
+        "cost_per_error": 1.0,
+        "total_large": 0.31,
+        "total_routed": 19.21,
+        "total_small": 19.01
+      },
+      {
+        "minutes": 5,
+        "hourly": 90,
+        "share": 1.0,
+        "cost_per_error": 7.5,
+        "total_large": 0.31,
+        "total_routed": 142.71,
+        "total_small": 142.51
+      },
+      {
+        "minutes": 5,
+        "hourly": 90,
+        "share": 0.5,
+        "cost_per_error": 3.75,
+        "total_large": 0.31,
+        "total_routed": 71.46,
+        "total_small": 71.26
+      },
+      {
+        "minutes": 5,
+        "hourly": 90,
+        "share": 0.2,
+        "cost_per_error": 1.5,
+        "total_large": 0.31,
+        "total_routed": 28.71,
+        "total_small": 28.51
+      },
+      {
+        "minutes": 5,
+        "hourly": 120,
+        "share": 1.0,
+        "cost_per_error": 10.0,
+        "total_large": 0.31,
+        "total_routed": 190.21,
+        "total_small": 190.01
+      },
+      {
+        "minutes": 5,
+        "hourly": 120,
+        "share": 0.5,
+        "cost_per_error": 5.0,
+        "total_large": 0.31,
+        "total_routed": 95.21,
+        "total_small": 95.01
+      },
+      {
+        "minutes": 5,
+        "hourly": 120,
+        "share": 0.2,
+        "cost_per_error": 2.0,
+        "total_large": 0.31,
+        "total_routed": 38.21,
+        "total_small": 38.01
+      },
+      {
+        "minutes": 8,
+        "hourly": 60,
+        "share": 1.0,
+        "cost_per_error": 8.0,
+        "total_large": 0.31,
+        "total_routed": 152.21,
+        "total_small": 152.01
+      },
+      {
+        "minutes": 8,
+        "hourly": 60,
+        "share": 0.5,
+        "cost_per_error": 4.0,
+        "total_large": 0.31,
+        "total_routed": 76.21,
+        "total_small": 76.01
+      },
+      {
+        "minutes": 8,
+        "hourly": 60,
+        "share": 0.2,
+        "cost_per_error": 1.6,
+        "total_large": 0.31,
+        "total_routed": 30.61,
+        "total_small": 30.41
+      },
+      {
+        "minutes": 8,
+        "hourly": 90,
+        "share": 1.0,
+        "cost_per_error": 12.0,
+        "total_large": 0.31,
+        "total_routed": 228.21,
+        "total_small": 228.01
+      },
+      {
+        "minutes": 8,
+        "hourly": 90,
+        "share": 0.5,
+        "cost_per_error": 6.0,
+        "total_large": 0.31,
+        "total_routed": 114.21,
+        "total_small": 114.01
+      },
+      {
+        "minutes": 8,
+        "hourly": 90,
+        "share": 0.2,
+        "cost_per_error": 2.4,
+        "total_large": 0.31,
+        "total_routed": 45.81,
+        "total_small": 45.61
+      },
+      {
+        "minutes": 8,
+        "hourly": 120,
+        "share": 1.0,
+        "cost_per_error": 16.0,
+        "total_large": 0.31,
+        "total_routed": 304.21,
+        "total_small": 304.01
+      },
+      {
+        "minutes": 8,
+        "hourly": 120,
+        "share": 0.5,
+        "cost_per_error": 8.0,
+        "total_large": 0.31,
+        "total_routed": 152.21,
+        "total_small": 152.01
+      },
+      {
+        "minutes": 8,
+        "hourly": 120,
+        "share": 0.2,
+        "cost_per_error": 3.2,
+        "total_large": 0.31,
+        "total_routed": 61.01,
+        "total_small": 60.81
+      }
+    ]
+  },
+  "oracle": {
+    "to_large": 19,
+    "acc": 100.0,
+    "cost_cny": 0.0221,
+    "saving_pct": 92.84
+  }
+}

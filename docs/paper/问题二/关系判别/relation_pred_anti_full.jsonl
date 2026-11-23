@@ -1,0 +1,300 @@
+{"pair_id": "P-DUP-032", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9989, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-041", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9864, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.76,meas=1.00)"}
+{"pair_id": "P-VAR-052", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.7686, "condition_state": "unknown", "reason": "LLM: 现象和适用条件相同，但根因结论互斥，一个是因为锡膏残渣，另一个是因为对位视觉系统标定偏移。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-053", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8733, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-032", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6585, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.66)"}
+{"pair_id": "P-VAR-079", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8872, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-050", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9834, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-028", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.93, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-DUP-073", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9802, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-076", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9885, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-052", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9835, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.88,cause=0.82,meas=1.00)"}
+{"pair_id": "P-UNR-034", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6307, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.63)"}
+{"pair_id": "P-VAR-014", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8712, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-010", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.9069, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是主气路过滤器堵塞，另一个是供料器齿轮磨损。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-VAR-041", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8629, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-CON-054", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8979, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-017", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8158, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-015", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8434, "condition_state": "unknown", "reason": "LLM: 现象和适用条件相同，但根因互斥。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-041", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9347, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一条是主气路过滤器堵塞，另一条是压料盖弹簧疲劳。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-VAR-088", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8206, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-083", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9935, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.73,meas=1.00)"}
+{"pair_id": "P-CON-011", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9345, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一条是轴承卡死，另一条是气路过滤器堵塞。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-062", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8965, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-080", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8992, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-045", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9184, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-UNR-038", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6394, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.64)"}
+{"pair_id": "P-VAR-056", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8398, "condition_state": "unknown", "reason": "LLM: 现象和适用条件相同，但根因结论互斥 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-DUP-020", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9867, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.86,meas=1.00)"}
+{"pair_id": "P-VAR-020", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8298, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因一个是交换机端口协商异常，另一个是元件库问题，适用条件重叠，但根因结论互斥。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-046", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9247, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-CON-038", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9217, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-DUP-017", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9893, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-UNR-001", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5552, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.56)"}
+{"pair_id": "P-UNR-018", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6568, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.66)"}
+{"pair_id": "P-VAR-049", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8417, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同，适用条件不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-023", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6023, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.60)"}
+{"pair_id": "P-UNR-005", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5301, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.53)"}
+{"pair_id": "P-VAR-022", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.835, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因互斥，一条是供料泵问题，另一条是热电偶问题。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-029", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5954, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.60)"}
+{"pair_id": "P-VAR-055", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8262, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-VAR-019", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8091, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-048", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8947, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.25)"}
+{"pair_id": "P-UNR-017", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6438, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.64)"}
+{"pair_id": "P-VAR-034", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9001, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-004", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9399, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.17)"}
+{"pair_id": "P-UNR-015", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.4969, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.50)"}
+{"pair_id": "P-CON-035", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9254, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-DUP-039", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9915, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.83,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-051", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9356, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个认为是贴装头零点漂移，另一个认为是相机光源偏移。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-007", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8252, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥，一个是轴承卡死，一个是视觉系统标定偏移。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-013", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5568, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.56)"}
+{"pair_id": "P-CON-050", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.911, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-004", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6431, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.64)"}
+{"pair_id": "P-DUP-009", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9939, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-084", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9005, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-UNR-002", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5908, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.59)"}
+{"pair_id": "P-VAR-028", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9024, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-VAR-068", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8487, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-027", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9918, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-074", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9991, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-037", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.895, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-007", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5397, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.54)"}
+{"pair_id": "P-DUP-081", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9996, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-060", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9992, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.80,meas=1.00)"}
+{"pair_id": "P-DUP-007", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9924, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-067", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9923, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-053", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9853, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.95,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-060", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9029, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.25)"}
+{"pair_id": "P-VAR-074", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8686, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-064", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9899, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.81,meas=1.00)"}
+{"pair_id": "P-CON-077", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8869, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-037", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6954, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.70)"}
+{"pair_id": "P-CON-005", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9325, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-022", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6425, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.64)"}
+{"pair_id": "P-CON-006", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9405, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-DUP-055", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9828, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.85,meas=1.00)"}
+{"pair_id": "P-CON-065", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9103, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-UNR-020", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.545, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.55)"}
+{"pair_id": "P-VAR-077", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8468, "condition_state": "unknown", "reason": "LLM: 现象和适用条件相同，但根因结论互斥。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-072", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8909, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-035", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9908, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-022", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9781, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-064", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9078, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-045", "gold": "duplicate", "pred": "duplicate", "confidence": 0.85, "sim": 0.993, "condition_state": "unknown", "reason": "高相似且措施/验证同源(sim=0.99,meas=1.00,ver=1.00)"}
+{"pair_id": "P-UNR-030", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6343, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.63)"}
+{"pair_id": "P-DUP-016", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9787, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.83,meas=1.00)"}
+{"pair_id": "P-UNR-033", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.7048, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.70)"}
+{"pair_id": "P-DUP-005", "gold": "duplicate", "pred": "duplicate", "confidence": 0.85, "sim": 0.9926, "condition_state": "unknown", "reason": "高相似且措施/验证同源(sim=0.99,meas=1.00,ver=1.00)"}
+{"pair_id": "P-VAR-016", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8691, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-014", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9252, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-DUP-014", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9962, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.81,meas=1.00)"}
+{"pair_id": "P-VAR-058", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.9014, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一条是钢网对位问题，另一条是压料盖弹簧问题。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-011", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9952, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-043", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.833, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同，适用条件未知。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.25)"}
+{"pair_id": "P-CON-075", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9039, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-VAR-044", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8466, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-079", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8913, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-064", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8873, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-058", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9887, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-090", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9911, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-030", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9381, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-DUP-023", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9991, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-010", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9836, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.80,meas=1.00)"}
+{"pair_id": "P-VAR-046", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8575, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同，适用条件不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-VAR-086", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8942, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因互斥，一条是辊面被异物划伤，另一条是压合气缸密封圈漏气。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-013", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8427, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-019", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5685, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.57)"}
+{"pair_id": "P-VAR-029", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8891, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-069", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8872, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-036", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5646, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.56)"}
+{"pair_id": "P-DUP-012", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9991, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.80,meas=1.00)"}
+{"pair_id": "P-VAR-062", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8328, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-DUP-087", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9942, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-072", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.846, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-042", "gold": "variant", "pred": "duplicate", "confidence": 1.0, "sim": 0.9275, "condition_state": "unknown", "reason": "LLM: 现象描述完全一致，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-UNR-040", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.626, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.63)"}
+{"pair_id": "P-DUP-089", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9991, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.83,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-060", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8731, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是主气路过滤器堵塞，另一个是Z轴伺服编码器信号线松动。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-CON-012", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9157, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是检测程序阈值过严，另一个是轨道宽度调整机构丝杆积尘卡滞。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-017", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9123, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是镜头表面附着助焊剂雾气，另一个是元件库未录入该封装导致检测框缺失。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-026", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9297, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一条是轴承卡死，另一条是弹簧疲劳导致压料不到位。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-063", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9943, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-029", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9989, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.80,meas=1.00)"}
+{"pair_id": "P-CON-013", "gold": "conflict", "pred": "conflict", "confidence": 0.85, "sim": 0.9269, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是耐温不足，一个是测温偏低。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-003", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9853, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.95,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-043", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9871, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-036", "gold": "conflict", "pred": "conflict", "confidence": 0.85, "sim": 0.9315, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥，一个是钢网与PCB对位视觉系统标定偏移，另一个是相机光源偏移导致元件轮廓过曝。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-VAR-070", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8172, "condition_state": "unknown", "reason": "LLM: 现象和适用条件相同，但根因结论互斥。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-033", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9223, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-027", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9146, "condition_state": "unknown", "reason": "LLM: 现象相同且适用条件重叠，但根因结论互斥，条目 A 的原因是镜头表面附着助焊剂雾气，而条目 B 的原因是环境温度升高导致相机暗电流增大、灰度基准漂移。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-038", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.993, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-049", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9881, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.83,meas=0.50)"}
+{"pair_id": "P-VAR-037", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.799, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-001", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9905, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.77,meas=1.00)"}
+{"pair_id": "P-VAR-026", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8773, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因互斥，一条是浆料问题，另一条是编码器问题。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-079", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9889, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.80,meas=1.00)"}
+{"pair_id": "P-CON-020", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9301, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-VAR-003", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8977, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是因为贴装头零点漂移，另一个是因为压料盖弹簧疲劳。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-025", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9357, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-VAR-051", "gold": "variant", "pred": "duplicate", "confidence": 1.0, "sim": 0.9355, "condition_state": "unknown", "reason": "LLM: 现象、条件和根因基本一致，可合并或跳过。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-026", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9989, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-028", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9631, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.79,meas=1.00)"}
+{"pair_id": "P-DUP-042", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9989, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=0.50)"}
+{"pair_id": "P-DUP-013", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9857, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-038", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.7952, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-056", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9998, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.84,meas=1.00)"}
+{"pair_id": "P-VAR-040", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.845, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-021", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8473, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-082", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8096, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-001", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9517, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是供料器齿轮磨损，另一个是压料盖弹簧疲劳。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.31)"}
+{"pair_id": "P-DUP-072", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9934, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-068", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9932, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-006", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8735, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-015", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9402, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-VAR-067", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8204, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-048", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 1.0, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-045", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8889, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-DUP-078", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9884, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.79,meas=1.00)"}
+{"pair_id": "P-DUP-037", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9906, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-031", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9474, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是供料器齿轮磨损，另一个是相机光源偏移。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-VAR-078", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9035, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-080", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8799, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-019", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9201, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-028", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6538, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.65)"}
+{"pair_id": "P-DUP-065", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9932, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-UNR-016", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.557, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.56)"}
+{"pair_id": "P-VAR-057", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8403, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-008", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8878, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是因为视觉系统标定偏移，另一个是因为回流焊预热区升温速率过快。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-033", "gold": "variant", "pred": "duplicate", "confidence": 1.0, "sim": 0.8644, "condition_state": "unknown", "reason": "LLM: 现象和废品率相同，但原因和处理措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-DUP-021", "gold": "duplicate", "pred": "duplicate", "confidence": 0.85, "sim": 0.9892, "condition_state": "unknown", "reason": "高相似且措施/验证同源(sim=0.99,meas=1.00,ver=1.00)"}
+{"pair_id": "P-CON-056", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9265, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一条是贴装头零点漂移，另一条是钢网与PCB对位视觉系统标定偏移。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-040", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9228, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.09)"}
+{"pair_id": "P-CON-063", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9167, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.21)"}
+{"pair_id": "P-UNR-027", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6579, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.66)"}
+{"pair_id": "P-CON-032", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9001, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是轨道丝杆积尘卡滞，另一个是元件库未录入封装导致检测框缺失。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-004", "gold": "variant", "pred": "duplicate", "confidence": 1.0, "sim": 0.8655, "condition_state": "unknown", "reason": "LLM: 现象和抛料率描述一致，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-DUP-084", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9999, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.79,meas=1.00)"}
+{"pair_id": "P-UNR-021", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6664, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.67)"}
+{"pair_id": "P-VAR-030", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8981, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-010", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5516, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.55)"}
+{"pair_id": "P-UNR-025", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5265, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.53)"}
+{"pair_id": "P-DUP-085", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9761, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-UNR-035", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6554, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.66)"}
+{"pair_id": "P-CON-055", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9183, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-016", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9372, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-054", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.9191, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是压料盖弹簧疲劳，另一个是主气路过滤器堵塞。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-VAR-090", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8229, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-039", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6022, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.60)"}
+{"pair_id": "P-CON-023", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9158, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因不同，一个是模头垫片磨损，另一个是供料泵吸入空气。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-030", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9933, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-025", "gold": "duplicate", "pred": "duplicate", "confidence": 0.85, "sim": 0.9784, "condition_state": "unknown", "reason": "高相似且措施/验证同源(sim=0.98,meas=1.00,ver=1.00)"}
+{"pair_id": "P-DUP-033", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9935, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.73,meas=1.00)"}
+{"pair_id": "P-VAR-047", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9334, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-UNR-031", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5208, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.52)"}
+{"pair_id": "P-DUP-008", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9901, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.92,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-070", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9804, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.86,meas=1.00)"}
+{"pair_id": "P-VAR-065", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8641, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-011", "gold": "variant", "pred": "conflict", "confidence": 0.9, "sim": 0.8665, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥，一个是检测程序阈值过严，另一个是镜头表面附着助焊剂雾气。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-039", "gold": "conflict", "pred": "conflict", "confidence": 0.85, "sim": 0.9207, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因互斥，一个是辊面被异物划伤，另一个是气缸密封圈漏气。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-046", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9861, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-043", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9221, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-053", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9185, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-066", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9932, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.83,meas=1.00)"}
+{"pair_id": "P-DUP-086", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9867, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-024", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9254, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-012", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5748, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.57)"}
+{"pair_id": "P-VAR-085", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8431, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同，适用条件可能不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-026", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5264, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.53)"}
+{"pair_id": "P-CON-066", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9052, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是编码器信号线松动，另一个是主气路过滤器堵塞。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-CON-022", "gold": "conflict", "pred": "conflict", "confidence": 0.85, "sim": 0.9037, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因互斥，一个是程序映射错误，另一个是交换机端口协商异常。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-071", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8694, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-009", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8617, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-068", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9098, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-069", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9998, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.85,meas=1.00)"}
+{"pair_id": "P-DUP-019", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9881, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.85,meas=1.00)"}
+{"pair_id": "P-VAR-066", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8475, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-076", "gold": "conflict", "pred": "conflict", "confidence": 0.9, "sim": 0.9065, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥，一个是预热区升温速率过快，另一个是钢网与PCB对位视觉系统标定偏移。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-029", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9289, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-087", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8302, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-059", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8473, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-077", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9918, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-076", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8483, "condition_state": "unknown", "reason": "LLM: 现象相同且适用条件重叠，但根因结论互斥，一条是浆料问题，一条是传感器问题。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-024", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9904, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-061", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8723, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是检测程序阈值过严，另一个是Z轴对焦电机皮带松弛。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-075", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8546, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-048", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9194, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-050", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9196, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-UNR-009", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5435, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.54)"}
+{"pair_id": "P-CON-057", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.8978, "condition_state": "unknown", "reason": "LLM: 现象相同且适用条件重叠，但根因结论互斥，一个是元件库问题，一个是交换机端口协商异常。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-007", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.9092, "condition_state": "unknown", "reason": "LLM: 现象相同且适用条件重叠，但根因结论互斥，一条是交换机端口问题，另一条是程序映射错误。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-071", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8968, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-DUP-061", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9943, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-018", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9932, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-035", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8363, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-042", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.899, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-052", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8884, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-089", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.8246, "condition_state": "unknown", "reason": "LLM: 现象和适用条件相同，但根因结论互斥，一个是因为导轨宽度问题，另一个是因为加热管固态继电器接触不良。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-040", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9879, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-036", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9867, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-073", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9246, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-CON-008", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9383, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.10)"}
+{"pair_id": "P-VAR-024", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8936, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.21)"}
+{"pair_id": "P-VAR-036", "gold": "variant", "pred": "conflict", "confidence": 1.0, "sim": 0.9243, "condition_state": "unknown", "reason": "LLM: 现象和适用条件相同，但根因结论互斥，一个是辊面被异物划伤，另一个是静电消除器失效导致材料带电量过高。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-059", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.8881, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-088", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9922, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-057", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9936, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-063", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8428, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因互斥，一个是镜头问题，一个是交换机端口问题。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-031", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9918, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-044", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9165, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.08)"}
+{"pair_id": "P-DUP-080", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9933, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-018", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8268, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-023", "gold": "variant", "pred": "duplicate", "confidence": 1.0, "sim": 0.9354, "condition_state": "unknown", "reason": "LLM: 现象和根因描述相同，措施略有不同，但都指向解决极片边缘漏涂问题。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.10)"}
+{"pair_id": "P-VAR-001", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8879, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-CON-047", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9096, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-DUP-071", "gold": "duplicate", "pred": "duplicate", "confidence": 0.85, "sim": 0.9802, "condition_state": "unknown", "reason": "高相似且措施/验证同源(sim=0.98,meas=1.00,ver=1.00)"}
+{"pair_id": "P-DUP-054", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9949, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.77,meas=1.00)"}
+{"pair_id": "P-VAR-039", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8215, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-021", "gold": "conflict", "pred": "duplicate", "confidence": 1.0, "sim": 0.9391, "condition_state": "unknown", "reason": "LLM: 现象、条件和根因基本一致，可合并或跳过。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-031", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9099, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-003", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6261, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.63)"}
+{"pair_id": "P-CON-003", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.925, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.09)"}
+{"pair_id": "P-CON-067", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.889, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-002", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9902, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.88,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-051", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9992, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-VAR-012", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8222, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-074", "gold": "conflict", "pred": "conflict", "confidence": 1.0, "sim": 0.879, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一个是因为导轨宽度问题，另一个是因为静电消除器失效。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-083", "gold": "variant", "pred": "duplicate", "confidence": 1.0, "sim": 0.8326, "condition_state": "unknown", "reason": "LLM: 现象和废品率相同，处理措施虽然不同，但都是解决起皱问题的方法。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-044", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.995, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-049", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9019, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-014", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6065, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.61)"}
+{"pair_id": "P-DUP-062", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9977, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.80,meas=1.00)"}
+{"pair_id": "P-DUP-006", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9997, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-UNR-024", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6139, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.61)"}
+{"pair_id": "P-CON-034", "gold": "conflict", "pred": "conflict", "confidence": 0.9, "sim": 0.9239, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因结论互斥，一条是辊面被异物划伤，另一条是Mark点周围反光导致对比度不足。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-002", "gold": "conflict", "pred": "conflict", "confidence": 0.9, "sim": 0.9394, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥，一个是检测程序阈值过严，另一个是元件库未录入封装导致检测框缺失。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-VAR-081", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.9126, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-032", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8355, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-075", "gold": "duplicate", "pred": "duplicate", "confidence": 0.85, "sim": 0.9849, "condition_state": "unknown", "reason": "高相似且措施/验证同源(sim=0.98,meas=1.00,ver=1.00)"}
+{"pair_id": "P-DUP-004", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9935, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.77,meas=1.00)"}
+{"pair_id": "P-CON-009", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9327, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.17)"}
+{"pair_id": "P-UNR-011", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6748, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.67)"}
+{"pair_id": "P-DUP-047", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9989, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-082", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.982, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=0.88,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-015", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9916, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-CON-073", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9126, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-027", "gold": "variant", "pred": "duplicate", "confidence": 1.0, "sim": 0.8347, "condition_state": "unknown", "reason": "LLM: 现象和条件基本一致，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-005", "gold": "variant", "pred": "conflict", "confidence": 0.85, "sim": 0.8205, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因互斥。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.06)"}
+{"pair_id": "P-CON-058", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9097, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-078", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9145, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-018", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9262, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-VAR-069", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8187, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-VAR-002", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8318, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-DUP-059", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9939, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=1.00,meas=1.00)"}
+{"pair_id": "P-DUP-034", "gold": "duplicate", "pred": "duplicate", "confidence": 0.95, "sim": 0.9871, "condition_state": "unknown", "reason": "现象/根因一致且措施重叠(sym=1.00,cause=0.79,meas=1.00)"}
+{"pair_id": "P-VAR-025", "gold": "variant", "pred": "variant", "confidence": 0.85, "sim": 0.8763, "condition_state": "unknown", "reason": "LLM: 现象相同，但原因和措施不同。 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.07)"}
+{"pair_id": "P-UNR-006", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.5079, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.51)"}
+{"pair_id": "P-CON-070", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9085, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-CON-010", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9362, "condition_state": "unknown", "reason": "LLM: 现象相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.00)"}
+{"pair_id": "P-UNR-008", "gold": "unrelated", "pred": "unrelated", "confidence": 0.9, "sim": 0.6179, "condition_state": "unknown", "reason": "现象不同且无共享根因/措施(sim=0.62)"}
+{"pair_id": "P-CON-061", "gold": "conflict", "pred": "variant", "confidence": 0.85, "sim": 0.9038, "condition_state": "unknown", "reason": "LLM: 现象和条件相同，但根因和措施不同 | 规则: 同现象不同根因且条件不互斥(unknown,cause=0.25)"}

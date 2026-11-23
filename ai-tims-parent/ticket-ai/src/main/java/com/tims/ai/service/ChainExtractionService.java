@@ -180,7 +180,7 @@ public class ChainExtractionService {
         // 链式模式不产出标题/标签：按设备类型 + 现象派生，审核页可人工修正
         String deviceType = StringUtils.hasText(req.getDeviceType()) ? req.getDeviceType() : "设备";
         r.setDeviceType(req.getDeviceType());
-        r.setTitle(truncate(deviceType + "：" + (symptom == null ? "" : symptom), 30));
+        r.setTitle(buildTitle(deviceType, symptom));
         List<String> tags = new ArrayList<>();
         if (StringUtils.hasText(req.getDeviceType())) {
             tags.add(req.getDeviceType());
@@ -522,6 +522,20 @@ public class ChainExtractionService {
 
     private static String nvl(String s) {
         return s == null ? "" : s;
+    }
+
+    /** 链式标题：「设备类型：现象」截 30 字；去掉与设备类型重复的前缀，以及截断后残留的标点/连词结尾 */
+    private static String buildTitle(String deviceType, String symptom) {
+        String s = symptom == null ? "" : symptom.trim();
+        if (StringUtils.hasText(deviceType) && s.startsWith(deviceType)) {
+            s = s.substring(deviceType.length()).replaceFirst("^[：:，,、\\s]+", "");
+        }
+        String title = s.isEmpty() ? deviceType : deviceType + "：" + s;
+        if (title.length() > 30) {
+            title = title.substring(0, 30);
+        }
+        return title.replaceAll("[，,、；;：:。.！!？?\\s]+$", "")
+                .replaceAll("(和|与|及|或|的)$", "");
     }
 
     private static String truncate(String s, int max) {

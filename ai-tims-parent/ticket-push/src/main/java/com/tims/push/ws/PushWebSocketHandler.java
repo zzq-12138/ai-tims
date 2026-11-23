@@ -65,7 +65,7 @@ public class PushWebSocketHandler extends TextWebSocketHandler {
         Object uid = session.getAttributes().get("userId");
         if (uid != null) {
             long userId = (long) uid;
-            registry.offline(userId);
+            registry.offline(userId, session);
             log.info("WS 下线 userId={} status={}", userId, status);
         }
     }

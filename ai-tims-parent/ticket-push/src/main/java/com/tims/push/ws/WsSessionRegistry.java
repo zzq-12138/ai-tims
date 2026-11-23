@@ -42,9 +42,11 @@ public class WsSessionRegistry {
         this.ttlSeconds = Integer.parseInt(env.getProperty("tims.push.online-ttl-seconds", "30"));
     }
 
-    /** 连接建立：注册会话 + 写在线表 */
+    /** 连接建立：注册会话 + 写在线表；session 为空时只续期在线表（心跳兜底，防 ConcurrentHashMap put null 抛 NPE） */
     public void online(Long userId, Long tenantId, WebSocketSession session) {
-        sessions.put(userId, session);
+        if (session != null) {
+            sessions.put(userId, session);
+        }
         try {
             Map<String, Object> v = Map.of("userId", userId, "tenantId", tenantId,
                     "ts", LocalDateTime.now().toString());
@@ -60,9 +62,11 @@ public class WsSessionRegistry {
         online(userId, tenantId, sessions.get(userId));
     }
 
-    /** 连接关闭：摘除会话 + 删在线表（仅当在线表归属仍是自己，防误删重连后的新记录） */
-    public void offline(Long userId) {
-        sessions.remove(userId);
+    /** 连接关闭：只摘除自己的会话，防旧连接的关闭回调误删重连后的新会话 */
+    public void offline(Long userId, WebSocketSession session) {
+        if (!sessions.remove(userId, session)) {
+            return; // 在线表已归属新连接，不能误删
+        }
         try {
             redis.delete(ONLINE_KEY_PREFIX + userId);
         } catch (Exception ignored) {

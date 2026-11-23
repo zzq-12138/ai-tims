@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # 只读重放：核对 2026-11-23 线上检索分数是否相对 11-19 整体下移
-# 用法（在公司 master1 上执行）：bash replay_gate_off.sh
+# 用法（在公司 master1 上执行）：bash replay_gate_off.sh          # 13 条走 VECTOR（默认）
+#                                  MODE=HYBRID bash replay_gate_off.sh   # 13 条全部走 HYBRID（线上口径）
 # 安全性：只新建独立标签的替身 Deployment，不建 Service；不改 ConfigMap/Secret/业务数据；退出时强删。
 # 注意：线上 env 已经通过 envFrom 带了一个 KB_GATE_ENABLED，本脚本在 containers[0].env 追加同名项；
 #       K8s 允许同名，后出现的显式 env 覆盖 envFrom，因此替身里门控确实为 false（apply 时的
@@ -137,10 +138,10 @@ awk -F'\t' '
   END{
     printf "有 11-19 基线条数=%d  均值差=%+.4f  最小=%+.4f  最大=%+.4f\n", n, (n?s/n:0), mn, mx
     if(m){for(i=1;i<=m;i++)for(j=i+1;j<=m;j++)if(a[i]>a[j]){t=a[i];a[i]=a[j];a[j]=t}
-      printf "本次 VECTOR 得分=%d 条  均值=%.4f  中位=%.4f  （11-19 离线 P 池锚点：均值0.7784 / 中位0.7974）\n", m, v/m, (m%2?a[(m+1)/2]:(a[m/2]+a[m/2+1])/2)}
+      printf "本次得分=%d 条  均值=%.4f  中位=%.4f  （11-19 离线 P 池锚点：均值0.7784 / 中位0.7974，仅 VECTOR 口径可比）\n", m, v/m, (m%2?a[(m+1)/2]:(a[m/2]+a[m/2+1])/2)}
     printf "top1 命中期望文档=%d/%d\n", hit, m
   }' /tmp/replay-out.tsv
 
 echo
 echo "口径：delta 仅对前两条（11-19 线上 HYBRID 基线）计算；其余行无逐条基线，只能与分布锚点比较。"
-echo "替�
+echo "替身在本脚本退出时自动强删。"

@@ -73,7 +73,7 @@ spec:
       terminationGracePeriodSeconds: 15
       containers:
         - name: front
-          image: harbor.xnunion.com/library/ai-tims-front:1.0.2
+          image: harbor.xnunion.com/library/ai-tims-front:1.0.3
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

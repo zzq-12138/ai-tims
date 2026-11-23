@@ -20,9 +20,9 @@ kind: Kustomization
 #     全部在 patches/ 下覆盖，不再依赖服务器上 kubectl set env 手改。
 #
 # 镜像 tag 取值依据（docs/ops/公司环境操作记录.md、AI-TIMS-环境速查.md）：
-#   - 前端 1.0.2：记录 10.23（2026-11-18 上线并纳入 base/apps/front.yaml）；
-#   - ticket-ai 1.0.1：记录 10.21（2026-11-18，修工单 AI 分析 400）；
-#   - ticket-knowledge 1.0.1：记录 10.28（2026-11-19，门控 0.70 + 查询 instruction）；
+#   - 前端 1.0.3：2026-11-23 现场发布（回滚基准 1.0.2，见记录 10.23）；
+#   - ticket-ai 1.0.2：2026-11-23 现场发布（回滚基准 1.0.1，见记录 10.21）；
+#   - ticket-knowledge 1.0.2：2026-11-23 现场发布（回滚基准 1.0.1，见记录 10.28）；
 #   - gateway/system/order/push 1.0.0：记录 10.1 首次部署即为 1.0.0，此后无升级记录。
 #     这四项属「文档可证、未现场回读」，apply 前预检会与集群现状逐项对比，不一致会告警。
 namespace: ai-tims
@@ -49,10 +49,10 @@ images:
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-knowledge
     newName: harbor.xnunion.com/library/ticket-knowledge
-    newTag: "1.0.1"
+    newTag: "1.0.2"
   - name: registry.company.internal/ai-tims/ticket-ai
     newName: harbor.xnunion.com/library/ticket-ai
-    newTag: "1.0.1"
+    newTag: "1.0.2"
   - name: registry.company.internal/ai-tims/ticket-push
     newName: harbor.xnunion.com/library/ticket-push
     newTag: "1.0.0"

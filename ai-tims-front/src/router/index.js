@@ -50,6 +50,18 @@ const routes = [
         name: 'system-users',
         component: () => import('../views/SystemUser.vue'),
         meta: { title: '用户管理', roles: ['ADMIN'] }
+      },
+      {
+        path: 'observe',
+        name: 'observe',
+        component: () => import('../views/Observe.vue'),
+        meta: { title: '调用观测', roles: ['ADMIN', 'ENGINEER'] }
+      },
+      {
+        path: 'system/ai-keys',
+        name: 'ai-keys',
+        component: () => import('../views/ApiKeyManage.vue'),
+        meta: { title: 'AI Key 管理', roles: ['ADMIN'] }
       }
     ]
   },

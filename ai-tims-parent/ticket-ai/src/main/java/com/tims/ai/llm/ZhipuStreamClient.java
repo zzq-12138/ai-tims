@@ -36,6 +36,8 @@ public class ZhipuStreamClient {
     private final ZhipuKeyProvider keyProvider;
     private final ObjectMapper mapper;
     private final HttpClient httpClient = HttpClient.newBuilder()
+            // 强制 HTTP/1.1：JDK 对 http:// 默认先发 h2c 升级，vLLM（uvicorn）不支持升级且会丢掉请求体
+            .version(HttpClient.Version.HTTP_1_1)
             .connectTimeout(Duration.ofSeconds(5))
             .build();
 
@@ -63,13 +65,14 @@ public class ZhipuStreamClient {
     /**
      * 发起流式对话。
      *
+     * @param tenantId  租户 id；有租户级 Key 配置时优先使用
      * @param model     模型名（glm-4-flash / glm-5.3-flash）
      * @param messages  [{role, content}]
      * @param listener  增量回调
      */
-    public StreamResult stream(String model, int maxTokens, double temperature,
+    public StreamResult stream(Long tenantId, String model, int maxTokens, double temperature,
                                List<Map<String, String>> messages, Listener listener) {
-        String key = keyProvider.getKey();
+        String key = keyProvider.getKey(tenantId);
         if (key.isEmpty()) {
             throw new LlmException(40201, "AI 服务暂不可用：未配置智谱 API Key");
         }

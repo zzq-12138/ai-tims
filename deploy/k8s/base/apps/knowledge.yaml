@@ -7,6 +7,11 @@ metadata:
     app: ticket-knowledge
 data:
   SERVER_PORT: "8103"
+  # 开发/本地默认：智谱 embedding-3（1024 维）。
+  # 公司内网使用 Qwen3-Embedding-8B，并额外设置 EMBED_USAGE_URL 与门控参数；
+  # 这些环境差异统一在 deploy/k8s/overlays/company/patches/ 里覆盖，本文件不再写线上值。
+  # 门控未显式配置时走 application.yml 默认：enabled=true、threshold=0.75、soft-band=0.07、
+  # query-instruction 为空（与改造前行为一致）。
   TIMS_KB_EMBEDDING_MODEL: embedding-3
   TIMS_KB_EMBEDDING_DIMENSIONS: "1024"
   TIMS_KB_MILVUS_COLLECTION: kb_knowledge_vec
@@ -61,7 +66,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: knowledge
-          image: registry.company.internal/ai-tims/ticket-knowledge:1.0.0
+          image: registry.company.internal/ai-tims/ticket-knowledge:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

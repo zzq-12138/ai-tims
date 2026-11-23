@@ -54,6 +54,11 @@ public class SaTokenConfigure {
                             .check(r -> requireAnyRole("ADMIN"));
                     SaRouter.match("/api/kb/extraction/**")
                             .check(r -> requireAnyRole("ADMIN", "REVIEWER"));
+                    // AI 运营面：Key/额度管理与兜底重算仅 ADMIN；调用观测与用量统计 ADMIN/ENGINEER
+                    SaRouter.match("/api/ai/admin/**")
+                            .check(r -> requireAnyRole("ADMIN"));
+                    SaRouter.match("/api/ai/observe/**", "/api/ai/usage/recent", "/api/ai/usage/summary")
+                            .check(r -> requireAnyRole("ADMIN", "ENGINEER"));
                 })
                 .setError(e -> {
                     boolean forbidden = e instanceof BizException be

@@ -18,7 +18,7 @@ source "$SCRIPT_DIR/images.env"
 COMPANY_REGISTRY=${COMPANY_REGISTRY:-harbor.example.com}
 COMPANY_REGISTRY=${COMPANY_REGISTRY%/}
 PUSH=${PUSH:-1}
-TARGET_PREFIX="${COMPANY_REGISTRY}/ai-tims"
+TARGET_PREFIX="${REGISTRY_PREFIX}"
 
 command -v docker >/dev/null 2>&1 || { echo "缺少 docker"; exit 1; }
 docker info >/dev/null 2>&1 || { echo "docker daemon 不可用"; exit 1; }

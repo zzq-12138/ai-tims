@@ -63,6 +63,41 @@ tims:
     order-base-url: ${ORDER_BASE_URL:http://ticket-order}
     top-k: ${LLM_RAG_TOPK:5}
     snippet-chars: ${LLM_SNIPPET_CHARS:500}
+    # ===== AI 应用层护栏（默认全关，保持现有接口契约与行为）=====
+    # 打开：AI_GUARD_ENABLED=true；打开后可按子开关裁剪
+    guard:
+      enabled: ${AI_GUARD_ENABLED:false}
+      injection-enabled: ${AI_GUARD_INJECTION:true}
+      injection-threshold: ${AI_GUARD_THRESHOLD:0.5}
+      mask-input: ${AI_GUARD_MASK_INPUT:true}          # 送模型前脱敏手机号/身份证/邮箱/姓名/地址
+      mask-tool-output: ${AI_GUARD_MASK_TOOL:true}     # 工具结果送模型前脱敏
+      output-enabled: ${AI_GUARD_OUTPUT:true}          # 输出过滤：系统提示词泄露/凭据/堆栈
+      mask-output: ${AI_GUARD_MASK_OUTPUT:true}        # 输出 PII 脱敏
+    # ===== AI 应用层模型路由（默认关闭）：简单问题走小模型，复杂问题走大模型 =====
+    # 打开：AI_ROUTER_ENABLED=true；分流依据为长度/多跳/推理词/工具/历史轮次等可解释信号
+    router:
+      enabled: ${AI_ROUTER_ENABLED:false}
+      simple-model: ${AI_ROUTER_SIMPLE_MODEL:glm-4-flash}
+      complex-model: ${AI_ROUTER_COMPLEX_MODEL:glm-5.3-flash}
+      threshold: ${AI_ROUTER_THRESHOLD:0.5}
+    # ===== AI 应用层语义缓存（默认关闭）：精确 hash + embedding 余弦相似度 =====
+    # 打开：AI_CACHE_ENABLED=true；关闭时不调 embedding、不改响应，行为与改动前一致
+    cache:
+      enabled: ${AI_CACHE_ENABLED:false}
+      threshold: ${AI_CACHE_THRESHOLD:0.92}      # 余弦相似度阈值，≥ 才算命中
+      ttl-seconds: ${AI_CACHE_TTL_SECONDS:86400}
+      max-entries: ${AI_CACHE_MAX_ENTRIES:2000}  # 单租户条目上限
+      embedding-model: ${AI_CACHE_EMBEDDING_MODEL:embedding-3}
+      embeddings-path: ${AI_CACHE_EMBEDDINGS_PATH:/embeddings}
+      min-question-chars: ${AI_CACHE_MIN_QUESTION_CHARS:6}
+      embedding-timeout-ms: ${AI_CACHE_EMBEDDING_TIMEOUT_MS:3000}
+    # ===== C 档兜底建议（默认关闭）：门控判 C 时让大模型给自由建议，并记录“建议-处置”配对 =====
+    # 打开：AI_FALLBACK_ENABLED=true；关闭时不改 prompt、不落库、不新增返回字段
+    fallback:
+      enabled: ${AI_FALLBACK_ENABLED:false}
+      # 新口径（处置侧覆盖率）判定线：0.60 判“一致”，有效片段 <3 记“样本不足”
+      consistent-threshold: ${AI_FALLBACK_CONSISTENT_THRESHOLD:0.60}
+      min-segments: ${AI_FALLBACK_MIN_SEGMENTS:3}
     # 问题9：无官方余额接口，按调用记录本地计量（费用=token×单价），页面标注“估算”
     budget-cny: ${LLM_BUDGET_CNY:18}
     # 缺省单价（元/千 tokens）：取 glm-5.3-flash 标准价，避免切模型后低估

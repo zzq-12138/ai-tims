@@ -67,6 +67,11 @@ export function assistantChat(body) {
   return request.post('/api/ai/assistant', body, { timeout: 180000 })
 }
 
+/** C 档兜底建议：回填工单实际处置（只记录配对，不触发入库或反馈闭环） */
+export function backfillFallback(id, actualDisposition) {
+  return request.post(`/api/ai/fallback/${id}/disposition`, { actualDisposition })
+}
+
 export function usageRecent(limit = 20) {
   return request.get('/api/ai/usage/recent', { params: { limit } })
 }
@@ -95,4 +100,16 @@ export function deleteSession(id) {
 
 export function sessionMessages(id) {
   return request.get(`/api/ai/chat/sessions/${id}/messages`)
+}
+
+/** 撤回前置信息：会删哪些消息、这轮调过哪些工具、是否含写操作 */
+export function messageRecallInfo(sessionId, messageId) {
+  return request.get(`/api/ai/chat/sessions/${sessionId}/messages/${messageId}/recall-info`)
+}
+
+/** 撤回（物理删除该条用户消息 + 它触发的那条 AI 回复）；含写操作时需 force=true */
+export function deleteChatMessage(sessionId, messageId, force = false) {
+  return request.delete(`/api/ai/chat/sessions/${sessionId}/messages/${messageId}`, {
+    params: { force }
+  })
 }

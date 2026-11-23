@@ -46,6 +46,7 @@ public class ExtractionService {
     private final OrderClient orderClient;
     private final EmbeddingService embeddingService;
     private final MilvusVectorStore vectorStore;
+    private final RelationJudgeService relationJudge;
     /** 抽取异步执行器（与 MQ 消费线程解耦）与积压指标 */
     private final ThreadPoolExecutor extractExecutor;
     private final ExtractQueueMetrics queueMetrics;
@@ -72,6 +73,7 @@ public class ExtractionService {
                              OrderClient orderClient,
                              EmbeddingService embeddingService,
                              MilvusVectorStore vectorStore,
+                             RelationJudgeService relationJudge,
                              @org.springframework.beans.factory.annotation.Qualifier("extractExecutor")
                              ThreadPoolExecutor extractExecutor,
                              ExtractQueueMetrics queueMetrics) {
@@ -81,6 +83,7 @@ public class ExtractionService {
         this.orderClient = orderClient;
         this.embeddingService = embeddingService;
         this.vectorStore = vectorStore;
+        this.relationJudge = relationJudge;
         this.extractExecutor = extractExecutor;
         this.queueMetrics = queueMetrics;
     }
@@ -207,8 +210,25 @@ public class ExtractionService {
                 row.setSolutionSteps(result.getSolutionSteps());
                 row.setKeyPoints(result.getKeyPoints());
                 row.setTags(tagsJson(result.getTags()));
+                // P0 五元组字段（单轮模式返回 null → 列保持 NULL，读取侧按空值降级）
+                String condJson = jsonOf(result.getApplyConditions());
+                row.setRootCause(blankToNull(result.getRootCause()));
+                row.setRootCauseEvidence(blankToNull(result.getRootCauseEvidence()));
+                row.setVerification(blankToNull(result.getVerification()));
+                row.setVerificationEvidence(blankToNull(result.getVerificationEvidence()));
+                row.setApplyConditions(condJson);
+                row.setConditionKeys(condJson == null ? null : ConditionSupport.keys(condJson));
+                row.setExcludedHypotheses(jsonOf(result.getExcludedHypotheses()));
+                row.setHasFinalRootCause(Boolean.TRUE.equals(result.getHasFinalRootCause()) ? 1 : 0);
+                row.setChainTrace(result.getChainTrace());
                 row.setStatus("PENDING_REVIEW");
                 applyDedupSuggestion(row, result, tenantId);
+                // 链式降级必须可见：不静默当正常结果
+                if (Boolean.TRUE.equals(result.getChainDegraded())) {
+                    row.setDedupNote(truncate("【链式抽取降级】"
+                            + String.join("；", result.getChainErrors() == null ? List.of() : result.getChainErrors())
+                            + "；" + nvl(row.getDedupNote()), 900));
+                }
             }
 
             if (result == null) {
@@ -290,19 +310,24 @@ public class ExtractionService {
                 return;
             }
             double score = top.score();
+            // P1 四类关系判别：规则可判定时按关系映射建议；字段不全/灰区则沿用余弦三分档
+            RelationJudgeService.Verdict verdict = relationJudge.judge(row, target, score);
             String action;
-            if (score >= dedupSkipThreshold) {
-                action = "SKIP";
-            } else if (score >= dedupThreshold) {
-                action = "MERGE";
+            if ("rule".equals(verdict.source())) {
+                // duplicate 才谈合并/跳过；variant 需并存、conflict 挂人工裁决、unrelated 无关 → 均建议新建
+                action = "duplicate".equals(verdict.relation())
+                        ? (score >= dedupSkipThreshold ? "SKIP" : "MERGE") : "NEW";
             } else {
-                action = "NEW";
+                action = cosineAction(score);
             }
+            row.setRelationType(verdict.relation());
+            row.setRelationConfidence(BigDecimal.valueOf(verdict.confidence())
+                    .setScale(3, RoundingMode.HALF_UP));
             row.setDedupAction(action);
             row.setDedupTargetId(target.getId());
             row.setDedupTargetTitle(target.getTitle());
             row.setDedupScore(BigDecimal.valueOf(score).setScale(4, RoundingMode.HALF_UP));
-            row.setDedupNote(buildDiffNote(score, action, target, result));
+            row.setDedupNote(buildDiffNote(score, action, target, result, verdict));
         } catch (Exception e) {
             log.warn("[m6] 相似度计算失败: {}", e.getMessage());
             row.setDedupAction("NEW");
@@ -310,10 +335,26 @@ public class ExtractionService {
         }
     }
 
-    /** 生成“相似度 + 关键差异”摘要，供审核人判断（非自动决策依据） */
-    private String buildDiffNote(double score, String action, KbKnowledge target, ExtractResult result) {
+    /** 现网余弦三分档（字段不全时的兜底，与原行为一致） */
+    private String cosineAction(double score) {
+        if (score >= dedupSkipThreshold) {
+            return "SKIP";
+        }
+        if (score >= dedupThreshold) {
+            return "MERGE";
+        }
+        return "NEW";
+    }
+
+    /** 生成“相似度 + 关系判别 + 关键差异”摘要，供审核人判断（非自动决策依据） */
+    private String buildDiffNote(double score, String action, KbKnowledge target, ExtractResult result,
+                                 RelationJudgeService.Verdict verdict) {
         StringBuilder sb = new StringBuilder();
         sb.append("向量余弦相似度 ").append(String.format("%.4f", score)).append("；");
+        sb.append("关系判别 ").append(relationLabel(verdict.relation()))
+                .append("（置信度 ").append(String.format("%.3f", verdict.confidence()))
+                .append("，").append("rule".equals(verdict.source()) ? "条件规则" : "余弦兜底")
+                .append("，条件状态 ").append(verdict.conditionState()).append("）；");
         sb.append("最相似条目 #").append(target.getId()).append("《").append(target.getTitle()).append("》；");
         Set<String> oldTags = parseTags(target.getTags());
         Set<String> newTags = new HashSet<>(result.getTags() == null ? List.of() : result.getTags());
@@ -338,6 +379,39 @@ public class ExtractionService {
             sb.append("相似度低于阈值，建议新建");
         }
         return sb.toString();
+    }
+
+    private static String relationLabel(String relation) {
+        if (relation == null) {
+            return "未判别";
+        }
+        return switch (relation) {
+            case "duplicate" -> "重复";
+            case "variant" -> "变体";
+            case "conflict" -> "冲突";
+            case "unrelated" -> "无关";
+            default -> relation;
+        };
+    }
+
+    /** List<Map> → JSON 字符串；空返回 null（对应列保持 NULL） */
+    private String jsonOf(java.util.List<java.util.Map<String, String>> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        try {
+            return MAPPER.writeValueAsString(list);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static String blankToNull(String s) {
+        return s == null || s.isBlank() ? null : s;
+    }
+
+    private static String nvl(String s) {
+        return s == null ? "" : s;
     }
 
     private Set<String> parseTags(String json) {

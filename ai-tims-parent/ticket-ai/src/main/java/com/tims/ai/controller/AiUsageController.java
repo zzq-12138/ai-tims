@@ -2,6 +2,7 @@ package com.tims.ai.controller;
 
 import com.tims.ai.usage.AiCallLog;
 import com.tims.ai.usage.AiUsageService;
+import com.tims.ai.util.AdminGuard;
 import com.tims.common.api.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -30,12 +31,14 @@ public class AiUsageController {
     @GetMapping("/recent")
     public Result<List<AiCallLog>> recent(@RequestParam(defaultValue = "20") int limit,
                                           @RequestHeader(value = "X-Tenant-Id", required = false) String tenant) {
+        AdminGuard.requireAnyRole("ADMIN", "ENGINEER");
         return Result.ok(usageService.recent(tenantId(tenant), limit));
     }
 
     @GetMapping("/summary")
     public Result<Map<String, Object>> summary(
             @RequestHeader(value = "X-Tenant-Id", required = false) String tenant) {
+        AdminGuard.requireAnyRole("ADMIN", "ENGINEER");
         return Result.ok(usageService.summary(tenantId(tenant)));
     }
 

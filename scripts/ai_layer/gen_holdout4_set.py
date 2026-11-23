@@ -1,0 +1,347 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""生成 Holdout-4（120 条：96 calc / 24 simple）。
+
+协议：本脚本必须在 det-trigger-v2 冻结之后运行；题面与 gold 由代码确定性生成，
+不调用模型；gold 另由 verify_holdout4_gold.py 只读题面/资料独立重算复核。
+
+与前三套的关系（脚本内断言，不容忍例外）：
+  - 不得复用 holdout_set.tsv（120 条迭代集）、holdout2_set.tsv、holdout3_set.tsv 的题干；
+  - 数字签名（题面+资料按出现顺序的全部数字）也不得与之相同。
+
+题型（比 Holdout-3 更贴近真实提问：口语化、少书面模板、部分题面不含数字）：
+  G1 达成率 + 缺口（基数在资料里，含上周同期干扰）
+  G2 成数换算（口语化四式，含年度目标干扰）
+  G3 工艺窗口合格数 + 合格率
+  G4 均值 + 比下限高多少（制令/号线/班次/批量干扰）
+  G5 超限个数 + 比上一批多百分之几（v2 反向基数方向的目标题型）
+  G7 问句里一个数字都没有，基数与读数全在资料里（新组）
+        A1 超限个数 + 超标占比
+        A2 均值 + 比上限低多少
+        A3 今日均值 vs 上一批均值的相对变化（二段：先均值，再以资料基数为分母）
+  simple：G8 有数字但不必算（点检周期 / 保修月数 / 额定功率 / 负责人 / 备件库位）
+"""
+import random
+import re
+from decimal import Decimal, ROUND_HALF_UP
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+DATA = HERE / "data"
+PREV = [DATA / "holdout_set.tsv", DATA / "holdout2_set.tsv", DATA / "holdout3_set.tsv"]
+OUT = DATA / "holdout4_set.tsv"
+
+RNG = random.Random(20261111)
+
+
+def q(x, n):
+    return Decimal(str(x)).quantize(Decimal(1).scaleb(-n), rounding=ROUND_HALF_UP)
+
+
+def fmt(d):
+    s = format(Decimal(d).normalize(), "f")
+    return s if s != "-0" else "0"
+
+
+def existing():
+    qs, sigs = set(), set()
+    for p in PREV:
+        for line in p.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            c = line.split("\t")
+            qs.add(c[5])
+            sigs.add(tuple(re.findall(r"\d+(?:\.\d+)?", c[5] + c[6])))
+    return qs, sigs
+
+
+# ---------------------------------------------------------------- G1 达成率
+G1 = [("回流炉", "过板量", "片"), ("波峰炉", "过板量", "片"), ("贴片机", "贴装点数", "点"),
+      ("AOI", "检出板数", "片"), ("X-Ray", "检测批数", "批"), ("分板机", "分板片数", "片"),
+      ("点胶机", "点胶点数", "点"), ("灌胶机", "灌胶件数", "件"), ("老化柜", "老化板数", "片"),
+      ("清洗机", "清洗篮数", "篮"), ("镀膜机", "镀膜片数", "片"), ("划片机", "划片片数", "片"),
+      ("编带机", "编带盘数", "盘"), ("烧录机", "烧录颗数", "颗"), ("印刷机", "印刷板数", "片"),
+      ("波峰焊", "焊接件数", "件")]
+
+G1_Q = [
+    "这周{dev}的{metric}干得怎么样？达成率多少（保留一位小数，%）？离目标还差多少{unit}？",
+    "{dev}这个礼拜{metric}做到什么程度了？完成率多少（保留一位小数，%）？还差多少{unit}没做到？",
+    "帮我算下{dev}本周{metric}的达成率（保留一位小数，%）？差多少{unit}才够目标？",
+    "看下{dev}这周的{metric}：完成率多少（保留一位小数，%）？缺口还有多少{unit}？",
+]
+
+
+def gen_g1():
+    out = []
+    for i, (dev, metric, unit) in enumerate(G1):
+        plan = RNG.randint(1600, 9900)
+        done = int(plan * RNG.uniform(0.61, 0.98))
+        prev = int(plan * RNG.uniform(0.5, 1.03))
+        ratio = q(Decimal(done) / Decimal(plan) * 100, 1)
+        gap = plan - done
+        qs = G1_Q[i % 4].format(dev=dev, metric=metric, unit=unit)
+        ctx = "【%s·%s】本周目标 %d %s，实际 %d %s；上周同期 %d %s。" % (
+            dev, metric, plan, unit, done, unit, prev, unit)
+        out.append(("calc", "G1_达成率", "g1_attain_gap_v4", dev, qs, ctx,
+                    "%s|%d" % (fmt(ratio), gap), "numeric", 0, "True"))
+    return out
+
+
+# ---------------------------------------------------------------- G2 成数
+G2 = [("空压站", "电耗", "kWh"), ("纯水站", "水耗", "t"), ("锅炉房", "蒸汽量", "t"),
+      ("氮气站", "氮气量", "m³"), ("维修组", "耗材成本", "元"), ("产线", "加班工时", "h"),
+      ("设备组", "维修次数", "次"), ("模具组", "换模次数", "次"), ("质检组", "检验批次", "批"),
+      ("包装组", "包装材料", "kg"), ("清洗站", "清洗剂用量", "L"), ("润滑组", "润滑油用量", "L"),
+      ("滤材组", "滤芯消耗", "个"), ("打磨组", "砂纸消耗", "张"), ("焊接组", "焊锡丝用量", "kg"),
+      ("装配组", "胶带用量", "卷")]
+
+G2_Q = [
+    "{dev}这个月的{metric}跟上月比，{w}了几成（保留一位小数）？",
+    "跟上个月比，{dev}{metric}{w}了几成（保留一位小数）？",
+    "{dev}本月{metric}较上月{w}了几成（保留一位小数）？",
+    "这个月{dev}的{metric}，比上月{w}几成（保留一位小数）？",
+]
+
+
+def gen_g2():
+    out = []
+    for i, (dev, metric, unit) in enumerate(G2):
+        a = RNG.randint(35, 920)
+        up = i % 4 != 2
+        b = int(a * RNG.uniform(1.06, 1.8)) if up else int(a * RNG.uniform(0.52, 0.93))
+        target = int(max(a, b) * RNG.uniform(1.03, 1.45))
+        gold = q(abs(Decimal(b - a)) / Decimal(a) * 10, 1)
+        w = "涨" if up else "降"
+        qs = G2_Q[i % 4].format(dev=dev, metric=metric, w=w)
+        ctx = "【%s·%s】上月 %d %s，本月 %d %s；年度目标 %d %s。" % (
+            dev, metric, a, unit, b, unit, target, unit)
+        out.append(("calc", "G2_成数", "g2_month_cheng_v4", dev, qs, ctx,
+                    fmt(gold), "numeric", 0, "True"))
+    return out
+
+
+# ---------------------------------------------------------------- G3 工艺窗口
+G3 = [("回流炉", "炉温", "℃"), ("波峰炉", "锡温", "℃"), ("贴片机", "贴装压力", "N"),
+      ("AOI", "曝光时间", "ms"), ("X-Ray", "管电流", "mA"), ("分板机", "主轴电流", "A"),
+      ("点胶机", "胶点重量", "mg"), ("灌胶机", "出胶量", "g"), ("老化柜", "老化电压", "V"),
+      ("清洗机", "超声频率", "kHz"), ("镀膜机", "膜厚", "μm"), ("划片机", "进刀压力", "MPa"),
+      ("编带机", "热封温度", "℃"), ("烧录机", "烧录电压", "V"), ("印刷机", "刮刀压力", "kg"),
+      ("波峰焊", "预热温度", "℃")]
+
+
+def gen_g3():
+    out = []
+    for dev, metric, unit in G3:
+        n = RNG.choice([6, 7, 8, 9])
+        lo = q(RNG.uniform(0.7, 7.6), 1)
+        hi = q(lo + Decimal(str(RNG.uniform(0.7, 2.6))), 1)
+        vals = []
+        for _ in range(n):
+            while True:
+                v = q(lo - Decimal("0.5") + (hi - lo + Decimal("1.0")) * Decimal(str(RNG.random())), 1)
+                if lo <= v <= hi:
+                    break
+            vals.append(v)
+        hit = sum(1 for v in vals if lo <= v <= hi)
+        if hit == n:
+            vals[0] = q(hi + Decimal("0.4"), 1)
+            hit -= 1
+        if hit == 0:
+            vals[0] = q(lo + Decimal("0.1"), 1)
+            hit = 1
+        pct = q(Decimal(hit) / Decimal(n) * 100, 1)
+        qs = ("这批 %d 个%s读数：%s。在工艺窗口里的有几个？合格率多少（保留一位小数，%%）？"
+              % (n, metric, "、".join(fmt(v) for v in vals)))
+        ctx = "【%s·%s】工艺窗口 %s～%s %s；窗口外一律返工。" % (
+            dev, metric, fmt(lo), fmt(hi), unit)
+        out.append(("calc", "G3_区间", "g3_window_count_v4", dev, qs, ctx,
+                    "%d|%s" % (hit, fmt(pct)), "numeric", 0, "True"))
+    return out
+
+
+# ---------------------------------------------------------------- G4 均值差
+G4 = [("回流炉", "各区温度", "℃", 1), ("贴片机", "吸嘴真空", "kPa", 1),
+      ("AOI", "光源亮度", "lx", 1), ("X-Ray", "管电压", "kV", 1),
+      ("分板机", "分板应力", "MPa", 2), ("点胶机", "胶量", "mg", 2),
+      ("灌胶机", "灌胶时间", "s", 1), ("老化柜", "老化电流", "A", 2),
+      ("清洗机", "漂洗压力", "MPa", 2), ("镀膜机", "真空度", "Pa", 1),
+      ("划片机", "主轴转速", "rpm", 0), ("编带机", "编带张力", "N", 1),
+      ("烧录机", "烧录电流", "mA", 1), ("印刷机", "印刷压力", "kg", 1),
+      ("波峰焊", "波峰高度", "mm", 1), ("冷却塔", "回水温度", "℃", 1)]
+
+
+def gen_g4():
+    out = []
+    for dev, metric, unit, dec in G4:
+        n = RNG.choice([6, 7, 8])
+        lo = q(RNG.uniform(0.8, 6.2), dec)
+        span = Decimal(str(RNG.uniform(0.5, 2.4)))
+        vals = [q(lo + span * Decimal(str(RNG.uniform(0.1, 1.15))), dec) for _ in range(n)]
+        avg = q(sum(vals) / Decimal(n), 2)
+        diff = q(avg - lo, 2)
+        wo = "MO-202611%02d-%03d" % (RNG.randint(1, 28), RNG.randint(1, 200))
+        qs = ("制令 %s，%d 号线第 %d 班，这批 %d 片%s依次是 %s %s。"
+              "平均下来多少（保留两位小数）？比工艺下限 %s 高多少（保留两位小数）？"
+              % (wo, RNG.randint(1, 6), RNG.randint(1, 3), n, metric,
+                 "、".join(fmt(v) for v in vals), unit, fmt(lo)))
+        ctx = "【%s·%s】工艺下限 %s %s，上限 %s %s；低于下限判返工。" % (
+            dev, metric, fmt(lo), unit, fmt(q(lo + span + Decimal("1.6"), dec)), unit)
+        out.append(("calc", "G4_均值差", "g4_mean_diff_v4", dev, qs, ctx,
+                    "%s|%s" % (fmt(avg), fmt(diff)), "numeric", 0, "True"))
+    return out
+
+
+# ---------------------------------------------------------------- G5 超限环比
+G5 = [("回流炉", "炉温", "℃"), ("波峰炉", "锡温", "℃"), ("贴片机", "贴装偏移", "mm"),
+      ("AOI", "误判次数", "次"), ("X-Ray", "管电压", "kV"), ("分板机", "主轴振动", "μm"),
+      ("点胶机", "胶量偏差", "mg"), ("灌胶机", "出胶偏差", "g"), ("老化柜", "老化电流", "A"),
+      ("清洗机", "漂洗压力", "MPa"), ("镀膜机", "膜厚偏差", "μm"), ("划片机", "进刀偏差", "μm"),
+      ("编带机", "热封偏差", "℃"), ("烧录机", "烧录电流", "mA"), ("印刷机", "刮刀压力", "kg"),
+      ("波峰焊", "预热温度", "℃")]
+
+
+def gen_g5():
+    out = []
+    for dev, metric, unit in G5:
+        while True:
+            n = RNG.choice([7, 8, 9])
+            lim = q(RNG.uniform(0.8, 8.0), 1)
+            vals = [q(lim * Decimal(str(RNG.uniform(0.78, 1.24))), 1) for _ in range(n)]
+            over = [i for i, v in enumerate(vals) if v > lim]
+            if 2 <= len(over) <= n - 1:
+                break
+        prev = RNG.randint(1, len(over) - 1)
+        delta = q(Decimal(len(over) - prev) / Decimal(prev) * 100, 1)
+        qs = ("这批 %d 个%s实测值是 %s。超了几个？比上一批的 %d 个多了百分之几（保留一位小数）？"
+              % (n, metric, "、".join(fmt(v) for v in vals), prev))
+        ctx = "【%s·%s】工艺上限 %s %s；越限就要停机。" % (dev, metric, fmt(lim), unit)
+        out.append(("calc", "G5_超限环比", "g5_over_delta_v4", dev, qs, ctx,
+                    "%d|%s" % (len(over), fmt(delta)), "numeric", 0, "True"))
+    return out
+
+
+# ---------------------------------------------------------------- G7 问句无数字
+G7 = [("回流炉", "炉温", "℃"), ("波峰炉", "锡温", "℃"), ("贴片机", "贴装偏移", "mm"),
+      ("AOI", "误判次数", "次"), ("X-Ray", "管电压", "kV"), ("分板机", "主轴振动", "μm"),
+      ("点胶机", "胶量偏差", "mg"), ("灌胶机", "出胶偏差", "g"), ("老化柜", "老化电流", "A"),
+      ("清洗机", "漂洗压力", "MPa"), ("镀膜机", "膜厚偏差", "μm"), ("划片机", "进刀偏差", "μm"),
+      ("编带机", "热封偏差", "℃"), ("烧录机", "烧录电流", "mA"), ("印刷机", "刮刀压力", "kg"),
+      ("波峰焊", "预热温度", "℃")]
+
+
+def gen_g7():
+    out = []
+    for i, (dev, metric, unit) in enumerate(G7):
+        kind = i % 3
+        n = RNG.choice([7, 8, 9])
+        lim = q(RNG.uniform(0.8, 8.0), 1)
+        vals = [q(lim * Decimal(str(RNG.uniform(0.76, 1.22))), 1) for _ in range(n)]
+        if kind == 0:
+            over = [v for v in vals if v > lim]
+            if not 1 <= len(over) <= n - 1:
+                vals[0] = q(lim + Decimal("0.3"), 1)
+                over = [v for v in vals if v > lim]
+            pct = q(Decimal(len(over)) / Decimal(n) * 100, 1)
+            qs = "今天%s的%s有几个超了上限？超标占比多少（保留一位小数，%%）？" % (dev, metric)
+            ctx = "【%s·%s】今天读数：%s；工艺上限 %s %s。" % (
+                dev, metric, "、".join(fmt(v) for v in vals), fmt(lim), unit)
+            gold = "%d|%s" % (len(over), fmt(pct))
+            tpl = "g7_no_digit_over_ratio"
+        elif kind == 1:
+            avg = q(sum(vals) / Decimal(n), 2)
+            qs = "%s今天这批%s平均多少（保留两位小数）？比上限低多少（保留两位小数）？" % (dev, metric)
+            ctx = "【%s·%s】今天这批读数：%s；工艺上限 %s %s。" % (
+                dev, metric, "、".join(fmt(v) for v in vals), fmt(lim), unit)
+            gold = "%s|%s" % (fmt(avg), fmt(q(Decimal(str(lim)) - avg, 2)))
+            tpl = "g7_no_digit_mean_gap"
+        else:
+            n2 = RNG.choice([6, 7, 8])
+            vals2 = [q(lim * Decimal(str(RNG.uniform(0.7, 1.2))), 1) for _ in range(n2)]
+            avg_t = q(sum(vals) / Decimal(n), 2)
+            avg_p = q(sum(vals2) / Decimal(n2), 2)
+            if avg_p == avg_t:
+                vals2[0] = q(vals2[0] + Decimal("0.2"), 1)
+                avg_p = q(sum(vals2) / Decimal(n2), 2)
+            delta = q(abs(avg_t - avg_p) / avg_p * 100, 1)
+            qs = "跟上一批比，%s今天的%s均值是涨了还是降了？变化了百分之几（保留一位小数）？" % (dev, metric)
+            ctx = "【%s·%s】今天读数：%s；上一批读数：%s。" % (
+                dev, metric, "、".join(fmt(v) for v in vals), "、".join(fmt(v) for v in vals2))
+            gold = fmt(delta)
+            tpl = "g7_no_digit_mean_delta"
+        assert not re.search(r"\d", qs), "G7 题面不得含数字：" + qs
+        out.append(("calc", "G7_无数字取基数", tpl, dev, qs, ctx, gold, "numeric", 0, "True"))
+    return out
+
+
+# ---------------------------------------------------------------- G8 不必算
+G8_DEV = [("点胶机", 1), ("激光打标机", 2), ("分板机", 3), ("老化测试柜", 4),
+          ("超声波清洗槽", 5), ("贴片机", 6), ("回流炉", 7), ("X-Ray检测机", 8)]
+NAMES = ["沈书言", "陆明轩", "韩雨桐", "苏子墨", "郝思嘉"]
+
+
+def gen_g8():
+    out = []
+    idx = 0
+    while len(out) < 24:
+        idx += 1
+        dev, k = G8_DEV[(idx - 1) % len(G8_DEV)]
+        kind = (idx - 1) % 6
+        if kind == 0:
+            val = (k % 20) + 6
+            qs = "%s多久点检一次？" % dev
+            ctx = "【%s·点检卡】每 %d 天点检一次；本月已点检 %d 次。" % (dev, val, (k % 7) + 1)
+            gold = str(val)
+        elif kind == 1:
+            val = (k % 12) + 8
+            qs = "%s整机保修多少个月？" % dev
+            ctx = "【%s·商务】整机保修 %d 个月，核心部件 %d 个月。" % (dev, val, val + 6)
+            gold = str(val)
+        elif kind == 2:
+            val = (k % 7) + 3
+            qs = "%s额定功率多大？" % dev
+            ctx = "【%s·铭牌】额定功率 %d kW；待机功率 %d kW。" % (dev, val, 1)
+            gold = "%d" % val
+        elif kind == 3:
+            name = NAMES[idx % len(NAMES)]
+            qs = "%s这块归谁管？" % dev
+            ctx = "【%s·责任表】负责人：%s；备件库位 D%d-%02d。" % (
+                dev, name, RNG.randint(1, 5), RNG.randint(1, 30))
+            gold = name
+        elif kind == 4:
+            loc = "D%d-%02d" % (RNG.randint(1, 5), RNG.randint(1, 30))
+            qs = "%s的备件搁在哪个库位？" % dev
+            ctx = "【%s·备件】库位 %s；最低库存 %d 件。" % (dev, loc, RNG.randint(2, 9))
+            gold = loc
+        else:
+            val = (k % 9) + 2
+            qs = "%s的保养间隔是几天？" % dev
+            ctx = "【%s·保养表】保养间隔 %d 天；上次保养 %d 天前。" % (
+                dev, val, RNG.randint(1, 5))
+            gold = str(val)
+        out.append(("simple", "G8_不必算", "g8_no_calc_v4", dev,
+                    qs, "【%s·台账】设备编号 T%02d%03d；%s" % (dev, k, idx, ctx),
+                    gold, "text", 0, "False"))
+    return out
+
+
+def main():
+    calc = gen_g1() + gen_g2() + gen_g3() + gen_g4() + gen_g5() + gen_g7()
+    simple = gen_g8()
+    rows = [("H4-%03d" % (i + 1),) + r for i, r in enumerate(calc + simple)]
+
+    qs, sigs = existing()
+    for r in rows:
+        assert r[5] not in qs, "题干复用: " + r[0]
+        sig = tuple(re.findall(r"\d+(?:\.\d+)?", r[5] + r[6]))
+        assert sig not in sigs, "数字签名复用: " + r[0]
+    assert len(rows) == 120, len(rows)
+    assert len({r[0] for r in rows}) == 120
+    assert len({r[5] for r in rows}) == 120, "题干预重复"
+    assert sum(1 for r in rows if r[1] == "calc") == 96
+    assert sum(1 for r in rows if r[1] == "simple") == 24
+    OUT.write_text("\n".join("\t".join(map(str, r)) for r in rows) + "\n", encoding="utf-8")
+    print("wrote", OUT, len(rows))
+
+
+if __name__ == "__main__":
+    main()

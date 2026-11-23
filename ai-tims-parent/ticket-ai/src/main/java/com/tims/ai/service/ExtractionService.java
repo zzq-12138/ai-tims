@@ -54,15 +54,25 @@ public class ExtractionService {
     private final OpenAiChatModel chatModel;
     private final AiProperties props;
     private final AiUsageService usageService;
+    private final ChainExtractionService chainService;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public ExtractionService(OpenAiChatModel chatModel, AiProperties props, AiUsageService usageService) {
+    /** P0 链式抽取开关，默认关闭：关闭时走原单轮链路，行为与现网完全一致 */
+    @org.springframework.beans.factory.annotation.Value("${tims.ai.extract.chain-enabled:false}")
+    private boolean chainEnabled;
+
+    public ExtractionService(OpenAiChatModel chatModel, AiProperties props, AiUsageService usageService,
+                             ChainExtractionService chainService) {
         this.chatModel = chatModel;
         this.props = props;
         this.usageService = usageService;
+        this.chainService = chainService;
     }
 
     public ExtractResult extract(Long tenantId, ExtractRequest req) {
+        if (chainEnabled) {
+            return extractChain(tenantId, req);
+        }
         long t0 = System.currentTimeMillis();
         String model = props.getExtractModel();
         try {
@@ -124,6 +134,56 @@ public class ExtractionService {
                 throw le;
             }
             throw new LlmException(40203, "知识抽取失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * P0 链式抽取（开关开启时才走）：三步编排 + 逐步校验 + 降级打标。
+     * 降级不静默：chainDegraded=true 与 chainErrors 一并返回，落 ai_call_log（degraded=true）并
+     * 由 ticket-knowledge 写 chain_trace 供审核页提示；三步全失败按单轮失败语义抛 LlmException。
+     */
+    private ExtractResult extractChain(Long tenantId, ExtractRequest req) {
+        long t0 = System.currentTimeMillis();
+        String model = props.getExtractModel();
+        try {
+            ExtractResult result = chainService.run(tenantId, req);
+            if (!StringUtils.hasText(result.getTitle())) {
+                result.setTitle(StringUtils.hasText(req.getTitle()) ? req.getTitle() : req.getTicketNo());
+            }
+            if (!StringUtils.hasText(result.getDeviceType())) {
+                result.setDeviceType(req.getDeviceType());
+            }
+            AiCallLog row = new AiCallLog();
+            row.setTenantId(tenantId == null ? 1L : tenantId);
+            row.setScene("EXTRACT");
+            row.setModel(model);
+            row.setPromptTokens(result.getPromptTokens());
+            row.setCompletionTokens(result.getCompletionTokens());
+            row.setTotalTokens(result.getTotalTokens());
+            row.setLatencyMs(result.getLatencyMs());
+            row.setStatus("SUCCESS");
+            row.setDegraded(Boolean.TRUE.equals(result.getChainDegraded()));
+            row.setErrorMsg(Boolean.TRUE.equals(result.getChainDegraded())
+                    ? truncate("链式抽取降级: " + result.getChainErrors(), 250) : null);
+            row.setRefCount(0);
+            usageService.record(row);
+            return result;
+        } catch (Exception e) {
+            long cost = System.currentTimeMillis() - t0;
+            AiCallLog row = new AiCallLog();
+            row.setTenantId(tenantId == null ? 1L : tenantId);
+            row.setScene("EXTRACT");
+            row.setModel(model);
+            row.setLatencyMs(cost);
+            row.setStatus("ERROR");
+            row.setDegraded(true);
+            row.setErrorMsg(truncate(e.getMessage(), 250));
+            usageService.record(row);
+            log.error("[extract-chain] 失败 ticket={} model={} {}ms: {}", req.getTicketNo(), model, cost, e.getMessage());
+            if (e instanceof LlmException le) {
+                throw le;
+            }
+            throw new LlmException(40203, "链式知识抽取失败：" + e.getMessage());
         }
     }
 

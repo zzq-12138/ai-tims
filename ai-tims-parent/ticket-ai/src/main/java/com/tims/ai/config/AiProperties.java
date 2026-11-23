@@ -72,6 +72,61 @@ public class AiProperties {
     /** 分模型单价（元/千 tokens）；未命中时回退缺省单价。glm-4-flash 按 0.1 元/百万计（扣通用包） */
     private Map<String, Price> modelPrices = new LinkedHashMap<>();
 
+    /** 模型路由（默认关闭）：按可解释信号把简单问题分流到小模型 */
+    private Router router = new Router();
+
+    /** 路由配置 */
+    public static class Router {
+        /** 总开关，默认 false：关闭时仍用 model 单模型，行为不变 */
+        private boolean enabled = false;
+        /** 简单问题档位 */
+        private String simpleModel = "glm-4-flash";
+        /** 复杂问题档位 */
+        private String complexModel = "glm-5.3-flash";
+        /** 复杂度阈值：得分 ≥ 阈值判为复杂 */
+        private double threshold = 0.5;
+
+        public boolean isEnabled() { return enabled; }
+        public void setEnabled(boolean enabled) { this.enabled = enabled; }
+        public String getSimpleModel() { return simpleModel; }
+        public void setSimpleModel(String simpleModel) { this.simpleModel = simpleModel; }
+        public String getComplexModel() { return complexModel; }
+        public void setComplexModel(String complexModel) { this.complexModel = complexModel; }
+        public double getThreshold() { return threshold; }
+        public void setThreshold(double threshold) { this.threshold = threshold; }
+    }
+
+    public Router getRouter() { return router; }
+    public void setRouter(Router router) { this.router = router; }
+
+    /** C 档兜底建议（默认关闭）：关闭时 C 档行为与现状一致（不推送、不落库） */
+    private Fallback fallback = new Fallback();
+
+    /** C 档兜底配置 */
+    public static class Fallback {
+        /** 总开关，默认 false：关闭时不改 prompt、不落库、不新增返回字段 */
+        private boolean enabled = false;
+
+        /**
+         * 新口径（处置侧覆盖率）判“一致”的阈值。
+         * 2026-11-12 定为 0.60；样本不足时另按 minSegments 判，不参与阈值比较。
+         */
+        private double consistentThreshold = 0.60;
+
+        /** 新口径判定的最小有效片段数；少于该值记“样本不足”，不判一致/不一致 */
+        private int minSegments = 3;
+
+        public boolean isEnabled() { return enabled; }
+        public void setEnabled(boolean enabled) { this.enabled = enabled; }
+        public double getConsistentThreshold() { return consistentThreshold; }
+        public void setConsistentThreshold(double consistentThreshold) { this.consistentThreshold = consistentThreshold; }
+        public int getMinSegments() { return minSegments; }
+        public void setMinSegments(int minSegments) { this.minSegments = minSegments; }
+    }
+
+    public Fallback getFallback() { return fallback; }
+    public void setFallback(Fallback fallback) { this.fallback = fallback; }
+
     /** 单模型计价单元 */
     public static class Price {
         private double inputPer1k;

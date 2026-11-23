@@ -77,6 +77,9 @@ tims:
       dimensions: 1024
       # 单条文本截断长度（embedding-3 上限 8192 tokens，留余量）
       max-text-length: 4000
+      # Qwen3-Embedding 查询侧检索指令（仅查询向量加前缀，文档侧始终原文）。
+      # 留空 = 与旧行为完全一致；启用后门控阈值必须按新分数分布重新标定（见 docs/paper/评测/Qwen3Embedding阈值重标定.md）
+      query-instruction: ${KB_EMBED_QUERY_INSTRUCTION:}
     milvus:
       host: ${MILVUS_HOST:127.0.0.1}
       port: ${MILVUS_PORT:19530}

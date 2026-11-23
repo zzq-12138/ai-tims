@@ -10,6 +10,8 @@ public class AssistantRequest {
     private Long sessionId;
     /** 兼容旧调用：无 sessionId 时的前端历史 */
     private List<ChatRequest.HistoryMsg> history;
+    /** 引用回复：被引用的消息 ID（可选，必须属于同一会话） */
+    private Long quotedMessageId;
 
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
@@ -17,4 +19,6 @@ public class AssistantRequest {
     public void setSessionId(Long sessionId) { this.sessionId = sessionId; }
     public List<ChatRequest.HistoryMsg> getHistory() { return history; }
     public void setHistory(List<ChatRequest.HistoryMsg> history) { this.history = history; }
+    public Long getQuotedMessageId() { return quotedMessageId; }
+    public void setQuotedMessageId(Long quotedMessageId) { this.quotedMessageId = quotedMessageId; }
 }

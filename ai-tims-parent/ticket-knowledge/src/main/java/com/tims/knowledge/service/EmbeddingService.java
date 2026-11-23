@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
@@ -13,9 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 智谱 embedding-3 向量化客户端（M3）。
- * HTTP 直调 /api/paas/v4/embeddings，批量入参（≤64），维度 1024。
- * key 从环境变量 ZHIPU_API_KEY 注入（~/secrets/zhipu_api_key → restart 脚本），不进 git。
+ * 向量化客户端（M3）：OpenAI 兼容 /v1/embeddings，批量入参（≤64）。
+ * 地址/模型/维度均从配置读取：开发环境为智谱 embedding-3（1024 维），
+ * 公司环境为公司 vLLM 的 Qwen/Qwen3-Embedding-8B（1024 维）。
+ * key 从环境变量注入（~/secrets），不进 git。
  */
 @Service
 public class EmbeddingService {
@@ -34,6 +36,13 @@ public class EmbeddingService {
 
     @Value("${tims.kb.embedding.max-text-length:4000}")
     private int maxTextLength;
+
+    /**
+     * Qwen3-Embedding 查询侧检索指令（任务描述，不含 Instruct:/Query: 包装）。
+     * 留空 = 不加前缀，与旧行为完全一致；文档侧始终走原文本，不加前缀。
+     */
+    @Value("${tims.kb.embedding.query-instruction:}")
+    private String queryInstruction;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -96,6 +105,19 @@ public class EmbeddingService {
             if (e instanceof IllegalStateException ise) throw ise;
             throw new IllegalStateException("embedding 响应解析失败: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * 查询侧向量化：Qwen3-Embedding 检索协议要求查询加 instruction、文档不加。
+     * 配置了 tims.kb.embedding.query-instruction 时拼成 "Instruct: {desc}\nQuery: {query}"；
+     * 未配置时退化为原文本，行为与改造前一致（可随时回滚）。
+     */
+    public float[] embedQuery(String query) {
+        String q = query == null ? "" : query;
+        if (!StringUtils.hasText(queryInstruction)) {
+            return embed(List.of(q)).get(0);
+        }
+        return embed(List.of("Instruct: " + queryInstruction.trim() + "\nQuery: " + q)).get(0);
     }
 
     /** 服务可用性探测（配置是否齐备），供同步任务降级判断 */

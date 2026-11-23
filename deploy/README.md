@@ -55,6 +55,20 @@ deploy/
 
 > 原则：VM 负责构建，公司集群只负责 `docker load` 和 push；集群内 Pod 不下载任何依赖。
 
+**推荐：逐文件交付（含前端，产物自解释 + md5 校验）**
+
+```bash
+# VM 一条命令完成：六个后端 + 前端 + 四个中间件，逐个 save | gzip，并生成 MANIFEST
+bash deploy/scripts/export-images.sh
+# 产物：/home/dev/tims-images/ 下 12 个 *.tar.gz + MANIFEST.txt + MANIFEST.md5 + load-all.sh
+# 只补清单不重建：MANIFEST_ONLY=1 bash deploy/scripts/export-images.sh
+# 公司侧：bash load-all.sh（先校验 md5 再 load）
+```
+
+完整步骤、失败判读与已知边界见 [docs/ops/镜像离线交付手册.md](../docs/ops/镜像离线交付手册.md)。
+
+以下是原有「六服务 + 单 tar」链路，保留备查：
+
 ```bash
 # ① VM：编译 + 构建六个业务镜像
 bash deploy/scripts/build-images.sh

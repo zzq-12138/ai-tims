@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""导出 PUBLISHED 知识清单（阈值评估的负例校验底稿）。
+"""导出 PUBLISHED 知识清单（阈值评估的负例校验底稿 / 向量重算的文档原文）。
 
-用法: python3 dump_kb.py --out /tmp/kb_dump.json
+用法:
+  python3 dump_kb.py --out /tmp/kb_dump.json            # 摘要口径：content 压平换行并截断 260 字
+  python3 dump_kb.py --out kb_full.json --full          # 全文口径：保留 summary 与原始换行
+                                                       # （与 VectorSyncService 送 embedding 的文本一致）
 """
 import argparse
 import json
@@ -22,6 +25,7 @@ def get(path, params):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="/tmp/kb_dump.json")
+    ap.add_argument("--full", action="store_true", help="保留 summary 与完整 content（向量重算用）")
     args = ap.parse_args()
 
     recs, page = [], 1
@@ -38,10 +42,12 @@ def main():
 
     out = []
     for r in keep:
-        c = (r.get("content") or "").replace("\n", " / ")
+        c = r.get("content") or ""
         out.append({"id": str(r["id"]), "device": r.get("applyDeviceType"),
                     "title": r["title"], "tags": r.get("tags"),
-                    "summary": r.get("summary"), "content": c[:260]})
+                    "summary": r.get("summary"),
+                    # 全文口径保留原始换行，保证与 VectorSyncService 送 embedding 的文本一致
+                    "content": c if args.full else c.replace("\n", " / ")[:260]})
     json.dump(out, open(args.out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("写出:", args.out, len(out), "条")
 

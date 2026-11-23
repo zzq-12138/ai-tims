@@ -139,14 +139,93 @@ p { margin: 0; }
 }
 .el-button:hover:not(.is-disabled) { transform: translateY(-1px); }
 .el-button:active:not(.is-disabled) { transform: translateY(0); }
-.el-button--primary {
+
+/* 弹窗输入框：正常输入用正文色，只有真正的校验错误才显示为红色提示，
+   避免“把用户输入当成错误提示”时整段文字变红，看起来像输入框自己变红了。 */
+.el-message-box__input .el-input__inner,
+.el-message-box__input .el-textarea__inner {
+  color: var(--ink);
+}
+.el-message-box__input .el-textarea__inner {
+  min-height: 96px;
+  line-height: 1.7;
+  resize: vertical;
+}
+.el-message-box__errormsg { font-weight: 600; }
+/* 实心主按钮：渐变只作用于“实心”按钮。
+   过去无条件写在 .el-button--primary 上，文字/链接按钮虽然 background-color 透明，
+   但 background-image 渐变仍在，于是橙字压在橙块上（约 1.2:1）。 */
+.el-button--primary:not(.is-text):not(.is-link):not(.is-plain) {
   background: linear-gradient(180deg, #a85320 0%, #8f4616 100%);
   border-color: var(--amber-deep);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .2) inset, 0 6px 14px -10px rgba(143, 70, 22, .65);
 }
-.el-button--primary:hover:not(.is-disabled) {
+.el-button--primary:not(.is-text):not(.is-link):not(.is-plain):hover:not(.is-disabled) {
   background: linear-gradient(180deg, #96491a 0%, #7f3d13 100%);
   border-color: #7f3d13;
+}
+/* 浅色（plain）主按钮：EP 的默认配色是「浅琥珀底 + 主色文字」，
+   但上面的实心渐变选择器漏了 .is-plain，导致浅色按钮被刷成深橙底 + 橙字（约 1.4:1）。
+   这里显式给 plain 一套三段配色：正常 5.9:1 / hover 白字 5.2:1 / 禁用 5.9:1，均过 AA。 */
+.el-button--primary.is-plain {
+  --el-button-text-color: var(--amber-deep);
+  --el-button-bg-color: #f8ece0;
+  --el-button-border-color: #d8b395;
+  --el-button-hover-text-color: #fffdf9;
+  --el-button-hover-bg-color: var(--amber-deep);
+  --el-button-hover-border-color: var(--amber-deep);
+  --el-button-active-text-color: #fffdf9;
+  --el-button-active-bg-color: #7f3d13;
+  --el-button-active-border-color: #7f3d13;
+  --el-button-disabled-text-color: var(--amber-deep);
+  --el-button-disabled-bg-color: #f8ece0;
+  --el-button-disabled-border-color: var(--line-strong);
+  opacity: 1;
+}
+.el-button--primary.is-plain.is-disabled,
+.el-button--primary.is-plain.is-disabled:hover {
+  background: #f8ece0;
+  border-color: var(--line-strong);
+  color: var(--amber-deep);
+  opacity: 1;
+}
+/* 文字/链接按钮：清掉渐变，保证只有文字没有色块 */
+.el-button--primary.is-text,
+.el-button--primary.is-link { background-image: none; }
+
+/* 其余实心类型：Element 默认白字压在 #67c23a / #e6a23c / #f56c6c / #909399 上仅 2.2–3.1:1，
+   统一换成通过 AA 的深色底（白字 5.0–7.3:1）。plain / text / link 不受影响。 */
+.el-button--success:not(.is-text):not(.is-link):not(.is-plain) {
+  --el-button-bg-color: #3f7d2e;
+  --el-button-border-color: #3f7d2e;
+  --el-button-hover-bg-color: #356a27;
+  --el-button-hover-border-color: #356a27;
+  --el-button-active-bg-color: #2d5a21;
+  --el-button-active-border-color: #2d5a21;
+}
+.el-button--warning:not(.is-text):not(.is-link):not(.is-plain) {
+  --el-button-bg-color: #8a5a15;
+  --el-button-border-color: #8a5a15;
+  --el-button-hover-bg-color: #754c11;
+  --el-button-hover-border-color: #754c11;
+  --el-button-active-bg-color: #63400e;
+  --el-button-active-border-color: #63400e;
+}
+.el-button--danger:not(.is-text):not(.is-link):not(.is-plain) {
+  --el-button-bg-color: #a4262c;
+  --el-button-border-color: #a4262c;
+  --el-button-hover-bg-color: #8d2026;
+  --el-button-hover-border-color: #8d2026;
+  --el-button-active-bg-color: #781b20;
+  --el-button-active-border-color: #781b20;
+}
+.el-button--info:not(.is-text):not(.is-link):not(.is-plain) {
+  --el-button-bg-color: #4f5a65;
+  --el-button-border-color: #4f5a65;
+  --el-button-hover-bg-color: #434d57;
+  --el-button-hover-border-color: #434d57;
+  --el-button-active-bg-color: #3a434c;
+  --el-button-active-border-color: #3a434c;
 }
 .el-button.is-disabled, .el-button.is-disabled:hover { transform: none; box-shadow: none; opacity: .5; }
 /* 禁用主按钮：EP 默认白字压在 light-5 琥珀上仅 2.39:1；改成浅琥珀底 + 深琥珀字（6.0:1），禁用态仍可辨认 */
@@ -155,6 +234,33 @@ p { margin: 0; }
   background: var(--amber-soft);
   border-color: var(--line-strong);
   color: var(--amber-deep);
+}
+/* 文字按钮 / 链接按钮：用变量统一压深，而不是给单个按钮写 color
+   （单类选择器 .obs-refresh 的权重低于 Element 的 .el-button.is-text，会被覆盖） */
+.el-button--primary.is-text,
+.el-button--primary.is-link {
+  --el-button-text-color: var(--amber-deep);
+  --el-button-hover-text-color: var(--ink);
+}
+.el-button--warning.is-text,
+.el-button--warning.is-link {
+  --el-button-text-color: #7a4f12;
+  --el-button-hover-text-color: var(--ink);
+}
+.el-button--danger.is-text,
+.el-button--danger.is-link {
+  --el-button-text-color: #8d302a;
+  --el-button-hover-text-color: var(--ink);
+}
+.el-button--success.is-text,
+.el-button--success.is-link {
+  --el-button-text-color: #2f6b25;
+  --el-button-hover-text-color: var(--ink);
+}
+.el-button--info.is-text,
+.el-button--info.is-link {
+  --el-button-text-color: #4f5a65;
+  --el-button-hover-text-color: var(--ink);
 }
 .el-button--small { height: 30px; padding: 0 12px; }
 .el-input__wrapper, .el-textarea__inner, .el-select__wrapper {
@@ -174,11 +280,15 @@ p { margin: 0; }
   letter-spacing: .04em;
   border-color: transparent;
 }
-/* 标签文字对比度：浅色底上统一压深，正文级文字 >=4.5:1 */
-.el-tag.el-tag--primary { --el-tag-text-color: #8f4616; }
-.el-tag.el-tag--success { --el-tag-text-color: #245f4e; }
-.el-tag.el-tag--warning { --el-tag-text-color: #7a4f12; }
-.el-tag.el-tag--info { --el-tag-text-color: #4f5a65; }
+/* 标签文字对比度：只对“浅色底”标签压深文字。
+   注意：Element Plus 的深色标签类名是 .el-tag--dark（没有 .is-light），
+   过去写成 .el-tag.el-tag--warning 会连深色标签一起覆盖，导致深字压深底（约 1.06:1）。 */
+.el-tag:not(.el-tag--dark).el-tag--primary { --el-tag-text-color: #8f4616; }
+.el-tag:not(.el-tag--dark).el-tag--success { --el-tag-text-color: #245f4e; }
+.el-tag:not(.el-tag--dark).el-tag--warning { --el-tag-text-color: #7a4f12; }
+.el-tag:not(.el-tag--dark).el-tag--info { --el-tag-text-color: #4f5a65; }
+/* 深色标签统一白字：显式兜底，避免再被同权重规则改掉 */
+.el-tag.el-tag--dark { --el-tag-text-color: #fff; }
 .el-tag--primary.el-tag--dark { --el-tag-bg-color: #8f4616; --el-tag-border-color: #8f4616; }
 .el-tag--warning.el-tag--dark { --el-tag-bg-color: #8a5a15; --el-tag-border-color: #8a5a15; }
 .el-alert { border-radius: 8px; border-left: 3px solid currentColor; }

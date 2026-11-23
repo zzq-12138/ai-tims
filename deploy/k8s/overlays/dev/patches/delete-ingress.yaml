@@ -1,0 +1,7 @@
+# 开发机没有 nginx ingress controller（k3s 自带 traefik，本环境不用 ingress），
+# 直接把 base 的 Ingress 删掉，避免出现一个永远不生效的对象。
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai-tims
+$patch: delete

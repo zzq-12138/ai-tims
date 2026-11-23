@@ -1,0 +1,20 @@
+# ticket-ai 的模型名唯一来源是 tims-common-config 的 LLM_CHAT_MODEL（见 common-config.yaml）。
+# 本文件只放 AI 服务专属键：知识抽取与复杂路由的独立模型、Spring AI 的 model 选项、
+# 链式抽取开关；不重复定义 LLM_CHAT_MODEL，也不把 AI 专属键放进共享的 common。
+# 2026-11-19 实测：不设 LLM_EXTRACT_MODEL / AI_ROUTER_COMPLEX_MODEL 会回落
+# glm-5.3-flash，公司 vLLM 无此模型，ticket.closed 抽取报 4003/404，工单落 MANUAL_REQUIRED。
+# 2026-11-20 起开启链式抽取（TIMS_AI_EXTRACT_CHAIN_ENABLED=true）：
+#   - 不开启时 rootCause / verification / hasFinalRootCause / chainTrace 全为 null，
+#     审核页显示「（无最终根因）」；
+#   - 链式开启后的既定取舍：troubleshootSteps 置空、tags 只保留设备类型、
+#     title 按「设备类型：现象」截 30 字、每条工单 3 次模型调用。
+#   - ConfigMap 变更不会重启 Pod，apply 后必须 rollout restart deploy/ticket-ai。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-ai-config
+data:
+  LLM_EXTRACT_MODEL: "Qwen/Qwen3.8-27B-dev"
+  AI_ROUTER_COMPLEX_MODEL: "Qwen/Qwen3.8-27B-dev"
+  SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL: "Qwen/Qwen3.8-27B-dev"
+  TIMS_AI_EXTRACT_CHAIN_ENABLED: "true"

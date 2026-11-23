@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -60,5 +61,21 @@ public class AiChatSessionController {
     @GetMapping("/{id}/messages")
     public Result<List<AiChatMessage>> messages(@PathVariable Long id) {
         return Result.ok(sessionService.messages(CurrentUser.tenantId(), CurrentUser.id(), id));
+    }
+
+    /** 撤回前置信息：这一轮会删掉哪些消息、调用过哪些工具、是否含写操作 */
+    @GetMapping("/{id}/messages/{messageId}/recall-info")
+    public Result<Map<String, Object>> recallInfo(@PathVariable Long id, @PathVariable Long messageId) {
+        return Result.ok(sessionService.recallInfo(CurrentUser.tenantId(), CurrentUser.id(), id, messageId));
+    }
+
+    /**
+     * 撤回本人发送的用户消息 = 物理删除该条 + 它触发的那条 AI 回复。
+     * force=false 时若该轮含写操作（工具调用白名单外）返回 10409，前端确认后带 force=true 再删。
+     */
+    @DeleteMapping("/{id}/messages/{messageId}")
+    public Result<Map<String, Object>> deleteMessage(@PathVariable Long id, @PathVariable Long messageId,
+                                                     @RequestParam(name = "force", defaultValue = "false") boolean force) {
+        return Result.ok(sessionService.deleteRound(CurrentUser.tenantId(), CurrentUser.id(), id, messageId, force));
     }
 }

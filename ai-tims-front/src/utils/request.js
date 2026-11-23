@@ -1,5 +1,6 @@
 import axios from 'axios'
 import JSONBig from 'json-bigint'
+import { ElMessage } from 'element-plus'
 import { useAuthStore } from '../stores/auth'
 import router from '../router'
 
@@ -52,6 +53,12 @@ request.interceptors.response.use(
       auth.clear()
       router.push('/login')
       return Promise.reject(new Error('未登录或凭证失效'))
+    }
+    // 403：后端角色校验未通过（网关与接口级统一返回 10403）。给出明确提示，不跳转、不白屏。
+    if (err.response && err.response.status === 403) {
+      const msg = (err.response.data && err.response.data.message) || '当前账号无权访问该功能'
+      ElMessage.error(msg)
+      return Promise.reject(new Error(msg))
     }
     return Promise.reject(err)
   }

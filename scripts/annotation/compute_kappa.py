@@ -88,10 +88,15 @@ def exists(v):
 
 
 def cohen_kappa(pairs):
-    """pairs: [(a, b)]，返回 (kappa, p_o, p_e, n)"""
+    """pairs: [(a, b)]，返回 (kappa, p_o, p_e, n)。
+
+    修复（2026-11-07）：当 p_e == 1（两侧都只出现同一个类别）时，Cohen's κ 为 0/0，
+    数学上**无定义**，旧实现返回 1.0 会被误读成「完全一致」。现返回 None，
+    由调用方渲染成「—（单类，无定义）」。参见 compute_kappa_v1.py（旧版对照）。
+    """
     n = len(pairs)
     if n == 0:
-        return 0.0, 0.0, 0.0, 0
+        return None, 0.0, 0.0, 0
     labels = sorted({x for p in pairs for x in p})
     idx = {l: i for i, l in enumerate(labels)}
     m = len(labels)
@@ -102,11 +107,20 @@ def cohen_kappa(pairs):
     ra = [sum(cm[i]) / n for i in range(m)]
     cb = [sum(cm[i][j] for i in range(m)) / n for j in range(m)]
     pe = sum(ra[i] * cb[i] for i in range(m))
-    k = 1.0 if pe == 1 else (po - pe) / (1 - pe)
+    if abs(1.0 - pe) < 1e-12:
+        return None, po, pe, n
+    k = (po - pe) / (1 - pe)
     return k, po, pe, n
 
 
+def fmt_k(k):
+    """κ 的统一渲染：无定义时输出「—」而非 1.000。"""
+    return "—（单类无定义）" if k is None else f"{k:.3f}"
+
+
 def band(k):
+    if k is None:
+        return "无定义（单类）"
     if k < 0:
         return "差（低于随机）"
     if k < 0.21:
@@ -121,7 +135,7 @@ def band(k):
 
 
 def fmt(k, po, pe, n):
-    return f"{k:.3f}", f"{po:.3f}", f"{pe:.3f}", str(n)
+    return fmt_k(k), f"{po:.3f}", f"{pe:.3f}", str(n)
 
 
 YES = {"是", "有", "对", "y", "yes", "true", "1"}
@@ -200,7 +214,7 @@ def run_layperson(A, L, G, out):
         w(f"| 指标 | 值 |\n|---|---|")
         w(f"| 一致率 p_o | **{po:.3f}**（{sum(cm[(a, a)] for a in (0, 1))}/{n}） |")
         w(f"| 期望一致率 p_e | {pe:.3f} |")
-        w(f"| Cohen's κ | **{k:.3f}**（{band(k)}） |")
+        w(f"| Cohen's κ | **{fmt_k(k)}**（{band(k)}） |")
         w(f"| 有效样本 | {n}（外行答「不确定」{unsure} 条，未计入） |\n")
         w("| 混淆矩阵 | 外行=否 | 外行=是 |\n|---|---|---|")
         w(f"| **你=否** | {cm[(0, 0)]} | {cm[(0, 1)]} |")
@@ -230,7 +244,7 @@ def run_layperson(A, L, G, out):
                     continue
                 pairs.append((str(gv), str(lp)))
             k, po, pe, n = cohen_kappa(pairs)
-            w(f"| {title} | {k:.3f} | {po:.3f} | {n} |")
+            w(f"| {title} | {fmt_k(k)} | {po:.3f} | {n} |")
         w("")
 
     # Q3 一致性（阅读追踪，不是标签）
@@ -328,10 +342,11 @@ def main():
         else:
             pairs = [(str(exists(A[i].get(key))), str(exists(B[i].get(key)))) for i in common]
         k, po, pe, n = cohen_kappa(pairs)
-        verdict = "达标" if k >= 0.6 else "**未达标，需处置**"
-        if k < 0.6:
+        verdict = ("**不可计算（单类）**" if k is None
+                   else ("达标" if k >= 0.6 else "**未达标，需处置**"))
+        if k is not None and k < 0.6:
             bad.append((key, name, k))
-        w(f"| {name} `{key}` | {k:.3f} | {po:.3f} | {pe:.3f} | {n} | {band(k)} | {verdict} |")
+        w(f"| {name} `{key}` | {fmt_k(k)} | {po:.3f} | {pe:.3f} | {n} | {band(k)} | {verdict} |")
     w("")
 
     # 关系对专项
@@ -340,12 +355,12 @@ def main():
         pairs = [(norm(A[i].get("relation")), norm(B[i].get("relation"))) for i in common
                  if norm(A[i].get("relation")) and norm(B[i].get("relation"))]
         k, po, pe, n = cohen_kappa(pairs)
-        w(f"- 四分类（duplicate/variant/conflict/unrelated）：κ = **{k:.3f}**，p_o={po:.3f}，n={n}")
+        w(f"- 四分类（duplicate/variant/conflict/unrelated）：κ = **{fmt_k(k)}**，p_o={po:.3f}，n={n}")
         cb = [("conflict" if (norm(A[i].get("relation")) == "conflict") else "other",
                "conflict" if (norm(B[i].get("relation")) == "conflict") else "other")
               for i in common if norm(A[i].get("relation")) and norm(B[i].get("relation"))]
         k2, _, _, n2 = cohen_kappa(cb)
-        w(f"- conflict 二分类：κ = **{k2:.3f}**，n={n2}")
+        w(f"- conflict 二分类：κ = **{fmt_k(k2)}**，n={n2}")
         # 混淆
         cm = Counter((norm(A[i].get("relation")), norm(B[i].get("relation"))) for i in common
                      if norm(A[i].get("relation")) and norm(B[i].get("relation")))
@@ -387,9 +402,10 @@ def main():
             k1 = cohen_kappa(p1)[0]
             k2 = cohen_kappa(p2)[0] if len(p2) >= 10 else float("nan")
             k3 = cohen_kappa(p3)[0]
-            k2s = "—" if k2 != k2 else f"{k2:.3f}"
-            flag = " ⚠" if (k1 < 0.6 or k3 < 0.6) else ""
-            w(f"| {name} | {len(ids)} | {k1:.3f}{flag} | {k2s} | {k3:.3f}{flag} |")
+            k2s = "—" if k2 != k2 else fmt_k(k2)
+            flag = "" if (k1 is None or k3 is None) else (
+                " ⚠" if ((k1 < 0.6) or (k3 < 0.6)) else "")
+            w(f"| {name} | {len(ids)} | {fmt_k(k1)}{flag} | {k2s} | {fmt_k(k3)}{flag} |")
         w("")
 
     # 处置建议

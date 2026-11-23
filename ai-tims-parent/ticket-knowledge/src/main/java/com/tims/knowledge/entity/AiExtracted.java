@@ -37,6 +37,39 @@ public class AiExtracted {
 
     private String faultPhenomenon;
 
+    /** 根因结论句（无最终根因时 NULL） */
+    private String rootCause;
+
+    /** 根因原文依据 */
+    private String rootCauseEvidence;
+
+    /** 验证方式/结果 */
+    private String verification;
+
+    /** 验证依据原文 */
+    private String verificationEvidence;
+
+    /** 适用条件 JSON 数组 [{type,value}] */
+    private String applyConditions;
+
+    /** 条件扁平键，检索/过滤用 */
+    private String conditionKeys;
+
+    /** 被排除假设 JSON 数组 [{hypothesis,evidence}] */
+    private String excludedHypotheses;
+
+    /** 是否有最终根因 0/1 */
+    private Integer hasFinalRootCause;
+
+    /** 与最相似条目的关系：duplicate/variant/conflict/unrelated */
+    private String relationType;
+
+    /** 关系判别置信度 0.000-1.000 */
+    private BigDecimal relationConfidence;
+
+    /** 链式抽取三步原始/校验结果 JSON（单轮模式为 NULL） */
+    private String chainTrace;
+
     private String troubleshootSteps;
 
     private String solutionSteps;
@@ -83,6 +116,10 @@ public class AiExtracted {
     @TableField(exist = false)
     private String dedupTargetTitle;
 
+    /** 链式抽取是否降级（非表字段，由 chain_trace 解析，供审核页提示） */
+    @TableField(exist = false)
+    private Boolean chainDegraded;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public Long getTenantId() { return tenantId; }
@@ -101,6 +138,30 @@ public class AiExtracted {
     public void setDeviceType(String deviceType) { this.deviceType = deviceType; }
     public String getFaultPhenomenon() { return faultPhenomenon; }
     public void setFaultPhenomenon(String faultPhenomenon) { this.faultPhenomenon = faultPhenomenon; }
+    public String getRootCause() { return rootCause; }
+    public void setRootCause(String rootCause) { this.rootCause = rootCause; }
+    public String getRootCauseEvidence() { return rootCauseEvidence; }
+    public void setRootCauseEvidence(String rootCauseEvidence) { this.rootCauseEvidence = rootCauseEvidence; }
+    public String getVerification() { return verification; }
+    public void setVerification(String verification) { this.verification = verification; }
+    public String getVerificationEvidence() { return verificationEvidence; }
+    public void setVerificationEvidence(String verificationEvidence) { this.verificationEvidence = verificationEvidence; }
+    public String getApplyConditions() { return applyConditions; }
+    public void setApplyConditions(String applyConditions) { this.applyConditions = applyConditions; }
+    public String getConditionKeys() { return conditionKeys; }
+    public void setConditionKeys(String conditionKeys) { this.conditionKeys = conditionKeys; }
+    public String getExcludedHypotheses() { return excludedHypotheses; }
+    public void setExcludedHypotheses(String excludedHypotheses) { this.excludedHypotheses = excludedHypotheses; }
+    public Integer getHasFinalRootCause() { return hasFinalRootCause; }
+    public void setHasFinalRootCause(Integer hasFinalRootCause) { this.hasFinalRootCause = hasFinalRootCause; }
+    public String getRelationType() { return relationType; }
+    public void setRelationType(String relationType) { this.relationType = relationType; }
+    public BigDecimal getRelationConfidence() { return relationConfidence; }
+    public void setRelationConfidence(BigDecimal relationConfidence) { this.relationConfidence = relationConfidence; }
+    public String getChainTrace() { return chainTrace; }
+    public void setChainTrace(String chainTrace) { this.chainTrace = chainTrace; }
+    public Boolean getChainDegraded() { return chainDegraded; }
+    public void setChainDegraded(Boolean chainDegraded) { this.chainDegraded = chainDegraded; }
     public String getTroubleshootSteps() { return troubleshootSteps; }
     public void setTroubleshootSteps(String troubleshootSteps) { this.troubleshootSteps = troubleshootSteps; }
     public String getSolutionSteps() { return solutionSteps; }

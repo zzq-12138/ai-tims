@@ -3,54 +3,75 @@ kind: Kustomization
 
 # 公司集群交付入口：kubectl apply -k deploy/k8s/overlays/company
 #
-# 使用前必须替换：
-#   1) harbor.example.com → 公司镜像仓库实际域名
-#   2) Ingress 域名 tims.company.local（base/ingress.yaml）
-#   3) ingressClassName（base/ingress.yaml，当前为 nginx）
-#   4) ConfigMap 中的 LLM_BASE_URL / ZHIPU_EMBEDDING_URL（若内网无外网出口）
+# 镜像仓库已确定为 harbor.xnunion.com（= 172.27.18.160，仅 HTTP，
+# 已写入各节点 /etc/docker/daemon.json 的 insecure-registries）。
+# 项目路径统一为 library（若后续在 Harbor 建 ai-tims 项目，改 newName 前缀即可）。
+#
+# 现状说明：
+#   - 已推送：6 个后端、前端 ai-tims-front、rabbitmq/etcd/milvus/minio；
+#   - 未推送：redis——清单已指向 tims-redis:7-alpine，补推前该工作负载会 ImagePullBackOff；
+#   - MySQL 与 Nacos 改用公司公共实例（mlops-train-test），本套清单不再部署它们；
+#   - base 已有前端 Deployment（apps/front.yaml，2026-11-18 纳入），前端镜像 tag 直接写在
+#     该清单里，本 overlay 不再为前端做 images 改写，避免出现两个 tag 来源。
+#
+# 配置来源（2026-11-19 起）：
+#   - base 只保留开发默认值（智谱公网地址、embedding-3、门控 0.75、无查询前缀）；
+#   - 公司内网差异（vLLM 地址/模型、Qwen3-Embedding-8B、EMBED_USAGE_URL、门控 0.70/前缀）
+#     全部在 patches/ 下覆盖，不再依赖服务器上 kubectl set env 手改。
+#
+# 镜像 tag 取值依据（docs/ops/公司环境操作记录.md、AI-TIMS-环境速查.md）：
+#   - 前端 1.0.2：记录 10.23（2026-11-18 上线并纳入 base/apps/front.yaml）；
+#   - ticket-ai 1.0.1：记录 10.21（2026-11-18，修工单 AI 分析 400）；
+#   - ticket-knowledge 1.0.1：记录 10.28（2026-11-19，门控 0.70 + 查询 instruction）；
+#   - gateway/system/order/push 1.0.0：记录 10.1 首次部署即为 1.0.0，此后无升级记录。
+#     这四项属「文档可证、未现场回读」，apply 前预检会与集群现状逐项对比，不一致会告警。
 namespace: ai-tims
 
 resources:
   - ../../base
 
+# kustomize v4.5（kubectl 1.24 内置）支持的写法；ConfigMap patch 按 key 合并。
+patchesStrategicMerge:
+  - patches/common-config.yaml
+  - patches/knowledge-config.yaml
+  - patches/ai-config.yaml
+
 images:
+  # ---- 后端 6 个（已推送） ----
   - name: registry.company.internal/ai-tims/ticket-gateway
-    newName: harbor.example.com/ai-tims/ticket-gateway
+    newName: harbor.xnunion.com/library/ticket-gateway
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-system
-    newName: harbor.example.com/ai-tims/ticket-system
+    newName: harbor.xnunion.com/library/ticket-system
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-order
-    newName: harbor.example.com/ai-tims/ticket-order
+    newName: harbor.xnunion.com/library/ticket-order
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-knowledge
-    newName: harbor.example.com/ai-tims/ticket-knowledge
-    newTag: "1.0.0"
+    newName: harbor.xnunion.com/library/ticket-knowledge
+    newTag: "1.0.1"
   - name: registry.company.internal/ai-tims/ticket-ai
-    newName: harbor.example.com/ai-tims/ticket-ai
-    newTag: "1.0.0"
+    newName: harbor.xnunion.com/library/ticket-ai
+    newTag: "1.0.1"
   - name: registry.company.internal/ai-tims/ticket-push
-    newName: harbor.example.com/ai-tims/ticket-push
+    newName: harbor.xnunion.com/library/ticket-push
     newTag: "1.0.0"
 
-  - name: registry.company.internal/ai-tims/mysql
-    newName: harbor.example.com/ai-tims/mysql
-    newTag: "8.0.36"
-  - name: registry.company.internal/ai-tims/redis
-    newName: harbor.example.com/ai-tims/redis
-    newTag: "7-alpine"
+  # ---- 中间件 4 个（已推送） ----
   - name: registry.company.internal/ai-tims/rabbitmq
-    newName: harbor.example.com/ai-tims/rabbitmq
+    newName: harbor.xnunion.com/library/tims-rabbitmq
     newTag: "3-management"
-  - name: registry.company.internal/ai-tims/nacos
-    newName: harbor.example.com/ai-tims/nacos
-    newTag: "3.0.3"
   - name: registry.company.internal/ai-tims/etcd
-    newName: harbor.example.com/ai-tims/etcd
+    newName: harbor.xnunion.com/library/tims-etcd
     newTag: "v3.5.14"
-  - name: registry.company.internal/ai-tims/minio
-    newName: harbor.example.com/ai-tims/minio
-    newTag: "RELEASE.2024-05-28T17-19-04Z"
   - name: registry.company.internal/ai-tims/milvus
-    newName: harbor.example.com/ai-tims/milvus
+    newName: harbor.xnunion.com/library/tims-milvus
     newTag: "v2.4.15"
+  - name: registry.company.internal/ai-tims/minio
+    newName: harbor.xnunion.com/library/tims-minio
+    newTag: "RELEASE.2024-05-28T17-19-04Z"
+
+  # ---- Redis 自建（待补推 tims-redis:7-alpine） ----
+  - name: registry.company.internal/ai-tims/redis
+    newName: harbor.xnunion.com/library/tims-redis
+    newTag: "7-alpine"

@@ -46,10 +46,19 @@ public class AiCallLog {
     /** 引用知识条目数 */
     private Integer refCount;
 
-    /** SUCCESS / ERROR / DEGRADED */
+    /** SUCCESS / ERROR / DEGRADED / BLOCKED / CACHE_HIT */
     private String status;
 
     private Boolean degraded;
+
+    /** 是否被安全护栏拦截 */
+    private Boolean guardBlocked;
+
+    /** prompt 版本号，可反查 ai_prompt_version 的内容 */
+    private String promptVersion;
+
+    /** 调用链 id：同一次问答的父调用与工具调用共用 */
+    private String traceId;
 
     private String errorMsg;
 
@@ -87,6 +96,12 @@ public class AiCallLog {
     public void setStatus(String status) { this.status = status; }
     public Boolean getDegraded() { return degraded; }
     public void setDegraded(Boolean degraded) { this.degraded = degraded; }
+    public Boolean getGuardBlocked() { return guardBlocked; }
+    public void setGuardBlocked(Boolean guardBlocked) { this.guardBlocked = guardBlocked; }
+    public String getPromptVersion() { return promptVersion; }
+    public void setPromptVersion(String promptVersion) { this.promptVersion = promptVersion; }
+    public String getTraceId() { return traceId; }
+    public void setTraceId(String traceId) { this.traceId = traceId; }
     public String getErrorMsg() { return errorMsg; }
     public void setErrorMsg(String errorMsg) { this.errorMsg = errorMsg; }
     public Long getUserId() { return userId; }

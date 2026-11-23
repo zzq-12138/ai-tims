@@ -25,6 +25,18 @@ public class KbKnowledge {
 
     private String content;
 
+    /** 根因结论句（P2 条件化知识表示） */
+    private String rootCause;
+
+    /** 验证方式/结果 */
+    private String verification;
+
+    /** 适用条件 JSON 数组 [{type,value}] */
+    private String applyConditions;
+
+    /** 条件扁平键，检索过滤用 */
+    private String conditionKeys;
+
     private String summary;
 
     /** JSON 数组字符串，如 ["贴片机","抛料"] */
@@ -64,6 +76,14 @@ public class KbKnowledge {
     public void setTitle(String title) { this.title = title; }
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+    public String getRootCause() { return rootCause; }
+    public void setRootCause(String rootCause) { this.rootCause = rootCause; }
+    public String getVerification() { return verification; }
+    public void setVerification(String verification) { this.verification = verification; }
+    public String getApplyConditions() { return applyConditions; }
+    public void setApplyConditions(String applyConditions) { this.applyConditions = applyConditions; }
+    public String getConditionKeys() { return conditionKeys; }
+    public void setConditionKeys(String conditionKeys) { this.conditionKeys = conditionKeys; }
     public String getSummary() { return summary; }
     public void setSummary(String summary) { this.summary = summary; }
     public String getTags() { return tags; }

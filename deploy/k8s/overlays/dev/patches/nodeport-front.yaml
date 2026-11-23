@@ -1,0 +1,13 @@
+# 前端对外：NodePort 31579（与公司一致）
+# 注意：base 的 front.yaml 显式写了 namespace，patch 必须带上同一个 namespace 才能匹配。
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-tims-front
+  namespace: ai-tims
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      nodePort: 31579

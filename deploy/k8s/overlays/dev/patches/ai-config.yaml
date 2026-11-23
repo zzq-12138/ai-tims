@@ -1,0 +1,10 @@
+# ticket-ai 的模型名在 tims-common-config 与 ticket-ai-config 各有一份，
+# envFrom 顺序是 common 在前、ai-config 在后，后加载者生效，所以两处必须一起改。
+# 开发机沿用 start_all.sh 的 glm-5.3-flash（智谱云）。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-ai-config
+data:
+  LLM_CHAT_MODEL: "glm-5.3-flash"
+  SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL: "glm-5.3-flash"

@@ -1,0 +1,74 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 开发机 VM 演练入口：kubectl apply -k deploy/k8s/overlays/dev
+# 目标机：dev@192.168.40.10（k3s v1.36.5 单节点，1 节点 zzqserver）
+#
+# 与 overlays/company 的差异只有四处（base 一行不改）：
+#   1. 中间件地址指向开发机：Nacos/compose 在宿主机 8848，MySQL 在宿主机 3306
+#   2. 对外走 NodePort：gateway 30204、front 31579（与公司端口号一致，方便记忆）
+#   3. 不启用 Ingress（k3s 只有 traefik，本环境不需要域名）
+#   4. 镜像 tag 与本机已导入的 tar 对齐：front 用 1.0.1（本机没有 1.0.2 的 tar）
+#
+# 不包含（有意为之）：
+#   - 不部署 MySQL / Nacos（沿用宿主机 mysql.service 与 compose 的 tims-nacos）
+#   - 不缩小任何 PVC（与公司清单保持一致，磁盘已扩到 150G）
+namespace: ai-tims
+
+resources:
+  - ../../base
+
+images:
+  # ---- 后端 6 个 ----
+  - name: registry.company.internal/ai-tims/ticket-gateway
+    newName: harbor.xnunion.com/library/ticket-gateway
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-system
+    newName: harbor.xnunion.com/library/ticket-system
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-order
+    newName: harbor.xnunion.com/library/ticket-order
+    newTag: "1.0.0"
+  - name: registry.company.internal/ai-tims/ticket-knowledge
+    newName: harbor.xnunion.com/library/ticket-knowledge
+    newTag: "1.0.1"
+  - name: registry.company.internal/ai-tims/ticket-ai
+    newName: harbor.xnunion.com/library/ticket-ai
+    newTag: "1.0.1"
+  - name: registry.company.internal/ai-tims/ticket-push
+    newName: harbor.xnunion.com/library/ticket-push
+    newTag: "1.0.0"
+
+  # ---- 前端：与公司保持同一版本（1.0.2，含 WebSocket 状态灯与多行弹窗修复） ----
+  - name: harbor.xnunion.com/library/ai-tims-front
+    newTag: "1.0.2"
+
+  # ---- 中间件 5 个 ----
+  - name: registry.company.internal/ai-tims/rabbitmq
+    newName: harbor.xnunion.com/library/tims-rabbitmq
+    newTag: "3-management"
+  - name: registry.company.internal/ai-tims/etcd
+    newName: harbor.xnunion.com/library/tims-etcd
+    newTag: "v3.5.14"
+  - name: registry.company.internal/ai-tims/milvus
+    newName: harbor.xnunion.com/library/tims-milvus
+    newTag: "v2.4.15"
+  - name: registry.company.internal/ai-tims/minio
+    newName: harbor.xnunion.com/library/tims-minio
+    newTag: "RELEASE.2024-05-28T17-19-04Z"
+  - name: registry.company.internal/ai-tims/redis
+    newName: harbor.xnunion.com/library/tims-redis
+    newTag: "7-alpine"
+
+patches:
+  # 开发机地址（Nacos/MySQL 在宿主机，模型仍走智谱云）
+  - path: patches/common-config.yaml
+  # 模型名在 common 与 ticket-ai-config 各有一份，必须同时覆盖
+  - path: patches/ai-config.yaml
+  # 知识库：embedding-3 + 门控 0.70 + 查询前缀（与公司同一套参数）
+  - path: patches/knowledge-config.yaml
+  # 对外暴露：NodePort 30204 / 31579（front 的 Service 显式带 namespace，拆成两个补丁）
+  - path: patches/nodeport-gateway.yaml
+  - path: patches/nodeport-front.yaml
+  # 去掉 nginx Ingress（本环境不用）
+  - path: patches/delete-ingress.yaml

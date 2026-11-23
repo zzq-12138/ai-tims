@@ -19,6 +19,12 @@
         <el-menu-item v-if="isAdmin" index="/system/users">
           <span>系统管理</span>
         </el-menu-item>
+        <el-menu-item v-if="canObserve" index="/observe">
+          <span>调用观测</span>
+        </el-menu-item>
+        <el-menu-item v-if="isAdmin" index="/system/ai-keys">
+          <span>AI Key 管理</span>
+        </el-menu-item>
         <el-menu-item v-if="canViewKb" index="/kb">
           <span>知识库</span>
         </el-menu-item>
@@ -33,9 +39,10 @@
           <!-- 状态归状态：连接诊断只在状态面板中展示 -->
           <el-popover v-model:visible="statusVisible" trigger="click" placement="bottom-start" width="300" @show="loadOnline">
             <template #reference>
-              <el-tag :type="statusType" size="small" effect="dark" class="ws-tag">
-                {{ statusText }}
-              </el-tag>
+              <!-- 四种状态：文字 + 形状 + 颜色三重区分，深色底白字保证对比度 -->
+              <span class="ws-chip" :class="wsChipClass" role="status" :title="wsMeta.hint">
+                <i class="ws-glyph" aria-hidden="true">{{ wsMeta.glyph }}</i>{{ statusText }}
+              </span>
             </template>
             <div class="ws-panel">
               <div class="ws-panel-head">推送连接诊断</div>
@@ -143,13 +150,23 @@ const roles = computed(() => auth.user?.roles || [])
 const isAdmin = computed(() => roles.value.includes('ADMIN'))
 // 知识库对管理员/工程师/审核员开放；报障人仅保留工单相关菜单
 const canViewKb = computed(() => ['ADMIN', 'ENGINEER', 'REVIEWER'].some(r => roles.value.includes(r)))
+// 调用观测对管理员/工程师开放；Key 管理仅管理员
+const canObserve = computed(() => ['ADMIN', 'ENGINEER'].some(r => roles.value.includes(r)))
 
 const drawer = ref(false)
 const statusVisible = ref(false)
 const onlineCount = ref(0)
 
-const statusType = computed(() => ({ ONLINE: 'success', CONNECTING: 'warning', RECONNECT: 'danger', OFF: 'info' }[wsStatus.value] || 'info'))
-const statusText = computed(() => ({ ONLINE: '推送在线', CONNECTING: '推送连接中', RECONNECT: '推送断线重连中', OFF: '推送未连接' }[wsStatus.value]))
+// 推送状态展示：不依赖 el-tag（theme.css 的 .el-tag.el-tag--success 文字色会盖掉深色底的白色文字）
+const WS_META = {
+  ONLINE: { cls: 'is-online', glyph: '●', text: '推送已连接', hint: '实时推送已连接，工单变化会即时提醒' },
+  CONNECTING: { cls: 'is-connecting', glyph: '◔', text: '推送连接中…', hint: '正在建立实时连接' },
+  RECONNECT: { cls: 'is-reconnect', glyph: '↻', text: '推送已断开·重连中', hint: '实时连接已断开，正在自动重连' },
+  OFF: { cls: 'is-off', glyph: '○', text: '推送未连接', hint: '实时推送未连接，暂不会收到即时提醒' }
+}
+const wsMeta = computed(() => WS_META[wsStatus.value] || WS_META.OFF)
+const wsChipClass = computed(() => wsMeta.value.cls)
+const statusText = computed(() => wsMeta.value.text)
 
 function fmtTime(ts) {
   if (!ts) return '—'
@@ -330,7 +347,18 @@ async function onCommand(cmd) {
   backdrop-filter: blur(6px);
 }
 .header-left { display: flex; align-items: center; gap: 12px; }
-.ws-tag { cursor: pointer; font-family: var(--font-mono); letter-spacing: .04em; }
+.ws-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 24px; padding: 0 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; letter-spacing: .02em;
+  color: #fff; border: 1px solid transparent; cursor: pointer;
+  line-height: 1; white-space: nowrap;
+}
+.ws-chip.is-online { background: #186a43; }
+.ws-chip.is-connecting { background: #7a4f12; }
+.ws-chip.is-reconnect { background: #a4262c; }
+.ws-chip.is-off { background: #4f5a65; }
+.ws-chip .ws-glyph { font-style: normal; font-size: 11px; line-height: 1; }
 .user-pill {
   display: inline-flex;
   align-items: center;
@@ -402,6 +430,6 @@ async function onCommand(cmd) {
   .aside :deep(.el-menu-item) { flex: 0 0 auto; margin: 0 4px; padding: 0 12px; }
   .aside :deep(.el-menu-item::before) { display: none; }
   .header { height: 50px; padding: 0 14px; }
-  .ws-tag { font-size: 11px; }
+  .ws-chip { font-size: 11px; padding: 0 8px; }
 }
 </style>

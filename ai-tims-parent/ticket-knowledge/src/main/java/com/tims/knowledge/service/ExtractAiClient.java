@@ -68,6 +68,26 @@ public class ExtractAiClient {
                 data.path("tags").forEach(n -> tags.add(n.asText()));
                 r.setTags(tags);
             }
+            // 链式模式五元组字段；单轮模式下这些字段为 null/缺省，保持空值降级
+            r.setRootCause(textOrNull(data, "rootCause"));
+            r.setRootCauseEvidence(textOrNull(data, "rootCauseEvidence"));
+            r.setVerification(textOrNull(data, "verification"));
+            r.setVerificationEvidence(textOrNull(data, "verificationEvidence"));
+            r.setConditionKeys(textOrNull(data, "conditionKeys"));
+            r.setChainTrace(textOrNull(data, "chainTrace"));
+            if (data.hasNonNull("hasFinalRootCause")) {
+                r.setHasFinalRootCause(data.path("hasFinalRootCause").asBoolean(false));
+            }
+            if (data.hasNonNull("chainDegraded")) {
+                r.setChainDegraded(data.path("chainDegraded").asBoolean(false));
+            }
+            r.setExcludedHypotheses(readMapList(data.get("excludedHypotheses"), "hypothesis"));
+            r.setApplyConditions(readMapList(data.get("applyConditions"), "value"));
+            if (data.path("chainErrors").isArray()) {
+                java.util.List<String> errs = new java.util.ArrayList<>();
+                data.path("chainErrors").forEach(n -> errs.add(n.asText("")));
+                r.setChainErrors(errs);
+            }
             return r;
         } catch (IllegalStateException e) {
             throw e;
@@ -79,5 +99,29 @@ public class ExtractAiClient {
 
     private static String trimSlash(String s) {
         return s != null && s.endsWith("/") ? s.substring(0, s.length() - 1) : s;
+    }
+
+    private static String textOrNull(JsonNode data, String field) {
+        JsonNode n = data.get(field);
+        return n == null || n.isNull() ? null : n.asText("");
+    }
+
+    /** [{type,value}] / [{hypothesis,evidence}] → List<Map>，空/非法一律返回 null */
+    private static java.util.List<java.util.Map<String, String>> readMapList(JsonNode arr, String requiredKey) {
+        if (arr == null || !arr.isArray() || arr.isEmpty()) {
+            return null;
+        }
+        java.util.List<java.util.Map<String, String>> list = new java.util.ArrayList<>();
+        for (JsonNode n : arr) {
+            if (!n.isObject()) {
+                continue;
+            }
+            java.util.Map<String, String> m = new java.util.LinkedHashMap<>();
+            n.fields().forEachRemaining(e -> m.put(e.getKey(), e.getValue().asText("")));
+            if (m.get(requiredKey) != null && !m.get(requiredKey).isBlank()) {
+                list.add(m);
+            }
+        }
+        return list.isEmpty() ? null : list;
     }
 }

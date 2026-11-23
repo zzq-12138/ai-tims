@@ -11,16 +11,15 @@ resources:
   - limitrange.yaml
   - config/common-configmap.yaml
 
-  - middleware/mysql.yaml
   - middleware/redis.yaml
   - middleware/rabbitmq.yaml
-  - middleware/nacos.yaml
   - middleware/milvus.yaml
 
   - apps/gateway.yaml
   - apps/system.yaml
   - apps/order.yaml
   - apps/knowledge.yaml
+  - apps/front.yaml
   - apps/ai.yaml
   - apps/push.yaml
 

@@ -13,6 +13,7 @@ export const wsLastDownAt = ref(0) // 最近一次断开时间戳
 
 let socket = null
 let heartbeatTimer = null
+let retryTimer = null // 重连定时器单例：同时只允许一个排队中的重连
 let retryDelay = 1000
 let closedByUser = false
 const handlers = {} // type -> [fn]
@@ -28,10 +29,11 @@ function emit(type, data) {
   })
 }
 
-function startHeartbeat() {
+function startHeartbeat(ws) {
   stopHeartbeat()
   heartbeatTimer = setInterval(() => {
-    if (socket && socket.readyState === 1) socket.send(JSON.stringify({ type: 'PING' }))
+    // 只给当前活着的这一条连接发心跳，旧连接的定时器不能误发到新连接
+    if (socket === ws && ws.readyState === 1) ws.send(JSON.stringify({ type: 'PING' }))
   }, HEARTBEAT_MS)
 }
 
@@ -40,10 +42,13 @@ function stopHeartbeat() {
 }
 
 function scheduleReconnect() {
-  if (closedByUser) return
+  if (closedByUser || retryTimer) return // 已有排队中的重连则忽略，防止叠出多条连接
   wsStatus.value = 'RECONNECT'
   wsReconnectCount.value += 1
-  setTimeout(connect, retryDelay)
+  retryTimer = setTimeout(() => {
+    retryTimer = null
+    connect()
+  }, retryDelay)
   retryDelay = Math.min(retryDelay * 2, 30000)
 }
 
@@ -59,18 +64,35 @@ export function connect(opts = {}) {
   if (!localStorage.getItem('tims_token')) return
   // 用户手动重连才清零诊断计数；自动重连保留累计值以便查看
   if (opts.manual) resetDiagnostics()
+  // 已经连上或正在建连时直接复用：不再把活着的连接关掉再重连（否则会 1s 一次反复闪断）
+  if (!opts.manual && socket && (socket.readyState === 0 || socket.readyState === 1)) return
   closedByUser = false
+  if (retryTimer) { clearTimeout(retryTimer); retryTimer = null }
   wsStatus.value = 'CONNECTING'
-  try { socket && socket.close() } catch (_) { /* 忽略旧连接关闭异常 */ }
-  socket = new WebSocket(wsUrl())
 
-  socket.onopen = () => {
+  // 先摘掉旧连接的回调再关它，旧连接的迟到事件就不会影响新连接
+  const old = socket
+  socket = null
+  if (old) {
+    old.onopen = null
+    old.onmessage = null
+    old.onclose = null
+    old.onerror = null
+    try { old.close() } catch (_) { /* 忽略旧连接关闭异常 */ }
+  }
+
+  const ws = new WebSocket(wsUrl())
+  socket = ws
+
+  ws.onopen = () => {
+    if (socket !== ws) return
     wsStatus.value = 'ONLINE'
     wsConnectedAt.value = Date.now()
     retryDelay = 1000
-    startHeartbeat()
+    startHeartbeat(ws)
   }
-  socket.onmessage = (ev) => {
+  ws.onmessage = (ev) => {
+    if (socket !== ws) return
     let msg
     try { msg = JSON.parse(ev.data) } catch (_) { return }
     if (msg.type === 'PONG') {
@@ -80,18 +102,22 @@ export function connect(opts = {}) {
     wsLastMessageAt.value = Date.now()
     emit(msg.type, msg.data)
   }
-  socket.onclose = () => {
+  ws.onclose = () => {
+    if (socket !== ws) return // 旧连接的 close 不得触发重连
+    socket = null
     stopHeartbeat()
     wsLastDownAt.value = Date.now()
     scheduleReconnect()
   }
-  socket.onerror = () => {
-    try { socket.close() } catch (_) { /* 已关闭则忽略 */ }
+  ws.onerror = () => {
+    if (socket !== ws) return
+    try { ws.close() } catch (_) { /* 已关闭则忽略 */ }
   }
 }
 
 export function closePush() {
   closedByUser = true
+  if (retryTimer) { clearTimeout(retryTimer); retryTimer = null }
   stopHeartbeat()
   try { socket && socket.close() } catch (_) { /* 忽略 */ }
   socket = null

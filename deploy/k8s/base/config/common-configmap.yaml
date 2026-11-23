@@ -1,6 +1,8 @@
 # 全服务共享的非敏感配置。密码/Token 一律走 Secret（tims-app-secret）。
-# 注意：公司内网不出外网时，LLM_BASE_URL / ZHIPU_EMBEDDING_URL 必须改成
-#      公司内可达的代理或内网推理服务地址，否则 knowledge / ai 服务会在调用时超时。
+# 本文件只放本地/开发默认值：假设集群内已有同名 Service mysql / nacos，
+# Redis / RabbitMQ / Milvus 由 base 自带清单部署（Service 名为 tims-*）。
+# 公司内网的固定地址、namespaceId、vLLM 地址统一在
+# deploy/k8s/overlays/company/patches/common-config.yaml 覆盖。
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,15 +14,20 @@ data:
   JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=25 -Duser.timezone=Asia/Shanghai -Dfile.encoding=UTF-8"
   MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED: "true"
 
-  # 注册中心
-  NACOS_ADDR: tims-nacos:8848
-  NACOS_NAMESPACE: public
+  # 注册中心：本地/开发默认 nacos:8848。
+  # 必须用主端口 8848（gRPC 自动 +1000 走 9848），不能用控制台 8080。
+  NACOS_ADDR: nacos:8848
+  # 本地/开发默认命名空间；公司实际 namespaceId 在 company patch 覆盖。
+  NACOS_NAMESPACE: dev
 
-  # 数据层
-  MYSQL_HOST: tims-mysql
+  # 数据层：本地/开发默认 mysql:3306，密码走 Secret；公司实例地址在 company patch 覆盖。
+  MYSQL_HOST: mysql
   MYSQL_PORT: "3306"
   MYSQL_DB: aitims
-  MYSQL_USER: tims
+  MYSQL_USER: root
+
+  # 以下三个中间件由 base 自带清单部署，Service 名就是 tims-*；
+  # 不要改成 redis/rabbitmq/milvus，否则会和 base 里的 Service 名失配。
   REDIS_HOST: tims-redis
   REDIS_PORT: "6379"
   RABBIT_HOST: tims-rabbitmq
@@ -28,8 +35,7 @@ data:
   MILVUS_HOST: tims-milvus
   MILVUS_PORT: "19530"
 
-  # 大模型 / 向量化：默认值仅适用于可出外网的环境。
-  # 公司内网部署请在 company overlay 或本文件改成内网地址。
+  # 大模型 / 向量化：本地/开发默认走智谱公网；公司 vLLM 地址在 company patch 覆盖。
   LLM_BASE_URL: https://open.bigmodel.cn/api/paas/v4
   LLM_CHAT_MODEL: glm-4-flash
   ZHIPU_EMBEDDING_URL: https://open.bigmodel.cn/api/paas/v4/embeddings

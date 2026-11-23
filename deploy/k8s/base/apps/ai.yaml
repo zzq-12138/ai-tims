@@ -7,7 +7,8 @@ metadata:
     app: ticket-ai
 data:
   SERVER_PORT: "8104"
-  LLM_CHAT_MODEL: glm-4-flash
+  # 模型名唯一来源：tims-common-config 的 LLM_CHAT_MODEL。
+  # 本 ConfigMap 只保留 Spring AI 专属的 model 选项，避免两处定义导致改一处不生效。
   SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL: glm-4-flash
 ---
 apiVersion: v1
@@ -58,7 +59,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: ai
-          image: registry.company.internal/ai-tims/ticket-ai:1.0.0
+          image: registry.company.internal/ai-tims/ticket-ai:1.0.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

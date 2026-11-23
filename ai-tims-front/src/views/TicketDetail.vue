@@ -31,6 +31,8 @@
       <div class="actions">
         <template v-for="a in availableActions" :key="a.action">
           <el-button v-if="!a.needReason" size="small" type="primary" :loading="acting" @click="doAction(a)">{{ a.label }}</el-button>
+          <!-- 解决改用独立多行弹窗，避免再套一层 popconfirm 确认 -->
+          <el-button v-else-if="a.action === 'resolve'" size="small" type="primary" :loading="acting" @click="doAction(a)">{{ a.label }}</el-button>
           <el-popconfirm v-else title="确认执行该操作？" width="200" @confirm="doAction(a)">
             <template #reference>
               <el-button size="small" type="primary" :loading="acting">{{ a.label }}</el-button>
@@ -42,10 +44,22 @@
       <div class="attachments">
         <div class="att-head">
           <h4>附件</h4>
-          <el-upload :show-file-list="false" :before-upload="beforeUpload" :http-request="doUpload">
-            <el-button size="small" type="primary" plain :loading="uploading">上传附件</el-button>
-          </el-upload>
+          <div class="att-ops">
+            <el-button size="small" link type="primary" :loading="attachmentLoading"
+                       @click="loadAttachments()">刷新</el-button>
+            <el-upload :show-file-list="false" :before-upload="beforeUpload" :http-request="doUpload">
+              <el-button size="small" type="primary" plain :loading="uploading">上传附件</el-button>
+            </el-upload>
+          </div>
         </div>
+        <!-- 失败时保留已有附件，同时在上方给出可见提示与重试 -->
+        <el-alert v-if="attachmentLoadError" type="warning" :closable="false" class="mb8">
+          <template #title>
+            附件列表加载失败，
+            <el-button link type="primary" size="small" :loading="attachmentLoading"
+                       @click="loadAttachments()">点此重试</el-button>
+          </template>
+        </el-alert>
         <el-table v-if="attachments.length" :data="attachments" size="small" border>
           <el-table-column prop="originalName" label="文件名" min-width="200" show-overflow-tooltip />
           <el-table-column label="大小" width="100">
@@ -63,7 +77,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div v-else class="muted">暂无附件</div>
+        <div v-else-if="!attachmentLoadError" class="muted">暂无附件</div>
       </div>
 
       <el-row :gutter="16">
@@ -108,6 +122,15 @@
 
       <el-alert v-if="ai.error" :title="ai.error" type="error" :closable="false" class="mt8" />
 
+      <el-alert v-if="ai.noKbBasis" type="warning" :closable="false" show-icon class="mt8"
+                title="无知识库依据，仅供参考">
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">
+          <span>{{ ai.tierReason || '当前问题未命中知识库（C 档），以下为模型自由生成建议，请人工判断。' }}</span>
+          <el-button v-if="ai.suggestionId" link type="primary" size="small"
+                     @click="backfillDisposition">回填实际处置</el-button>
+        </div>
+      </el-alert>
+
       <div v-if="aiRefs.length" class="ai-refs">
         <div class="ai-section-title">引用知识（{{ aiRefs.length }}）</div>
         <el-card v-for="(r, i) in aiRefs" :key="r.id || i" shadow="never" class="ai-ref">
@@ -142,6 +165,25 @@
         <span>耗时 {{ ai.usage.latencyMs }}ms</span>
       </div>
     </el-drawer>
+
+    <!-- 解决说明：多行文本域，可调高度，带字数统计 -->
+    <el-dialog v-model="resolveVisible" title="提交验证（填写解决说明）" width="560px"
+               :close-on-click-modal="false" append-to-body>
+      <el-input
+        v-model="resolveNote"
+        type="textarea"
+        :rows="5"
+        maxlength="2000"
+        show-word-limit
+        resize="vertical"
+        placeholder="写清本次处理做了什么、结果如何，至少 4 个字。建议：故障现象 → 处置动作 → 复测结果。"
+      />
+      <div class="resolve-tip">解决说明会作为知识提炼的输入，写具体部件和复测数值，后续更容易被检索命中。</div>
+      <template #footer>
+        <el-button @click="resolveVisible = false">取消</el-button>
+        <el-button type="primary" :loading="acting" @click="submitResolve">确定</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -153,7 +195,7 @@ import {
   getTicket, ticketAction, addComment,
   listAttachments, uploadAttachment, downloadAttachment, deleteAttachment
 } from '../api/ticket'
-import { chatStream } from '../api/ai'
+import { chatStream, backfillFallback } from '../api/ai'
 
 const route = useRoute()
 const id = route.params.id
@@ -161,6 +203,9 @@ const detail = ref(null)
 const acting = ref(false)
 const comment = ref('')
 const attachments = ref([])
+// 附件列表加载失败标记：与“真的没有附件”区分开
+const attachmentLoadError = ref(false)
+const attachmentLoading = ref(false)
 const uploading = ref(false)
 
 // ===== M5 AI 分析（SSE 流式）=====
@@ -169,6 +214,7 @@ const aiLoading = ref(false)
 const aiAnswerRef = ref(null)
 const ai = reactive({
   model: '', retrievalMs: 0, degraded: false, firstTokenMs: 0,
+  tier: '', tierReason: '', noKbBasis: false, suggestionId: null,
   answer: '', reasoning: '', refs: [], usage: null, error: ''
 })
 const aiRefs = computed(() => ai.refs || [])
@@ -209,7 +255,7 @@ async function scrollAiBottom() {
 
 async function runAi() {
   stopAi()
-  Object.assign(ai, { answer: '', reasoning: '', refs: [], usage: null, error: '', degraded: false, retrievalMs: 0, firstTokenMs: 0 })
+  Object.assign(ai, { answer: '', reasoning: '', refs: [], usage: null, error: '', degraded: false, retrievalMs: 0, firstTokenMs: 0, tier: '', tierReason: '', noKbBasis: false, suggestionId: null })
   aiLoading.value = true
   aiAbort = new AbortController()
   const question = `请分析该工单“${detail.value?.ticket?.title || ''}”的可能原因、排查步骤与处理建议；知识库有相关 SOP 请引用。`
@@ -224,12 +270,16 @@ async function runAi() {
         ai.retrievalMs = m.retrievalMs
         ai.degraded = !!m.degraded
         ai.refs = m.refs || []
+        ai.tier = m.tier || ''
+        ai.tierReason = m.tierReason || ''
+        ai.noKbBasis = !!m.noKbBasis
       },
       reasoning: (d) => { ai.reasoning += d.delta || '' },
       delta: (d) => { ai.answer += d.delta || ''; scrollAiBottom() },
       usage: (u) => {
         ai.usage = u
         ai.firstTokenMs = u.firstTokenMs
+        if (u.fallbackSuggestionId) ai.suggestionId = u.fallbackSuggestionId
       },
       error: (e) => { ai.error = e.message || 'AI 服务异常' },
       done: () => {}
@@ -245,6 +295,29 @@ async function runAi() {
   }
 }
 
+
+/** C 档兜底建议：回填工单实际处置（只记录配对，不做自动吸纳） */
+async function backfillDisposition() {
+  try {
+    const { value } = await ElMessageBox.prompt(
+      '填写工单关闭时的实际处置，用于与本次建议配对留档。',
+      '回填实际处置',
+      {
+        inputType: 'textarea',
+        inputPlaceholder: '如：更换吸料嘴并复位报警，连续观察 2 小时未复发',
+        confirmButtonText: '提交',
+        cancelButtonText: '取消',
+        inputValidator: (v) => (v && v.trim().length >= 4) || '至少填写 4 个字'
+      }
+    )
+    const res = await backfillFallback(ai.suggestionId, value.trim())
+    const c = res?.consistent
+    ElMessage.success(c == null ? '已回填（文本过短，未判定一致性）'
+      : (c === 1 ? '已回填：实际处置与建议一致' : '已回填：实际处置与建议不一致'))
+  } catch (e) {
+    if (e !== 'cancel' && e?.message) ElMessage.error(e.message)
+  }
+}
 
 const ALLOWED_EXT = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'log', 'txt']
 const MAX_SIZE = 20 * 1024 * 1024
@@ -308,9 +381,18 @@ async function removeAtt(row) {
 }
 
 async function loadAttachments() {
+  if (attachmentLoading.value) return
+  attachmentLoading.value = true
   try {
-    attachments.value = await listAttachments(id) || []
-  } catch { attachments.value = [] }
+    attachments.value = (await listAttachments(id)) || []
+    attachmentLoadError.value = false
+  } catch (e) {
+    // 失败不清空已有列表，标记错误并给出重试入口，避免误显示成“暂无附件”
+    attachmentLoadError.value = true
+    ElMessage.error(e.message || '附件列表加载失败，可点击重试')
+  } finally {
+    attachmentLoading.value = false
+  }
 }
 
 const statusMap = {
@@ -338,16 +420,62 @@ const availableActions = computed(() => {
   return list
 })
 
-const reasonActions = { suspend: '请输入挂起原因', resolve: '请输入解决说明' }
+const reasonActions = { suspend: '请输入挂起原因' }
+
+// 解决说明弹窗（多行文本域，独立于 ElMessageBox）
+const resolveVisible = ref(false)
+const resolveNote = ref('')
+
+async function submitResolve() {
+  const note = resolveNote.value.trim()
+  if (!note) {
+    ElMessage.warning('请填写解决说明后再点“确定”')
+    return
+  }
+  if (note.length < 4) {
+    ElMessage.warning('解决说明至少 4 个字，便于后续知识提炼')
+    return
+  }
+  if (note.length > 2000) {
+    ElMessage.warning('解决说明最长 2000 字，请精简后重试')
+    return
+  }
+  acting.value = true
+  try {
+    await ticketAction(id, 'resolve', { resolveNote: note })
+    ElMessage.success('已提交验证')
+    resolveVisible.value = false
+    resolveNote.value = ''
+    await load()
+  } catch (e) {
+    ElMessage.error(e.message || '提交失败')
+  } finally {
+    acting.value = false
+  }
+}
 
 async function doAction(a) {
+  // 解决走独立弹窗：不再经过 ElMessageBox.prompt
+  if (a.action === 'resolve') {
+    resolveNote.value = ''
+    resolveVisible.value = true
+    return
+  }
   let data
-  if (a.action === 'suspend' || a.action === 'resolve') {
+  if (a.action === 'suspend') {
     try {
+      // 注意：ElMessageBox 的 inputValidator 必须返回 true 才算通过；
+      // 返回字符串会被当成“错误提示”渲染成红字（旧写法返回 v.trim()，
+      // 导致任何输入都被判为校验失败，表现是点确定没反应、不发请求）。
       const { value } = await ElMessageBox.prompt(reasonActions[a.action], a.label, {
-        inputValidator: (v) => (v && v.trim()) || '内容不能为空'
+        inputType: 'textarea',
+        inputPlaceholder: '请输入挂起原因',
+        inputValidator: (v) => {
+          if (!(v || '').trim()) return '请先输入内容，再点“确定”'
+          return true
+        }
       })
-      data = a.action === 'resolve' ? { resolveNote: value } : { reason: value }
+      data = { reason: value.trim() }
     } catch { return }
   }
   acting.value = true
@@ -381,6 +509,7 @@ onMounted(load)
 .head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .head > span { font-size: 17px; font-weight: 600; letter-spacing: .02em; }
 .actions { margin: 18px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+.att-ops { display: flex; align-items: center; gap: 8px; }
 .muted { color: var(--muted); font-size: 12px; }
 .mono { font-family: var(--font-mono); font-size: 12px; letter-spacing: -.01em; }
 .comment { border-top: 1px dashed var(--line); padding: 10px 0; }
@@ -473,5 +602,12 @@ onMounted(load)
 @media (max-width: 760px) {
   .head { flex-direction: column; align-items: flex-start; }
   :deep(.el-row) .el-col { max-width: 100%; flex: 0 0 100%; }
+}
+
+.resolve-tip {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
 }
 </style>

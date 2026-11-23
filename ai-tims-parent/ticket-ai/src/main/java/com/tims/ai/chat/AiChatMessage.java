@@ -17,6 +17,11 @@ public class AiChatMessage {
     private Long userId;
     private String role;
     private String content;
+    /** 引用的原消息 ID（回复功能） */
+    private Long quotedMessageId;
+    private String quotedRole;
+    /** 引用内容快照（截断），避免原消息后续变化导致引用不一致 */
+    private String quotedContent;
     private String model;
     private String toolCalls;
     private String usageJson;
@@ -34,6 +39,12 @@ public class AiChatMessage {
     public void setRole(String role) { this.role = role; }
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+    public Long getQuotedMessageId() { return quotedMessageId; }
+    public void setQuotedMessageId(Long quotedMessageId) { this.quotedMessageId = quotedMessageId; }
+    public String getQuotedRole() { return quotedRole; }
+    public void setQuotedRole(String quotedRole) { this.quotedRole = quotedRole; }
+    public String getQuotedContent() { return quotedContent; }
+    public void setQuotedContent(String quotedContent) { this.quotedContent = quotedContent; }
     public String getModel() { return model; }
     public void setModel(String model) { this.model = model; }
     public String getToolCalls() { return toolCalls; }

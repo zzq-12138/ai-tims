@@ -1,0 +1,17 @@
+# 开发机知识库配置：模型仍用智谱 embedding-3（与 start_all.sh 一致），
+# 但门控参数与公司保持同一套（D6 决定：先开再测）。
+# 注意：base/apps/knowledge.yaml 已把公司值抽到 overlays/company/patches/，
+#       所以 dev 必须自己显式写这 4 个 key，否则会回落到 application.yml 默认（0.75、无前缀）。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-knowledge-config
+data:
+  TIMS_KB_EMBEDDING_MODEL: "embedding-3"
+  TIMS_KB_EMBEDDING_DIMENSIONS: "1024"
+  # 集群内可直接解析 ticket-ai 服务名
+  EMBED_USAGE_URL: "http://ticket-ai:8104/api/ai/usage/record"
+  KB_GATE_ENABLED: "true"
+  KB_GATE_THRESHOLD: "0.70"
+  KB_GATE_SOFT_BAND: "0.07"
+  KB_EMBED_QUERY_INSTRUCTION: "Given a web search query, retrieve relevant passages that answer the query"

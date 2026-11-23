@@ -1,0 +1,12 @@
+# 网关对外：NodePort 30204（与公司一致）
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticket-gateway
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      nodePort: 30204

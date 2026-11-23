@@ -27,5 +27,4 @@ public class AssistantController {
     @PostMapping("/assistant")
     public Result<AssistantVO> assistant(@RequestBody AssistantRequest request) {
         return Result.ok(assistantService.chat(CurrentUser.tenantId(), CurrentUser.id(), request));
-    }
-}
+    }}

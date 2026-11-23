@@ -190,7 +190,7 @@ public class SearchService {
             return null;
         }
         try {
-            float[] vec = embeddingService.embed(List.of(query)).get(0);
+            float[] vec = embeddingService.embedQuery(query);
             List<MilvusVectorStore.VecHit> hits = vectorStore.search(vec, topK, tenantId);
             List<Long> ids = hits.stream().map(MilvusVectorStore.VecHit::knowledgeId).toList();
             Map<Long, KbKnowledge> byId = loadPublished(ids);

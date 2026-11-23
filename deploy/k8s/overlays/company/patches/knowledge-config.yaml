@@ -1,0 +1,20 @@
+# 公司侧知识库配置（线上实际值）。
+# base/apps/knowledge.yaml 只保留开发默认（智谱 embedding-3 / 门控 0.75 / 无 instruction），
+# 公司差异全部在此覆盖，避免再依赖服务器上 kubectl set env 手改：
+#   - Qwen3-Embedding-8B + 1024 维（维度与 Milvus 集合一致，未重灌向量）；
+#   - EMBED_USAGE_URL 指向集群内 ticket-ai，修正 Pod 内 localhost:8104 无法解析；
+#   - 门控阈值按 Qwen3-Embedding-8B 分数分布重标定为 0.70，软带 0.07；
+#   - 查询侧 instruction 前缀只作用于查询向量，文档侧仍用原文。
+# 回滚：删除对应行即可回到 base/application.yml 默认（embedding-3、0.75、无前缀）。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-knowledge-config
+data:
+  TIMS_KB_EMBEDDING_MODEL: "Qwen/Qwen3-Embedding-8B"
+  TIMS_KB_EMBEDDING_DIMENSIONS: "1024"
+  EMBED_USAGE_URL: "http://ticket-ai:8104/api/ai/usage/record"
+  KB_GATE_ENABLED: "true"
+  KB_GATE_THRESHOLD: "0.70"
+  KB_GATE_SOFT_BAND: "0.07"
+  KB_EMBED_QUERY_INSTRUCTION: "Given a web search query, retrieve relevant passages that answer the query"

@@ -34,11 +34,12 @@ public class KnowledgeClient {
         this.props = props;
     }
 
-    /** 检索结果 */
+    /** 检索结果；tier/reason 透传知识库门控档位（A/B/C），供 C 档兜底建议使用 */
     public record SearchOutcome(List<KbRef> refs, List<String> contents, String mode,
-                                boolean fallback, boolean unavailable, long elapsedMs) {
+                                boolean fallback, boolean unavailable, long elapsedMs,
+                                String tier, String tierReason) {
         public static SearchOutcome unavailable(long elapsedMs) {
-            return new SearchOutcome(List.of(), List.of(), "KEYWORD", true, true, elapsedMs);
+            return new SearchOutcome(List.of(), List.of(), "KEYWORD", true, true, elapsedMs, "", "");
         }
     }
 
@@ -93,7 +94,8 @@ public class KnowledgeClient {
             log.info("[rag] kb search ok q='{}' refs={} fallback={} elapsed={}ms",
                     query, refs.size(), fallback, elapsed);
             return new SearchOutcome(refs, contents, String.valueOf(data.getOrDefault("mode", "HYBRID")),
-                    fallback, false, elapsed);
+                    fallback, false, elapsed,
+                    asString(data.get("tier")), asString(data.get("reason")));
         } catch (Exception e) {
             long elapsed = System.currentTimeMillis() - t0;
             log.warn("[rag] 知识库检索失败，降级为无知识上下文: {}", e.getMessage());

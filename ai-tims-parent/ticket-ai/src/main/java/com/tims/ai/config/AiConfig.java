@@ -1,6 +1,7 @@
 package com.tims.ai.config;
 
 import com.tims.ai.llm.ZhipuKeyProvider;
+import com.tims.ai.route.ModelRouter;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -37,7 +38,16 @@ public class AiConfig {
                 .baseUrl(props.getBaseUrl())
                 .apiKey(key)
                 .completionsPath(props.getCompletionsPath())
-                .restClientBuilder(RestClient.builder().requestFactory(factory))
+                .restClientBuilder(RestClient.builder()
+                        .requestFactory(factory)
+                        // 每次请求实时解析租户 Key：管理页改完立即生效，无需重启
+                        .requestInterceptor((request, body, execution) -> {
+                            String dynamic = keyProvider.getKey();
+                            if (!dynamic.isEmpty()) {
+                                request.getHeaders().setBearerAuth(dynamic);
+                            }
+                            return execution.execute(request, body);
+                        }))
                 .build();
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
@@ -55,6 +65,13 @@ public class AiConfig {
     @Bean
     public ChatClient chatClient(OpenAiChatModel model) {
         return ChatClient.builder(model).build();
+    }
+
+    /** 可解释模型路由器：配置来自 tims.ai.router，关闭时 ChatService 不会调用它 */
+    @Bean
+    public ModelRouter modelRouter(AiProperties props) {
+        AiProperties.Router r = props.getRouter();
+        return new ModelRouter(r.getThreshold(), r.getSimpleModel(), r.getComplexModel());
     }
 
     /** 跨服务调用（lb://ticket-knowledge、lb://ticket-order），自动透传租户与登录态 */

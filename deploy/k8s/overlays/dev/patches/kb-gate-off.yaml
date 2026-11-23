@@ -1,0 +1,15 @@
+# D6 的 A/B 对比用：只在做「开关 0.70 + 查询前缀」对照实验时单独使用，
+# 默认不参与 kustomization（否则会覆盖 base 里已启用的门控）。
+# 用法：
+#   kubectl kustomize deploy/k8s/overlays/dev > /tmp/dev.yaml
+#   然后手工给 ticket-knowledge-config 关掉门控（推荐直接用 rollout 验证，见台账）：
+#   kubectl -n ai-tims set env deploy/ticket-knowledge KB_GATE_ENABLED=false
+# 用完必须：
+#   kubectl -n ai-tims set env deploy/ticket-knowledge KB_GATE_ENABLED=true
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticket-knowledge-config
+data:
+  KB_GATE_ENABLED: "false"
+  KB_GATE_THRESHOLD: "0.75"

@@ -1,0 +1,19 @@
+# 公司内网推理服务（2026-11-18 起线上口径，见 docs/ops/公司环境操作记录.md 10.3）。
+# base 的 tims-common-config 保持智谱公网默认值；这里只覆盖公司差异。
+# LLM_CHAT_MODEL 的唯一来源就是本文件；ticket-ai-config 只保留 Spring AI 专属的
+# SPRING_AI_OPENAI_CHAT_OPTIONS_MODEL（见 patches/ai-config.yaml）。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tims-common-config
+data:
+  # Nacos 必须用主端口 8848（gRPC 自动 +1000 走 9848），不能用控制台 8080。
+  # 依据：docs/ops/公司环境操作记录.md 10.2 与 docs/paper/决策台账.md DEC（NACOS_ADDR）。
+  NACOS_ADDR: "10.96.1.240:8848"
+  # 公司公共 Nacos 的 namespaceId（zzq-tims 命名空间）；注册必须用 ID，不能用名字。
+  NACOS_NAMESPACE: "7a8fa30c-0121-4606-8c17-f6b932e9c80a"
+  # 公司公共 MySQL（mlops-train-test/mysql）ClusterIP；端口/库名/用户沿用 base 默认。
+  MYSQL_HOST: "10.96.1.253"
+  LLM_BASE_URL: "http://172.27.26.253:18892/v1"
+  LLM_CHAT_MODEL: "Qwen/Qwen3.8-27B-dev"
+  ZHIPU_EMBEDDING_URL: "http://172.27.26.253:18893/v1/embeddings"

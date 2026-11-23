@@ -394,7 +394,7 @@ CREATE TABLE `pt_stress_run` (
 -- ---------------------------------------------------------------------
 -- 8. ai_ 调用观测（M5，2026-11-03）
 --    ai_call_log：每次 LLM 调用/工具调用落一行，用于估算智谱 ¥18 配额余量
---    scene：CHAT_STREAM / CHAT_SYNC / AGENT / AGENT_TOOL；status：SUCCESS / ERROR / DEGRADED
+--    scene：CHAT_STREAM / CHAT_SYNC / AGENT / AGENT_TOOL；status：SUCCESS / ERROR / DEGRADED / BLOCKED / CACHE_HIT
 -- ---------------------------------------------------------------------
 DROP TABLE IF EXISTS `ai_call_log`;
 CREATE TABLE `ai_call_log` (
@@ -411,15 +411,74 @@ CREATE TABLE `ai_call_log` (
   `latency_ms`        BIGINT      DEFAULT NULL COMMENT '总耗时ms',
   `first_token_ms`    BIGINT      DEFAULT NULL COMMENT '首Token耗时ms/工具耗时ms',
   `ref_count`         INT         NOT NULL DEFAULT 0 COMMENT '引用知识条数',
-  `status`            VARCHAR(16) NOT NULL DEFAULT 'SUCCESS' COMMENT 'SUCCESS/ERROR/DEGRADED',
+  `status`            VARCHAR(16) NOT NULL DEFAULT 'SUCCESS' COMMENT 'SUCCESS/ERROR/DEGRADED/BLOCKED/CACHE_HIT',
   `degraded`          TINYINT     NOT NULL DEFAULT 0 COMMENT '是否降级 0/1',
+  `guard_blocked`     TINYINT     NOT NULL DEFAULT 0 COMMENT '是否被安全护栏拦截 0/1',
+  `prompt_version`    VARCHAR(32) DEFAULT NULL COMMENT 'prompt 版本号，可反查 ai_prompt_version',
+  `trace_id`          VARCHAR(48) DEFAULT NULL COMMENT '调用链ID：父调用与工具调用共用',
   `error_msg`         VARCHAR(255) DEFAULT NULL COMMENT '错误摘要',
   `user_id`           BIGINT      DEFAULT NULL COMMENT '调用用户',
   `create_time`       DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_tenant_time` (`tenant_id`, `create_time`),
-  KEY `idx_tenant_scene` (`tenant_id`, `scene`)
+  KEY `idx_tenant_scene` (`tenant_id`, `scene`),
+  KEY `idx_tenant_trace` (`tenant_id`, `trace_id`),
+  KEY `idx_tenant_user` (`tenant_id`, `user_id`, `create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI调用观测表';
+
+-- ---------------------------------------------------------------------
+-- 8.1 prompt 版本存档 + 租户 Key / 额度 / 审计（2026-11-07）
+--     prompt 内容全量存档，历史调用按 prompt_version 反查当时内容
+--     Key 密文存储（AES-256-GCM），列表只回显尾号
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ai_prompt_version` (
+  `id`          BIGINT       NOT NULL COMMENT '主键（雪花）',
+  `tenant_id`   BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `scene`       VARCHAR(24)  NOT NULL COMMENT '场景 CHAT/ASSISTANT/AGENT',
+  `version`     VARCHAR(32)  NOT NULL COMMENT '版本号，如 chat-v1',
+  `content`     MEDIUMTEXT   NOT NULL COMMENT 'prompt 全文存档',
+  `active`      TINYINT      NOT NULL DEFAULT 1 COMMENT '是否当前生效 0/1',
+  `created_by`  BIGINT       DEFAULT NULL COMMENT '创建人',
+  `create_time` DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_tenant_scene_version` (`tenant_id`, `scene`, `version`),
+  KEY `idx_tenant_scene_active` (`tenant_id`, `scene`, `active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='prompt 版本存档';
+
+CREATE TABLE IF NOT EXISTS `ai_tenant_key` (
+  `id`             BIGINT       NOT NULL COMMENT '主键（雪花）',
+  `tenant_id`      BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `provider`       VARCHAR(32)  NOT NULL DEFAULT 'zhipu' COMMENT '模型供应商',
+  `model`          VARCHAR(64)  NOT NULL COMMENT '模型名（展示/对账）',
+  `api_key_cipher` VARCHAR(512) NOT NULL COMMENT 'AES-256-GCM 密文 v1:iv:data',
+  `key_tail`       VARCHAR(8)   DEFAULT NULL COMMENT 'Key 尾号（列表回显）',
+  `updated_by`     BIGINT       DEFAULT NULL COMMENT '操作人',
+  `update_time`    DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_tenant_provider_model` (`tenant_id`, `provider`, `model`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='租户模型 API Key（密文）';
+
+CREATE TABLE IF NOT EXISTS `ai_tenant_quota` (
+  `tenant_id`   BIGINT       NOT NULL COMMENT '租户ID（主键）',
+  `quota_cny`   DECIMAL(12,4) NOT NULL DEFAULT 0 COMMENT '管理员填写额度（元）',
+  `updated_by`  BIGINT       DEFAULT NULL COMMENT '操作人',
+  `update_time` DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  PRIMARY KEY (`tenant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='租户额度（管理员填写，用于本地估算剩余）';
+
+CREATE TABLE IF NOT EXISTS `ai_key_audit` (
+  `id`          BIGINT       NOT NULL COMMENT '主键（雪花）',
+  `tenant_id`   BIGINT       NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `action`      VARCHAR(16)  NOT NULL COMMENT 'CREATE/UPDATE/DELETE/VIEW/QUOTA',
+  `provider`    VARCHAR(32)  DEFAULT NULL COMMENT '模型供应商',
+  `model`       VARCHAR(64)  DEFAULT NULL COMMENT '模型名',
+  `key_tail`    VARCHAR(8)   DEFAULT NULL COMMENT 'Key 尾号（不记录明文）',
+  `operator_id` BIGINT       DEFAULT NULL COMMENT '操作人',
+  `detail`      VARCHAR(255) DEFAULT NULL COMMENT '操作说明',
+  `create_time` DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '操作时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_time` (`tenant_id`, `create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='API Key 操作审计';
 
 -- ============================================================
 -- M6 提炼闭环：AI 抽取中间表 + 知识历史快照

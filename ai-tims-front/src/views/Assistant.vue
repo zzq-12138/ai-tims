@@ -18,8 +18,16 @@
             <span>历史会话</span>
             <el-button size="small" text class="new-session" @click="newSession">+ 新建</el-button>
           </div>
+          <!-- 列表加载失败时给可点击的重试入口，不静默成“暂无会话” -->
+          <el-alert v-if="sessionLoadError" type="warning" :closable="false" class="session-error">
+            <template #title>
+              会话列表加载失败，
+              <el-button link type="primary" size="small" :loading="loadingSessions"
+                         @click="loadSessions()">点此重试</el-button>
+            </template>
+          </el-alert>
           <div class="session-scroll">
-            <el-empty v-if="!sessions.length" description="暂无会话" :image-size="56" />
+            <el-empty v-if="!sessions.length && !sessionLoadError" description="暂无会话" :image-size="56" />
             <div v-for="s in sessions" :key="s.id" class="session-item"
                  :class="{ active: String(s.id) === String(sessionId) }" @click="openSession(s)">
               <div class="session-title" :title="s.title">{{ s.title }}</div>
@@ -33,6 +41,14 @@
         </aside>
 
         <div class="chat-main">
+          <!-- 消息加载失败：保留已有内容，提供重试 -->
+          <el-alert v-if="messageLoadError" type="warning" :closable="false" class="msg-load-error">
+            <template #title>
+              当前会话的消息加载失败，
+              <el-button link type="primary" size="small" :loading="loading"
+                         @click="reloadCurrentMessages()">点此重试</el-button>
+            </template>
+          </el-alert>
           <div class="messages" ref="msgRef">
             <el-empty v-if="!messages.length" description="问我工单进度、故障处理方法或工单统计">
               <div class="quick">
@@ -40,31 +56,54 @@
               </div>
             </el-empty>
 
-            <div v-for="(m, i) in messages" :key="i" :class="['bubble-row', m.role]">
-              <div v-if="m.role === 'user'" class="bubble user-bubble">{{ m.content }}</div>
-              <div v-else class="bubble ai-bubble">
-                <div class="ai-text">{{ m.content || (loading && i === messages.length - 1 ? '思考中…' : '') }}</div>
-                <el-collapse v-if="m.toolCalls && m.toolCalls.length" class="tool-collapse">
-                  <el-collapse-item :title="`工具调用 ${m.toolCalls.length} 次（点开查看参数/耗时）`">
-                    <div v-for="(t, j) in m.toolCalls" :key="j" class="tool-row">
-                      <el-tag size="small" :type="t.status === 'OK' ? 'success' : 'danger'">{{ t.name }}</el-tag>
-                      <span class="tool-ms">{{ t.elapsedMs }}ms</span>
-                      <div class="tool-args">{{ t.args }}</div>
-                      <div class="tool-summary">{{ t.summary }}</div>
-                    </div>
-                  </el-collapse-item>
-                </el-collapse>
-                <div v-if="m.usage" class="msg-meta">
-                  <span>{{ m.model }}</span>
-                  <span>tokens {{ m.usage.promptTokens }}+{{ m.usage.completionTokens }}={{ m.usage.totalTokens }}</span>
-                  <span v-if="m.latencyMs">{{ m.latencyMs }}ms</span>
-                  <el-tag v-if="m.degraded" size="small" type="warning">降级</el-tag>
+            <div v-for="(m, i) in messages" :key="m.id || 'tmp-' + i" :class="['bubble-row', m.role]">
+              <div class="bubble-wrap">
+                <div v-if="m.quotedContent" class="quote-ref">
+                  <span class="quote-who">{{ m.quotedRole === 'user' ? '你' : 'AI 助手' }}</span>
+                  <span class="quote-text" :title="m.quotedContent">{{ m.quotedContent }}</span>
+                </div>
+                <div v-if="m.role === 'user'" class="bubble user-bubble">{{ m.content }}</div>
+                <div v-else class="bubble ai-bubble">
+                  <div class="ai-text">{{ m.content || (loading && i === messages.length - 1 ? '思考中…' : '') }}</div>
+                  <el-collapse v-if="m.toolCalls && m.toolCalls.length" class="tool-collapse">
+                    <el-collapse-item :title="`工具调用 ${m.toolCalls.length} 次（点开查看参数/耗时）`">
+                      <div v-for="(t, j) in m.toolCalls" :key="j" class="tool-row">
+                        <el-tag size="small" :type="t.status === 'OK' ? 'success' : 'danger'">{{ t.name }}</el-tag>
+                        <span class="tool-ms">{{ t.elapsedMs }}ms</span>
+                        <div class="tool-args">{{ t.args }}</div>
+                        <div class="tool-summary">{{ t.summary }}</div>
+                      </div>
+                    </el-collapse-item>
+                  </el-collapse>
+                  <div v-if="m.usage" class="msg-meta">
+                    <span>{{ m.model }}</span>
+                    <span>tokens {{ m.usage.promptTokens }}+{{ m.usage.completionTokens }}={{ m.usage.totalTokens }}</span>
+                    <span v-if="m.latencyMs">{{ m.latencyMs }}ms</span>
+                    <el-tag v-if="m.degraded" size="small" type="warning">降级</el-tag>
+                  </div>
+                </div>
+                <div class="msg-actions">
+                  <el-button link size="small" class="msg-act" @click="copyMessage(m, i)">
+                    {{ copiedIdx === i ? '已复制' : '复制' }}
+                  </el-button>
+                  <el-button link size="small" class="msg-act" @click="startQuote(m)">回复</el-button>
+                  <!-- 撤回只对本人已落库的用户消息开放 -->
+                  <el-button v-if="m.role === 'user' && m.id" link size="small"
+                             class="msg-act danger" @click="recallMessage(m)">撤回</el-button>
                 </div>
               </div>
             </div>
             <div v-if="loading" class="typing muted">助手正在调用工具并生成回答…</div>
           </div>
 
+          <!-- 引用回复：输入框上方显示被引用消息，可取消 -->
+          <div v-if="quote" class="quote-bar">
+            <div class="quote-bar-main">
+              <span class="quote-who">回复 {{ quote.role === 'user' ? '你' : 'AI 助手' }}</span>
+              <span class="quote-text" :title="quote.content">{{ quote.content }}</span>
+            </div>
+            <el-button link size="small" class="msg-act" @click="quote = null">取消</el-button>
+          </div>
           <div class="composer">
             <el-input v-model="input" type="textarea" :rows="2" resize="none"
                       placeholder="例如：工单 WO20261103-2129 现在是什么状态？（Enter 发送，Shift+Enter 换行）"
@@ -75,7 +114,7 @@
       </div>
     </el-card>
 
-    <el-card shadow="never" class="obs-card">
+    <el-card v-if="canObserve" shadow="never" class="obs-card">
       <template #header>
         <div class="chat-head">
           <span class="chat-title">调用观测</span>
@@ -177,12 +216,17 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
-  assistantChat, createSession, deleteSession, listSessions, renameSession,
-  sessionMessages, usageRecent, usageSummary
+  assistantChat, createSession, deleteChatMessage, deleteSession, listSessions,
+  messageRecallInfo, renameSession, sessionMessages, usageRecent, usageSummary
 } from '../api/ai'
+import { useAuthStore } from '../stores/auth'
+
+const auth = useAuthStore()
+// 调用观测后端仅对 ADMIN/ENGINEER 开放，其他角色不展示该面板，避免无谓的 403 提示
+const canObserve = computed(() => ['ADMIN', 'ENGINEER'].some((r) => (auth.user?.roles || []).includes(r)))
 
 const sessions = ref([])
 const sessionId = ref(null)
@@ -193,6 +237,15 @@ const loading = ref(false)
 const msgRef = ref(null)
 const summary = ref(null)
 const rows = ref([])
+// 会话列表加载状态：失败时置 true，页面给“点此重试”，且不清空已有会话/消息
+const sessionLoadError = ref(false)
+const loadingSessions = ref(false)
+// 当前会话消息加载失败标记：失败时保留已有消息并给重试入口
+const messageLoadError = ref(false)
+// 引用回复：{ id, role, content }，null 表示没有引用
+const quote = ref(null)
+// 刚复制成功的气泡下标，按钮文字临时显示“已复制”
+const copiedIdx = ref(-1)
 
 const quickPrompts = [
   '今天待办工单有多少？',
@@ -201,6 +254,8 @@ const quickPrompts = [
 ]
 
 const LAST_SESSION_KEY = 'ai-chat-last-session'
+/** 会话列表自动重试间隔：1s / 3s / 5s（首次失败后共再试 3 次） */
+const SESSION_RETRY_DELAYS = [1000, 3000, 5000]
 
 function parseJson(raw, fallback) {
   if (raw == null || raw === '') return fallback
@@ -212,11 +267,15 @@ function parseJson(raw, fallback) {
   }
 }
 
-/** 库内消息 → 气泡（刷新/切会话后恢复完整记录） */
+/** 库内消息 → 气泡（刷新/切会话后恢复完整记录，含引用关系） */
 function toBubble(m) {
   return {
+    id: m.id,
     role: m.role,
     content: m.content,
+    quotedMessageId: m.quotedMessageId,
+    quotedRole: m.quotedRole,
+    quotedContent: m.quotedContent,
     toolCalls: parseJson(m.toolCalls, []),
     usage: parseJson(m.usageJson, null),
     model: m.model
@@ -229,9 +288,27 @@ async function scrollBottom() {
   if (el) el.scrollTop = el.scrollHeight
 }
 
-async function loadSessions() {
+/** 拉会话列表；retry=true 时按 1s/3s/5s 自动重试三次 */
+async function fetchSessions(retry) {
+  const delays = retry ? SESSION_RETRY_DELAYS : []
+  let lastErr
+  for (let i = 0; i <= delays.length; i++) {
+    try {
+      return (await listSessions()) || []
+    } catch (e) {
+      lastErr = e
+      if (i < delays.length) await new Promise((r) => setTimeout(r, delays[i]))
+    }
+  }
+  throw lastErr
+}
+
+async function loadSessions({ retry = true } = {}) {
+  if (loadingSessions.value) return
+  loadingSessions.value = true
   try {
-    const list = (await listSessions()) || []
+    const list = await fetchSessions(retry)
+    sessionLoadError.value = false
     sessions.value = list
     if (!list.length) {
       sessionId.value = null
@@ -247,7 +324,11 @@ async function loadSessions() {
       await openSession(target || list[0])
     }
   } catch (e) {
-    // 列表失败不打断当前对话
+    // 失败不清空已有会话与消息，只标记异常并提示；页面提供“点此重试”
+    sessionLoadError.value = true
+    ElMessage.error('会话列表加载失败，可点击重试')
+  } finally {
+    loadingSessions.value = false
   }
 }
 
@@ -259,11 +340,20 @@ async function openSession(s) {
   try {
     const list = (await sessionMessages(s.id)) || []
     messages.value = list.map(toBubble)
+    messageLoadError.value = false
   } catch (e) {
-    messages.value = []
-    ElMessage.error(e.message || '会话消息加载失败')
+    // 失败保留当前已显示内容，只标记错误并提供重试，不清空
+    messageLoadError.value = true
+    ElMessage.error(e.message || '会话消息加载失败，可点击重试')
   }
   scrollBottom()
+}
+
+/** 重试加载当前会话的消息（失败保留现有内容） */
+async function reloadCurrentMessages() {
+  if (loading.value || !sessionId.value) return
+  const current = sessions.value.find((s) => String(s.id) === String(sessionId.value))
+  await openSession(current || { id: sessionId.value, title: sessionTitle.value })
 }
 
 async function newSession() {
@@ -332,10 +422,98 @@ function bumpSession(title) {
   sessions.value.unshift(s)
 }
 
+/** 复制正文：https 下用 Clipboard API；开发机是 http，退回 select + execCommand */
+/** 复制正文：https 下用 Clipboard API；开发机是 http，退回 select + execCommand。
+ *  复制结果直接在按钮上显示 1.5 秒，不依赖全局 toast 是否可见。 */
+let copiedTimer = null
+async function copyMessage(m, idx) {
+  const text = String(m.content || '')
+  if (!text.trim()) return
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text)
+    } else {
+      const ta = document.createElement('textarea')
+      ta.value = text
+      ta.style.position = 'fixed'
+      ta.style.top = '-1000px'
+      document.body.appendChild(ta)
+      ta.select()
+      document.execCommand('copy')
+      document.body.removeChild(ta)
+    }
+    copiedIdx.value = idx
+    if (copiedTimer) clearTimeout(copiedTimer)
+    copiedTimer = setTimeout(() => { copiedIdx.value = -1 }, 1500)
+  } catch (e) {
+    ElMessage.error('复制失败，请手动选择文本')
+  }
+}
+
+function truncate(text, n) {
+  const t = String(text || '')
+  return t.length > n ? t.slice(0, n) + '…' : t
+}
+
+/** 点“回复”：把该条消息挂到输入框上方，发送时随请求带给后端 */
+function startQuote(m) {
+  if (!m.id) {
+    ElMessage.warning('这条消息还没保存，稍后再试')
+    return
+  }
+  quote.value = { id: m.id, role: m.role, content: truncate(m.content, 120) }
+}
+
+/**
+ * 撤回 = 物理删除该条用户消息 + 它触发的 AI 回复。
+ * 先查后端：这轮若产生过写操作（增减数据/改状态），弹确认说明“不会回滚”，确认后才删。
+ */
+async function recallMessage(m) {
+  if (!m.id || !sessionId.value || loading.value) return
+  try {
+    const info = await messageRecallInfo(sessionId.value, m.id)
+    const sideEffects = !!(info && info.sideEffects)
+    if (sideEffects) {
+      const tools = (info.tools || []).join('、') || '写操作'
+      await ElMessageBox.confirm(
+        `<p>将要删除：<b>这条提问</b> 和 <b>它触发的 AI 回复</b>（共 2 条消息，永久删除、无法恢复）。</p>
+         <p>这一轮实际调用过：<b>${tools}</b>。</p>
+         <p>这些操作<b>已经真实执行，撤回不会自动回滚</b>（例如已新建/修改的工单需要你手动处理）。</p>
+         <p>删除后这轮不再作为上下文送给模型。是否继续？</p>`,
+        '这一轮有实际操作，确认撤回？',
+        {
+          type: 'warning',
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '仍要撤回',
+          cancelButtonText: '取消'
+        }
+      )
+    }
+    const res = await deleteChatMessage(sessionId.value, m.id, sideEffects)
+    const deleted = ((res && res.deletedMessageIds) || []).map(String)
+    const ids = deleted.length ? deleted : [String(m.id)]
+    // 本地同步移除：不留下空壳气泡
+    messages.value = messages.value.filter((x) => !x.id || !ids.includes(String(x.id)))
+    messages.value.forEach((x) => {
+      if (x.quotedMessageId && ids.includes(String(x.quotedMessageId))) {
+        x.quotedContent = '引用的消息已删除'
+      }
+    })
+    if (quote.value && quote.value.id && ids.includes(String(quote.value.id))) quote.value = null
+    if (res && res.sessionTitle) bumpSession(res.sessionTitle)
+    ElMessage.success('已撤回')
+    loadSessions({ retry: false })
+  } catch (e) {
+    if (e !== 'cancel' && e !== 'close') ElMessage.error((e && e.message) || '撤回失败')
+  }
+}
+
 async function send(text) {
   const content = (text ?? input.value).trim()
   if (!content || loading.value) return
   input.value = ''
+  // 进入时列表就是空的（多半是刚才列表接口失败），发完后补拉一次，恢复历史会话
+  const needListRefresh = sessions.value.length === 0
   if (!sessionId.value) {
     try {
       const s = await createSession()
@@ -347,13 +525,30 @@ async function send(text) {
       return
     }
   }
-  messages.value.push({ role: 'user', content })
+  // 引用回复：发送时一并带给后端，随该条用户消息落库
+  const quoted = quote.value
+  quote.value = null
+  const userIdx = messages.value.length
+  messages.value.push({
+    role: 'user',
+    content,
+    quotedMessageId: quoted ? quoted.id : null,
+    quotedRole: quoted ? quoted.role : null,
+    quotedContent: quoted ? quoted.content : null
+  })
   loading.value = true
   scrollBottom()
   try {
     // 多轮上下文由后端按 sessionId 从 ai_chat_message 取窗口，这里不再回传 history
-    const data = await assistantChat({ message: content, sessionId: sessionId.value })
+    const data = await assistantChat({
+      message: content,
+      sessionId: sessionId.value,
+      quotedMessageId: quoted ? quoted.id : null
+    })
+    // 回填落库后的消息 ID：复制/引用/撤回都依赖它
+    if (data.userMessageId) messages.value[userIdx].id = data.userMessageId
     messages.value.push({
+      id: data.assistantMessageId,
       role: 'assistant',
       content: data.answer,
       toolCalls: data.toolCalls || [],
@@ -362,7 +557,14 @@ async function send(text) {
       latencyMs: data.latencyMs,
       degraded: data.degraded
     })
+    // 接住后端返回的会话 ID：自动新建会话时，保证当前选中且后续消息落在同一会话
+    if (data.sessionId && String(data.sessionId) !== String(sessionId.value)) {
+      sessionId.value = data.sessionId
+      localStorage.setItem(LAST_SESSION_KEY, String(data.sessionId))
+    }
+    if (data.sessionTitle) sessionTitle.value = data.sessionTitle
     bumpSession(data.sessionTitle)
+    if (needListRefresh) await loadSessions({ retry: false })
   } catch (e) {
     messages.value.push({ role: 'assistant', content: '调用失败：' + (e.message || '未知错误') })
     ElMessage.error(e.message || 'AI 助手调用失败')
@@ -374,6 +576,7 @@ async function send(text) {
 }
 
 async function loadUsage() {
+  if (!canObserve.value) return
   try {
     const [s, r] = await Promise.all([usageSummary(), usageRecent(15)])
     summary.value = s
@@ -448,11 +651,31 @@ onMounted(async () => {
 .session-act { padding: 0; height: 18px; font-size: 11px; color: var(--muted); }
 .session-act.danger { color: var(--rust); }
 .chat-main { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.msg-load-error { margin-bottom: 8px; }
 .messages { flex: 1; overflow: auto; padding-right: 4px; }
 .quick { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 520px; }
 .bubble-row { display: flex; margin: 10px 0; }
 .bubble-row.user { justify-content: flex-end; }
-.bubble { max-width: 82%; border-radius: 8px; padding: 10px 12px; font-size: 14px; line-height: 1.7; }
+/* 气泡外层：承载引用摘要与消息操作，宽度跟随气泡 */
+.bubble-wrap { display: flex; flex-direction: column; max-width: 82%; min-width: 0; }
+.bubble { max-width: 100%; border-radius: 8px; padding: 10px 12px; font-size: 14px; line-height: 1.7; }
+/* 引用摘要：与输入框上方的引用条同一套视觉 */
+.quote-ref, .quote-bar {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+  border-left: 3px solid var(--amber-deep); background: var(--amber-soft);
+  border-radius: 4px; padding: 4px 8px; font-size: 12px;
+}
+.quote-ref { margin-bottom: 6px; }
+.quote-bar { margin-top: 10px; justify-content: space-between; }
+.quote-bar-main { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.quote-who { flex: 0 0 auto; color: var(--amber-deep); font-weight: 600; }
+.quote-text { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 消息级操作：沿用会话列表的小号文字按钮 */
+.msg-actions { display: flex; gap: 10px; margin-top: 3px; }
+.bubble-row.user .msg-actions { justify-content: flex-end; }
+.msg-act { padding: 0; height: 18px; font-size: 11px; color: var(--muted); }
+.msg-act:hover { color: var(--amber-deep); background: transparent; }
+.msg-act.danger { color: var(--rust); }
 .user-bubble { background: #ecf5ff; color: #303133; white-space: pre-wrap; }
 .ai-bubble { background: #f6f8fa; color: #303133; }
 .ai-text { white-space: pre-wrap; }

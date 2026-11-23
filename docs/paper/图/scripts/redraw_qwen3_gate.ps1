@@ -5,8 +5,13 @@
 #     §三 主表二 instruct（Hit@1=92.0%, AUC=0.7408）同上
 #     §6.2 T=0.70：覆盖 82.0%、正例错误 2.4%、负例错误 62.3%、负例(有效)54.5%、混合 47.6%、混合(有效)45.1%
 #   采集时间：2026-11-19（公司内网执行机，qwen3_gate_eval.py 单次运行，失败 0 条）
-# 说明：0.70 阈值下 P/N/LG 三池的 A/B/C 逐档条数未随结果回传（逐条 CSV 留在执行机），
-#       因此本图不画分档柱状图，改用「分数分布分位 + 阈值线」和「指标条」表达。
+#   2026-11-23 补：在 master1 上对 600 行逐条 CSV 现算 A/B/C 分档与 Wilson 95% CI（原 CSV 仍未回传仓库，
+#     以下为现算输出），补为本图第三面板；分档条数见 §6.2「分档与误差带」。
+#       A/B/C（T=0.70、软带 0.07 → A≥0.77、B [0.70,0.77)、C<0.70；每格 n=100）
+#         instruct：LG 18/38/44，N 21/32/47，P 61/21/18
+#         raw     ：LG  9/56/35，N 39/23/38，P 57/30/13
+#       P 池错误推送率（分母=推送数）：instruct 82 推/2 错=2.4% CI[0.7,8.5]；raw 87 推/8 错=9.2% CI[4.7,17.1]
+#       LG 推送：instruct 56；raw 65
 # 运行：powershell -ExecutionPolicy Bypass -File redraw_qwen3_gate.ps1
 Add-Type -AssemblyName System.Drawing
 
@@ -39,8 +44,9 @@ function Draw-Text($g, $text, $x, $y, $size, $brush, $bold, $align) {
     $font.Dispose()
 }
 
-# ============ 图 5-9：新基线（instruct + T=0.70） ============
-$bmp, $g = New-Canvas $W $H
+# ============ 图 5-13：新基线（instruct + T=0.70） ============
+# 画布加高到 1500，底部新增「A/B/C 分档」第三面板（2026-11-23 补）
+$bmp, $g = New-Canvas $W 1560
 $black = New-Brush 30 30 30
 $grey  = New-Brush 110 110 110
 $blue  = New-Brush 47 111 196
@@ -137,6 +143,75 @@ Draw-Text $g "而是「恢复被 0.75 误杀的正确回答」的取舍点；" (
 Draw-Text $g "混合口径含 LG（gold 移除后必然不可用），" ($RX) ($baseY+126) 15 $grey $false "left"
 Draw-Text $g "不能单独当系统错误率（见结果文档 §七.3）。" ($RX) ($baseY+150) 15 $grey $false "left"
 Draw-Text $g "LG 错误率 100% 是构造结果，不是模型缺陷。" ($RX) ($baseY+174) 15 $grey $false "left"
+
+# ---- 第三面板：T=0.70 的 A/B/C 分档（2026-11-23 逐条 CSV 现算） ----
+$greyC = New-Brush 178 178 178
+Draw-Text $g "T=0.70 的 A/B/C 分档（A≥0.77、B [0.70,0.77)、C<0.70；每池 n=100）" 60 976 24 $black $true "left"
+Draw-Text $g "数据：docs/paper/评测/Qwen3Embedding门控阈值实测结果.md §6.2；600 行逐条 CSV 现算，采集 2026-11-23" 60 1014 16 $grey $false "left"
+
+# 图例
+$lgY = 1042
+$g.FillRectangle($green, 110, $lgY, 20, 16);  Draw-Text $g "A 档（≥0.77）" 138 ($lgY-3) 15 $black $false "left"
+$g.FillRectangle($orange, 280, $lgY, 20, 16); Draw-Text $g "B 档 [0.70,0.77)" 308 ($lgY-3) 15 $black $false "left"
+$g.FillRectangle($greyC, 470, $lgY, 20, 16);  Draw-Text $g "C 档（<0.70，items 清空）" 498 ($lgY-3) 15 $black $false "left"
+
+$BX0 = 150; $BW_TOTAL = 1000; $baseY = 1420; $barH = 290; $maxTotal = 100
+$bw = 92
+$tiers = @(
+    @{ m="instruct"; s="LG"; A=18; B=38; C=44 },
+    @{ m="instruct"; s="N";  A=21; B=32; C=47 },
+    @{ m="instruct"; s="P";  A=61; B=21; C=18 },
+    @{ m="raw";      s="LG"; A=9;  B=56; C=35 },
+    @{ m="raw";      s="N";  A=39; B=23; C=38 },
+    @{ m="raw";      s="P";  A=57; B=30; C=13 }
+)
+$slot = $BW_TOTAL / $tiers.Count
+$unit = $barH / $maxTotal
+# 组标题
+Draw-Text $g "instruct（查询侧前缀）" ($BX0 + $slot*1.5) ($baseY - $barH - 34) 17 $blue $true "center"
+Draw-Text $g "raw（无前缀）" ($BX0 + $slot*4.5) ($baseY - $barH - 34) 17 $red $true "center"
+for ($i=0; $i -lt $tiers.Count; $i++) {
+    $t = $tiers[$i]
+    $x = $BX0 + $slot*$i + ($slot - $bw)/2
+    $hC = $t.C * $unit; $hB = $t.B * $unit; $hA = $t.A * $unit
+    # C 底
+    $g.FillRectangle($greyC, $x, ($baseY - $hC), $bw, $hC)
+    Draw-Text $g ([string]$t.C) ($x + $bw/2) ($baseY - $hC/2 - 9) 15 $black $true "center"
+    # B 中
+    $g.FillRectangle($orange, $x, ($baseY - $hC - $hB), $bw, $hB)
+    Draw-Text $g ([string]$t.B) ($x + $bw/2) ($baseY - $hC - $hB/2 - 9) 15 $black $true "center"
+    # A 顶
+    $g.FillRectangle($green, $x, ($baseY - $hC - $hB - $hA), $bw, $hA)
+    Draw-Text $g ([string]$t.A) ($x + $bw/2) ($baseY - $hC - $hB - $hA/2 - 9) 15 $black $true "center"
+    # 双行标签
+    Draw-Text $g $t.m ($x + $bw/2) ($baseY + 8) 14 ($(if ($t.m -eq "instruct") { $blue } else { $red })) $true "center"
+    Draw-Text $g $t.s ($x + $bw/2) ($baseY + 28) 15 $black $true "center"
+}
+$g.DrawLine((New-PenColor 60 60 60 2 $false), $BX0, $baseY, ($BX0+$BW_TOTAL), $baseY)
+
+# 右侧读数
+$RX2 = 1210; $RY2 = 1066
+Draw-Text $g "P 池错误推送率（分母=推送数）" $RX2 $RY2 17 $black $true "left"
+$notes = @(
+    "instruct：82 推 / 2 错 = 2.4%",
+    "           Wilson CI95 [0.7%, 8.5%]",
+    "raw      ：87 推 / 8 错 = 9.2%",
+    "           Wilson CI95 [4.7%, 17.1%]",
+    "",
+    "LG 池推送：instruct 56 / raw 65",
+    "",
+    "读法：A+B 即推送数，与覆盖率一致；",
+    "C 档是设计上的清空态，不是模型缺陷。"
+)
+$yy2 = $RY2 + 34
+foreach ($line in $notes) {
+    Draw-Text $g $line $RX2 $yy2 15 $grey $false "left"
+    $yy2 += 26
+}
+
+# 脚注
+Draw-Text $g "口径：A≥0.77、B∈[0.70,0.77)、C<0.70；A+B 即 T=0.70 的推送数，与上行「正例覆盖 82.0%」「LG 推送 56/65」自洽。" 110 1478 15 $grey $false "left"
+Draw-Text $g "注意：分档为 2026-11-23 对 600 行逐条 CSV 的现算结果，与图 5-13 上部 2026-11-19 的分位/指标同源（同一批 300 条样本）。" 110 1506 15 $grey $false "left"
 
 $path1 = Join-Path $outDir "fig19_qwen3_gate_070.png"
 $bmp.Save($path1, [System.Drawing.Imaging.ImageFormat]::Png)

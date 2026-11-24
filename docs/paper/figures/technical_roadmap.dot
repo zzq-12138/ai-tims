@@ -1,0 +1,22 @@
+digraph technical_roadmap {
+  rankdir=TB;
+  graph [bgcolor="white", fontname="SimSun", nodesep=0.35, ranksep=0.45];
+  node  [shape=box, style="solid", color="black", penwidth=1.5, fillcolor="white",
+         fontname="SimSun", fontsize=11, margin="0.18,0.10"];
+  edge  [color="black", penwidth=1.4, arrowsize=0.8];
+
+  entry [shape=plaintext, label="工单关闭事件", fontsize=12];
+
+  b1 [label="分步抽取\n现象 → 根因 → 措施 → 验证 → 条件\n另设反向项：排除过哪些可能、有无最终结论"];
+  b2 [label="证据校验门\n格式校验、证据回溯、反向项核验\n未过即停，标记证据不足并留空"];
+  b3 [label="条件字段化\n设备型号 · 工艺段 · 材料或批次\n参数区间 · 前置状态"];
+  b4 [label="条件判别与去重\n该合并 / 不该合并\n事实冲突 / 条件冲突"];
+  b5 [label="三档门控\nA 正常推送 · B 仅供参考 · C 不推送"];
+  b6 [label="知识入库与推送\n带条件、可追溯\n按条件过滤后推送"];
+
+  branch [label="阈值定参与跨库迁移复核\n小库定参、大库复核\n失效即判不可迁移", penwidth=1.0, fontsize=10];
+
+  entry -> b1;
+  b1 -> b2; b2 -> b3; b3 -> b4; b4 -> b5; b5 -> b6;
+  branch -> b5 [style=dashed, penwidth=1.0, label="复核", fontsize=9];
+}

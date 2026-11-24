@@ -20,7 +20,7 @@
 | 知识库 | **MySQL 实查 2026-11-23：328 条，status 分组仅 `PUBLISHED / 328`，全部已发布**；旧 322/319、311 为历史口径，已作废 |
 | 检索验证 | **0.7691** 是 11-20 下午控制台模拟检索请求的实测观察值（未落库、无日志，不可事后复核）；**0.7696** 是 11-19 kb310 回放落档（top1 `2117517479423836162`《蚀刻机过蚀刻处理》）；**0.76701** 是 11-19 回流焊 query 单点验证（**全角逗号版**；空格版约低 0.015；310 条 PUBLISHED，B 档）；**0.6589 不可复现、已作废**（属噪声版蚀刻 query）；同 query 现测 VECTOR/HYBRID 均 **0.7737、A 档**；系统性偏移不成立，唯一异常项为回流焊 −0.0173（已归因收尾）。0.7696 是 11-19 旧 embedding 模型下的评测读数，与当前模型不可比 |
 | embedding 现状 | 当前 env：`Qwen/Qwen3-Embedding-8B`、1024 维、collection `kb_knowledge_vec`、`KB_EMBED_QUERY_INSTRUCTION=Given a web search query, retrieve relevant passages that answer the query`；`kb_knowledge` **没有** `embed_model` / `vector_status` / `embedding_time`，只有 `vector_synced_at`；2026-11-23 实查 `MIN=2026-11-18 14:31:19`、`MAX=2026-11-20 14:41:39`、`COUNT=328`、`NULL=0`；按日分布未显示，不能据此推断混有两代向量 |
-| 新代码 | 已提交，当前 HEAD `a926c2b`；审核页分页/筛选项、`ref_count` 修复都已在历史提交里 |
+| 新代码 | 已提交，当前 HEAD `bb44127`；审核页分页/筛选项、`ref_count` 修复、建议回填待审入口都已在历史提交里 |
 | 新镜像 | 三个已发布（2026-11-23）：`ticket-ai:1.0.2`、`ticket-knowledge:1.0.2`、`ai-tims-front:1.0.3` 已进 Harbor 并上线 |
 | 存储（PVC） | `ai-tims` **6 个，全部 Bound**，`nfs-storage`，合计 **72Gi**（rabbitmq 5 / redis 2 / etcd 5 / milvus 20 / minio 20 / order-uploads 20；全集群 54 个） |
 | 对外入口 | `ai-tims/ai-tims` Ingress **对象存在**，但无 IngressClass、无 controller 认领，ADDRESS 空、不生效；对外只走 NodePort `172.27.19.64:31579`（front）、`:30204`（gateway） |
@@ -87,7 +87,7 @@
 - 已发现并注明的差异见 [10-事实核对与差异.md](10-事实核对与差异.md)，包括：
   - `D:\tims-images` 约定目录当前不存在，实际包仍在 `D:\ai-tims-images`；
   - 仓库 `images/` 仍放着三个新包，与「不再放仓库 images/」的约定冲突；
-  - `docs/plan/开发计划与进度.md`、`docs/handover/环境与版本对照.md`、`docs/ops/公司环境资产清单.md` 已于 2026-11-23 更新，但其中知识库 328、待审 85 等数字仍是旧口径；本包以 2026-11-23 MySQL 实查为准。
+  - `docs/plan/开发计划与进度.md`、`docs/handover/环境与版本对照.md`、`docs/ops/公司环境资产清单.md` 已于 2026-11-23 更新，并改为 MySQL 实查口径（知识库 328、待审 0），旧数仅作历史标注。
   - 知识库 **328 已由 MySQL 2026-11-23 实查确认**（322/319/311 历史作废）；0.7691 是实测观察值、未落库/无日志、不可事后复核；0.7696 是 11-19 旧 embedding 模型下的评测读数，与当前模型不可比；**0.6589 属噪声版 query、已作废**，干净 query 现测 VECTOR/HYBRID 均 0.7737、A 档；待审 85 **作废**（实查 0）。
 
 ---

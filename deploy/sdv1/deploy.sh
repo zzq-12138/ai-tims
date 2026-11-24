@@ -20,8 +20,8 @@
 #      也就是说：只 sed base/apps/*.yaml 的 image 行是【不生效】的。
 #      所以本脚本把 newTag 作为唯一生效入口来改，同时同步 base 清单的 image 行
 #      （保持仓库可读、避免下次误以为清单没更新）。
-#   2) 前端与后端统一走清单：改 deploy/k8s/base/apps/front.yaml 的 image tag，
-#      再 apply -k；前端不在 overlay 的 images: 段里，该清单是 tag 的唯一来源。
+#   2) 前端与后端走同一条路径：同样改 overlay 的 newTag，再同步 base/apps/front.yaml
+#      的 image 行，最后 apply -k。
 #      不再使用 kubectl set image（手工改集群会和清单脱钩，下一次 apply 就被带回）。
 #
 # 安全边界：
@@ -80,7 +80,7 @@ AI-TIMS 部署脚本
   ./deploy.sh --help
 
 service:
-  front      前端 ai-tims-front（改 base/apps/front.yaml 的 tag + apply -k）
+  front      前端 ai-tims-front（与后端同一路径：改 overlay 的 newTag + 同步 base + apply -k）
   ai         ticket-ai
   gateway    ticket-gateway
   knowledge  ticket-knowledge
@@ -109,7 +109,7 @@ tag:
   1. 校验参数、打印 context / 命名空间 / 现有 Pod 数
   2. 检查 git 工作区（不干净只提示）
   3. 镜像准备：本机没有就从 IMAGES_DIR load；Harbor 上没有就 push
-  4. 备份并改写清单：后端改 overlay 的 newTag，前端改 base/apps/front.yaml 的 image tag
+  4. 备份并改写清单：改 overlay 的 newTag，同时同步 base 的 image 行（前后端一致）
   5. 部署前预检：kubectl kustomize 渲染一次，打印全部 image 行与关键配置项，
      并与集群现状逐项对比；跨 ConfigMap 重复 key 会醒目告警；
      版本回退需显式确认，否则终止（不改集群）
@@ -121,7 +121,7 @@ tag:
 回滚:
   单服务回到旧 tag（预检会打印每个服务 apply 前的集群 tag）:
     ./deploy.sh <service> <旧tag> --no-image --yes
-  前端同理：本脚本会把 base/apps/front.yaml 的 tag 改回旧值再 apply -k。
+  前端同理：overlay newTag 与 base/apps/front.yaml 会一起改回旧值再 apply -k。
   仅撤最近一次 Deployment 变更:
     kubectl -n ai-tims rollout undo deploy/<deployment>
   配置回滚: 修改或删除 deploy/k8s/overlays/company/patches/ 下对应行，
@@ -164,9 +164,10 @@ svc_image() {
   esac
 }
 # base 清单里的原始镜像名（用于 sed 同步）
+# 前端在 base 里本来就是 Harbor 全名，所以与 svc_image 相同。
 svc_src_image() {
   case "$1" in
-    front) echo "$SRC_PREFIX/ai-tims-front" ;;
+    front) echo "$HARBOR_PREFIX/ai-tims-front" ;;
     all)   return 1 ;;
     *)     echo "$SRC_PREFIX/ticket-$1" ;;
   esac
@@ -695,31 +696,6 @@ manifest_image_tag() {
   ' "$file"
 }
 
-# ---------- 前端：与后端一致，改 base/apps/front.yaml 的 image tag ----------
-FRONT_OLD_TAG=""
-prepare_front() {
-  local tag="$1" manifest image cur now
-  manifest="$(svc_manifest front)"
-  image="$(svc_image front)"
-
-  [ -f "$manifest" ] || die "找不到前端清单：$manifest"
-  cur="$(manifest_image_tag "$manifest" "$image")"
-  [ -n "$cur" ] || die "front.yaml 里找不到 image: $image:<tag>，无法确定回滚目标"
-
-  FRONT_OLD_TAG="$cur"
-  backup "$manifest"
-  sed -i "s|image:[[:space:]]*${image}:[^[:space:]]*|image: ${image}:${tag}|" "$manifest"
-
-  now="$(manifest_image_tag "$manifest" "$image")"
-  [ "$now" = "$tag" ] || die "front.yaml 改写失败：期望 $tag，实际 ${now:-未找到}"
-
-  if [ "$cur" = "$tag" ]; then
-    log "  front: 已是 $tag（tag 未变化，apply 不会触发重建；如需重启用 kubectl rollout restart）"
-  else
-    log "  front: $cur -> $tag  (base/apps/front.yaml)"
-  fi
-}
-
 rollout_one() {
   local dep="$1"
   log "rollout status deploy/$dep ..."
@@ -766,14 +742,10 @@ else
   log "跳过镜像准备（--no-image）"
 fi
 
-# 4) 改清单：后端改 overlay newTag，前端改 base/apps/front.yaml
+# 4) 改清单：前后端统一改 overlay 的 newTag，并同步 base 的 image 行
 PREPARE_FAILED=0
 for svc in "${TARGETS[@]}"; do
-  if [ "$svc" = "front" ]; then
-    if ! prepare_front "$TAG"; then PREPARE_FAILED=1; break; fi
-  else
-    if ! prepare_backend "$svc" "$TAG"; then PREPARE_FAILED=1; break; fi
-  fi
+  if ! prepare_backend "$svc" "$TAG"; then PREPARE_FAILED=1; break; fi
 done
 
 if [ "$PREPARE_FAILED" -ne 0 ]; then
@@ -809,8 +781,6 @@ if [ "$ROLLOUT_FAILED" -ne 0 ]; then
 
   if [ "$SERVICE" = "all" ]; then
     warn "已整体回滚（${SERVICE}）"
-  elif [ "$FAILED_SVC" = "front" ]; then
-    warn "前端已回滚到原 tag：${FRONT_OLD_TAG:-见 .bak}"
   else
     warn "已回滚到原 tag：$(current_tag "$(svc_image "$FAILED_SVC")" 2>/dev/null || echo '见 .bak')"
   fi

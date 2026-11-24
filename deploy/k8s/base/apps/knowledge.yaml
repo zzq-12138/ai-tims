@@ -66,7 +66,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: knowledge
-          image: registry.company.internal/ai-tims/ticket-knowledge:1.0.3
+          image: registry.company.internal/ai-tims/ticket-knowledge:1.0.4
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

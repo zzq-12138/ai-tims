@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 建议→回填：把 C 档建议与处置的配对记录转成 ai_extracted 待审条目。
@@ -29,6 +30,8 @@ public class FallbackIntakeService {
 
     private static final Logger log = LoggerFactory.getLogger(FallbackIntakeService.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    /** 配对ID异常时的占位序列，初值取纳秒时间，避免与历史值重复。 */
+    private static final AtomicLong FALLBACK_TICKET_SEQ = new AtomicLong(System.nanoTime());
 
     public static final String SOURCE_FALLBACK = "FALLBACK";
     public static final String STATUS_PENDING = "PENDING_REVIEW";
@@ -108,11 +111,25 @@ public class FallbackIntakeService {
         return list == null || list.isEmpty() ? null : list.get(0).getId();
     }
 
+    /**
+     * 生成无工单回填的占位来源工单ID。
+     * 正常情况用 -fallbackPairId；配对ID异常（为空或非正）时退到 BIGINT 负区间极值 + 自增序列，
+     * 保证结果非零、且不会与 -pairId 或真实雪花ID重叠。
+     */
+    private static long fallbackTicketId(Long fallbackPairId) {
+        if (fallbackPairId != null && fallbackPairId > 0L) {
+            return -fallbackPairId;
+        }
+        long seq = FALLBACK_TICKET_SEQ.incrementAndGet();
+        return Long.MIN_VALUE + seq;
+    }
+
     private AiExtracted buildRow(FallbackIntakeRequest req, BigDecimal conf) {
         AiExtracted row = new AiExtracted();
         row.setTenantId(req.getTenantId());
-        // 不使用 source_ticket_id：避开既有唯一键 (tenant_id, source_ticket_id)，来源由 source_ref_id 回溯
-        row.setSourceTicketId(null);
+        // 无工单回填也要满足 source_ticket_id NOT NULL + uk_tenant_ticket(tenant_id, source_ticket_id)：
+        // 用负值占位，既不与真实雪花ID（正数）冲突，又保证每个配对唯一；来源仍由 source_ref_id 回溯。
+        row.setSourceTicketId(fallbackTicketId(req.getFallbackPairId()));
         row.setSourceTicketNo(isBlank(req.getTicketNo()) ? "FALLBACK#" + req.getFallbackPairId() : req.getTicketNo().trim());
         row.setSourceTitle("C 档建议回填");
         row.setSourceType(SOURCE_FALLBACK);

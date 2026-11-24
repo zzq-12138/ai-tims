@@ -10,8 +10,9 @@ kind: Kustomization
 # 现状说明：
 #   - 已推送：6 个后端、前端 ai-tims-front、rabbitmq/etcd/milvus/minio、tims-redis:7-alpine；
 #   - MySQL 与 Nacos 改用公司公共实例（mlops-train-test），本套清单不再部署它们；
-#   - base 已有前端 Deployment（apps/front.yaml，2026-11-18 纳入），前端镜像 tag 直接写在
-#     该清单里，本 overlay 不再为前端做 images 改写，避免出现两个 tag 来源。
+#   - base 已有前端 Deployment（apps/front.yaml，2026-11-18 纳入）；前端与后端一样，
+#     镜像 tag 统一由下面的 images: 段决定（newTag 是唯一生效入口），base 里的 image 行
+#     仅作可读同步，不再是 tag 来源。
 #
 # 配置来源（2026-11-19 起）：
 #   - base 只保留开发默认值（智谱公网地址、embedding-3、门控 0.75、无查询前缀）；
@@ -19,9 +20,9 @@ kind: Kustomization
 #     全部在 patches/ 下覆盖，不再依赖服务器上 kubectl set env 手改。
 #
 # 镜像 tag 取值依据（docs/ops/公司环境操作记录.md、AI-TIMS-环境速查.md）：
-#   - 前端 1.0.3：2026-11-23 现场发布（回滚基准 1.0.2，见记录 10.23）；
-#   - ticket-ai 1.0.2：2026-11-23 现场发布（回滚基准 1.0.1，见记录 10.21）；
-#   - ticket-knowledge 1.0.2：2026-11-23 现场发布（回滚基准 1.0.1，见记录 10.28）；
+#   - 前端 1.0.4：2026-11-24 建议回填灰度发布（回滚基准 1.0.3）；
+#   - ticket-ai 1.0.4：2026-11-24 同上（回滚基准 1.0.2；1.0.3 已被 dev 占用，故跳号）；
+#   - ticket-knowledge 1.0.3：2026-11-24 同上（回滚基准 1.0.2）；
 #   - gateway/system/order/push 1.0.0：记录 10.1 首次部署即为 1.0.0，此后无升级记录。
 #     这四项已于 2026-11-19 记录 10.29 现场回读，与清单一致；apply 前预检仍会与集群现状逐项对比。
 namespace: ai-tims
@@ -48,13 +49,17 @@ images:
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-knowledge
     newName: harbor.xnunion.com/library/ticket-knowledge
-    newTag: "1.0.3"
+    newTag: "1.0.4"
   - name: registry.company.internal/ai-tims/ticket-ai
     newName: harbor.xnunion.com/library/ticket-ai
     newTag: "1.0.4"
   - name: registry.company.internal/ai-tims/ticket-push
     newName: harbor.xnunion.com/library/ticket-push
     newTag: "1.0.0"
+
+  # ---- 前端（与后端同一机制：tag 由本段 newTag 决定，base 里的 image 行仅同步可读） ----
+  - name: harbor.xnunion.com/library/ai-tims-front
+    newTag: "1.0.4"
 
   # ---- 中间件 4 个（已推送） ----
   - name: registry.company.internal/ai-tims/rabbitmq

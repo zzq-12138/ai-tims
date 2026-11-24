@@ -48,10 +48,10 @@ images:
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-knowledge
     newName: harbor.xnunion.com/library/ticket-knowledge
-    newTag: "1.0.2"
+    newTag: "1.0.3"
   - name: registry.company.internal/ai-tims/ticket-ai
     newName: harbor.xnunion.com/library/ticket-ai
-    newTag: "1.0.2"
+    newTag: "1.0.4"
   - name: registry.company.internal/ai-tims/ticket-push
     newName: harbor.xnunion.com/library/ticket-push
     newTag: "1.0.0"

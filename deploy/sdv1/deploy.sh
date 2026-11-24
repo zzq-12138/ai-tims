@@ -559,45 +559,74 @@ preflight() {
     printf '       %s\n' "${drifts[@]}"
   fi
 
-  # 跨 ConfigMap 重复 key：只告警，不阻断。同一 key 被同一 Pod 的多个 envFrom
-  # 同时引用时，后加载者生效，改一处不生效——LLM_CHAT_MODEL 就是这么踩过的。
+  # 同一 Pod 内跨 ConfigMap 重复 key：只告警，不阻断。
+  # 判据收窄为“同一个 Deployment/StatefulSet 的 envFrom 里同时引用的多个 ConfigMap
+  # 存在同名 key”。各服务各自的 ConfigMap（如各自的 SERVER_PORT）不属于冲突。
+  # 同一 key 被同一 Pod 的多个 envFrom 同时引用时，后加载者生效，改一处不生效。
   dup_lines="$(awk '
-    function flush(   i, pair) {
-      if (kind=="ConfigMap" && name!="") {
-        for (i=1; i<=n; i++) {
-          pair=keys[i] SUBSEP name
-          if (!(pair in seen)) { seen[pair]=1; cnt[keys[i]]++ }
-        }
+    function finish(   i) {
+      if (kind=="ConfigMap" && cmname!="") {
+        for (i=1; i<=nkeys; i++) cmkey[cmname SUBSEP keyarr[i]]=1
       }
-      n=0; in_data=0; kind=""; name=""
+      if ((kind=="Deployment" || kind=="StatefulSet") && wlname!="" && ncm>1) {
+        nwl++; wl[nwl]=wlname; wln[nwl]=ncm
+        for (i=1; i<=ncm; i++) wlc[nwl SUBSEP i]=cms[i]
+      }
+      kind=""; cmname=""; nkeys=0; in_data=0; wlname=""; ncm=0; in_env=0; pending=0
     }
-    /^---[[:space:]]*$/ {flush(); next}
-    /^data:[[:space:]]*$/ {in_data=1; next}
-    /^[^[:space:]]/ {in_data=0}
-    /^kind: / {kind=$2; gsub(/"/,"",kind); next}
-    /^  name: / && name=="" {name=$2; gsub(/"/,"",name); next}
-    in_data && /^  [A-Za-z_][A-Za-z0-9_.-]*:/ {
-      line=$0; sub(/^  /,"",line); key=line; sub(/:.*/,"",key);
-      keys[++n]=key; next
+    /^---[[:space:]]*$/ { finish(); next }
+    /^kind: / { kind=$2; gsub(/"/,"",kind); next }
+    /^  name: / {
+      nm=$2; gsub(/"/,"",nm)
+      if (kind=="ConfigMap") cmname=nm
+      else if (kind=="Deployment" || kind=="StatefulSet") wlname=nm
+      next
+    }
+    kind=="ConfigMap" && /^data:[[:space:]]*$/ { in_data=1; next }
+    kind=="ConfigMap" && in_data && /^  [A-Za-z_][A-Za-z0-9_.-]*:/ {
+      line=$0; sub(/^  /,"",line); sub(/:.*/,"",line); keyarr[++nkeys]=line; next
+    }
+    kind=="ConfigMap" && in_data && /^[^[:space:]]/ { in_data=0 }
+    (kind=="Deployment" || kind=="StatefulSet") && /^[[:space:]]*envFrom:[[:space:]]*$/ {
+      match($0,/^ */); env_ind=RLENGTH; in_env=1; pending=0; next
+    }
+    (kind=="Deployment" || kind=="StatefulSet") && in_env {
+      if ($0 ~ /^[[:space:]]*$/) next
+      match($0,/^ */); ind=RLENGTH
+      if (ind<=env_ind && $0 !~ /^[[:space:]]*-/) { in_env=0; next }
+      if ($0 ~ /^[[:space:]]*-[[:space:]]*configMapRef:[[:space:]]*$/) { pending=1; next }
+      if (pending && $0 ~ /^[[:space:]]*name:[[:space:]]*/) {
+        v=$0; sub(/^[[:space:]]*name:[[:space:]]*/,"",v); gsub(/"/,"",v)
+        cms[++ncm]=v; pending=0; next
+      }
+      if ($0 ~ /^[[:space:]]*-[[:space:]]*/) { pending=0; next }
+      next
     }
     END {
-      flush();
-      for (k in cnt) if (cnt[k]>1) {
-        src="";
-        for (p in seen) {
-          split(p, a, SUBSEP);
-          if (a[1]==k) src=src (src=="" ? "" : ", ") a[2];
+      finish()
+      for (i=1; i<=nwl; i++) {
+        for (k in cnt) delete cnt[k]
+        for (k in src) delete src[k]
+        for (j=1; j<=wln[i]; j++) {
+          cm=wlc[i SUBSEP j]
+          for (p in cmkey) {
+            split(p, a, SUBSEP)
+            if (a[1]==cm) {
+              k=a[2]; cnt[k]++
+              src[k]=src[k] (src[k]=="" ? "" : ", ") cm
+            }
+          }
         }
-        print k "\t" cnt[k] "\t" src;
+        for (k in cnt) if (cnt[k]>1) print wl[i] "\t" k "\t" src[k]
       }
     }
   ' "$RENDER_TMP" | sort)"
   if [ -n "$dup_lines" ]; then
     printf '\n################################################################\n'
-    printf '[WARN] 跨 ConfigMap 重复 key（后加载者生效；被同一 Pod 同时 envFrom 时改一处不生效）\n'
-    while IFS=$'\t' read -r key cnt srcs; do
-      [ -n "$key" ] || continue
-      printf '  - %-34s 出现 %s 个 ConfigMap: %s\n' "$key" "$cnt" "$srcs"
+    printf '[WARN] 同一 Pod 同时 envFrom 的多个 ConfigMap 存在同名 key（后加载者生效，改一处不生效）\n'
+    while IFS=$'\t' read -r wl key srcs; do
+      [ -n "$wl" ] || continue
+      printf '  - %-20s %-34s 同时引用: %s\n' "$wl" "$key" "$srcs"
     done <<< "$dup_lines"
     printf '################################################################\n'
   fi

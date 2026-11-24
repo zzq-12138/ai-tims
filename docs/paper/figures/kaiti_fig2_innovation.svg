@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1594" height="1160" viewBox="0 0 1594 1160">
+  <rect width="1594" height="1160" fill="#FFFFFF"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#3A3A3A"/>
+    </marker>
+  </defs>
+
+  <!-- 左侧层级轨 -->
+  <line x1="200" y1="100" x2="200" y2="500" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/>
+  <line x1="200" y1="660" x2="200" y2="1050" stroke="#C8C8C8" stroke-width="3" stroke-linecap="round"/>
+  <text x="122" y="312" font-family="SimSun, serif" font-size="54" font-weight="bold" fill="#1A1A1A" text-anchor="middle">方法</text>
+  <text x="122" y="872" font-family="SimSun, serif" font-size="54" font-weight="bold" fill="#1A1A1A" text-anchor="middle">检验</text>
+
+  <!-- 方法层：两块深色 -->
+  <rect x="240" y="90" width="550" height="420" rx="28" fill="#2B2B2B"/>
+  <rect x="840" y="90" width="550" height="420" rx="28" fill="#2B2B2B"/>
+
+  <!-- ① 证据切分 -->
+  <circle cx="300" cy="152" r="30" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+  <text x="300" y="168" font-family="SimSun, serif" font-size="42" font-weight="bold" fill="#FFFFFF" text-anchor="middle">①</text>
+  <text x="515" y="286" font-family="SimSun, serif" font-size="64" font-weight="bold" fill="#FFFFFF" text-anchor="middle">证据切分</text>
+  <g>
+    <rect x="360" y="350" width="56" height="112" rx="10" fill="#FFFFFF" fill-opacity="0.16" stroke="#FFFFFF" stroke-width="2.5"/>
+    <rect x="438" y="350" width="56" height="112" rx="10" fill="#FFFFFF" fill-opacity="0.16" stroke="#FFFFFF" stroke-width="2.5"/>
+    <rect x="516" y="350" width="56" height="112" rx="10" fill="#FFFFFF" fill-opacity="0.16" stroke="#FFFFFF" stroke-width="2.5"/>
+    <rect x="594" y="350" width="56" height="112" rx="10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="10 8"/>
+  </g>
+
+  <!-- ② 条件字段化 -->
+  <circle cx="900" cy="152" r="30" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+  <text x="900" y="168" font-family="SimSun, serif" font-size="42" font-weight="bold" fill="#FFFFFF" text-anchor="middle">②</text>
+  <text x="1115" y="286" font-family="SimSun, serif" font-size="64" font-weight="bold" fill="#FFFFFF" text-anchor="middle">条件字段化</text>
+  <g>
+    <rect x="975" y="350" width="280" height="38" rx="19" fill="#FFFFFF" fill-opacity="0.14" stroke="#FFFFFF" stroke-width="2"/>
+    <rect x="975" y="404" width="280" height="38" rx="19" fill="#FFFFFF" fill-opacity="0.14" stroke="#FFFFFF" stroke-width="2"/>
+    <rect x="975" y="458" width="280" height="38" rx="19" fill="#FFFFFF" fill-opacity="0.14" stroke="#FFFFFF" stroke-width="2"/>
+    <circle cx="997" cy="369" r="7" fill="#FFFFFF" fill-opacity="0.8"/>
+    <circle cx="997" cy="423" r="7" fill="#FFFFFF" fill-opacity="0.8"/>
+    <circle cx="997" cy="477" r="7" fill="#FFFFFF" fill-opacity="0.8"/>
+  </g>
+
+  <!-- 方法 → 检验 -->
+  <line x1="815" y1="512" x2="815" y2="598" stroke="#4D4D4D" stroke-width="26" stroke-linecap="butt"/>
+  <polygon points="775,598 855,598 815,650" fill="#4D4D4D"/>
+
+  <!-- 检验层：两块浅色 -->
+  <rect x="240" y="650" width="550" height="400" rx="28" fill="#E3E3E3" stroke="#3A3A3A" stroke-width="3"/>
+  <rect x="840" y="650" width="550" height="400" rx="28" fill="#E3E3E3" stroke="#3A3A3A" stroke-width="3"/>
+
+  <!-- ③ 判据可证伪：判据卡 → 通过 ✓ / 不通过 ✗ -->
+  <circle cx="300" cy="712" r="30" fill="none" stroke="#3A3A3A" stroke-width="2.5"/>
+  <text x="300" y="728" font-family="SimSun, serif" font-size="42" font-weight="bold" fill="#3A3A3A" text-anchor="middle">③</text>
+  <text x="515" y="846" font-family="SimSun, serif" font-size="64" font-weight="bold" fill="#1A1A1A" text-anchor="middle">判据可证伪</text>
+  <g>
+    <!-- 判据卡：可被检验的规则 -->
+    <rect x="360" y="905" width="120" height="80" rx="12" fill="#FFFFFF" stroke="#3A3A3A" stroke-width="3"/>
+    <line x1="382" y1="932" x2="458" y2="932" stroke="#3A3A3A" stroke-width="3" stroke-linecap="round"/>
+    <line x1="382" y1="958" x2="438" y2="958" stroke="#3A3A3A" stroke-width="3" stroke-linecap="round"/>
+    <!-- 检验分叉：通过 / 不通过 -->
+    <line x1="480" y1="945" x2="520" y2="945" stroke="#3A3A3A" stroke-width="3"/>
+    <line x1="520" y1="945" x2="575" y2="905" stroke="#3A3A3A" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="520" y1="945" x2="575" y2="985" stroke="#3A3A3A" stroke-width="3" marker-end="url(#arrow)"/>
+    <!-- 通过 -->
+    <circle cx="625" cy="900" r="32" fill="#FFFFFF" stroke="#3A3A3A" stroke-width="3"/>
+    <path d="M610 900 L620 911 L641 888" fill="none" stroke="#3A3A3A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 不通过，判据被推翻 -->
+    <circle cx="625" cy="990" r="32" fill="#FFFFFF" stroke="#3A3A3A" stroke-width="3"/>
+    <path d="M612 977 L638 1003 M638 977 L612 1003" fill="none" stroke="#3A3A3A" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- ④ 去条件对照 -->
+  <circle cx="900" cy="712" r="30" fill="none" stroke="#3A3A3A" stroke-width="2.5"/>
+  <text x="900" y="728" font-family="SimSun, serif" font-size="42" font-weight="bold" fill="#3A3A3A" text-anchor="middle">④</text>
+  <text x="1115" y="846" font-family="SimSun, serif" font-size="64" font-weight="bold" fill="#1A1A1A" text-anchor="middle">去条件对照</text>
+  <g>
+    <rect x="930" y="885" width="250" height="115" rx="16" fill="#FFFFFF" stroke="#3A3A3A" stroke-width="3"/>
+    <rect x="955" y="910" width="100" height="28" rx="14" fill="#D0D0D0"/>
+    <rect x="955" y="950" width="100" height="28" rx="14" fill="#D0D0D0"/>
+    <path d="M1188 942 C1215 942 1215 925 1238 925" fill="none" stroke="#3A3A3A" stroke-width="3" stroke-dasharray="8 7"/>
+    <polygon points="1238,916 1258,925 1238,934" fill="#3A3A3A"/>
+    <rect x="1268" y="910" width="90" height="30" rx="15" fill="none" stroke="#3A3A3A" stroke-width="3" stroke-dasharray="8 7"/>
+  </g>
+</svg>

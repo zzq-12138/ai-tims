@@ -1,0 +1,16 @@
+# 公司环境 RabbitMQ：去掉 fsGroup（与 dev 同一隐患）。
+# 根因：base 的 securityContext.fsGroup: 999 未配 fsGroupChangePolicy，kubelet 每次挂载卷
+# 都会把 .erlang.cookie 从 0600 改成 0660，RabbitMQ 启动即报
+# "Cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only" 后退出（CrashLoop）。
+# 现状核对：master1 上 sts/tims-rabbitmq 的 securityContext 为 {"fsGroup":999}，volumeClaimTemplates 含 data 5Gi，
+# 与 dev 修复前一致。置 null 后 cookie 保持 600。
+# 仅 company 生效；base 不改。
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tims-rabbitmq
+spec:
+  template:
+    spec:
+      securityContext:
+        fsGroup: null

@@ -35,6 +35,8 @@ patchesStrategicMerge:
   - patches/common-config.yaml
   - patches/knowledge-config.yaml
   - patches/ai-config.yaml
+  # RabbitMQ 去掉 fsGroup（否则 .erlang.cookie 被改成 0660 导致 CrashLoop，与 dev 同一隐患）
+  - patches/rabbitmq-no-fsgroup.yaml
 
 images:
   # ---- 后端 6 个（已推送） ----

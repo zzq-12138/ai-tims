@@ -12,7 +12,7 @@ data:
   NACOS_ADDR: "10.96.1.240:8848"
   # 公司公共 Nacos 的 namespaceId（zzq-tims 命名空间）；注册必须用 ID，不能用名字。
   NACOS_NAMESPACE: "7a8fa30c-0121-4606-8c17-f6b932e9c80a"
-  # 公司公共 MySQL（mlops-train-test/mysql）ClusterIP；端口/库名/用户沿用 base 默认。
+  # 公司公共 MySQL（mqis-tm16-test/mysql）ClusterIP；端口/库名/用户沿用 base 默认。
   MYSQL_HOST: "10.96.1.253"
   LLM_BASE_URL: "http://172.27.26.253:18892/v1"
   LLM_CHAT_MODEL: "Qwen/Qwen3.8-27B-dev"

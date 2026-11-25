@@ -89,7 +89,7 @@ say "PVC 数据将随删除永久丢失（etcd/minio/milvus/order-uploads）"
 # --- 3. 明确列出「不删」的部分 ---------------------------------------------
 cat <<'EOF'
 [cleanup] 以下公共资源【不删】，清理后应保持原样：
-  - MySQL   10.96.1.253:3306   库 aitims（属 mlops-train-test 公共实例）
+  - MySQL   10.96.1.253:3306   库 aitims（属 mqis-tm16-test 公共实例）
   - Nacos   10.96.1.240:8848   命名空间 zzq-tims（ID 7a8fa30c-0121-4606-8c17-f6b932e9c80a）
   - Harbor  harbor.xnunion.com/library 下的 11 个镜像
   - vLLM    172.27.26.253:18892（对话）/ :18893（向量）

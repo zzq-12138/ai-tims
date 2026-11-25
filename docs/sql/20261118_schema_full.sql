@@ -10,6 +10,11 @@
 --            需要真正重建某张表时，请先手工执行 DROP TABLE，再运行本脚本；
 --            不要把 DROP 加回脚本（2026-11-20 公司环境曾因成对 DROP+CREATE
 --            清空 ai_chat_session / ai_chat_message 的全部历史）。
+-- 临时库演练 : 脚本第 59-60 行是 CREATE DATABASE IF NOT EXISTS `aitims` 与 USE `aitims`，
+--            正式建库时正确；但若只想导到临时库试跑，必须先剥掉这两行并自行 USE <临时库>，
+--            否则脚本会把库切回业务库 aitims，在已有数据上执行即等于误伤真实数据
+--            （VM 验证时已踩到过一次）。
+--            剥法示例：grep -v -E '^(CREATE DATABASE|USE )' 20261118_schema_full.sql > /tmp/try.sql
 -- 字符集   : utf8mb4；库/表默认 utf8mb4_0900_ai_ci（ai_extracted、kb_knowledge_history
 --            两个历史表为 utf8mb4_unicode_ci，保持开发库原样）
 -- 外键     : 全库无物理外键；仍按依赖顺序建表并用 SET FOREIGN_KEY_CHECKS=0 包裹

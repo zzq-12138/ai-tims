@@ -21,6 +21,7 @@ kind: Kustomization
 #
 # 镜像 tag 取值依据（docs/ops/公司环境操作记录.md、AI-TIMS-环境速查.md）：
 #   - 前端 1.0.4：2026-11-24 建议回填灰度发布（回滚基准 1.0.3）；
+#   - ticket-ai / ticket-knowledge 1.0.5：2026-11-25 带上 ticket_title 修复（回滚基准 1.0.4）；
 #   - ticket-ai 1.0.4：2026-11-24 同上（回滚基准 1.0.2；1.0.3 已被 dev 占用，故跳号）；
 #   - ticket-knowledge 1.0.4：2026-11-24 同上（回滚基准 1.0.3）；
 #   - gateway/system/order/push 1.0.0：记录 10.1 首次部署即为 1.0.0，此后无升级记录。
@@ -51,10 +52,10 @@ images:
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-knowledge
     newName: harbor.xnunion.com/library/ticket-knowledge
-    newTag: "1.0.4"
+    newTag: "1.0.5"
   - name: registry.company.internal/ai-tims/ticket-ai
     newName: harbor.xnunion.com/library/ticket-ai
-    newTag: "1.0.4"
+    newTag: "1.0.5"
   - name: registry.company.internal/ai-tims/ticket-push
     newName: harbor.xnunion.com/library/ticket-push
     newTag: "1.0.0"

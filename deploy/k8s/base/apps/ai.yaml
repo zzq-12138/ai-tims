@@ -59,7 +59,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: ai
-          image: registry.company.internal/ai-tims/ticket-ai:1.0.4
+          image: registry.company.internal/ai-tims/ticket-ai:1.0.5
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

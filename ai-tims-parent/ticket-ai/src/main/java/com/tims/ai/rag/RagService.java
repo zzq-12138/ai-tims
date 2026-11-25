@@ -39,7 +39,7 @@ public class RagService {
     public record RagContext(List<KbRef> refs, boolean fallback, boolean unavailable, String mode,
                              long retrievalMs, List<Map<String, String>> messages, String degradedNote,
                              String promptVersion, String tier, String tierReason, boolean noKbBasis,
-                             Long ticketId, String ticketNo) { }
+                             Long ticketId, String ticketNo, String ticketTitle) { }
 
     public RagContext prepare(Long tenantId, ChatRequest request) {
         if (!StringUtils.hasText(request.getQuestion())) {
@@ -83,10 +83,12 @@ public class RagService {
         messages.add(msg("user", guard.mask(
                 buildUserPrompt(request.getQuestion(), kb, ticket, degradedNote, noKbBasis))));
         String ticketNo = ticket == null ? null : asString(ticket.get("ticketNo"));
+        String ticketTitle = ticket == null ? null : asString(ticket.get("title"));
         return new RagContext(kb.refs(), kb.fallback(), kb.unavailable(), kb.mode(),
                 kb.elapsedMs(), messages, degradedNote, prompt.version(),
                 kb.tier(), kb.tierReason(), noKbBasis, request.getTicketId(),
-                StringUtils.hasText(ticketNo) ? ticketNo : null);
+                StringUtils.hasText(ticketNo) ? ticketNo : null,
+                StringUtils.hasText(ticketTitle) ? ticketTitle.trim() : null);
     }
 
     private String buildUserPrompt(String question, KnowledgeClient.SearchOutcome kb,

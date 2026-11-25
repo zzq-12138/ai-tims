@@ -64,7 +64,7 @@ public class FallbackSuggestionService {
      * @return 新记录 id；落库失败返回 null
      */
     public Long record(Long tenantId, Long ticketId, String ticketNo, String suggestion, String promptVersion) {
-        return record(tenantId, ticketId, ticketNo, suggestion, promptVersion, null);
+        return record(tenantId, ticketId, ticketNo, suggestion, promptVersion, null, null);
     }
 
     /**
@@ -75,6 +75,18 @@ public class FallbackSuggestionService {
      */
     public Long record(Long tenantId, Long ticketId, String ticketNo, String suggestion, String promptVersion,
                        String sessionId) {
+        return record(tenantId, ticketId, ticketNo, suggestion, promptVersion, sessionId, null);
+    }
+
+    /**
+     * 记录一条 C 档建议。失败只告警，不影响本次问答返回。
+     *
+     * @param sessionId   可选问答会话ID，仅用于后续回填入库的来源回溯
+     * @param ticketTitle 可选工单标题快照，回填入库时用于生成待审标题（可空）
+     * @return 新记录 id；落库失败返回 null
+     */
+    public Long record(Long tenantId, Long ticketId, String ticketNo, String suggestion, String promptVersion,
+                       String sessionId, String ticketTitle) {
         if (suggestion == null || suggestion.isBlank()) {
             return null;
         }
@@ -83,6 +95,7 @@ public class FallbackSuggestionService {
             p.setTenantId(tenantId);
             p.setTicketId(ticketId);
             p.setTicketNo(ticketNo);
+            p.setTicketTitle(ticketTitle == null || ticketTitle.isBlank() ? null : ticketTitle.trim());
             p.setTier("C");
             p.setSuggestionText(suggestion.trim());
             p.setModel(props.getModel());

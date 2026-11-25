@@ -14,6 +14,9 @@ public class FallbackIntakeRequest {
 
     private String ticketNo;
 
+    /** 工单标题快照（可空：旧数据不带该字段时回退处置首行） */
+    private String ticketTitle;
+
     /** 问答会话ID（可空） */
     private String sessionId;
 
@@ -39,6 +42,8 @@ public class FallbackIntakeRequest {
     public void setTicketId(Long ticketId) { this.ticketId = ticketId; }
     public String getTicketNo() { return ticketNo; }
     public void setTicketNo(String ticketNo) { this.ticketNo = ticketNo; }
+    public String getTicketTitle() { return ticketTitle; }
+    public void setTicketTitle(String ticketTitle) { this.ticketTitle = ticketTitle; }
     public String getSessionId() { return sessionId; }
     public void setSessionId(String sessionId) { this.sessionId = sessionId; }
     public String getModel() { return model; }

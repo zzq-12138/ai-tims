@@ -46,6 +46,7 @@ public class FallbackIntakeClient {
             body.put("fallbackPairId", String.valueOf(p.getId()));
             body.put("ticketId", p.getTicketId() == null ? null : String.valueOf(p.getTicketId()));
             body.put("ticketNo", p.getTicketNo());
+            body.put("ticketTitle", p.getTicketTitle());
             body.put("sessionId", p.getSessionId());
             body.put("model", p.getModel());
             body.put("promptVersion", p.getPromptVersion());

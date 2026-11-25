@@ -166,7 +166,16 @@ public class FallbackIntakeService {
         return r;
     }
 
+    /**
+     * 生成待审标题：优先工单标题快照（压缩空白后截 30 字）；
+     * 快照为空（旧配对记录）时退回历史口径——实际处置首行，截 120 字。
+     */
     private static String buildTitle(FallbackIntakeRequest req) {
+        String ticketTitle = req.getTicketTitle() == null ? null
+                : req.getTicketTitle().replaceAll("\\s+", " ").trim();
+        if (!isBlank(ticketTitle)) {
+            return ticketTitle.length() > 30 ? ticketTitle.substring(0, 30) : ticketTitle;
+        }
         String text = req.getActualDisposition().trim();
         int cut = text.indexOf('\n');
         String first = cut > 0 ? text.substring(0, cut) : text;

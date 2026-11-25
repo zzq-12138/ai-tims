@@ -8,7 +8,7 @@ kind: Kustomization
 #   1. 中间件地址指向开发机：Nacos/compose 在宿主机 8848，MySQL 在宿主机 3306
 #   2. 对外走 NodePort：gateway 30204、front 31579（与公司端口号一致，方便记忆）
 #   3. 不启用 Ingress（k3s 只有 traefik，本环境不需要域名）
-#   4. 镜像 tag 与 dev 实测对齐（2026-11-24：front 1.0.2、ticket-ai 1.0.3、ticket-push 1.0.1）
+#   4. 镜像 tag 与 dev 实测对齐（2026-11-25：front 1.0.2、ticket-ai/knowledge 1.0.4、ticket-push 1.0.1）
 #
 # 不包含（有意为之）：
 #   - 不部署 MySQL / Nacos（沿用宿主机 mysql.service 与 compose 的 tims-nacos）
@@ -31,10 +31,10 @@ images:
     newTag: "1.0.0"
   - name: registry.company.internal/ai-tims/ticket-knowledge
     newName: harbor.xnunion.com/library/ticket-knowledge
-    newTag: "1.0.1"
+    newTag: "1.0.4"
   - name: registry.company.internal/ai-tims/ticket-ai
     newName: harbor.xnunion.com/library/ticket-ai
-    newTag: "1.0.3"
+    newTag: "1.0.4"
   - name: registry.company.internal/ai-tims/ticket-push
     newName: harbor.xnunion.com/library/ticket-push
     newTag: "1.0.1"

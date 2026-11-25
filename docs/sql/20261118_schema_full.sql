@@ -8,9 +8,10 @@
 --            两个历史表为 utf8mb4_unicode_ci，保持开发库原样）
 -- 外键     : 全库无物理外键；仍按依赖顺序建表并用 SET FOREIGN_KEY_CHECKS=0 包裹
 -- 已排除   : 工单/流程/附件/推送/调用日志/KB 知识/抽取结果/对话等业务与测试数据
--- 增量核对 : docs/sql 下 7 个增量脚本的最终形态已全部体现在本文件中
+-- 增量核对 : docs/sql 下各增量脚本的最终形态已全部体现在本文件中
 --            （ai_chat_session/ai_chat_message 及 quoted_*；ai_extracted 五元组+关系+chain_trace；
---             kb_knowledge 四列；ai_fallback_pair 的 is_test/coverage_*/coverage_verdict/data_source 等）
+--             kb_knowledge 四列；ai_fallback_pair 的 is_test/coverage_*/coverage_verdict/data_source、
+--             ticket_title 等）
 -- ============================================================================
 -- 表清单（表名 / 行数 / 是否带种子数据）
 -- ----------------------------------------------------------------------------
@@ -314,6 +315,7 @@ CREATE TABLE `ai_fallback_pair` (
   `tenant_id` bigint NOT NULL DEFAULT '1' COMMENT '租户ID',
   `ticket_id` bigint DEFAULT NULL COMMENT '工单ID（问答时未带工单则为空）',
   `ticket_no` varchar(64) DEFAULT NULL COMMENT '工单号',
+  `ticket_title` varchar(128) DEFAULT NULL COMMENT '工单标题快照（可空，回填入库时用于生成待审标题）',
   `tier` varchar(4) NOT NULL DEFAULT 'C' COMMENT '触发档位，固定 C',
   `suggestion_text` mediumtext NOT NULL COMMENT '模型自由建议原文（不含“仅供参考”前缀）',
   `model` varchar(64) DEFAULT NULL COMMENT '生成建议所用模型',

@@ -23,6 +23,9 @@ public class FallbackPair {
 
     private String ticketNo;
 
+    /** 工单标题快照（可空：旧数据或工单已删除时为空，回填入库时用于生成待审标题） */
+    private String ticketTitle;
+
     /** 触发档位，目前固定 C */
     private String tier;
 
@@ -87,6 +90,8 @@ public class FallbackPair {
     public void setTicketId(Long ticketId) { this.ticketId = ticketId; }
     public String getTicketNo() { return ticketNo; }
     public void setTicketNo(String ticketNo) { this.ticketNo = ticketNo; }
+    public String getTicketTitle() { return ticketTitle; }
+    public void setTicketTitle(String ticketTitle) { this.ticketTitle = ticketTitle; }
     public String getTier() { return tier; }
     public void setTier(String tier) { this.tier = tier; }
     public String getSuggestionText() { return suggestionText; }

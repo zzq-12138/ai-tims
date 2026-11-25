@@ -72,3 +72,5 @@ patches:
   - path: patches/nodeport-front.yaml
   # 去掉 nginx Ingress（本环境不用）
   - path: patches/delete-ingress.yaml
+  # RabbitMQ 去掉 fsGroup（否则 .erlang.cookie 被改成 0660 导致 CrashLoop）
+  - path: patches/rabbitmq-no-fsgroup.yaml

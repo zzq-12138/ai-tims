@@ -1,0 +1,15 @@
+# 开发机 RabbitMQ：去掉 fsGroup。
+# 根因：base 的 securityContext.fsGroup: 999 未配 fsGroupChangePolicy，kubelet 每次挂载卷
+# 都会把 .erlang.cookie 从 0600 改成 0660，RabbitMQ 启动即报
+# "Cookie file /var/lib/rabbitmq/.erlang.cookie must be accessible by owner only" 后退出（CrashLoop）。
+# 置 null 后 cookie 保持 600，Pod 1/1 Running，应用侧 UnknownHostException 消失。
+# 仅 dev 生效；公司侧是否同样处理待定，base 与 company overlay 均不改。
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tims-rabbitmq
+spec:
+  template:
+    spec:
+      securityContext:
+        fsGroup: null
